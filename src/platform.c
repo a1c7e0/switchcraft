@@ -83,11 +83,11 @@ void sc_memory(void) {
         (unsigned long long)heap.arena,(unsigned long long)heap.uordblks,(unsigned long long)heap.fordblks);
     sc_log("Kernel-used memory includes reserved heap; arena free space is separate.\n");
     const size_t size=4*1024*1024;
-    unsigned char *p=malloc(size);
+    volatile unsigned char *p=malloc(size);
     if (!p) {sc_log("4 MiB allocation FAILED\n"); return;}
-    memset(p,0xa5,size);
+    for(size_t i=0;i<size;i++)p[i]=0xa5;
     bool ok=true; for(size_t i=0;i<size;i++) if(p[i]!=0xa5) {ok=false; break;}
-    free(p); sc_log("4 MiB allocation/write/read/free: %s\n",ok?"PASS":"FAIL");
+    free((void *)p); sc_log("4 MiB allocation/write/read/free: %s\n",ok?"PASS":"FAIL");
 }
 void sc_fs_test(void) {
     const char *path=SC_ROOT "/diagnostic.tmp";
