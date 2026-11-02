@@ -9,6 +9,7 @@ The legacy branch is legacy/1.12.2; Java ownership is the independent java-switc
 | NVK transfer/offscreen triangle | Yes | NRO | Format/link | NOT TESTED |
 | Exact snapshot feature profile | Yes | NRO/tool | Gate fixtures | NOT TESTED |
 | SDL3 Vulkan-only video/input | Yes, patched upstream | Static archive | Link; no GL/EGL API symbols | NOT TESTED |
+| Limited SDL/Vulkan static symbol lookup | Yes | AArch64 archive/NRO | Host lookup; linked-symbol check | NOT TESTED |
 | VI surface/swapchain/presentation | Yes | NRO | Format/link | NOT TESTED |
 | Java 8 interpreter diagnostic | Independent Java repo | NRO/SDK | Real JAR/reflection/thread/I/O/native bridge | NOT TESTED |
 | Standard JNI invocation adapter | Yes | SDK | Real Java 25 VM/native registration/options/teardown | No VM linked |

@@ -18,6 +18,8 @@ flowchart TD
   L --> SDK[Pinned java-switch C SDK / JNI adapter]
   SDK -. no VM linked .-> JVM[Horizon OpenJDK 25 / class library / JNI / FFM]
   JVM -. required .-> LW[Static LWJGL / SDL3 / VMA / shaderc / SPVC / audio]
+  W --> LOOKUP[Limited static SDL / Vulkan symbol lookup]
+  LW -. future resolver handoff .-> LOOKUP
   LW -.-> NVK[Native NVK + Horizon GPU services]
   JVM -.-> BRIDGE[Java instrumentation / pinned Vulkan-only method transformation]
   BRIDGE -.-> MC[Minecraft title / world / future Fabric]

@@ -57,6 +57,7 @@ verifies AArch64/NRO/ASET/NACP/build IDs and creates:
 * `dist/switch-minecraft-test-package.zip` and `dist/COPY_TO_SD/`
 * `dist/switchcraft-corresponding-source.tar.gz`
 * `dist/manifest.json`, `dist/SHA256SUMS` and `dist/DELIVERY_REPORT.md`
+* `dist/switchcraft-debug-symbols.zip` and `dist/switchcraft-native-sdk.tar.gz`
 
 Merge the package onto the SD root and preserve existing saves/configuration.
 Use **application-mode hbmenu** under Atmosphère on Switch 1. Start native
@@ -102,6 +103,7 @@ not a proposed way to execute the Switch game on another computer. See
 * [Compatibility](docs/COMPATIBILITY.md)
 * [Known issues](docs/KNOWN_ISSUES.md)
 * [Decisions](docs/DECISIONS.md) and [next steps](docs/NEXT_STEPS.md)
+* [Java SDK handoff](docs/JAVA_INTEGRATION_HANDOFF.md) and [native bindings](docs/NATIVE_BINDINGS.md)
 
 Original source is MIT. Third-party notices and the full miniJVM Java/C and
 libffi source accompany distributions. The Java class library retains GPL terms;

@@ -1,7 +1,7 @@
 # Build and reproducibility
 
 Mainline target: 26.4-snapshot-6 / Java 25 / Vulkan. Legacy builds are on branch
-1.12.2; Java runtime builds are owned by a1c7e0/java-switch.
+legacy/1.12.2; Java runtime builds are owned by a1c7e0/java-switch.
 
 ```sh
 bash scripts/build-all.sh
@@ -37,6 +37,14 @@ NRO verification checks NRO0/ASET, aligned bounded segments, NACP title/author/
 version, JPEG icon and matching AArch64 ELF build IDs. Repackaged Java artifacts
 retain JavaSwitch identity. Debug ELFs/maps remain under build for crash
 symbolication. Artifacts are never renamed ELFs or placeholders.
+`dist/switchcraft-debug-symbols.zip` contains matching debug ELFs and available
+linker maps; `dist/switchcraft-native-sdk.tar.gz` contains the experimental static
+symbol lookup and its contract. Neither constitutes a working Horizon JVM.
+
+To test the actual hash-verified snapshot client without redistributing it, set
+`SWITCHCRAFT_CLIENT_JAR` to a locally held client JAR before `make host-test`.
+The test rejects a wrong client SHA-1 and renderer-class SHA-256; only temporary
+transformed class bytes are written. The default suite skips this optional test.
 
 Build logs: build/cross-build.log, build/host-tests.log, build/java-runtime.log
 and build/sdl3-build.log. Final source pins, hashes and hardware status are in

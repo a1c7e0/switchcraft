@@ -29,8 +29,15 @@ on a cross-link or host screenshot.
 java-switch exports a versioned C SDK, actual standard JNI adapter and libffi
 AAPCS64/W^X prerequisites. JNI/FFM tests pass on host. No Horizon libjvm is linked,
 so the launch gate must return JS_UNAVAILABLE; do not add a fake Play action.
-OpenJDK 25/Zero configuration fails at unsupported OS elf. Port actual memory,
-exceptions, threads/TLS, class libraries, static symbols and fallback FFM next.
+OpenJDK 25/Zero configuration fails at unsupported OS elf. The independent
+java-switch task owns the VM, OS/class-library and FFM port. Do not modify that
+repository; coordinate via docs/JAVA_INTEGRATION_HANDOFF.md and committed SHAs.
+Switchcraft owns Vulkan/SDL/native-library integration and hardware feedback.
+
+`build/libswitchcraft-native.a` is a limited AArch64 static SDL/Vulkan symbol
+lookup, not a Java loader. Run scripts/verify-native-link.py after linking. The
+feedback collector takes an SD root and creates a new ZIP outside it, with only
+allowlisted logs. NRO/SDL/Vulkan hardware results remain NOT TESTED.
 
 The bridge uses the public Java 25 Class-File API and java.instrument; it only
 changes the hash-pinned PreferredGraphicsApi.getBackendsToTry method. No account

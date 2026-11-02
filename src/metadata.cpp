@@ -221,8 +221,8 @@ Json make_plan(const Config &config,const std::string &runtime_root) {
     plan["jvm_arguments"]=jvm;plan["game_arguments"]=game;
     plan["blockers"].push_back("No Minecraft-capable Horizon JVM or AOT backend integrated in launcher");
     if(config.runtime=="minijvm")plan["blockers"].push_back("miniJVM is a separate Java 8 diagnostic; Minecraft compatibility is unimplemented");
-    plan["blockers"].push_back("LWJGL/GLFW/OpenAL JNI substitutions not integrated");
-    if(config.graphics!="nvk")plan["blockers"].push_back("Mainline supports Vulkan NVK only; legacy OpenGL is on branch 1.12.2");
+    plan["blockers"].push_back("LWJGL/SDL3/Vulkan/FFM/OpenAL native bindings not integrated");
+    if(config.graphics!="nvk")plan["blockers"].push_back("Mainline supports Vulkan NVK only; legacy OpenGL is on branch legacy/1.12.2");
     if(plan["java_major"].get<int>()>8&&config.runtime=="minijvm")plan["blockers"].push_back("Java version mismatch: miniJVM 8 cannot execute this classfile version");
     if(!plan["missing_files"].empty())plan["blockers"].push_back("Installation files missing");
     if(!plan["native_substitutions"].empty())plan["blockers"].push_back("Desktop native dependencies need Horizon replacements");
