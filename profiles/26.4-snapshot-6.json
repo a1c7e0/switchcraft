@@ -4,11 +4,33 @@
   "java_major": 25,
   "classfile_major": 69,
   "graphics_backend": "vulkan",
-  "minimum_vulkan_api": [1, 2, 0],
+  "minimum_vulkan_api": [
+    1,
+    2,
+    0
+  ],
   "window_input_api": "SDL3",
-  "required_device_extensions": ["VK_KHR_synchronization2", "VK_EXT_vertex_attribute_divisor", "VK_KHR_swapchain"],
-  "required_features": ["multiDrawIndirect", "drawIndirectFirstInstance", "samplerAnisotropy", "shaderDrawParameters", "timelineSemaphore", "hostQueryReset", "synchronization2", "vertexAttributeInstanceRateDivisor"],
-  "evidence_classes": ["com.mojang.renderpearl.backend.vulkan.VulkanInstance", "com.mojang.renderpearl.backend.vulkan.VulkanFeatureSets", "com.mojang.blaze3d.platform.Window"],
+  "required_device_extensions": [
+    "VK_KHR_synchronization2",
+    "VK_EXT_vertex_attribute_divisor",
+    "VK_KHR_swapchain"
+  ],
+  "required_features": [
+    "multiDrawIndirect",
+    "drawIndirectFirstInstance",
+    "samplerAnisotropy",
+    "shaderDrawParameters",
+    "timelineSemaphore",
+    "hostQueryReset",
+    "synchronization2",
+    "vertexAttributeInstanceRateDivisor"
+  ],
+  "evidence_classes": [
+    "com.mojang.renderpearl.backend.vulkan.VulkanInstance",
+    "com.mojang.renderpearl.backend.vulkan.VulkanFeatureSets",
+    "com.mojang.blaze3d.platform.Window"
+  ],
   "evidence_method": "javap -c -p against SHA-1-verified official client; no game bytecode distributed",
-  "status": "Requirements inspected; Horizon compatibility must be measured"
+  "status": "Requirements inspected; Horizon compatibility must be measured",
+  "preferred_graphics_api_class_sha256": "b42d53d78fba06b0fbdb90395dfdc065f319dce9dc037fa4184f9399078ed7ee"
 }

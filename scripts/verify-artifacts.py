@@ -7,7 +7,7 @@ import struct
 import sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
-APPS = ("switch-diagnostics", "opengl-test", "vulkan-test", "minecraft-launcher", "java-test")
+APPS = ("switch-diagnostics", "vulkan-test", "vulkan-present", "minecraft-launcher", "java-test", "ffi-test")
 
 def verify(nro, elf):
     data = pathlib.Path(nro).read_bytes()
@@ -36,8 +36,9 @@ def verify(nro, elf):
     nacp = data[size+nacp_off:size+nacp_off+nacp_len]
     title = nacp[:0x200].split(b"\0")[0].decode()
     author = nacp[0x200:0x300].split(b"\0")[0].decode()
-    assert title == pathlib.Path(nro).stem and author == "Switchcraft", "Unexpected NACP identity"
-    assert nacp[0x3060:0x3070].split(b"\0")[0] == b"0.1.0", "Missing app version"
+    external=title in ['java-test','ffi-test']
+    assert title == pathlib.Path(nro).stem and author == ("JavaSwitch" if external else "Switchcraft"), "Unexpected NACP identity"
+    assert nacp[0x3060:0x3070].split(b"\0")[0] == (b"0.2.0" if external else b"0.1.0"), "Missing app version"
     # Cross-check ELF GNU build ID against the NRO build ID, padded to 32 bytes.
     build_id = data[0x40:0x54]
     assert b"GNU\0" + build_id in linked, "ELF and NRO build IDs differ"

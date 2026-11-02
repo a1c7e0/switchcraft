@@ -8,8 +8,8 @@ using Json=nlohmann::json;
 struct Config {
     std::string root="sdmc:/minecraft/.minecraft";
     std::string version;
-    std::string runtime="diagnostic";
-    std::string graphics="nvc0";
+    std::string runtime="openjdk25";
+    std::string graphics="nvk";
     unsigned heap_mib=256;
 };
 Json read_json(const std::string &path);

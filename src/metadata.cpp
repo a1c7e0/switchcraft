@@ -84,7 +84,7 @@ static Json resolve(const std::string &root,const std::string &id,std::set<std::
         if(!replaced)libs.push_back(lib);
     }
     Json args=base.value("arguments",Json::object());
-    if(child.contains("arguments"))for(const char *kind:{"jvm","game"}) {
+    if(child.contains("arguments"))for(const char *kind:{"jvm","game","default-user-jvm"}) {
         if(!args.contains(kind))args[kind]=Json::array();
         for(const auto &a:child["arguments"].value(kind,Json::array()))args[kind].push_back(a);
     }
@@ -178,6 +178,7 @@ Json make_plan(const Config &config,const std::string &runtime_root) {
     }
     std::string jar=version.at("_jar").get<std::string>();if(!safe_id(jar))throw std::runtime_error("Unsafe JAR ID");
     add(config.root+"/versions/"+jar+"/"+jar+".jar");
+    if(config.version=="26.4-snapshot-6")add(runtime_root+"/launchers/switchcraft-launcher-bridge.jar");
     std::string assets=version.value("assets","");
     if(version.contains("assetIndex"))assets=version["assetIndex"].at("id").get<std::string>();
     if(!assets.empty()) {
@@ -190,6 +191,16 @@ Json make_plan(const Config &config,const std::string &runtime_root) {
     std::vector<std::string> jvm={"-Xms64M","-Xmx"+std::to_string(config.heap_mib)+"M"},game;
     append_arguments(version["arguments"].value("jvm",Json::array()),jvm);
     append_arguments(version["arguments"].value("game",Json::array()),game);
+    std::vector<std::string> official_defaults;
+    append_arguments(version["arguments"].value("default-user-jvm",Json::array()),official_defaults);
+    plan["official_default_user_jvm_arguments"]=official_defaults;
+    plan["official_defaults_applied"]=false;
+    if(config.version=="26.4-snapshot-6"){
+        game.push_back("--graphicsBackend");game.push_back("VULKAN");
+        plan["target_profile"]="26.4-snapshot-6";
+        jvm.push_back("-javaagent:"+runtime_root+"/launchers/switchcraft-launcher-bridge.jar");
+        plan["required_runtime_modules"]={"java.base","java.instrument"};
+    }
     if(version.contains("minecraftArguments"))game=split_legacy(version["minecraftArguments"].get<std::string>());
     if(std::find(jvm.begin(),jvm.end(),"-cp")==jvm.end()&&std::find(jvm.begin(),jvm.end(),"-classpath")==jvm.end()){
         jvm.push_back("-cp");jvm.push_back("${classpath}");
@@ -211,7 +222,8 @@ Json make_plan(const Config &config,const std::string &runtime_root) {
     plan["blockers"].push_back("No Minecraft-capable Horizon JVM or AOT backend integrated in launcher");
     if(config.runtime=="minijvm")plan["blockers"].push_back("miniJVM is a separate Java 8 diagnostic; Minecraft compatibility is unimplemented");
     plan["blockers"].push_back("LWJGL/GLFW/OpenAL JNI substitutions not integrated");
-    if(config.graphics=="zink")plan["blockers"].push_back("Zink is not built");
+    if(config.graphics!="nvk")plan["blockers"].push_back("Mainline supports Vulkan NVK only; legacy OpenGL is on branch 1.12.2");
+    if(plan["java_major"].get<int>()>8&&config.runtime=="minijvm")plan["blockers"].push_back("Java version mismatch: miniJVM 8 cannot execute this classfile version");
     if(!plan["missing_files"].empty())plan["blockers"].push_back("Installation files missing");
     if(!plan["native_substitutions"].empty())plan["blockers"].push_back("Desktop native dependencies need Horizon replacements");
     if(!plan["unresolved_placeholders"].empty())plan["blockers"].push_back("Launch placeholders unresolved; account authentication is not implemented");

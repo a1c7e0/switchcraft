@@ -59,7 +59,9 @@ bool sc_frame(u64 *down) {
 void sc_exit(void) {
     sc_log("Clean exit: %s\n",app_name);
     if (log_file) fclose(log_file);
-    log_file=NULL; consoleExit(NULL);
+    log_file=NULL;
+    if(console_enabled)consoleExit(NULL);
+    console_enabled=false;
 }
 bool sc_chain(const char *name) {
     char path[256]; snprintf(path,sizeof(path),"sdmc:/switch/%s/%s.nro",name,name);

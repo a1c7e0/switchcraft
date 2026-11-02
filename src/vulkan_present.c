@@ -11,10 +11,11 @@
 #include <string.h>
 
 extern PFN_vkVoidFunction vkGetInstanceProcAddr(VkInstance,const char *);
-#define INST(X) X(DestroyInstance) X(EnumeratePhysicalDevices) X(GetPhysicalDeviceProperties) X(GetPhysicalDeviceFeatures2) X(GetPhysicalDeviceQueueFamilyProperties) X(EnumerateDeviceExtensionProperties) X(GetDeviceProcAddr) X(CreateDevice) X(GetPhysicalDeviceSurfaceSupportKHR) X(GetPhysicalDeviceSurfaceFormatsKHR) X(GetPhysicalDeviceSurfaceCapabilitiesKHR) X(DestroySurfaceKHR)
+#define INST(X) X(DestroyInstance) X(EnumeratePhysicalDevices) X(GetPhysicalDeviceProperties) X(GetPhysicalDeviceFeatures2) X(GetPhysicalDeviceQueueFamilyProperties) X(EnumerateDeviceExtensionProperties) X(GetDeviceProcAddr) X(CreateDevice)
+#define WSI(X) X(GetPhysicalDeviceSurfaceSupportKHR) X(GetPhysicalDeviceSurfaceFormatsKHR) X(GetPhysicalDeviceSurfaceCapabilitiesKHR) X(DestroySurfaceKHR)
 #define DEV(X) X(DestroyDevice) X(GetDeviceQueue) X(DeviceWaitIdle) X(CreateSwapchainKHR) X(DestroySwapchainKHR) X(GetSwapchainImagesKHR) X(AcquireNextImageKHR) X(QueuePresentKHR) X(CreateCommandPool) X(DestroyCommandPool) X(AllocateCommandBuffers) X(ResetCommandBuffer) X(BeginCommandBuffer) X(EndCommandBuffer) X(CmdPipelineBarrier) X(CmdClearColorImage) X(CreateSemaphore) X(DestroySemaphore) X(CreateFence) X(DestroyFence) X(WaitForFences) X(ResetFences) X(QueueSubmit) X(QueueWaitIdle)
 #define DECL(n) PFN_vk##n n;
-typedef struct {INST(DECL) DEV(DECL)} Dispatch;
+typedef struct {INST(DECL) WSI(DECL) DEV(DECL)} Dispatch;
 #define TRY(call) do{VkResult result=(call);if(result!=VK_SUCCESS){sc_log("%s -> %d\n",#call,result);goto cleanup;}}while(0)
 
 static void json_string(FILE *f,const char *s){
@@ -59,14 +60,16 @@ static bool run(bool present) {
     Dispatch d={0};SDL_Window *window=NULL;SDL_Gamepad *gamepad=NULL;
     bool sdl=false,screen=false,submitted=false;unsigned frames=0;bool complete=false;
     VkInstance instance=VK_NULL_HANDLE;VkDevice device=VK_NULL_HANDLE;VkSurfaceKHR surface=VK_NULL_HANDLE;
-    VkSwapchainKHR chain=VK_NULL_HANDLE;VkCommandPool pool=VK_NULL_HANDLE;VkSemaphore acquired=VK_NULL_HANDLE,rendered=VK_NULL_HANDLE;
+    VkSwapchainKHR chain=VK_NULL_HANDLE;VkCommandPool pool=VK_NULL_HANDLE;VkSemaphore acquired=VK_NULL_HANDLE,*rendered=NULL;
+    uint32_t chain_image_count=0;
     VkFence fence=VK_NULL_HANDLE;VkImage *images=NULL;
     const char *const *extensions=NULL;Uint32 extension_count=0;
     if(present){
         sc_log("Entering SDL3 / Vulkan-only window / VI surface test\n");sc_console(false);screen=true;
         SDL_SetMainReady();
+        sdl=true;
         if(!SDL_Init(SDL_INIT_VIDEO|SDL_INIT_GAMEPAD)){sc_log("SDL_Init: %s\n",SDL_GetError());goto cleanup;}
-        sdl=true;window=SDL_CreateWindow("Switchcraft Vulkan 26.4-snapshot-6",1280,720,SDL_WINDOW_VULKAN);
+        window=SDL_CreateWindow("Switchcraft Vulkan 26.4-snapshot-6",1280,720,SDL_WINDOW_VULKAN);
         if(!window){sc_log("SDL_CreateWindow: %s\n",SDL_GetError());goto cleanup;}
         sc_log("SDL version=%d driver=%s\n",SDL_GetVersion(),SDL_GetCurrentVideoDriver());
         int n=0;SDL_JoystickID *ids=SDL_GetGamepads(&n);
@@ -83,6 +86,7 @@ static bool run(bool present) {
     TRY(create(&ici,NULL,&instance));
 #define LOADI(n) d.n=(PFN_vk##n)vkGetInstanceProcAddr(instance,"vk" #n);if(!d.n){sc_log("Missing vk" #n "\n");goto cleanup;}
     INST(LOADI)
+    if(present){WSI(LOADI)}
     if(present&&!SDL_Vulkan_CreateSurface(window,instance,NULL,&surface)){sc_log("SDL_Vulkan_CreateSurface: %s\n",SDL_GetError());goto cleanup;}
     uint32_t nphysical=0;TRY(d.EnumeratePhysicalDevices(instance,&nphysical,NULL));
     if(!nphysical||nphysical>16){sc_log("Physical device count=%u\n",nphysical);goto cleanup;}
@@ -125,10 +129,13 @@ static bool run(bool present) {
     TRY(d.CreateSwapchainKHR(device,&sci,NULL,&chain));
     count=0;TRY(d.GetSwapchainImagesKHR(device,chain,&count,NULL));if(!count||count>32)goto cleanup;
     images=calloc(count,sizeof(*images));if(!images)goto cleanup;TRY(d.GetSwapchainImagesKHR(device,chain,&count,images));
+    chain_image_count=count;
     VkCommandPoolCreateInfo pci={.sType=VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO,.flags=VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT,.queueFamilyIndex=family};
     TRY(d.CreateCommandPool(device,&pci,NULL,&pool));
     VkCommandBuffer command;VkCommandBufferAllocateInfo ai={.sType=VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO,.commandPool=pool,.level=VK_COMMAND_BUFFER_LEVEL_PRIMARY,.commandBufferCount=1};TRY(d.AllocateCommandBuffers(device,&ai,&command));
-    VkSemaphoreCreateInfo sem={.sType=VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO};TRY(d.CreateSemaphore(device,&sem,NULL,&acquired));TRY(d.CreateSemaphore(device,&sem,NULL,&rendered));
+    VkSemaphoreCreateInfo sem={.sType=VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO};TRY(d.CreateSemaphore(device,&sem,NULL,&acquired));
+    rendered=calloc(chain_image_count,sizeof(*rendered));if(!rendered)goto cleanup;
+    for(uint32_t i=0;i<chain_image_count;i++)TRY(d.CreateSemaphore(device,&sem,NULL,&rendered[i]));
     VkFenceCreateInfo fi={.sType=VK_STRUCTURE_TYPE_FENCE_CREATE_INFO};TRY(d.CreateFence(device,&fi,NULL,&fence));
     sc_log("VI swapchain %ux%u images=%u format=%u; plus/Start or B exits\n",extent.width,extent.height,count,format.format);
     bool quit=false;
@@ -151,13 +158,13 @@ static bool run(bool present) {
         barrier.srcAccessMask=VK_ACCESS_TRANSFER_WRITE_BIT;barrier.dstAccessMask=0;barrier.oldLayout=VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;barrier.newLayout=VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
         d.CmdPipelineBarrier(command,VK_PIPELINE_STAGE_TRANSFER_BIT,VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,0,0,NULL,0,NULL,1,&barrier);TRY(d.EndCommandBuffer(command));
         VkPipelineStageFlags stage=VK_PIPELINE_STAGE_TRANSFER_BIT;
-        VkSubmitInfo submit={.sType=VK_STRUCTURE_TYPE_SUBMIT_INFO,.waitSemaphoreCount=1,.pWaitSemaphores=&acquired,.pWaitDstStageMask=&stage,.commandBufferCount=1,.pCommandBuffers=&command,.signalSemaphoreCount=1,.pSignalSemaphores=&rendered};
+        VkSubmitInfo submit={.sType=VK_STRUCTURE_TYPE_SUBMIT_INFO,.waitSemaphoreCount=1,.pWaitSemaphores=&acquired,.pWaitDstStageMask=&stage,.commandBufferCount=1,.pCommandBuffers=&command,.signalSemaphoreCount=1,.pSignalSemaphores=&rendered[index]};
         TRY(d.QueueSubmit(queue,1,&submit,fence));submitted=true;
-        VkPresentInfoKHR pi={.sType=VK_STRUCTURE_TYPE_PRESENT_INFO_KHR,.waitSemaphoreCount=1,.pWaitSemaphores=&rendered,.swapchainCount=1,.pSwapchains=&chain,.pImageIndices=&index};
+        VkPresentInfoKHR pi={.sType=VK_STRUCTURE_TYPE_PRESENT_INFO_KHR,.waitSemaphoreCount=1,.pWaitSemaphores=&rendered[index],.swapchainCount=1,.pSwapchains=&chain,.pImageIndices=&index};
         r=d.QueuePresentKHR(queue,&pi);
         VkResult wait=d.WaitForFences(device,1,&fence,VK_TRUE,5000000000ull);
         if(wait!=VK_SUCCESS){sc_log("Present fence -> %d; exiting without destroying pending objects\n",wait);return false;}
-        /* Conservative one-frame queue drain also makes semaphore reuse safe. */
+        /* Per-image present semaphore is reused only after reacquiring that image. */
         TRY(d.QueueWaitIdle(queue));submitted=false;TRY(d.ResetFences(device,1,&fence));
         if(r!=VK_SUCCESS&&r!=VK_SUBOPTIMAL_KHR){sc_log("QueuePresentKHR -> %d\n",r);break;}
         frames++;
@@ -167,14 +174,14 @@ cleanup:
     if(submitted){sc_log("GPU work pending; application exits for process teardown\n");return false;}
     if(device&&d.DeviceWaitIdle)d.DeviceWaitIdle(device);
     if(fence&&d.DestroyFence)d.DestroyFence(device,fence,NULL);
-    if(rendered&&d.DestroySemaphore)d.DestroySemaphore(device,rendered,NULL);
+    if(rendered&&d.DestroySemaphore)for(uint32_t i=0;i<chain_image_count;i++)if(rendered[i])d.DestroySemaphore(device,rendered[i],NULL);
     if(acquired&&d.DestroySemaphore)d.DestroySemaphore(device,acquired,NULL);
     if(pool&&d.DestroyCommandPool)d.DestroyCommandPool(device,pool,NULL);
     if(chain&&d.DestroySwapchainKHR)d.DestroySwapchainKHR(device,chain,NULL);
     if(device&&d.DestroyDevice)d.DestroyDevice(device,NULL);
     if(surface&&d.DestroySurfaceKHR)d.DestroySurfaceKHR(instance,surface,NULL);
     if(instance&&d.DestroyInstance)d.DestroyInstance(instance,NULL);
-    free(images);if(gamepad)SDL_CloseGamepad(gamepad);if(window)SDL_DestroyWindow(window);if(sdl)SDL_Quit();if(screen)sc_console(true);
+    free(images);free(rendered);if(gamepad)SDL_CloseGamepad(gamepad);if(window)SDL_DestroyWindow(window);if(sdl)SDL_Quit();if(screen)sc_console(true);
     sc_log("%s result=%s; presented frames=%u (not Minecraft title verification)\n",present?"SDL3 VI presentation":"Snapshot base profile",complete?"PASS":"NOT PASSED",frames);
     return true;
 }

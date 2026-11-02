@@ -7,6 +7,7 @@ import shutil
 import subprocess
 import tarfile
 import urllib.request
+import os
 
 ROOT=pathlib.Path(__file__).resolve().parents[1]
 DEPS=ROOT/".deps"
@@ -39,23 +40,18 @@ def main():
     if not (DEPS/"nvk/include/vk_video").exists():
         extract(download("vulkan_headers"),DEPS/"vk-headers",True)
         shutil.copytree(DEPS/"vk-headers/include/vk_video",DEPS/"nvk/include/vk_video",dirs_exist_ok=True)
-    patch=ROOT/"patches/minijvm-horizon.patch"
-    patch_hash=hashlib.sha256(patch.read_bytes()+(ROOT/"src/minijvm_mman.h").read_bytes()).hexdigest()
-    stamp=DEPS/"minijvm-patch.sha256"
-    if not stamp.exists() or stamp.read_text()!=patch_hash:
-        source=DEPS/"minijvm-source"
-        extract(download("minijvm"),source,True,prefix="minijvm/")
-        # Root notices are retained alongside the complete Java class-library source.
-        with tarfile.open(download("minijvm")) as archive:
-            member=next(m for m in archive if m.name.endswith('/LICENSE') and m.name.count('/')==1)
-            (source/"LICENSE").write_bytes(archive.extractfile(member).read())
-        target=DEPS/"minijvm"
-        if target.exists():shutil.rmtree(target)
-        shutil.copytree(source/"minijvm/c",target)
-        subprocess.run(["patch","--batch","-p1","-i",str(patch)],cwd=target,check=True)
-        shutil.copyfile(ROOT/"src/minijvm_mman.h",target/"jvm/sc_mman.h")
-        stamp.write_text(patch_hash)
-    if not (DEPS/"host-jdk8/jdk8u504-b01/bin/javac").exists():extract(download("host_jdk8"),DEPS/"host-jdk8")
+    entry=LOCK['java_switch']
+    target=pathlib.Path(os.environ.get('JAVA_SWITCH_SOURCE',str(DEPS/'java-switch')))
+    created=not target.exists()
+    if created:subprocess.run(['git','clone','--no-checkout','--depth','1',entry['url'],str(target)],check=True)
+    revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=target,text=True).strip()
+    if created or revision!=entry['revision']:
+        subprocess.run(['git','fetch','--depth','1','origin',entry['revision']],cwd=target,check=True)
+        subprocess.run(['git','checkout','--detach',entry['revision']],cwd=target,check=True)
+    if subprocess.check_output(['git','status','--porcelain'],cwd=target,text=True).strip():raise RuntimeError('Java dependency has uncommitted changes')
+    # Share hash-verified downloads/toolchain on constrained build machines.
+    if not (target/'.deps').exists():(target/'.deps').symlink_to(DEPS,target_is_directory=True)
+    if not (target/'.toolchain').exists():(target/'.toolchain').symlink_to(ROOT/'.toolchain',target_is_directory=True)
     assert hashlib.sha256((ROOT/"vendor/json.hpp").read_bytes()).hexdigest()==LOCK["nlohmann_json"]["sha256"]
     print("Dependencies verified")
 

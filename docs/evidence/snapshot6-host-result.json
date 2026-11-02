@@ -1,0 +1,19 @@
+{
+  "target": "26.4-snapshot-6",
+  "client_sha1": "8a97d5dafe80783525a2807b220527b65df724a5",
+  "java": "Temurin 25.0.5+8 Linux x86_64",
+  "renderer": "Vulkan 1.4.305 llvmpipe Mesa 25.0.7 (LLVM 19.1.7)",
+  "display": "Xvfb :97 / SDL3 X11",
+  "launch_mode": "official built-in demo, empty access token, no account credentials",
+  "vulkan_only_transform": "PASS: pinned class hash and single Vulkan backend",
+  "title_screen_host_visual_review": "PASS",
+  "screenshot": "26.4-snapshot-6-HOST-ONLY-vulkan-strict-title.png",
+  "screenshot_sha256": "c12916deafe22ebde0af59d01c562bd41f90036dc509ccac5839f67bd34c9e67",
+  "native_horizon_execution": "NOT TESTED",
+  "java25_horizon_vm": "NOT IMPLEMENTED",
+  "minecraft_title_on_horizon": "NOT ACHIEVED",
+  "known_host_limitations": [
+    "No audio device; sound system disabled itself",
+    "Minecraft services / Realms unreachable in this host; demo title still rendered"
+  ]
+}
