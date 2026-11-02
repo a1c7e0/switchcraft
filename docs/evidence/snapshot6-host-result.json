@@ -8,12 +8,15 @@
   "vulkan_only_transform": "PASS: pinned class hash and single Vulkan backend",
   "title_screen_host_visual_review": "PASS",
   "screenshot": "26.4-snapshot-6-HOST-ONLY-vulkan-strict-title.png",
-  "screenshot_sha256": "c12916deafe22ebde0af59d01c562bd41f90036dc509ccac5839f67bd34c9e67",
+  "screenshot_sha256": "cc5d747dacd5d6c1268767cf4c802edafbe9d51d4ef2f696c4fca414215ca9c1",
   "native_horizon_execution": "NOT TESTED",
   "java25_horizon_vm": "NOT IMPLEMENTED",
   "minecraft_title_on_horizon": "NOT ACHIEVED",
   "known_host_limitations": [
     "No audio device; sound system disabled itself",
     "Minecraft services / Realms unreachable in this host; demo title still rendered"
-  ]
+  ],
+  "reference_script": "tools/snapshot6-reference.py --cache /tmp/latest-snapshot --java /tmp/jdk25/jdk-25.0.5+8/bin/java --run-demo",
+  "bridge_jar_sha256": "2a2ff3124d669649c35a9d6e0353f0e2444ccd6d41f1d9506a0df30e5afd30d4",
+  "exit_host_visual_review": "PASS: selected Quit Game; log records Stopping! and process exited"
 }

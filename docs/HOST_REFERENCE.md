@@ -22,6 +22,12 @@ same title screen. Screenshot and logs are retained:
 * evidence/26.4-snapshot-6-host-strict-vulkan.log
 * evidence/snapshot6-host-result.json
 
+The final checked-in reference script reproduced the strict title screen. Its
+bridge JAR hash is recorded in snapshot6-host-result.json. The strict screenshot
+and log above come from that final run. Selecting Quit Game stopped the client
+normally; the log records `Stopping!`. A separate strict-run thread dump is
+retained as evidence/26.4-snapshot-6-host-strict-threads.log.
+
 The log records VULKAN_ONLY_APPLIED and `Using graphics backend Vulkan`, followed
 by actual atlas creation and title rendering. A thread dump from the first run
 shows vkQueuePresentKHR through VulkanGpuSurface.present and Minecraft.renderFrame.
