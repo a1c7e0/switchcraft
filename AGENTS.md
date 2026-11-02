@@ -3,10 +3,9 @@
 Write documentation in English; make focused commits and push authorized
 changes. Target fixed by the user: 26.4-snapshot-6, Java 25, Vulkan only.
 `legacy/1.12.2` preserves the legacy baseline at feb2f4d. Do not rewrite it.
-Develop on `main`. GitHub's default branch is temporarily named `1.12.2` and
-mirrors `main`: repository-settings writes return HTTP 403. The user authorized
-updating that default branch after backing up the old baseline. Keep the two
-modern refs aligned on authorized pushes; use explicit expected-head leases.
+Develop on `main`, which is the GitHub default branch. The owner removed the
+temporary mirror and renamed the default branch to `main`. Keep the legacy
+branch intact and use explicit expected-head leases when rewriting refs.
 
 Java runtime ownership is a1c7e0/java-switch. Pin its full commit in
 `dependencies.lock.json`; do not duplicate its implementation back here.

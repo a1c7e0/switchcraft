@@ -29,6 +29,6 @@ The repository-settings integration cannot change GitHub's default branch
 (HTTP 403). With the owner's explicit force-push authorization, first preserve
 feb2f4dd076d453d4f2db2be45096aecd4f2c2e7 at `legacy/1.12.2`, then move the default
 `1.12.2` ref to the current `main` commit using an explicit expected-head lease.
-The default name remains a temporary alias; implementation work continues on
-`main`. Existing release tags and artifact branches retain their original
-revisions.
+The owner subsequently removed the temporary `main` mirror and renamed the
+default branch to `main`. Existing release tags and artifact branches retain
+their original revisions; the legacy source remains at `legacy/1.12.2`.
