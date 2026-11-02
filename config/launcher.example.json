@@ -1,0 +1,7 @@
+{
+  "minecraft_root": "sdmc:/minecraft/.minecraft",
+  "version": "",
+  "runtime": "minijvm",
+  "graphics": "nvc0",
+  "heap_mib": 256
+}

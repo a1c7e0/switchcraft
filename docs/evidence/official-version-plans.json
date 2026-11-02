@@ -1,0 +1,95 @@
+[
+  {
+    "version": "1.12.2",
+    "metadata_sha256": "56dac2e1caa872d7e37a7b5523056cd812dca94f912ad2bd652817bee60edca4",
+    "required_java": 8,
+    "main_class": "net.minecraft.client.main.Main",
+    "classpath_entries": 30,
+    "missing_files": 31,
+    "native_substitutions": [
+      "net.java.jinput:jinput-platform:2.0.5",
+      "com.mojang:text2speech:1.10.3"
+    ],
+    "launchable": false,
+    "blockers": [
+      "No Minecraft-capable Horizon JVM or AOT backend integrated in launcher",
+      "LWJGL/GLFW/OpenAL JNI substitutions not integrated",
+      "Installation files missing",
+      "Desktop native dependencies need Horizon replacements",
+      "Launch placeholders unresolved; account authentication is not implemented"
+    ]
+  },
+  {
+    "version": "1.16.5",
+    "metadata_sha256": "3eeeab7b3165cc5263dc26ff8fe114fdb718b75a0244efead9d19635d090ba72",
+    "required_java": 8,
+    "main_class": "net.minecraft.client.main.Main",
+    "classpath_entries": 33,
+    "missing_files": 34,
+    "native_substitutions": [
+      "org.lwjgl:lwjgl:3.2.2",
+      "org.lwjgl:lwjgl-jemalloc:3.2.2",
+      "org.lwjgl:lwjgl-openal:3.2.2",
+      "org.lwjgl:lwjgl-opengl:3.2.2",
+      "org.lwjgl:lwjgl-glfw:3.2.2",
+      "org.lwjgl:lwjgl-stb:3.2.2",
+      "com.mojang:text2speech:1.11.3"
+    ],
+    "launchable": false,
+    "blockers": [
+      "No Minecraft-capable Horizon JVM or AOT backend integrated in launcher",
+      "LWJGL/GLFW/OpenAL JNI substitutions not integrated",
+      "Installation files missing",
+      "Desktop native dependencies need Horizon replacements",
+      "Launch placeholders unresolved; account authentication is not implemented"
+    ]
+  },
+  {
+    "version": "1.20.1",
+    "metadata_sha256": "5a60bf164ed8c8af0d7547ec2e619b91a37bca2b566bdaa06acf796e85e95f1e",
+    "required_java": 17,
+    "main_class": "net.minecraft.client.main.Main",
+    "classpath_entries": 44,
+    "missing_files": 45,
+    "native_substitutions": [],
+    "launchable": false,
+    "blockers": [
+      "No Minecraft-capable Horizon JVM or AOT backend integrated in launcher",
+      "LWJGL/GLFW/OpenAL JNI substitutions not integrated",
+      "Installation files missing",
+      "Launch placeholders unresolved; account authentication is not implemented"
+    ]
+  },
+  {
+    "version": "1.21.1",
+    "metadata_sha256": "5603a965deddb519da59866f3df784ed11c4fef81953d22781e76cebefeac8c3",
+    "required_java": 21,
+    "main_class": "net.minecraft.client.main.Main",
+    "classpath_entries": 47,
+    "missing_files": 48,
+    "native_substitutions": [],
+    "launchable": false,
+    "blockers": [
+      "No Minecraft-capable Horizon JVM or AOT backend integrated in launcher",
+      "LWJGL/GLFW/OpenAL JNI substitutions not integrated",
+      "Installation files missing",
+      "Launch placeholders unresolved; account authentication is not implemented"
+    ]
+  },
+  {
+    "version": "26.4-snapshot-6",
+    "metadata_sha256": "d6f3110b4bbf368cdcd6c02fded7eb80b0a84b4930d5b3f3538562b4295a2c95",
+    "required_java": 25,
+    "main_class": "net.minecraft.client.main.Main",
+    "classpath_entries": 55,
+    "missing_files": 56,
+    "native_substitutions": [],
+    "launchable": false,
+    "blockers": [
+      "No Minecraft-capable Horizon JVM or AOT backend integrated in launcher",
+      "LWJGL/GLFW/OpenAL JNI substitutions not integrated",
+      "Installation files missing",
+      "Launch placeholders unresolved; account authentication is not implemented"
+    ]
+  }
+]

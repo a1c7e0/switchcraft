@@ -10,7 +10,7 @@ TOOLS := $(DEVKITPRO)/tools/bin
 APPS := switch-diagnostics opengl-test vulkan-test minecraft-launcher java-test
 
 .PHONY: all clean host-test
-all: $(APPS:%=dist/%.nro)
+all: $(APPS:%=dist/%.nro) build/minijvm_rt.jar build/diagnostic-tests.jar build/dependency.jar
 build dist:
 	mkdir -p $@
 build/platform.o: src/platform.c src/platform.h | build

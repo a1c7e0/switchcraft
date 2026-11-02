@@ -1,0 +1,88 @@
+[INFO] object layout: ptr=64b MemoryBlock=24 Instance=24 JArrayHeader=32 field_off=24 arr_len_off=24 arr_body_off=32
+[INFO] gc backend : classic malloc
+method not exist :java/net/Proxy.<init>(Ljava/net/Proxy$Type;Ljava/net/SocketAddress;)V
+method not exist :java/net/Proxy.equals(Ljava/lang/Object;)Z
+method not exist :java/net/Authenticator.setDefault(Ljava/net/Authenticator;)V
+field not exist :java/net/Proxy.NO_PROXYLjava/net/Proxy;
+field not found java/net/Proxy.NO_PROXY 
+field not exist :java/net/Proxy.NO_PROXYLjava/net/Proxy;
+field not exist :java/net/Proxy$Type.SOCKSLjava/net/Proxy$Type;
+field not found java/net/Proxy$Type.SOCKS 
+field not exist :java/net/Proxy$Type.SOCKSLjava/net/Proxy$Type;
+method not exist :java/util/UUID.randomUUID()Ljava/util/UUID;
+method not exist :java/util/UUID.toString()Ljava/lang/String;
+method not exist :javax/imageio/ImageIO.setUseCache(Z)V
+method not exist :javax/imageio/ImageIO.read(Ljava/io/InputStream;)Ljava/awt/image/BufferedImage;
+method not exist :java/awt/image/BufferedImage.getWidth()I
+method not exist :java/awt/image/BufferedImage.getHeight()I
+method not exist :java/awt/image/BufferedImage.getRGB(IIII[III)[I
+method not exist :java/text/DecimalFormat.<init>(Ljava/lang/String;)V
+method not exist :java/text/DecimalFormat.format(D)Ljava/lang/String;
+method not exist :java/util/concurrent/Callable.call()Ljava/lang/Object;
+method not exist :java/util/concurrent/Executors.callable(Ljava/lang/Runnable;)Ljava/util/concurrent/Callable;
+method not exist :java/util/stream/Stream.map(Ljava/util/function/Function;)Ljava/util/stream/Stream;
+method not exist :java/util/stream/Collectors.toList()Ljava/util/stream/Collector;
+method not exist :java/util/stream/Stream.collect(Ljava/util/stream/Collector;)Ljava/lang/Object;
+method not exist :java/util/stream/Stream.flatMap(Ljava/util/function/Function;)Ljava/util/stream/Stream;
+method not exist :java/util/stream/Stream.filter(Ljava/util/function/Predicate;)Ljava/util/stream/Stream;
+field not exist :java/net/Proxy.NO_PROXYLjava/net/Proxy;
+field not found java/net/Proxy.NO_PROXY 
+field not exist :java/net/Proxy.NO_PROXYLjava/net/Proxy;
+method not exist :java/util/concurrent/locks/ReentrantReadWriteLock.<init>()V
+Exception threw: java/lang/RuntimeException: 
+    at java/util/concurrent/ConcurrentLinkedQueue.<clinit>(java/util/concurrent/ConcurrentLinkedQueue.java:37)
+
+method not exist :java/util/concurrent/locks/ReadWriteLock.writeLock()Ljava/util/concurrent/locks/Lock;
+multiple load class: 563db7a0af10  org/apache/logging/log4j/message/ReusableMessageFactory 
+multiple load class: 563db7b72d60  org/apache/logging/log4j/message/DefaultFlowMessageFactory 
+Exception threw: java/lang/OutOfMemoryError: 
+    at sun/misc/Launcher$AppClassLoader.findClass(sun/misc/Launcher$AppClassLoader.java:34)
+    at java/lang/ClassLoader.loadClass(java/lang/ClassLoader.java:173)
+    at java/lang/ClassLoader.loadClass(java/lang/ClassLoader.java:156)
+    at sun/misc/Launcher.loadClass(sun/misc/Launcher.java:92)
+    at org/apache/logging/log4j/status/StatusLogger.<init>(org/apache/logging/log4j/status/StatusLogger.java:84)
+    at org/apache/logging/log4j/status/StatusLogger.<clinit>(org/apache/logging/log4j/status/StatusLogger.java:77)
+
+Exception threw: java/lang/NullPointerException: 
+    at org/apache/logging/log4j/util/ProviderUtil.lazyInit(org/apache/logging/log4j/util/ProviderUtil.java:127)
+    at org/apache/logging/log4j/util/ProviderUtil.hasProviders(org/apache/logging/log4j/util/ProviderUtil.java:108)
+    at org/apache/logging/log4j/LogManager.<clinit>(org/apache/logging/log4j/LogManager.java:89)
+
+Exception threw: java/lang/NullPointerException: 
+    at org/apache/logging/log4j/util/ReflectionUtil.<clinit>(org/apache/logging/log4j/util/ReflectionUtil.java:84)
+
+Exception threw: java/lang/NoSuchMethodException: 
+    at org/apache/logging/log4j/util/ReflectionUtil.isValid(org/apache/logging/log4j/util/ReflectionUtil.java:168)
+    at org/apache/logging/log4j/util/ReflectionUtil.getEquivalentStackTraceElement(org/apache/logging/log4j/util/ReflectionUtil.java:155)
+    at org/apache/logging/log4j/util/ReflectionUtil.getCallerClass(org/apache/logging/log4j/util/ReflectionUtil.java:139)
+    at org/apache/logging/log4j/LogManager.getLogger(org/apache/logging/log4j/LogManager.java:537)
+    at bib.<clinit>(bib.java:224)
+
+method not exist :java/lang/UnsatisfiedLinkError.getMessage()Ljava/lang/String;
+method not exist :java/awt/Toolkit.getDefaultToolkit()Ljava/awt/Toolkit;
+method not exist :javax/swing/UIManager.getSystemLookAndFeelClassName()Ljava/lang/String;
+method not exist :javax/swing/UIManager.setLookAndFeel(Ljava/lang/String;)V
+method not exist :javax/swing/JOptionPane.showMessageDialog(Ljava/awt/Component;Ljava/lang/Object;Ljava/lang/String;I)V
+method not exist :java/awt/Toolkit.getDefaultToolkit()Ljava/awt/Toolkit;
+method not exist :java/awt/Toolkit.getSystemClipboard()Ljava/awt/datatransfer/Clipboard;
+method not exist :java/awt/datatransfer/Clipboard.getContents(Ljava/lang/Object;)Ljava/awt/datatransfer/Transferable;
+method not exist :java/awt/datatransfer/Transferable.isDataFlavorSupported(Ljava/awt/datatransfer/DataFlavor;)Z
+method not exist :java/awt/datatransfer/Transferable.getTransferData(Ljava/awt/datatransfer/DataFlavor;)Ljava/lang/Object;
+field not exist :java/awt/datatransfer/DataFlavor.stringFlavorLjava/awt/datatransfer/DataFlavor;
+field not found java/awt/datatransfer/DataFlavor.stringFlavor 
+field not exist :java/awt/datatransfer/DataFlavor.stringFlavorLjava/awt/datatransfer/DataFlavor;
+Exception threw: java/lang/NoSuchMethodException: getDefaultToolkit
+    at sun/misc/Launcher$AppClassLoader.findClass(sun/misc/Launcher$AppClassLoader.java:34)
+    at java/lang/ClassLoader.loadClass(java/lang/ClassLoader.java:173)
+    at java/lang/ClassLoader.loadClass(java/lang/ClassLoader.java:156)
+    at sun/misc/Launcher.loadClass(sun/misc/Launcher.java:92)
+    at org/lwjgl/LinuxSysImplementation.<clinit>(org/lwjgl/LinuxSysImplementation.java:50)
+
+lib not found:./liblwjgl64.so
+lib not found:/workspace/switchcraft/build/liblwjgl64.so
+Exception threw: java/lang/NoSuchMethodException: getPointerSize
+    at org/lwjgl/Sys.<clinit>(org/lwjgl/Sys.java:118)
+
+Exception threw: java/lang/IncompatibleClassChangeError: 
+    at net/minecraft/client/main/Main.main(net/minecraft/client/main/Main.java:38)
+

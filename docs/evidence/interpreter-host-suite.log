@@ -1,0 +1,21 @@
+g++ -std=c++17 -O2 -Wall -Wextra -Ivendor -Isrc src/metadata.cpp src/inspect.cpp -o build/switchcraft-inspect
+python3 scripts/build-minijvm.py --host
+miniJVM host diagnostic built
+python3 scripts/build-java-tests.py
+Note: Some input files use unchecked or unsafe operations.
+Note: Recompile with -Xlint:unchecked for details.
+python3 -m unittest discover -s tests -v
+test_actual_binaries (test_artifacts.ArtifactTests.test_actual_binaries) ... ok
+test_renamed_elf_and_truncation_rejected (test_artifacts.ArtifactTests.test_renamed_elf_and_truncation_rejected) ... ok
+test_interpreter_jar_io_thread_reflection_and_native_bridge (test_java.JavaTests.test_interpreter_jar_io_thread_reflection_and_native_bridge) ... ok
+test_cycle_missing_parent_traversal_and_bad_json (test_metadata.MetadataTests.test_cycle_missing_parent_traversal_and_bad_json) ... ok
+test_inheritance_library_override_and_parent_jar (test_metadata.MetadataTests.test_inheritance_library_override_and_parent_jar) ... ok
+test_legacy_quotes_and_asset_index (test_metadata.MetadataTests.test_legacy_quotes_and_asset_index) ... ok
+test_official_manifest_listing (test_metadata.MetadataTests.test_official_manifest_listing) ... ok
+test_read_only_and_no_token_substitution (test_metadata.MetadataTests.test_read_only_and_no_token_substitution) ... ok
+test_rules_and_native_substitutions (test_metadata.MetadataTests.test_rules_and_native_substitutions) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.332s
+
+OK

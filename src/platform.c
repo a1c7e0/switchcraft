@@ -6,6 +6,7 @@
 #include <errno.h>
 #include <sys/stat.h>
 #include <time.h>
+#include <malloc.h>
 
 static FILE *log_file;
 static PadState pad;
@@ -77,6 +78,10 @@ void sc_memory(void) {
         (unsigned long long)total,(unsigned long long)used,a,b);
     if (R_SUCCEEDED(a)&&R_SUCCEEDED(b)&&total>=used)
         sc_log("Process limit minus current use=%llu bytes (not JVM heap)\n",(unsigned long long)(total-used));
+    struct mallinfo heap=mallinfo();
+    sc_log("Newlib malloc arena=%llu allocated=%llu free-in-arena=%llu bytes\n",
+        (unsigned long long)heap.arena,(unsigned long long)heap.uordblks,(unsigned long long)heap.fordblks);
+    sc_log("Kernel-used memory includes reserved heap; arena free space is separate.\n");
     const size_t size=4*1024*1024;
     unsigned char *p=malloc(size);
     if (!p) {sc_log("4 MiB allocation FAILED\n"); return;}
