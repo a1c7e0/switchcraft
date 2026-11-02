@@ -23,6 +23,14 @@ def fetch(path, accept=None):
 raw = fetch("manifests/" + DIGEST, "application/vnd.docker.distribution.manifest.v2+json").read()
 assert "sha256:" + hashlib.sha256(raw).hexdigest() == DIGEST
 manifest = json.loads(raw)
+if "manifests" in manifest:
+    selected = next(m for m in manifest["manifests"]
+                    if m.get("platform", {}).get("architecture") == "amd64"
+                    and m["platform"].get("os") == "linux")
+    raw = fetch("manifests/" + selected["digest"],
+                "application/vnd.docker.distribution.manifest.v2+json").read()
+    assert "sha256:" + hashlib.sha256(raw).hexdigest() == selected["digest"]
+    manifest = json.loads(raw)
 ROOT.mkdir(exist_ok=True)
 for layer in manifest["layers"]:
     print("Extracting", layer["digest"], flush=True)
