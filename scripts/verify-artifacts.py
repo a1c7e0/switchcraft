@@ -43,7 +43,7 @@ def verify(nro, elf):
     build_id = data[0x40:0x54]
     assert b"GNU\0" + build_id in linked, "ELF and NRO build IDs differ"
     return {"name": pathlib.Path(nro).name, "bytes": len(data), "sha256": hashlib.sha256(data).hexdigest(),
-            "architecture": "AArch64", "format": "NRO0+ASET", "nacp_title": title,
+            "architecture": "AArch64", "format": "NRO0+ASET", "nacp_title": title, "build_id": build_id.hex(),
             "build_verification": "PASS", "hardware_verification": "NOT TESTED"}
 
 def main():

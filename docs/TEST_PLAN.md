@@ -98,8 +98,8 @@ Minecraft title PASS. Standard JNI/FFM host tests are not Horizon runtime tests.
 * **File:** `vulkan-present.nro`.
 * **Installation requirements:** Common setup; V-02 with Joy-Con or Pro Controller.
 * **How to launch:** Common hbmenu launch for the named NRO; the explicitly marked host/future cases are exceptions.
-* **Controller operations / actions:** During X presentation press ordinary buttons, then Plus/Start.
-* **Expected screen/output and successful result:** SDL gamepad name/events appear in log; exit input works.
+* **Controller operations / actions:** During X presentation press ordinary buttons, then SDL Start. For a standard paired/Pro controller the pinned SDL driver maps Plus to SDL Start and physical A to SDL East (which also exits); single Joy-Con mappings differ. Record the physical button and logged SDL name.
+* **Expected screen/output and successful result:** SDL gamepad name, instance ID, numeric button ID and SDL button name appear in the log; exit input works. These are expected static mappings, not a hardware PASS.
 * **Failure symptoms:** No gamepad, missing/repeated events, cannot exit.
 * **Log location:** `vulkan-present.log` under the common log root unless explicitly host/manifest.
 * **Information to report:** Exact controller/mode, event IDs and buttons that failed; this is not yet in-game controller verification.
@@ -305,3 +305,15 @@ Atmosphere crash reports and the matching `build/<app>.elf`. Symbolicate using
 `aarch64-none-elf-addr2line -Cfipe build/<app>.elf <module-relative-PC>`. Report the
 last flushed stage and whether HOME responded. Do not send Microsoft credentials,
 access tokens, account JSON, console keys or game JARs. The tools request none.
+
+Alternatively, on a computer with Python 3 use the installed helper (replace the
+SD path for your system, and write the output outside the SD root):
+
+```sh
+python3 switchcraft-docs/collect-feedback.py --sd-root /media/switch-sd --output switchcraft-feedback.zip
+```
+
+It copies only the manifest, six named diagnostic logs and snapshot-vulkan.json;
+missing entries are listed in collection.json. It never scans .minecraft or
+overwrites an output. Review the archive before sharing. Crash reports and
+launch-plan.json are excluded: review and attach relevant crash reports manually.

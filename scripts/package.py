@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Package the pinned snapshot-6 native bring-up without shipping game files."""
-import datetime,hashlib,importlib.util,json,os,pathlib,shutil,subprocess,tarfile,zipfile
+import datetime,hashlib,importlib.util,io,json,os,pathlib,shutil,subprocess,tarfile,zipfile
 ROOT=pathlib.Path(__file__).resolve().parents[1];os.chdir(ROOT);DIST=ROOT/'dist'
 LOCK=json.loads((ROOT/'dependencies.lock.json').read_text())
 JAVA=pathlib.Path(os.environ.get('JAVA_SWITCH_SOURCE',str(ROOT/'.deps/java-switch')))
@@ -47,6 +47,7 @@ shutil.copyfile(ROOT/'.deps/sdl3/share/licenses/SDL3/LICENSE.txt',runtime/'licen
 for sub in ['versions','libraries','assets','mods','config','saves','resourcepacks','shaderpacks']:(sd/'minecraft/.minecraft'/sub).mkdir(parents=True,exist_ok=True)
 for name in ['README.md','docs/TEST_PLAN.md','docs/KNOWN_ISSUES.md','docs/HOST_REFERENCE.md']:
     dest=sd/'switchcraft-docs'/pathlib.Path(name).name;dest.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(ROOT/name,dest)
+shutil.copyfile(ROOT/'tools/collect-feedback.py',sd/'switchcraft-docs/collect-feedback.py')
 (sd/'INSTALL.txt').write_text('Merge switch/ and minecraft/ onto the SD root. Preserve saves and real configuration.\nUse application-mode hbmenu. Start switch-diagnostics, then vulkan-present.\nHardware execution NOT TESTED. Java 25 VM is absent; Minecraft does not yet run on Horizon.\nSee switchcraft-docs/TEST_PLAN.md. No game files or credentials are included.\n')
 source=DIST/'switchcraft-corresponding-source.tar.gz'
 with tarfile.open(source,'w:gz') as archive:
@@ -69,7 +70,23 @@ with zipfile.ZipFile(zip_path,'w',zipfile.ZIP_DEFLATED,compresslevel=6) as archi
     for p in sorted(sd.rglob('*')):
         if p.is_file():archive.write(p,p.relative_to(sd))
         elif not any(p.iterdir()):archive.writestr(p.relative_to(sd).as_posix()+'/',b'')
-for p,purpose in [(zip_path,'Installable native snapshot-6 bring-up package'),(source,'Project, runtime and Java class-library corresponding source')]:
+debug_path=DIST/'switchcraft-debug-symbols.zip'
+with zipfile.ZipFile(debug_path,'w',zipfile.ZIP_DEFLATED,compresslevel=6) as debug:
+    debug.writestr('build-identities.json',json.dumps({'source_revision':revision,'java_switch_revision':java_revision,
+        'apps':{item['name']:item['build_id'] for item in records}},indent=2)+'\n')
+    for app in verify.APPS:
+        debug.write(ROOT/'build'/(app+'.elf'),app+'.elf')
+        mapfile=ROOT/'build'/(app+'.elf.map')
+        if mapfile.is_file():debug.write(mapfile,app+'.elf.map')
+native_sdk=DIST/'switchcraft-native-sdk.tar.gz'
+with tarfile.open(native_sdk,'w:gz') as sdk:
+    sdk.add(ROOT/'include/switchcraft/native_lookup.h',arcname='include/switchcraft/native_lookup.h')
+    sdk.add(ROOT/'build/libswitchcraft-native.a',arcname='lib/libswitchcraft-native.a')
+    sdk.add(ROOT/'docs/NATIVE_BINDINGS.md',arcname='NATIVE_BINDINGS.md')
+    contract=json.dumps({'source_revision':revision,'java_switch_revision':java_revision,'target':'AArch64 Horizon libnx',
+        'hardware_verification':'NOT TESTED','java_loader_integrated':False,'requires':'pinned SDL3, NVK and libnx at final link'},indent=2).encode()+b'\n'
+    entry=tarfile.TarInfo('native-contract.json');entry.size=len(contract);sdk.addfile(entry,io.BytesIO(contract))
+for p,purpose in [(zip_path,'Installable native snapshot-6 bring-up package'),(source,'Project, runtime and Java class-library corresponding source'),(debug_path,'Matching AArch64 debug ELFs and available linker maps'),(native_sdk,'Experimental static native symbol lookup SDK')]:
     manifest['artifacts'].append({'name':p.name,'purpose':purpose,'source_revision':revision,'java_switch_revision':java_revision,'source_dirty':dirty,
         'build_date':now,'toolchain':toolchain,'bundled_dependencies':['Native bring-up applications, original launcher bridge/tests, source and licenses; no Minecraft game files'],
         'build_verification':'PASS','tested_environment':'Host archive/hash checks','hardware_verification':'NOT TESTED','known_limitations':limitations,
