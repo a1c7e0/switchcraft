@@ -1,7 +1,7 @@
 # Snapshot 6 implementation status
 
 Target fixed by the user: **26.4-snapshot-6 / Java 25 / Vulkan only**.
-The legacy branch is 1.12.2; Java ownership is the independent java-switch repo.
+The legacy branch is legacy/1.12.2; Java ownership is the independent java-switch repo.
 
 | Milestone | Implemented | Built | Host verification | Horizon hardware |
 | --- | --- | --- | --- | --- |

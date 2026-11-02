@@ -37,7 +37,7 @@
 * NRO chaining requires next-load support and the packaged SD layout. Launch
   individual NROs directly if chaining is unsupported. SD logs have no rotation;
   crash recovery is HOME/relaunch and matching ELF symbolication.
-* Legacy OpenGL artifacts remain on branch 1.12.2 and are excluded from main's
+* Legacy OpenGL artifacts remain on branch legacy/1.12.2 and are excluded from main's
   package. AOT is still blocked on missing external runtime/game build inputs.
 * Docker/CI are supplied but not independently executed here. Private cross-repo
   CI checkout needs a read token configured in GitHub; local authenticated builds

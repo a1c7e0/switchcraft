@@ -5,7 +5,7 @@
 | 26.4-snapshot-6 | Java 25 / classfile 69 | Vulkan 1.2 base, SDL3/gamepad | Strict Vulkan Demo title on host; Horizon VM missing |
 | Java 25 JNI/FFM workload | Java 25 | Native downcalls/upcalls | Actual JNI adapter passes on host; no Horizon VM |
 | miniJVM diagnostic | Java 8 | Console | Host passed; Horizon NRO untested |
-| Legacy Minecraft experiments | Java 8/17/21 metadata targets | Historical OpenGL/LWJGL | Preserved on branch 1.12.2 |
+| Legacy Minecraft experiments | Java 8/17/21 metadata targets | Historical OpenGL/LWJGL | Preserved on branch legacy/1.12.2 |
 
 Mainline does not offer OpenGL selection. The original snapshot client still has
 an OpenGL fallback; the hash-pinned bridge restricts renderer selection to one

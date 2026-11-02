@@ -1,6 +1,6 @@
 # Decisions for mainline
 
-1. Preserve the complete previous source milestone on branch 1.12.2 and push it.
+1. Preserve the complete previous source milestone on branch legacy/1.12.2 and push it.
    Main targets the exact user-selected snapshot 6, not a moving latest alias.
 2. Separate runtime ownership into java-switch. Consume a full commit, versioned
    C SDK and its standalone artifacts; preserve Java-8 diagnostics while porting
@@ -24,3 +24,11 @@
    pending GPU work. Driver-level hangs still need physical diagnosis.
 9. Keep .minecraft read only. Runtime config/logs/test instances remain separate;
    installed saves and real configuration are never shipped/overwritten.
+
+The repository-settings integration cannot change GitHub's default branch
+(HTTP 403). With the owner's explicit force-push authorization, first preserve
+feb2f4dd076d453d4f2db2be45096aecd4f2c2e7 at `legacy/1.12.2`, then move the default
+`1.12.2` ref to the current `main` commit using an explicit expected-head lease.
+The default name remains a temporary alias; implementation work continues on
+`main`. Existing release tags and artifact branches retain their original
+revisions.

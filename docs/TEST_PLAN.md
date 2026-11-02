@@ -251,7 +251,7 @@ Minecraft title PASS. Standard JNI/FFM host tests are not Horizon runtime tests.
 
 ## Deferred and legacy coverage
 
-OpenGL context/triangle tests exist on branch 1.12.2 only and are excluded from
+OpenGL context/triangle tests exist on branch legacy/1.12.2 only and are excluded from
 mainline. Standard JNI Invocation, Java25 JAR/FFM execution and Minecraft bootstrap
 on Horizon require the missing native VM; do not mark them passed from the Java8
 suite or host title. Fabric/Mixin/world rendering remain unimplemented.

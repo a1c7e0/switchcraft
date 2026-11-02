@@ -2,9 +2,15 @@
 
 `main` targets **Minecraft 26.4-snapshot-6, Java 25 and Vulkan**. The previous
 OpenGL/Java-8 research baseline is preserved on branch
-[`1.12.2`](https://github.com/a1c7e0/switchcraft/tree/1.12.2). Java runtime work
-now lives in [`java-switch`](https://github.com/a1c7e0/java-switch), consumed at
-an immutable commit from `dependencies.lock.json`.
+[`legacy/1.12.2`](https://github.com/a1c7e0/switchcraft/tree/legacy/1.12.2).
+Java runtime work now lives in
+[`java-switch`](https://github.com/a1c7e0/java-switch), consumed at an immutable
+commit from `dependencies.lock.json`.
+
+GitHub's default branch is temporarily named `1.12.2` and mirrors `main`, so
+the repository landing page displays the current implementation. Repository
+settings cannot be changed by the integration (HTTP 403). Develop on `main`;
+use `legacy/1.12.2` for the preserved older implementation.
 
 **The snapshot reaches its title screen in the Linux Java-25/Vulkan reference.
 It does not yet run on Horizon: a native Java 25 VM is not built or linked.

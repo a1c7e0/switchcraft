@@ -60,7 +60,7 @@ host_result=json.loads((ROOT/'docs/evidence/snapshot6-host-result.json').read_te
 manifest={'project':'Switchcraft','target':'26.4-snapshot-6','source_revision':revision,'java_switch_revision':java_revision,'source_dirty':dirty,
  'build_date':now,'toolchain':toolchain,'dependency_lock':LOCK,'hardware_verification':'NOT TESTED','java25_horizon_runtime':'NOT AVAILABLE',
  'minecraft_title_on_horizon':'NOT ACHIEVED','host_reference':host_result,'artifacts':records,'sd_resources':[],
- 'known_limitations':limitations,'not_produced':{'opengl-test.nro':'Legacy branch 1.12.2 only','minecraft-aot-test.nro':'No viable self-contained AOT runtime'},
+ 'known_limitations':limitations,'not_produced':{'opengl-test.nro':'Legacy branch legacy/1.12.2 only','minecraft-aot-test.nro':'No viable self-contained AOT runtime'},
  'package_manifest_note':'Internal ZIP manifest records NRO/resources; external manifest additionally hashes the final archives.'}
 for file in sorted(runtime.rglob('*.jar')):manifest['sd_resources'].append({'path':file.relative_to(sd).as_posix(),'bytes':file.stat().st_size,'sha256':hashlib.sha256(file.read_bytes()).hexdigest()})
 (DIST/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n');shutil.copyfile(DIST/'manifest.json',sd/'manifest.json')
@@ -142,7 +142,7 @@ loading and LWJGL bindings. Re-run the same pinned title test on the console.
 
 ## J. Source and commits
 
-The legacy baseline is preserved on branch 1.12.2. main removes OpenGL and local
+The legacy baseline is preserved on branch legacy/1.12.2. main removes OpenGL and local
 Java implementation ownership, pins java-switch and SDL3, and packages explicit
 source/dependency/runtime/hardware evidence. Documents are English.
 
