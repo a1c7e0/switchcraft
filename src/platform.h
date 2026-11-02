@@ -8,6 +8,7 @@ extern "C" {
 #define SC_LOGS SC_ROOT "/logs"
 void sc_init(const char *name);
 void sc_exit(void);
+void sc_console(bool enabled);
 void sc_log(const char *format, ...) __attribute__((format(printf,1,2)));
 bool sc_frame(u64 *down);
 bool sc_chain(const char *name);
