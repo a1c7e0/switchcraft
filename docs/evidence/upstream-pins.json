@@ -1,0 +1,8 @@
+{
+  "etonedemid--minecraft-switch": "ed1e108986330d8d4943a92ed4ee88a457795b99 2026-10-21T18:46:27-03:00 Update README.md",
+  "autorunhq--autorun": "1ac9b6cf37b90f2d5783dd7ef389bebbe1c68877 2026-10-16T15:18:48-03:00 horizon-dlls: README with Autorun's header and what the files are, and aren't.",
+  "danfromtico--mesa-switch": "0ff52079ca9e9e837ed27eb95a8d239f439a1864 2026-10-12T21:49:29-03:00 horizon: runtime shutdown also closes the devices' cached buffers",
+  "devkitPro--deko3d": "373bfd43d8b2d805fa2eb7d406dbb823032df958 2026-10-17T20:30:48+02:00 Fix inverted logic in Device::viewportFlipY",
+  "jhuz0--nvk-switch": "080a647b0eb448631874da25d26826d491ddcf33 2026-07-24T23:48:47-04:00 Prebuilt NVK (Mesa Vulkan) for Nintendo Switch homebrew",
+  "PojavLauncherTeam--PojavLauncher": "b12ad048157b3aa255d078c235dd4571e1900309 2025-09-23T14:12:28-06:00 Discontinued"
+}
