@@ -1,34 +1,26 @@
-# Engineering decisions
+# Decisions for mainline
 
-1. **Deliver independent NROs first.** Native console diagnostics, GL, NVK,
-   Java and metadata inspection are separately launchable. This preserves useful
-   tests when a GPU/JVM path fails. Homebrew next-load is a replacement handoff.
-2. **Reuse the existing GPU stack.** Stable devkitPro NVC0 for GL; hash-pinned
-   public NVK for Vulkan. The heavier Mesa 26 fork is an upgrade candidate after
-   hardware evidence. No Vulkan-to-deko3d implementation was invented.
-3. **Use an interpreter to obtain a real Java milestone.** The existing OpenJDK
-   port is incomplete in this environment. miniJVM can be cross-linked after
-   explicit OS adaptation, and its real JAR suite passes on host. This does not
-   establish Minecraft, HotSpot, standard JNI or arbitrary Mod compatibility.
-4. **Disable unsupported services honestly.** No fake successful mmap, dlopen,
-   process creation or JIT stubs. Classic GC uses newlib; unused Immix reservation
-   returns ENOSYS. The C11 clock wrapper uses the real realtime clock. TLS entropy
-   uses Horizon's CSPRNG; networking itself remains untested.
-5. **Protect installations.** The portable planner performs reads only. Actual
-   diagnostic writes/config/logs live under `switch/mc-runtime`. Planned game
-   directories are isolated; no saves/assets/JARs are modified.
-6. **Use semicolon classpaths on Horizon.** `sdmc:` contains a colon. miniJVM's
-   parser/property and exported plans use `;`; a future OpenJDK backend must adapt
-   its path semantics or normalize paths consistently.
-7. **Keep runtime targets distinct.** Java 8 diagnostic, future OpenJDK 8/21/25
-   targets and AOT remain separate. Official metadata determines Java requirements;
-   no global assumption ties all Minecraft versions to Java 8.
-8. **Treat AOT as independent and blocked.** External pz-switch/musl/GraalVM/game
-   inputs are absent and licensing is unresolved. No placeholder AOT NRO appears
-   in dist. Its build attempts and exact failure are preserved.
-9. **Prefer a tested image-extraction fallback on this disk.** Docker works but
-   vfs layer copies exhausted space. OCI digests and every layer hash are checked
-   while extracting the same official toolchain for local builds.
-10. **Keep original code MIT and preserve third-party terms.** Java class-library
-    GPL notices/source are distributed with the JAR; native/runtime dependency
-    attribution is carried. No game or OptiFine bytes enter release archives.
+1. Preserve the complete previous source milestone on branch 1.12.2 and push it.
+   Main targets the exact user-selected snapshot 6, not a moving latest alias.
+2. Separate runtime ownership into java-switch. Consume a full commit, versioned
+   C SDK and its standalone artifacts; preserve Java-8 diagnostics while porting
+   Java 25. A Java version mismatch must fail before executing bytecode.
+3. Reuse the existing SDL3 Switch/NVK port. Patch its unconditional EGL/window
+   references and build without GL/EGL. No new Vulkan-to-deko3d layer was created.
+4. Read real snapshot classes/metadata. Implement exact base features, SDL/VI
+   presentation and gamepad tests; do not infer compatibility from device count.
+5. The client retains GL fallback. Use an original hash-pinned single-method
+   transformation through Java 25's public Class-File API and instrumentation.
+   Preserve the normal game class loader; the custom-loader experiment failed.
+   No authentication changes, feature fakes or game bytecode redistribution.
+6. Establish a host title reference to validate actual game requirements and
+   transformation behavior. Label its Linux/software Vulkan screenshot HOST ONLY;
+   it does not satisfy the Horizon title objective or substitute streaming.
+7. Port actual prerequisites. The same standard JNI adapter passes host Java-25
+   and FFM tests. Zero has a libffi fallback linker, so add real AAPCS64 and libnx
+   W^X closure code. Do not claim this is a complete OpenJDK 25 OS port.
+8. Keep graphics/runtime native tests independent, with finite acquire/fence
+   waits, per-image present semaphores and explicit process-exit behavior after
+   pending GPU work. Driver-level hangs still need physical diagnosis.
+9. Keep .minecraft read only. Runtime config/logs/test instances remain separate;
+   installed saves and real configuration are never shipped/overwritten.

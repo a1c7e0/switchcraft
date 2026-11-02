@@ -1,139 +1,115 @@
-# Architecture
+# Mainline architecture — snapshot 6 / Vulkan
 
-Solid nodes/edges below represent implemented source and linked components.
-Dashed nodes/edges are planned integrations. All Horizon nodes remain hardware
-NOT TESTED. The standalone [architecture.svg](architecture.svg) uses the same
-distinction and can be viewed without Mermaid support.
-
-## Components and process boundaries
+Solid paths have implemented and compiled code. Dashed paths are unavailable
+runtime integration. **Every Horizon path is hardware NOT TESTED.** Host reference
+execution is separate and is not a Switch execution backend.
 
 ```mermaid
 flowchart TD
-  HB[Application-mode hbmenu] --> D[Diagnostic console NRO]
-  HB --> L[Installation inspector NRO]
-  D -->|envSetNextLoad then exit| GL[OpenGL test NRO]
-  D -->|envSetNextLoad then exit| VK[NVK test NRO]
-  D -->|envSetNextLoad then exit| J[Java test NRO]
-  D -->|envSetNextLoad then exit| L
-  L --> M[Shared C++ JSON / inheritance / rules planner]
-  M --> MC[Read-only standard .minecraft]
-  M --> P[Blocked launch plan JSON]
-  L --> C[Runtime config and plain-text logs]
-  J --> VM[miniJVM interpreter + classic GC]
-  VM --> RT[Java 8 class library + original test JARs]
-  VM --> N[Static miniJVM native method bridge]
-  L -. future same-process backend .-> O[OpenJDK + standard JNI]
-  O -.-> LW[LWJGL / GLFW / OpenAL adapters]
-  LW -.-> GAME[Minecraft / Fabric]
-  L -. independent fixed image .-> AOT[GraalVM AOT backend]
-  classDef future stroke-dasharray: 5 5,fill:#fff3df
-  class O,LW,GAME,AOT future
+  HB[Application-mode hbmenu] --> D[Native platform diagnostics]
+  D -->|next-load replacement| V[NVK offscreen tests]
+  D -->|next-load replacement| W[SDL3 / VI swapchain + gamepad + exact base profile]
+  D --> L[Snapshot 6 inspector / launch gate]
+  D --> J[Independent Java 8 test NRO]
+  D --> F[Independent AAPCS64 / W^X FFI NRO]
+  L --> M[Portable metadata / inheritance / rules / classpath planner]
+  M --> INSTALL[Read-only standard .minecraft]
+  M --> PLAN[Strict Vulkan plan / separate runtime logs and config]
+  L --> SDK[Pinned java-switch C SDK / JNI adapter]
+  SDK -. no VM linked .-> JVM[Horizon OpenJDK 25 / class library / JNI / FFM]
+  JVM -. required .-> LW[Static LWJGL / SDL3 / VMA / shaderc / SPVC / audio]
+  LW -.-> NVK[Native NVK + Horizon GPU services]
+  JVM -.-> BRIDGE[Java instrumentation / pinned Vulkan-only method transformation]
+  BRIDGE -.-> MC[Minecraft title / world / future Fabric]
+  J --> MINI[miniJVM Java 8 interpreter + original test JARs]
+  F --> FFI[libffi AAPCS64 / libnx RW-RX code memory]
 ```
 
-The applications are separate NROs so independent GPU/JVM failures do not remove
-the platform diagnostic. Next-load requests replace the current application
-through hbmenu; they are not Linux fork/exec or concurrent processes. A future
-launcher/game runtime should enter the JVM in the same NRO or define an explicit
-serialized handoff, rather than retaining a launcher process beside the game.
+`java-switch` owns JVM adapters, interpreter, original Java workloads, SDK and
+libffi code. This repository consumes a fixed commit, builds/repacks its NROs and
+links its SDK. `src/platform.c` owns Horizon console/input/SD/memory/threads;
+`metadata.cpp` is shared with host tools; `vulkan_present.c` owns SDL/VI behavior.
 
-`platform.c/.h` owns Horizon services. `metadata.cpp/.hpp` is portable and shared
-by the host inspector and native launcher. `java_vm.c` isolates miniJVM's own
-integer typedefs/ABI from libnx headers; `java_test.c` owns platform initialization.
-The runtime boundary is the native adapter, not a claimed drop-in JNI library.
+The launcher cannot start a Java 25 game because the actual VM is absent. Its
+real SDK call returns JS_UNAVAILABLE/runtime-not-linked. No Play action claims
+otherwise. Next-load replaces the current NRO via hbmenu; there is no fork/exec
+or simultaneous launcher/game process. A future Java VM enters the same process
+or uses an explicit serialized handoff.
 
-## Java initialization and recovery
+## Graphics path
 
 ```mermaid
 flowchart LR
-  A[Application / logging / SD] --> B[Check class-library JAR]
-  B --> C[Create miniJVM; 64 MiB collector target]
-  C --> D[Select classic GC; JIT disabled; no JDWP]
-  D --> E[Load boot JAR and semicolon-separated test classpath]
-  E --> F[Register static nativeAdd method]
-  F --> G[call_main DiagnosticSmoke or UserMain]
-  G --> H[Destroy JVM and native bookkeeping]
-  H --> I[Return to controller menu; one run per NRO]
-  B -->|missing file| I
-  G -. future standard invocation .-> JNI[JNI_CreateJavaVM / HotSpot]
+  INPUT[Joy-Con / Pro / USB input] --> SDL[Patched SDL3 Switch driver]
+  SDL --> WIN[libnx NWindow]
+  SDL --> VI[VK_NN_vi_surface]
+  VI --> SWAP[VK_KHR_swapchain]
+  SWAP --> NVK[Static Mesa NVK / GM20B]
+  NVK --> DISPLAY[Horizon presentation]
+  PROFILE[Exact base-feature queries] --> NVK
+  JAVA[Future LWJGL FFM calls] -.-> SDL
+  JAVA -.-> NVK
 ```
 
-The host runs the same diagnostic adapter/interpreter, but POSIX host behavior
-does not prove Horizon pthread/TLS, Java I/O or teardown. The OpenJDK candidate
-needs missing platform services (mmap-style memory, executable code aliasing,
-signals/exceptions, TLS, dynamic native registration, threads, class libraries)
-before a real Invocation API can be tested. Interpreter-only miniJVM avoids JIT
-executable-memory requirements at substantial expected performance cost; no
-Minecraft frame rate is inferred.
+SDL3 is configured with GL/OpenGL ES/EGL disabled. Its native Switch backend
+previously referenced EGL even for Vulkan windows; the patch guards/removes
+those dependencies. Native linked symbol checks contain SDL/Vulkan entries and
+no EGL/OpenGL API functions. This does not prove Java bindings or hardware output.
 
-## OpenGL and Vulkan paths
+Presentation uses a graphics/present queue, actual surface capabilities/formats,
+FIFO, per-image render-finished semaphores, finite acquire/fence waits and a
+conservative queue drain. It clears animated colors over up to 300 frames and
+records SDL gamepad events. The independent NVK NRO retains transfer/readback and
+a shader-rendered offscreen triangle. Driver hangs remain possible.
+
+## Runtime and startup
 
 ```mermaid
-flowchart LR
-  GL[Test shaders + vertex-ID triangle] --> GLAD[GLAD]
-  GLAD --> EGL[EGL / Mesa NVC0]
-  EGL --> NW[libnx NWindow / Nouveau / GM20B]
-  NW --> SCREEN[Display and GL pixel readback]
-  V[Test Vulkan function pointers] --> NVK[Loaderless static Mesa NVK]
-  NVK --> Q[Graphics queue and shader compiler]
-  Q --> GPU[Horizon GPU services / GM20B]
-  GPU --> OFF[Offscreen RGBA8 image / transfer buffer]
-  OFF --> READ[Host-visible readback and ASCII preview]
-  NVK -. future .-> WSI[VI surface / swapchain / presentation]
-  LW[LWJGL JNI adapters] -. future .-> EGL
-  LW -. future .-> NVK
+flowchart TD
+  SCAN[Scan version JSONs] --> RESOLVE[Resolve inheritance / rules / dependencies]
+  RESOLVE --> REQUIRE[Java25 + classfile69 + Vulkan profile]
+  REQUIRE --> GATE[Check actual runtime availability]
+  GATE -->|current result| BLOCK[Log runtime-not-linked; no game invocation]
+  GATE -. future VM available .-> CREATE[JNI_CreateJavaVM + actual version check]
+  CREATE -.-> MODULES[Static FFM/JNI native lookup and required modules]
+  MODULES -.-> PATCH[Verify class hash; select Vulkan backend only]
+  PATCH -.-> MAIN[Invoke Minecraft main with isolated instance]
+  MAIN -.-> TITLE[Title / world]
+  CREATE -. failure .-> ERROR[Log stage; teardown / return or process recovery]
+  MAIN -. failure .-> ERROR
 ```
 
-OpenGL and Vulkan never share driver globals in one NRO. The OpenGL test releases
-the console renderer before creating an EGL window/context, reports API data,
-draws/reads pixels and restores console UI after teardown. NVK keeps the console
-renderer and tests independent headless GPU resources. Its device/extension/heap
-report is evidence to collect, not a promise of modern Minecraft compatibility.
-Zink is a future alternative, not a linked backend.
+The SDK's JNI creation/options/native-registration/teardown and FFM tests pass
+against a real **host** Java 25 VM. OpenJDK Zero defaults to a libffi fallback
+foreign linker, which motivates the native AAPCS64 and W^X tests. A complete
+Horizon OS/class-library implementation remains required; mmap/dlopen/signals
+cannot be assumed from Linux or replaced by fake successful stubs.
 
-## Filesystem layout
+The strict renderer bridge uses Java 25's public Class-File API/instrumentation
+and checks the exact original renderer-class hash. It modifies only backend
+selection. It preserves the normal loader and all authentication code. Its JAR
+contains original source-generated code, not game class bytes.
+
+## Filesystem and failure boundaries
 
 ```text
-sdmc:/switch/<application>/<application>.nro
+sdmc:/switch/{switch-diagnostics,vulkan-test,vulkan-present,minecraft-launcher,java-test,ffi-test}/<name>.nro
 sdmc:/switch/mc-runtime/
-  config/launcher.json             # user-created or saved by inspector
-  config/launcher.example.json     # package never overwrites real settings
-  logs/<application>.log           # flushed append-only diagnostic logs
-  logs/launch-plan.json            # last read-only inspection plan
+  config/{launcher.example.json,launcher.json}
+  logs/{<application>.log,launch-plan.json,snapshot-vulkan.json}
+  profiles/26.4-snapshot-6.json
+  launchers/switchcraft-launcher-bridge.jar
   runtimes/minijvm/minijvm_rt.jar
-  tests/{diagnostic-tests,dependency,user}.jar
-  instances/java-smoke/            # actual Java test I/O
-  instances/test/<version>/        # future isolated game directory
+  tests/{diagnostic-tests,dependency,java25-tests,user}.jar
+  instances/{java-smoke,test/<version>}/
   licenses/
-sdmc:/minecraft/.minecraft/
-  versions/ libraries/ assets/ mods/ config/ saves/ resourcepacks/ shaderpacks/
+sdmc:/minecraft/.minecraft/{versions,libraries,assets,mods,config,saves,resourcepacks,shaderpacks}/
 ```
 
-Standard installations remain recognizable. No PC native library is extracted
-or executed by the inspector. Inherited manifests resolve parent JARs, override
-Maven library coordinates, append structured arguments and apply Horizon rules.
-Asset indexes are counted; missing files and native substitutions are reported.
-Authentication placeholders stay unresolved. Logs/plans do not acquire tokens.
+The game installation is read only. Paths/classpaths use Horizon-aware separators;
+credentials remain unresolved and are not acquired/logged. Diagnostic writes are
+isolated. Supported API failures are reported; pending GPU work may require
+process exit, and a hung driver/JVM may require HOME/relaunch. Runtime target,
+source revision, hashes and NOT TESTED hardware state are in the manifest.
 
-## Minecraft startup and failure flow
-
-```mermaid
-flowchart TD
-  S[Scan installed version JSONs] --> R[Resolve inheritance and library rules]
-  R --> C[Construct classpath and JVM/game argument vectors]
-  C --> CHECK[Report Java requirement / files / native substitutions]
-  CHECK --> BLOCK[Export launchable=false with exact blockers]
-  CHECK -. future backend available .-> START[Initialize correct Java runtime]
-  START -.-> NATIVE[Register compatible LWJGL / graphics / audio]
-  NATIVE -.-> AUTH[User-managed legitimate authentication flow]
-  AUTH -.-> MAIN[Invoke Minecraft main]
-  MAIN -.-> TITLE[Title screen / world / Fabric checks]
-  R -->|parse error| ERR[Log stage and return to menu]
-  START -. failure .-> ERR
-  MAIN -. failure .-> ERR
-```
-
-The independent host experiment reached Minecraft 1.12.2 main-class loading but
-failed on missing class-library/native methods. The Horizon inspector stops at
-BLOCK. Native allocation failures, `Result`/`VkResult`/EGL/GL errors and stages
-are logged. Driver-level hangs and Java fatal failures may require HOME/relaunch;
-an in-process crash recovery guarantee is not implemented.
+The standalone [architecture.svg](architecture.svg) reflects the same boundaries.

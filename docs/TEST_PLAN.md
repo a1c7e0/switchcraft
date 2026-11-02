@@ -1,358 +1,293 @@
-# Physical Switch test plan
+# Physical test plan — snapshot 6 mainline
 
-Every test starts as **NOT TESTED**. Successful cross-compilation is not a
-hardware PASS. Test only Nintendo Switch 1 under Atmosphère/Horizon, without
-kernel patches or overclocking. Use application-mode hbmenu. Keep important SD
-content backed up and preserve existing saves/configuration when merging the
-package. No account credentials or game binaries need to be returned.
+Every physical case begins as **NOT TESTED**. The Linux Demo title is separate
+reference evidence; the Horizon game title remains **BLOCKED / NOT ACHIEVED**.
+Use Switch 1, Atmosphere, application-mode hbmenu, normal clocks and supported
+libnx APIs. No patches or Linux/Android boot. Keep SD backups and preserve saves
+and real configuration when merging the package.
 
-The first three sessions should be: (1) HW-01 through HW-05 for native basics,
-(2) HW-06/07 for OpenGL, (3) HW-08/09 for NVK enumeration and transfer. Then
-try HW-10 graphics and HW-11 onward for Java and launcher metadata.
+Common installation/launch for each NRO: extract the complete test ZIP to the SD
+root and start `sdmc:/switch/<name>/<name>.nro` in application-mode hbmenu, or use
+the explicitly named diagnostic next-load action. Logs named below are relative
+to `sdmc:/switch/mc-runtime/logs/`. The common prerequisites apply to every case.
 
-Common installation for every case: extract the full ZIP to the SD root, retain
-its directory structure, verify SHA256SUMS on the PC, and start the NRO under
-`sdmc:/switch/<name>/<name>.nro` from application-mode hbmenu (or the explicit
-next-load action named in the case). Every log below is relative to
-`sdmc:/switch/mc-runtime/logs/`. A log saying PASS reflects what that run measured,
-not certification of the complete runtime or game.
+First three sessions: N-01 through N-04; V-01 then V-02/03; V-04 then F-01/02.
+Proceed to Java8 and launcher checks afterward. A feature-profile PASS is not a
+Minecraft title PASS. Standard JNI/FFM host tests are not Horizon runtime tests.
 
-## Independent cases
+## N-01 — switch-diagnostics.nro
 
-### HW-01 — switch-diagnostics.nro
-
-* **NRO file:** `switch-diagnostics.nro`.
-* **Installation requirements:** Common installation; Full SD package; application-mode hbmenu.
-* **How to launch:** Common hbmenu launch for the named NRO; follow the specific handoff if given.
-* **Controller operations:** Start from hbmenu; press + after observing UI.
-* **Expected screen/output and successful result:** Readable diagnostic menu; version and controls visible; return to hbmenu.
-* **Failure symptoms:** Black screen, crash, missing entry, or failed exit.
-* **Log location:** `switch-diagnostics.log` under the common logs directory (configuration paths are outside logs as named).
-* **Information to report:** Launch mode, NRO hash, firmware, Atmosphère, exact last screen.
+* **File:** `switch-diagnostics.nro`.
+* **Installation requirements:** Common setup; Application-mode hbmenu, complete package.
+* **How to launch:** Common hbmenu launch for the named NRO; the explicitly marked host/future cases are exceptions.
+* **Controller operations / actions:** Launch, inspect readable menu, D-pad through eight entries; + exits.
+* **Expected screen/output and successful result:** Correct selection/input and clean hbmenu return.
+* **Failure symptoms:** Black screen, no input, wrong entry, failed exit.
+* **Log location:** `switch-diagnostics.log` under the common log root unless explicitly host/manifest.
+* **Information to report:** Firmware, Atmosphere/hbmenu, launch mode, model/controller, source/hash.
 * **Risk level:** Low.
-* **Recovery steps:** HOME and relaunch hbmenu; preserve logs.
+* **Recovery steps:** HOME/relaunch; test individual NRO directly if next-load fails.
 
-### HW-02 — switch-diagnostics.nro
+## N-02 — switch-diagnostics.nro
 
-* **NRO file:** `switch-diagnostics.nro`.
-* **Installation requirements:** Common installation; Handheld Joy-Con or paired Pro Controller.
-* **How to launch:** Common hbmenu launch for the named NRO; follow the specific handoff if given.
-* **Controller operations:** Use D-pad through all seven entries; A runs selected test; do not press A on GPU entries yet.
-* **Expected screen/output and successful result:** Exactly one selection advances per press; handheld and controller buttons work.
-* **Failure symptoms:** No input, repeated movement, incorrect action.
-* **Log location:** `switch-diagnostics.log` under the common logs directory (configuration paths are outside logs as named).
-* **Information to report:** Controller model/mode and failing buttons.
+* **File:** `switch-diagnostics.nro`.
+* **Installation requirements:** Common setup; Writable SD; preserve any existing diagnostic.tmp.
+* **How to launch:** Common hbmenu launch for the named NRO; the explicitly marked host/future cases are exceptions.
+* **Controller operations / actions:** Choose SD filesystem roundtrip, A.
+* **Expected screen/output and successful result:** Read/write/compare PASS and remove=0; no .minecraft changes.
+* **Failure symptoms:** errno or existing-file refusal; no existing temp file should be overwritten.
+* **Log location:** `switch-diagnostics.log` under the common log root unless explicitly host/manifest.
+* **Information to report:** Full errno, SD type/free space/filesystem.
 * **Risk level:** Low.
-* **Recovery steps:** Press + or HOME; reconnect controller and retry.
+* **Recovery steps:** Exit; preserve logs and any preexisting file before removing only a confirmed test leftover.
 
-### HW-03 — switch-diagnostics.nro
+## N-03 — switch-diagnostics.nro
 
-* **NRO file:** `switch-diagnostics.nro`.
-* **Installation requirements:** Common installation; Writable SD; no existing mc-runtime/diagnostic.tmp.
-* **How to launch:** Common hbmenu launch for the named NRO; follow the specific handoff if given.
-* **Controller operations:** Select SD filesystem roundtrip, press A.
-* **Expected screen/output and successful result:** SD write/read/compare PASS, remove=0; no game files change.
-* **Failure symptoms:** Read/write failure, errno, pre-existing temp file preserved.
-* **Log location:** `switch-diagnostics.log` under the common logs directory (configuration paths are outside logs as named).
-* **Information to report:** Exact errno and SD free space/filesystem; preserve any pre-existing temp file.
+* **File:** `switch-diagnostics.nro`.
+* **Installation requirements:** Common setup; Full application memory, default clocks.
+* **How to launch:** Common hbmenu launch for the named NRO; the explicitly marked host/future cases are exceptions.
+* **Controller operations / actions:** Choose Memory report, A.
+* **Expected screen/output and successful result:** Process total/used, malloc arena/free, 4 MiB allocation/access/free PASS.
+* **Failure symptoms:** svcGetInfo or allocation failure, freeze.
+* **Log location:** `switch-diagnostics.log` under the common log root unless explicitly host/manifest.
+* **Information to report:** Raw process and allocator byte counts; applet type.
 * **Risk level:** Low.
-* **Recovery steps:** Exit; copy logs; inspect temp file before manually removing only a known test leftover.
+* **Recovery steps:** HOME/relaunch; do not assume all physical 4 GB is usable heap.
 
-### HW-04 — switch-diagnostics.nro
+## N-04 — switch-diagnostics.nro
 
-* **NRO file:** `switch-diagnostics.nro`.
-* **Installation requirements:** Common installation; Application-mode hbmenu; close other homebrew.
-* **How to launch:** Common hbmenu launch for the named NRO; follow the specific handoff if given.
-* **Controller operations:** Select Memory report and bounded allocation; press A.
-* **Expected screen/output and successful result:** Total/used process bytes and malloc arena reported; 4 MiB roundtrip PASS.
-* **Failure symptoms:** svcGetInfo errors, allocation failure or inconsistent values.
-* **Log location:** `switch-diagnostics.log` under the common logs directory (configuration paths are outside logs as named).
-* **Information to report:** Raw byte counts, applet type, malloc arena/free values; do not interpret all physical RAM as free heap.
+* **File:** `switch-diagnostics.nro`.
+* **Installation requirements:** Common setup; Normal native setup.
+* **How to launch:** Common hbmenu launch for the named NRO; the explicitly marked host/future cases are exceptions.
+* **Controller operations / actions:** Choose Thread create/join, A.
+* **Expected screen/output and successful result:** Result=0 and sum=500500 PASS.
+* **Failure symptoms:** Nonzero Result, incorrect sum, hang.
+* **Log location:** `switch-diagnostics.log` under the common log root unless explicitly host/manifest.
+* **Information to report:** Create/start/join Result and last stage.
 * **Risk level:** Low.
-* **Recovery steps:** Exit/relaunch; compare applet mode only as an optional separate report.
+* **Recovery steps:** HOME/relaunch and retain matching ELF if it crashes.
 
-### HW-05 — switch-diagnostics.nro
+## V-01 — vulkan-present.nro
 
-* **NRO file:** `switch-diagnostics.nro`.
-* **Installation requirements:** Common installation; Same setup as HW-04.
-* **How to launch:** Common hbmenu launch for the named NRO; follow the specific handoff if given.
-* **Controller operations:** Select Thread create/join; press A.
-* **Expected screen/output and successful result:** threadCreate/start/join result 0; sum=500500 PASS.
-* **Failure symptoms:** Nonzero Result, freeze or incorrect sum.
-* **Log location:** `switch-diagnostics.log` under the common logs directory (configuration paths are outside logs as named).
-* **Information to report:** All Result codes and elapsed time to freeze.
-* **Risk level:** Low.
-* **Recovery steps:** If frozen use HOME; preserve matching ELF/crash report.
+* **File:** `vulkan-present.nro`.
+* **Installation requirements:** Common setup; Application mode, packaged NVK; start independently.
+* **How to launch:** Common hbmenu launch for the named NRO; the explicitly marked host/future cases are exceptions.
+* **Controller operations / actions:** Press A for exact snapshot profile.
+* **Expected screen/output and successful result:** GPU/API plus eight feature flags and three required extensions logged; snapshot-vulkan.json written. Mark compatible only if every base requirement passes.
+* **Failure symptoms:** No device, API error, missing feature/extension, missing JSON.
+* **Log location:** `vulkan-present.log and snapshot-vulkan.json` under the common log root unless explicitly host/manifest.
+* **Information to report:** Full JSON/log; missing base features do not imply a porting mistake or justify faking support.
+* **Risk level:** Moderate: experimental driver.
+* **Recovery steps:** HOME if hung; retain last stage; run platform diagnostics separately.
 
-### HW-06 — opengl-test.nro
+## V-02 — vulkan-present.nro
 
-* **NRO file:** `opengl-test.nro`.
-* **Installation requirements:** Common installation; Packaged native GL NRO; application-mode hbmenu.
-* **How to launch:** Common hbmenu launch for the named NRO; follow the specific handoff if given.
-* **Controller operations:** Launch directly or diagnostics OpenGL entry; press A.
-* **Expected screen/output and successful result:** EGL and GL API strings/extensions are logged; context succeeds.
-* **Failure symptoms:** EGL initialization/context error, black screen or crash.
-* **Log location:** `opengl-test.log` under the common logs directory (configuration paths are outside logs as named).
-* **Information to report:** Last EGL stage/error, GL_VENDOR/RENDERER/VERSION, docked/handheld.
-* **Risk level:** Moderate (experimental GPU driver).
-* **Recovery steps:** Wait up to 15 seconds; HOME/relaunch if hung; power recovery only if HOME cannot respond.
-
-### HW-07 — opengl-test.nro
-
-* **NRO file:** `opengl-test.nro`.
-* **Installation requirements:** Common installation; HW-06 context succeeded.
-* **How to launch:** Common hbmenu launch for the named NRO; follow the specific handoff if given.
-* **Controller operations:** Press A; observe green triangle on dark blue; B ends graphics early or wait up to 600 frames.
-* **Expected screen/output and successful result:** Visible green triangle; center pixel PASS; nonzero frame count; console restored.
-* **Failure symptoms:** Wrong colors, no triangle, shader/link error, pixel mismatch, swap error.
-* **Log location:** `opengl-test.log` under the common logs directory (configuration paths are outside logs as named).
-* **Information to report:** Visual result, pixel RGBA, frame count, GL error, whether console returned.
+* **File:** `vulkan-present.nro`.
+* **Installation requirements:** Common setup; Native basics passed; display and controller connected.
+* **How to launch:** Common hbmenu launch for the named NRO; the explicitly marked host/future cases are exceptions.
+* **Controller operations / actions:** Press X; observe color-changing window; Plus/Start ends test, or wait up to 300 frames.
+* **Expected screen/output and successful result:** SDL Switch video, VI surface/swapchain, visible color frames, nonzero presented count; returns to console.
+* **Failure symptoms:** SDL/window/surface errors, black output, swapchain/fence errors or freeze.
+* **Log location:** `vulkan-present.log` under the common log root unless explicitly host/manifest.
+* **Information to report:** Driver/window dimensions/format, frames, visible output and HOME responsiveness.
 * **Risk level:** Moderate.
-* **Recovery steps:** Use B/+ if responsive; otherwise HOME; do not infer success solely from a log without visible output.
+* **Recovery steps:** Use Plus/Start if responsive; HOME/relaunch otherwise; no GPU reset is promised.
 
-### HW-08 — vulkan-test.nro
+## V-03 — vulkan-present.nro
 
-* **NRO file:** `vulkan-test.nro`.
-* **Installation requirements:** Common installation; Packaged NVK NRO; run separately from OpenGL.
-* **How to launch:** Common hbmenu launch for the named NRO; follow the specific handoff if given.
-* **Controller operations:** Start directly or via diagnostics; press A only.
-* **Expected screen/output and successful result:** Physical device and reported API, extensions, features, queues and heaps appear; mode 0 PASS.
-* **Failure symptoms:** No devices, missing function, incompatible driver or crash.
-* **Log location:** `vulkan-test.log` under the common logs directory (configuration paths are outside logs as named).
-* **Information to report:** Full log including vendor/device/API/queue/memory data; do not assume conformance.
+* **File:** `vulkan-present.nro`.
+* **Installation requirements:** Common setup; V-02 with Joy-Con or Pro Controller.
+* **How to launch:** Common hbmenu launch for the named NRO; the explicitly marked host/future cases are exceptions.
+* **Controller operations / actions:** During X presentation press ordinary buttons, then Plus/Start.
+* **Expected screen/output and successful result:** SDL gamepad name/events appear in log; exit input works.
+* **Failure symptoms:** No gamepad, missing/repeated events, cannot exit.
+* **Log location:** `vulkan-present.log` under the common log root unless explicitly host/manifest.
+* **Information to report:** Exact controller/mode, event IDs and buttons that failed; this is not yet in-game controller verification.
 * **Risk level:** Moderate.
-* **Recovery steps:** HOME/relaunch if driver hangs; run native diagnostics independently.
+* **Recovery steps:** Wait for 300 frames or HOME; reconnect controller and retest baseline.
 
-### HW-09 — vulkan-test.nro
+## V-04 — vulkan-test.nro
 
-* **NRO file:** `vulkan-test.nro`.
-* **Installation requirements:** Common installation; HW-08 enumerated a GPU.
-* **How to launch:** Common hbmenu launch for the named NRO; follow the specific handoff if given.
-* **Controller operations:** Press X once.
-* **Expected screen/output and successful result:** GPU queue submission/fence succeed; all 4096 words match 0xcafebabe; PASS.
-* **Failure symptoms:** Allocation/bind/submit/fence error, timeout, mismatch or freeze.
-* **Log location:** `vulkan-test.log` under the common logs directory (configuration paths are outside logs as named).
-* **Information to report:** Last API result, mismatch index/value, memory type and timeout behavior.
+* **File:** `vulkan-test.nro`.
+* **Installation requirements:** Common setup; V-01 GPU enumeration usable.
+* **How to launch:** Common hbmenu launch for the named NRO; the explicitly marked host/future cases are exceptions.
+* **Controller operations / actions:** A enumerates; X runs fill/readback; Y runs offscreen triangle.
+* **Expected screen/output and successful result:** 4096 words equal cafebabe; triangle center/corner PASS with ASCII preview. This is distinct from VI presentation.
+* **Failure symptoms:** Allocation/submit/fence/pixel mismatch, crash.
+* **Log location:** `vulkan-test.log` under the common log root unless explicitly host/manifest.
+* **Information to report:** All VkResults, mismatch index/pixels, last stage, profile JSON.
 * **Risk level:** Moderate.
-* **Recovery steps:** Timeout path exits; if driver call hangs use HOME; preserve logs before another GPU test.
+* **Recovery steps:** Timeout exits without freeing pending work; HOME if driver itself hangs.
 
-### HW-10 — vulkan-test.nro
+## F-01 — ffi-test.nro
 
-* **NRO file:** `vulkan-test.nro`.
-* **Installation requirements:** Common installation; HW-09 passed; this is an offscreen test.
-* **How to launch:** Common hbmenu launch for the named NRO; follow the specific handoff if given.
-* **Controller operations:** Press Y once.
-* **Expected screen/output and successful result:** Shader/pipeline/render pass/submit succeed; green center/dark corner PASS and ASCII triangle.
-* **Failure symptoms:** Pipeline/format failure, pixel mismatch, timeout or crash.
-* **Log location:** `vulkan-test.log` under the common logs directory (configuration paths are outside logs as named).
-* **Information to report:** All API results, center/corner pixel values, ASCII output and last stage.
+* **File:** `ffi-test.nro`.
+* **Installation requirements:** Common setup; Complete package; normal application mode.
+* **How to launch:** Common hbmenu launch for the named NRO; the explicitly marked host/future cases are exceptions.
+* **Controller operations / actions:** Press A.
+* **Expected screen/output and successful result:** Integer AAPCS64 downcall=42 and mixed integer/FP=41.5 PASS.
+* **Failure symptoms:** Wrong result, crash or missing entry.
+* **Log location:** `ffi-test.log` under the common log root unless explicitly host/manifest.
+* **Information to report:** Both results and last stage; attach matching ELF/crash addresses.
+* **Risk level:** Moderate: native ABI test.
+* **Recovery steps:** HOME/relaunch on failure; do not run custom closures before basic downcalls.
+
+## F-02 — ffi-test.nro
+
+* **File:** `ffi-test.nro`.
+* **Installation requirements:** Common setup; F-01 passed; no custom system patches.
+* **How to launch:** Common hbmenu launch for the named NRO; the explicitly marked host/future cases are exceptions.
+* **Controller operations / actions:** Press X once.
+* **Expected screen/output and successful result:** Real jitCreate/RW-RX preparation and upcall=42; jitClose=0. Unsupported permission must be reported honestly.
+* **Failure symptoms:** libnx Result, bad ffi_status, wrong value, crash.
+* **Log location:** `ffi-test.log` under the common log root unless explicitly host/manifest.
+* **Information to report:** Every Result/code, closure phase and whether HOME responded.
+* **Risk level:** Moderate: supported executable-memory APIs.
+* **Recovery steps:** HOME/relaunch; do not install kernel patches or overclock to force a pass.
+
+## J-01 — java-test.nro
+
+* **File:** `java-test.nro`.
+* **Installation requirements:** Common setup; miniJVM Java8 class library and bundled two test JARs installed.
+* **How to launch:** Common hbmenu launch for the named NRO; the explicitly marked host/future cases are exceptions.
+* **Controller operations / actions:** Fresh process, A once.
+* **Expected screen/output and successful result:** Hello, arithmetic, exceptions, separate JAR, reflection, thread, allocation, file I/O, static mini bridge, suite PASS and teardown.
+* **Failure symptoms:** Missing JAR, exception, hang, leftover java-smoke.txt.
+* **Log location:** `java-test.log` under the common log root unless explicitly host/manifest.
+* **Information to report:** Every PASS/FAIL line, call_main and shutdown stage.
 * **Risk level:** Moderate.
-* **Recovery steps:** Same recovery as HW-09; report WSI presentation as NOT IMPLEMENTED, not passed.
+* **Recovery steps:** HOME if active Java hangs; preserve a leftover test file; one run per process.
 
-### HW-11 — java-test.nro
+## J-02 — java-test.nro
 
-* **NRO file:** `java-test.nro`.
-* **Installation requirements:** Common installation; Full package including minijvm_rt.jar and both diagnostic JARs.
-* **How to launch:** Common hbmenu launch for the named NRO; follow the specific handoff if given.
-* **Controller operations:** Launch via hbmenu or diagnostics; press A once.
-* **Expected screen/output and successful result:** jvm_init -> 0, Hello World, suite progresses; hardware JVM initialization may be marked PASS only after seeing these.
-* **Failure symptoms:** Missing JAR, initialization error, crash or freeze.
-* **Log location:** `java-test.log` under the common logs directory (configuration paths are outside logs as named).
-* **Information to report:** Last JVM stage, log and elapsed time; no repeated run in same process.
-* **Risk level:** Moderate (experimental runtime).
-* **Recovery steps:** HOME/relaunch if stuck; preserve logs and matching java-test.elf.
-
-### HW-12 — java-test.nro
-
-* **NRO file:** `java-test.nro`.
-* **Installation requirements:** Common installation; Same bundled run as HW-11.
-* **How to launch:** Common hbmenu launch for the named NRO; follow the specific handoff if given.
-* **Controller operations:** Read suite output after A.
-* **Expected screen/output and successful result:** PASS arithmetic, exception handling, separate JAR class loading, reflection invocation and allocation.
-* **Failure symptoms:** Missing PASS line, exception trace or nonzero call_main.
-* **Log location:** `java-test.log` under the common logs directory (configuration paths are outside logs as named).
-* **Information to report:** Every PASS/FAIL line, final suite marker, call_main status.
+* **File:** `java-test.nro`.
+* **Installation requirements:** Common setup; Optional trusted Java8 user.jar class UserMain.
+* **How to launch:** Common hbmenu launch for the named NRO; the explicitly marked host/future cases are exceptions.
+* **Controller operations / actions:** Fresh process, X.
+* **Expected screen/output and successful result:** UserMain runs in isolated diagnostic context and returns.
+* **Failure symptoms:** Unsupported API/class version/native library, missing JAR or hang.
+* **Log location:** `java-test.log` under the common log root unless explicitly host/manifest.
+* **Information to report:** Minimal nonsecret Java source, compiler target, first exception.
 * **Risk level:** Moderate.
-* **Recovery steps:** Exit/relaunch; reinstall unchanged bundled JARs if files are missing.
+* **Recovery steps:** Remove only the custom JAR for baseline retest; HOME if nonterminating.
 
-### HW-13 — java-test.nro
+## L-01 — minecraft-launcher.nro
 
-* **NRO file:** `java-test.nro`.
-* **Installation requirements:** Common installation; Same bundled run; writable runtime instance directory.
-* **How to launch:** Common hbmenu launch for the named NRO; follow the specific handoff if given.
-* **Controller operations:** Observe Java thread and file tests.
-* **Expected screen/output and successful result:** Thread start/join, file creation/read/write/cleanup PASS; no java-smoke.txt remains.
-* **Failure symptoms:** Thread hang, I/O exception, existing test file or failed cleanup.
-* **Log location:** `java-test.log` under the common logs directory (configuration paths are outside logs as named).
-* **Information to report:** File path/error, leftover file content only if it is the original test file, last thread stage.
-* **Risk level:** Low to moderate.
-* **Recovery steps:** HOME if hung; preserve a leftover file before manually deleting a confirmed test artifact.
-
-### HW-14 — java-test.nro
-
-* **NRO file:** `java-test.nro`.
-* **Installation requirements:** Common installation; Same bundled run.
-* **How to launch:** Common hbmenu launch for the named NRO; follow the specific handoff if given.
-* **Controller operations:** Observe nativeAdd result and teardown.
-* **Expected screen/output and successful result:** PASS miniJVM static native bridge; DIAGNOSTIC SUITE PASS; JVM teardown completed.
-* **Failure symptoms:** Missing bridge/teardown, unresolved method, crash; standard JNI Invocation remains BLOCKED.
-* **Log location:** `java-test.log` under the common logs directory (configuration paths are outside logs as named).
-* **Information to report:** Bridge result, suite marker, teardown stage; do not label standard JNI as supported.
-* **Risk level:** Moderate.
-* **Recovery steps:** Exit/relaunch; retain native crash addresses for addr2line.
-
-### HW-15 — java-test.nro
-
-* **NRO file:** `java-test.nro`.
-* **Installation requirements:** Common installation; Optional trusted Java 8 user.jar defining UserMain.main.
-* **How to launch:** Common hbmenu launch for the named NRO; follow the specific handoff if given.
-* **Controller operations:** Put tests/user.jar under mc-runtime; fresh NRO launch; press X once.
-* **Expected screen/output and successful result:** UserMain executes from JAR with isolated directory argument and returns.
-* **Failure symptoms:** Unsupported Java API/class version/native dependency, missing JAR or hang.
-* **Log location:** `java-test.log` under the common logs directory (configuration paths are outside logs as named).
-* **Information to report:** Minimal source, compiler target and first exception; do not send credentials.
-* **Risk level:** Moderate.
-* **Recovery steps:** Use HOME if custom Java code hangs; remove only the custom user.jar before baseline retest.
-
-### HW-16 — minecraft-launcher.nro
-
-* **NRO file:** `minecraft-launcher.nro`.
-* **Installation requirements:** Common installation; Legitimate local versions/<id>/<id>.json under configured root.
-* **How to launch:** Common hbmenu launch for the named NRO; follow the specific handoff if given.
-* **Controller operations:** Launch inspector; select version with D-pad; press A.
-* **Expected screen/output and successful result:** Installed JSONs listed; selected version/main class/Java requirement and dependency counts reported.
-* **Failure symptoms:** No scan results, malformed JSON error or wrong inherited JAR.
-* **Log location:** `minecraft-launcher.log and launch-plan.json` under the common logs directory (configuration paths are outside logs as named).
-* **Information to report:** Root, version ID, redacted version metadata, counts and exact error; no account files/tokens.
-* **Risk level:** Low (read-only game data).
-* **Recovery steps:** Fix metadata/import on PC; game directory should remain unchanged.
-
-### HW-17 — minecraft-launcher.nro
-
-* **NRO file:** `minecraft-launcher.nro`.
-* **Installation requirements:** Common installation; At least one inherited version or Fabric-installed metadata, without claiming Mod support.
-* **How to launch:** Common hbmenu launch for the named NRO; follow the specific handoff if given.
-* **Controller operations:** Select inherited version and press A.
-* **Expected screen/output and successful result:** Plan resolves parents, Maven overrides and arguments; marks native/runtime blockers; launchable=false.
-* **Failure symptoms:** Inheritance error, cycle message, missing parent or unexpected native desktop classpath.
-* **Log location:** `launch-plan.json` under the common logs directory (configuration paths are outside logs as named).
-* **Information to report:** Parent chain, selected JAR, skipped libraries/native substitutions and unresolved placeholders.
+* **File:** `minecraft-launcher.nro`.
+* **Installation requirements:** Common setup; Owned version JSON/JAR/library/assets under configured root.
+* **How to launch:** Common hbmenu launch for the named NRO; the explicitly marked host/future cases are exceptions.
+* **Controller operations / actions:** D-pad version, A exports plan; X saves; + relaunch checks persistence.
+* **Expected screen/output and successful result:** Real version/inheritance/main/Java/dependency plan; snapshot6 includes Vulkan preference and pinned javaagent; installation remains read only.
+* **Failure symptoms:** Parse/cycle/missing-parent errors, unexpected changes, plan claims launchable without backend.
+* **Log location:** `minecraft-launcher.log and launch-plan.json` under the common log root unless explicitly host/manifest.
+* **Information to report:** Version/parent IDs, nonsecret metadata/config, missing files/natives and blockers.
 * **Risk level:** Low.
-* **Recovery steps:** Repair a copy of metadata on PC; never alter saves to fix this test.
+* **Recovery steps:** Repair a copy on PC; preserve saves; malformed existing config is retained.
 
-### HW-18 — minecraft-launcher.nro
+## L-02 — minecraft-launcher.nro
 
-* **NRO file:** `minecraft-launcher.nro`.
-* **Installation requirements:** Common installation; Writable config directory; retain existing launcher.json backup on PC.
-* **How to launch:** Common hbmenu launch for the named NRO; follow the specific handoff if given.
-* **Controller operations:** Use L/R to choose targets; X saves; + exits; relaunch.
-* **Expected screen/output and successful result:** Chosen version/runtime/graphics persist; example file never replaces real config.
-* **Failure symptoms:** Save error, lost choice, malformed config warning; existing malformed config must be preserved.
-* **Log location:** `minecraft-launcher.log and config/launcher.json` under the common logs directory (configuration paths are outside logs as named).
-* **Information to report:** Saved nonsecret configuration and exact error; note that heap is planning only.
+* **File:** `minecraft-launcher.nro`.
+* **Installation requirements:** Common setup; No Horizon Java25 VM supplied in this release.
+* **How to launch:** Common hbmenu launch for the named NRO; the explicitly marked host/future cases are exceptions.
+* **Controller operations / actions:** L checks actual SDK runtime gate; R opens Vulkan test.
+* **Expected screen/output and successful result:** JS_UNAVAILABLE/runtime-not-linked and no game code invoked; no fake Play/success. This expected limitation is BLOCKED for Minecraft.
+* **Failure symptoms:** False launch success or a Java8 attempt for classfile69.
+* **Log location:** `minecraft-launcher.log` under the common log root unless explicitly host/manifest.
+* **Information to report:** Code/stage; report Horizon Minecraft title as NOT ACHIEVED.
 * **Risk level:** Low.
-* **Recovery steps:** Restore backed-up config or edit a valid JSON; do not delete .minecraft.
+* **Recovery steps:** Return to diagnostics; actual Java25 runtime integration is next work.
 
-### HW-19 — minecraft-launcher.nro
+## L-03 — minecraft-launcher.nro
 
-* **NRO file:** `minecraft-launcher.nro`.
-* **Installation requirements:** Common installation; Installation missing a JAR or deliberately invalid copied JSON in an isolated test root.
-* **How to launch:** Common hbmenu launch for the named NRO; follow the specific handoff if given.
-* **Controller operations:** Press A; then navigate menu and use minus to view recent log.
-* **Expected screen/output and successful result:** Useful stage/error and blockers; application remains usable; no game execution; no token prompt.
-* **Failure symptoms:** Crash, unreadable error or launchable=true without a backend.
-* **Log location:** `minecraft-launcher.log and launch-plan.json` under the common logs directory (configuration paths are outside logs as named).
-* **Information to report:** Minimal failing metadata, error text and menu recovery behavior.
+* **File:** `minecraft-launcher.nro`.
+* **Installation requirements:** Common setup; Isolated copied bad/missing version metadata.
+* **How to launch:** Common hbmenu launch for the named NRO; the explicitly marked host/future cases are exceptions.
+* **Controller operations / actions:** A inspect error, minus shows recent log, Y diagnostics.
+* **Expected screen/output and successful result:** Useful failure and usable menu; saved configuration choices persist only after X.
+* **Failure symptoms:** Crash, wrong path, sensitive credential output.
+* **Log location:** `minecraft-launcher.log and launch-plan.json` under the common log root unless explicitly host/manifest.
+* **Information to report:** Minimal failing JSON, error, menu recovery; never account files.
 * **Risk level:** Low.
-* **Recovery steps:** Restore test fixture; return to diagnostics or exit normally.
+* **Recovery steps:** Restore fixture on PC; no .minecraft deletion.
 
-### HW-20 — switch-diagnostics.nro
+## H-01 — Host Java25 reference, no NRO
 
-* **NRO file:** `switch-diagnostics.nro`.
-* **Installation requirements:** Common installation; All packaged paths unchanged; next-load-capable hbmenu.
-* **How to launch:** Common hbmenu launch for the named NRO; follow the specific handoff if given.
-* **Controller operations:** Select each other NRO; B returns from GL/Vulkan/Java; Y returns from inspector.
-* **Expected screen/output and successful result:** Requested NRO opens; original process exits; missing NRO reports error and menu survives.
-* **Failure symptoms:** envSetNextLoad error, wrong path, hbmenu return instead of handoff.
-* **Log location:** `Relevant application logs` under the common logs directory (configuration paths are outside logs as named).
-* **Information to report:** Exact next-load Result, installation path and hbmenu version.
+* **File:** `Host Java25 reference, no NRO`.
+* **Installation requirements:** Common setup; Linux X11/Vulkan; game cache outside Git/dist.
+* **How to launch:** Common hbmenu launch for the named NRO; the explicitly marked host/future cases are exceptions.
+* **Controller operations / actions:** Run tools/snapshot6-reference.py --run-demo; use Continue/Quit as needed.
+* **Expected screen/output and successful result:** VULKAN_ONLY_APPLIED, actual Vulkan renderer log, visible snapshot6 Demo title. HOST ONLY PASS; not Switch success.
+* **Failure symptoms:** Hash rejection, backend failure, wrong version or no title.
+* **Log location:** `Ignored cache host-vulkan.log` under the common log root unless explicitly host/manifest.
+* **Information to report:** Renderer/VM versions and explicitly HOST ONLY screenshot.
+* **Risk level:** Low to moderate: isolated public demo workload.
+* **Recovery steps:** Quit normally; preserve cache/logs; no account token or authentication patch required.
+
+## G-01 — Future Horizon game runtime, no executable provided
+
+* **File:** `Future Horizon game runtime, no executable provided`.
+* **Installation requirements:** Common setup; Real Java25 OS/class-library/native/instrumentation port required.
+* **How to launch:** Common hbmenu launch for the named NRO; the explicitly marked host/future cases are exceptions.
+* **Controller operations / actions:** Do not treat current inspector as a game launcher.
+* **Expected screen/output and successful result:** BLOCKED: no title/world on Switch in this release.
+* **Failure symptoms:** Any claim of console title from a host image/cross-build.
+* **Log location:** `Manifest and implementation status` under the common log root unless explicitly host/manifest.
+* **Information to report:** Keep this row BLOCKED until real console evidence exists.
+* **Risk level:** Not currently executable.
+* **Recovery steps:** Return to independent native tests; runtime source work must precede this test.
+
+## X-01 — All six NROs
+
+* **File:** `All six NROs`.
+* **Installation requirements:** Common setup; Complete packaged layout and next-load-capable hbmenu.
+* **How to launch:** Common hbmenu launch for the named NRO; the explicitly marked host/future cases are exceptions.
+* **Controller operations / actions:** Use menu chaining, test + exits; copy all logs after session.
+* **Expected screen/output and successful result:** Correct NRO opens, clean exit logs, files readable; no supplied tokens.
+* **Failure symptoms:** Wrong next-load path, nonzero Result, missing/corrupt logs.
+* **Log location:** `All mc-runtime/logs and dist/manifest.json` under the common log root unless explicitly host/manifest.
+* **Information to report:** Source/hashes/launch mode, test sheet and matching crash report.
 * **Risk level:** Low.
-* **Recovery steps:** Launch NROs directly if next-load is unsupported.
+* **Recovery steps:** Launch each NRO directly if chaining fails; export before rerunning.
 
-### HW-21 — minecraft-launcher.nro
+## Deferred and legacy coverage
 
-* **NRO file:** `minecraft-launcher.nro`.
-* **Installation requirements:** Common installation; Select any real version; no credentials needed.
-* **How to launch:** Common hbmenu launch for the named NRO; follow the specific handoff if given.
-* **Controller operations:** Press A to reach the Minecraft preflight boundary.
-* **Expected screen/output and successful result:** Plan records launchable=false and exact missing runtime/native/authentication placeholders. Mark real Minecraft bootstrap BLOCKED on Horizon.
-* **Failure symptoms:** Any false Play/success claim, token logging or unexpected game-directory writes.
-* **Log location:** `launch-plan.json` under the common logs directory (configuration paths are outside logs as named).
-* **Information to report:** Blocker list; distinguish this preflight from the separate failed host bootstrap experiment.
-* **Risk level:** Low.
-* **Recovery steps:** Exit; retain plan; actual bootstrap awaits a compatible JVM/LWJGL backend.
+OpenGL context/triangle tests exist on branch 1.12.2 only and are excluded from
+mainline. Standard JNI Invocation, Java25 JAR/FFM execution and Minecraft bootstrap
+on Horizon require the missing native VM; do not mark them passed from the Java8
+suite or host title. Fabric/Mixin/world rendering remain unimplemented.
 
-### HW-22 — all five NROs
+## Fillable return sheet
 
-* **NRO file:** `all five NROs`.
-* **Installation requirements:** Common installation; After a normal successful and failed test; SD readable on PC.
-* **How to launch:** Common hbmenu launch for the named NRO; follow the specific handoff if given.
-* **Controller operations:** Press + from menus, then copy entire logs/ directory to PC.
-* **Expected screen/output and successful result:** Return to hbmenu, Clean exit lines, logs readable; no supplied access tokens.
-* **Failure symptoms:** Hang on exit, corrupted/missing log or sensitive content.
-* **Log location:** `All logs and matching dist/manifest.json` under the common logs directory (configuration paths are outside logs as named).
-* **Information to report:** NRO hashes, launch mode, PASS/FAIL/NOT TESTED/BLOCKED table and relevant crash reports.
-* **Risk level:** Low.
-* **Recovery steps:** HOME/relaunch if needed; copy logs before rerunning to preserve evidence.
+Console model: ____ Firmware: ____ Atmosphere: ____ hbmenu: ____
 
-## Deferred capabilities
+Launch mode: ____ Docked/handheld: ____ Package source/hash: ____
 
-Standard `JNI_CreateJavaVM`/JNI Invocation, OpenJDK initialization, Vulkan
-swapchain presentation, Minecraft title-screen/world rendering and Fabric Mod
-loading are **BLOCKED / NOT IMPLEMENTED**, not hardware test passes. HW-14 tests
-miniJVM's custom static bridge only. HW-21 tests graceful Minecraft preflight
-failure. Do not create fake pass results for unavailable features.
-
-## Returnable result sheet
-
-Console model/revision: ______  Firmware: ______  Atmosphère: ______
-
-hbmenu version: ______  Launch mode: ______  Docked/handheld: ______
-
-Package source revision: ______  SHA256SUMS verified: ______
-
-| Test ID | PASS / FAIL / NOT TESTED / BLOCKED | Last stage / error | Log attached | Notes |
+| Case | PASS / FAIL / NOT TESTED / BLOCKED | Last stage / error | Log attached | Notes |
 | --- | --- | --- | --- | --- |
-| HW-01 | NOT TESTED | | | |
-| HW-02 | NOT TESTED | | | |
-| HW-03 | NOT TESTED | | | |
-| HW-04 | NOT TESTED | | | |
-| HW-05 | NOT TESTED | | | |
-| HW-06 | NOT TESTED | | | |
-| HW-07 | NOT TESTED | | | |
-| HW-08 | NOT TESTED | | | |
-| HW-09 | NOT TESTED | | | |
-| HW-10 | NOT TESTED | | | |
-| HW-11 | NOT TESTED | | | |
-| HW-12 | NOT TESTED | | | |
-| HW-13 | NOT TESTED | | | |
-| HW-14 | NOT TESTED | | | |
-| HW-15 | NOT TESTED | | | |
-| HW-16 | NOT TESTED | | | |
-| HW-17 | NOT TESTED | | | |
-| HW-18 | NOT TESTED | | | |
-| HW-19 | NOT TESTED | | | |
-| HW-20 | NOT TESTED | | | |
-| HW-21 | NOT TESTED | | | |
-| HW-22 | NOT TESTED | | | |
+| N-01 | NOT TESTED | | | |
+| N-02 | NOT TESTED | | | |
+| N-03 | NOT TESTED | | | |
+| N-04 | NOT TESTED | | | |
+| V-01 | NOT TESTED | | | |
+| V-02 | NOT TESTED | | | |
+| V-03 | NOT TESTED | | | |
+| V-04 | NOT TESTED | | | |
+| F-01 | NOT TESTED | | | |
+| F-02 | NOT TESTED | | | |
+| J-01 | NOT TESTED | | | |
+| J-02 | NOT TESTED | | | |
+| L-01 | NOT TESTED | | | |
+| L-02 | NOT TESTED | | | |
+| L-03 | NOT TESTED | | | |
+| H-01 | NOT TESTED | | | |
+| G-01 | BLOCKED | | | |
+| X-01 | NOT TESTED | | | |
 
-## Log export and crash analysis
+## Log export / recovery
 
-After each session, copy the entire `sdmc:/switch/mc-runtime/logs/` directory and
-`dist/manifest.json` into one folder on your PC. Keep logs from different package
-revisions separate. For a crash, also preserve the Atmosphère crash report and
-the matching `build/<application>.elf`; developers can use
-`aarch64-none-elf-addr2line -Cfipe build/<application>.elf <module-relative-PC>`.
-Report the last flushed stage and whether HOME still responded. Never include
-Microsoft credentials, access tokens, `launcher_accounts.json`, console keys,
-or game JARs in a bug report. The provided code does not request them.
+Copy the entire `sdmc:/switch/mc-runtime/logs/` directory to the PC with the exact
+manifest/SHA256SUMS and case sheet. Separate sessions by source revision. Preserve
+Atmosphere crash reports and the matching `build/<app>.elf`. Symbolicate using
+`aarch64-none-elf-addr2line -Cfipe build/<app>.elf <module-relative-PC>`. Report the
+last flushed stage and whether HOME responded. Do not send Microsoft credentials,
+access tokens, account JSON, console keys or game JARs. The tools request none.

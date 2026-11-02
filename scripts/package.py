@@ -1,196 +1,153 @@
 #!/usr/bin/env python3
-import datetime
-import hashlib
-import importlib.util
-import json
-import os
-import pathlib
-import re
-import shutil
-import subprocess
-import tarfile
-import zipfile
-
-ROOT=pathlib.Path(__file__).resolve().parents[1]
-os.chdir(ROOT)
-DIST=ROOT/"dist"
-spec=importlib.util.spec_from_file_location("verify",ROOT/"scripts/verify-artifacts.py")
-verify=importlib.util.module_from_spec(spec);spec.loader.exec_module(verify)
-records=[verify.verify(DIST/(app+".nro"),ROOT/"build"/(app+".elf")) for app in verify.APPS]
-revision=subprocess.check_output(["git","rev-parse","HEAD"],text=True).strip()
-dirty=bool(subprocess.check_output(["git","status","--porcelain"],text=True).strip())
-dk=pathlib.Path(os.environ.get("DEVKITPRO",str(ROOT/".toolchain/opt/devkitpro")))
-compiler=subprocess.check_output([str(dk/"devkitA64/bin/aarch64-none-elf-gcc"),"--version"],text=True).splitlines()[0]
-packages=sorted(p.name for p in (dk/"pacman/var/lib/pacman/local").glob('*') if p.is_dir())
-toolchain={"image":json.loads((ROOT/"dependencies.lock.json").read_text())["toolchain_image"],"compiler":compiler,"packages":packages}
-purposes={"switch-diagnostics.nro":"Controller menu, SD, process memory, native threads and NRO chaining",
-    "opengl-test.nro":"Mesa NVC0 EGL, OpenGL strings/extensions, visible triangle and pixel readback",
-    "vulkan-test.nro":"Experimental NVK enumeration, buffer fill/readback and offscreen triangle",
-    "java-test.nro":"Interpreter-only miniJVM: original Java JAR diagnostic and static native bridge",
-    "minecraft-launcher.nro":"Read-only Minecraft metadata inspection, isolated launch planning and settings"}
-limitations=["All Horizon hardware execution NOT TESTED","Minecraft client not launched on Horizon; host bootstrap failed before rendering",
-    "Vulkan WSI/swapchain presentation not implemented","miniJVM is not OpenJDK and does not provide standard JNI Invocation API",
-    "No LWJGL, OpenAL, Fabric or Microsoft authentication integration","NVK driver comes from a hash-pinned prebuilt archive; exact nxvk source commit was not provided by upstream release"]
-bundled={
-    "switch-diagnostics.nro":["libnx 4.12.0", "newlib 4.6.0.20260123"],
-    "opengl-test.nro":["libnx 4.12.0", "newlib", "Mesa NVC0/EGL 20.1.0-5", "GLAD 0.1.27", "Nouveau portlib", "libstdc++"],
-    "vulkan-test.nro":["libnx 4.12.0", "newlib", "Mesa NVK 25.0.7 public archive", "bundled Expat/nxvk compatibility and Rust support", "Nouveau portlib", "libstdc++"],
-    "java-test.nro":["libnx 4.12.0", "newlib", "miniJVM 87c9808 interpreter and Horizon patch", "bundled miniz/tinycthread/mbedTLS", "external SD miniJVM GPL Java class library"],
-    "minecraft-launcher.nro":["libnx 4.12.0", "newlib", "nlohmann JSON 3.11.3", "libstdc++"]}
+"""Package the pinned snapshot-6 native bring-up without shipping game files."""
+import datetime,hashlib,importlib.util,json,os,pathlib,shutil,subprocess,tarfile,zipfile
+ROOT=pathlib.Path(__file__).resolve().parents[1];os.chdir(ROOT);DIST=ROOT/'dist'
+LOCK=json.loads((ROOT/'dependencies.lock.json').read_text())
+JAVA=pathlib.Path(os.environ.get('JAVA_SWITCH_SOURCE',str(ROOT/'.deps/java-switch')))
+spec=importlib.util.spec_from_file_location('verify',ROOT/'scripts/verify-artifacts.py');verify=importlib.util.module_from_spec(spec);spec.loader.exec_module(verify)
+records=[verify.verify(DIST/(app+'.nro'),ROOT/'build'/(app+'.elf')) for app in verify.APPS]
+revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()
+java_revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=JAVA,text=True).strip()
+assert java_revision==LOCK['java_switch']['revision']
+dirty=bool(subprocess.check_output(['git','status','--porcelain'],text=True).strip())
+dk=pathlib.Path(os.environ.get('DEVKITPRO',str(ROOT/'.toolchain/opt/devkitpro')))
+toolchain={'image':LOCK['toolchain_image'],'compiler':subprocess.check_output([str(dk/'devkitA64/bin/aarch64-none-elf-gcc'),'--version'],text=True).splitlines()[0],
+    'packages':sorted(p.name for p in (dk/'pacman/var/lib/pacman/local').glob('*') if p.is_dir())}
+now=datetime.datetime.now(datetime.timezone.utc).isoformat()
+limitations=['Horizon execution NOT TESTED','Java 25 Horizon VM not built or linked; no Minecraft title on Switch',
+    'Host-only strict Vulkan demo title verified; this is not a Horizon result','NVK Maxwell is experimental/nonconformant',
+    'SDL3/VI presentation and libffi W^X closures compiled, awaiting physical tests','LWJGL static native loading, shaderc/VMA/SPIR-V Cross/audio bindings not integrated into a Horizon JVM',
+    'Fabric, account authentication and arbitrary Mods not implemented']
+purposes={'switch-diagnostics.nro':'Native memory, SD, input, threads and next-load menu',
+ 'vulkan-test.nro':'NVK transfer/readback and offscreen triangle',
+ 'vulkan-present.nro':'Exact snapshot-6 base features, SDL3 gamepad/window and VI swapchain presentation',
+ 'minecraft-launcher.nro':'Read-only instance planning, strict Vulkan arguments and explicit Java-25 runtime gate',
+ 'java-test.nro':'Independent java-switch Java-8 interpreter diagnostic; not a Java-25 VM',
+ 'ffi-test.nro':'AAPCS64 libffi downcalls and real libnx W^X upcall prerequisite test'}
 for item in records:
-    item.update(purpose=purposes[item["name"]],source_revision=revision,source_dirty=dirty,
-                build_date=datetime.datetime.now(datetime.timezone.utc).isoformat(),
-                toolchain=toolchain,bundled_dependencies=bundled[item["name"]],
-                tested_environment="Linux cross-build and host tests; no Horizon execution",known_limitations=limitations)
-sd=DIST/"COPY_TO_SD"
+    item.update(purpose=purposes[item['name']],source_revision=revision,java_switch_revision=java_revision,source_dirty=dirty,build_date=now,toolchain=toolchain,
+        bundled_dependencies=['libnx/newlib', 'Pinned NVK/SDL3 or java-switch component as applicable'],tested_environment='Linux cross-build and host checks; NRO not executed',known_limitations=limitations)
+sd=DIST/'COPY_TO_SD'
 if sd.exists():shutil.rmtree(sd)
 for app in verify.APPS:
-    dest=sd/"switch"/app;dest.mkdir(parents=True);shutil.copyfile(DIST/(app+".nro"),dest/(app+".nro"))
-runtime=sd/"switch/mc-runtime"
-for sub in ["config","logs","runtimes/minijvm","tests","instances/java-smoke","tmp","licenses"]:(runtime/sub).mkdir(parents=True,exist_ok=True)
-for sub in ["versions","libraries","assets","mods","config","saves","resourcepacks","shaderpacks"]:(sd/"minecraft/.minecraft"/sub).mkdir(parents=True,exist_ok=True)
-shutil.copyfile(ROOT/"build/minijvm_rt.jar",runtime/"runtimes/minijvm/minijvm_rt.jar")
-for name in ["diagnostic-tests.jar","dependency.jar"]:shutil.copyfile(ROOT/"build"/name,runtime/"tests"/name)
-shutil.copyfile(ROOT/"config/launcher.example.json",runtime/"config/launcher.example.json")
-for file in (ROOT/"licenses").rglob('*'):
-    if file.is_file():
-        dest=runtime/"licenses"/file.relative_to(ROOT/"licenses");dest.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(file,dest)
-shutil.copyfile(ROOT/"LICENSE",runtime/"licenses/SWITCHCRAFT-MIT.txt")
-shutil.copyfile(ROOT/"vendor/JSON-LICENSE.MIT",runtime/"licenses/NLOHMANN-JSON-MIT.txt")
-for file in ["README.md","docs/TEST_PLAN.md","docs/KNOWN_ISSUES.md"]:
-    dest=sd/"switchcraft-docs"/pathlib.Path(file).name;dest.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(ROOT/file,dest)
-(sd/"INSTALL.txt").write_text("Copy switch/ and minecraft/ to the SD root; merge directories, preserve saves and existing configuration.\nStart switch-diagnostics in application-mode hbmenu. All hardware tests are NOT TESTED.\nRead switchcraft-docs/TEST_PLAN.md. No game files are included.\n")
-# Corresponding source accompanies the GPL class library. Include all Java
-# sources, native modifications, build scripts and source repository snapshot.
-source=DIST/"switchcraft-corresponding-source.tar.gz"
-with tarfile.open(source,"w:gz") as tar:
-    tracked=subprocess.check_output(["git","ls-files","-z"]).split(b'\0')
-    for name in tracked:
-        if name:tar.add(ROOT/os.fsdecode(name),arcname="switchcraft/"+os.fsdecode(name))
-    tar.add(ROOT/".deps/minijvm-source",arcname="third_party/minijvm-source")
-    tar.add(ROOT/".deps/minijvm",arcname="third_party/minijvm-horizon-c")
-shutil.copyfile(source,sd/"switchcraft-corresponding-source.tar.gz")
-manifest={"project":"Switchcraft","source_revision":revision,"source_dirty":dirty,"hardware_verification":"NOT TESTED",
-    "artifacts":records,"not_produced":{"minecraft-aot-test.nro":"Unavailable external pz-switch runtime, GraalVM image and legitimately supplied patched game inputs"},
-    "known_limitations":limitations,"dependency_lock":json.loads((ROOT/"dependencies.lock.json").read_text()),
-    "package_manifest_note":"The manifest inside the ZIP describes NROs/resources. This external manifest additionally hashes the final ZIP to avoid a circular hash."}
-manifest["sd_resources"]=[]
-for file in sorted(runtime.rglob('*.jar')):
-    manifest["sd_resources"].append({"path":file.relative_to(sd).as_posix(),"bytes":file.stat().st_size,"sha256":hashlib.sha256(file.read_bytes()).hexdigest()})
-(DIST/"manifest.json").write_text(json.dumps(manifest,indent=2)+'\n')
-shutil.copyfile(DIST/"manifest.json",sd/"manifest.json")
-archive=DIST/"switch-minecraft-test-package.zip"
-with zipfile.ZipFile(archive,"w",zipfile.ZIP_DEFLATED,compresslevel=6) as zip:
-    for file in sorted(sd.rglob('*')):
-        if file.is_file():zip.write(file,file.relative_to(sd))
-        elif not any(file.iterdir()):zip.writestr(file.relative_to(sd).as_posix()+'/',b'')
-for file,purpose in [(archive,"Installable SD test package"),(source,"Project and miniJVM Java/C corresponding source")]:
-    manifest["artifacts"].append({"name":file.name,"purpose":purpose,"source_revision":revision,"source_dirty":dirty,
-        "build_date":datetime.datetime.now(datetime.timezone.utc).isoformat(),"toolchain":toolchain,
-        "bundled_dependencies":(["Five native applications", "miniJVM Java class library and original diagnostic JARs", "licenses and source"] if file==archive else ["Original project source", "complete miniJVM Java source", "modified miniJVM C source", "build scripts and licenses"]),
-        "build_verification":"PASS","tested_environment":"Archive generation and host checksum/ZIP validation", "hardware_verification":"NOT TESTED",
-        "known_limitations":limitations,"bytes":file.stat().st_size,"sha256":hashlib.sha256(file.read_bytes()).hexdigest()})
-(DIST/"manifest.json").write_text(json.dumps(manifest,indent=2)+'\n')
-test_log=(ROOT/"build/host-tests.log").read_text() if (ROOT/"build/host-tests.log").exists() else ""
-test_match=re.search(r"Ran (\d+) tests",test_log)
-tests=test_match.group(1)+" host tests passed" if test_match and re.search(r"\nOK\s*$",test_log) else "Host test status: consult build/host-tests.log"
-report=f'''# Switchcraft delivery report
+    dest=sd/'switch'/app;dest.mkdir(parents=True);shutil.copyfile(DIST/(app+'.nro'),dest/(app+'.nro'))
+runtime=sd/'switch/mc-runtime'
+for sub in ['config','logs','runtimes/minijvm','tests','launchers','profiles','instances/java-smoke','tmp','licenses']:(runtime/sub).mkdir(parents=True,exist_ok=True)
+shutil.copyfile(JAVA/'build/minijvm_rt.jar',runtime/'runtimes/minijvm/minijvm_rt.jar')
+for name in ['diagnostic-tests.jar','dependency.jar','java25-tests.jar']:shutil.copyfile(JAVA/'build'/name,runtime/'tests'/name)
+shutil.copyfile(ROOT/'build/switchcraft-launcher-bridge.jar',runtime/'launchers/switchcraft-launcher-bridge.jar')
+shutil.copyfile(ROOT/'profiles/26.4-snapshot-6.json',runtime/'profiles/26.4-snapshot-6.json')
+shutil.copyfile(ROOT/'config/launcher.example.json',runtime/'config/launcher.example.json')
+for base in [ROOT/'licenses',JAVA/'licenses']:
+    for file in base.rglob('*'):
+        if file.is_file():shutil.copyfile(file,runtime/'licenses'/file.name)
+shutil.copyfile(ROOT/'LICENSE',runtime/'licenses/SWITCHCRAFT-MIT.txt')
+shutil.copyfile(ROOT/'vendor/JSON-LICENSE.MIT',runtime/'licenses/NLOHMANN-JSON-MIT.txt')
+shutil.copyfile(ROOT/'.deps/sdl3/share/licenses/SDL3/LICENSE.txt',runtime/'licenses/SDL3-ZLIB.txt')
+for sub in ['versions','libraries','assets','mods','config','saves','resourcepacks','shaderpacks']:(sd/'minecraft/.minecraft'/sub).mkdir(parents=True,exist_ok=True)
+for name in ['README.md','docs/TEST_PLAN.md','docs/KNOWN_ISSUES.md','docs/HOST_REFERENCE.md']:
+    dest=sd/'switchcraft-docs'/pathlib.Path(name).name;dest.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(ROOT/name,dest)
+(sd/'INSTALL.txt').write_text('Merge switch/ and minecraft/ onto the SD root. Preserve saves and real configuration.\nUse application-mode hbmenu. Start switch-diagnostics, then vulkan-present.\nHardware execution NOT TESTED. Java 25 VM is absent; Minecraft does not yet run on Horizon.\nSee switchcraft-docs/TEST_PLAN.md. No game files or credentials are included.\n')
+source=DIST/'switchcraft-corresponding-source.tar.gz'
+with tarfile.open(source,'w:gz') as archive:
+    for repository,prefix in [(ROOT,'switchcraft'),(JAVA,'java-switch')]:
+        for name in subprocess.check_output(['git','ls-files','-z'],cwd=repository).split(b'\0'):
+            if name:archive.add(repository/os.fsdecode(name),arcname=prefix+'/'+os.fsdecode(name))
+    for directory in ['minijvm-source','minijvm','libffi-source']:
+        archive.add(JAVA/'.deps'/directory,arcname='third-party/'+directory)
+shutil.copyfile(source,sd/source.name)
+host_result=json.loads((ROOT/'docs/evidence/snapshot6-host-result.json').read_text())
+manifest={'project':'Switchcraft','target':'26.4-snapshot-6','source_revision':revision,'java_switch_revision':java_revision,'source_dirty':dirty,
+ 'build_date':now,'toolchain':toolchain,'dependency_lock':LOCK,'hardware_verification':'NOT TESTED','java25_horizon_runtime':'NOT AVAILABLE',
+ 'minecraft_title_on_horizon':'NOT ACHIEVED','host_reference':host_result,'artifacts':records,'sd_resources':[],
+ 'known_limitations':limitations,'not_produced':{'opengl-test.nro':'Legacy branch 1.12.2 only','minecraft-aot-test.nro':'No viable self-contained AOT runtime'},
+ 'package_manifest_note':'Internal ZIP manifest records NRO/resources; external manifest additionally hashes the final archives.'}
+for file in sorted(runtime.rglob('*.jar')):manifest['sd_resources'].append({'path':file.relative_to(sd).as_posix(),'bytes':file.stat().st_size,'sha256':hashlib.sha256(file.read_bytes()).hexdigest()})
+(DIST/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n');shutil.copyfile(DIST/'manifest.json',sd/'manifest.json')
+zip_path=DIST/'switch-minecraft-test-package.zip'
+with zipfile.ZipFile(zip_path,'w',zipfile.ZIP_DEFLATED,compresslevel=6) as archive:
+    for p in sorted(sd.rglob('*')):
+        if p.is_file():archive.write(p,p.relative_to(sd))
+        elif not any(p.iterdir()):archive.writestr(p.relative_to(sd).as_posix()+'/',b'')
+for p,purpose in [(zip_path,'Installable native snapshot-6 bring-up package'),(source,'Project, runtime and Java class-library corresponding source')]:
+    manifest['artifacts'].append({'name':p.name,'purpose':purpose,'source_revision':revision,'java_switch_revision':java_revision,'source_dirty':dirty,
+        'build_date':now,'toolchain':toolchain,'bundled_dependencies':['Native bring-up applications, original launcher bridge/tests, source and licenses; no Minecraft game files'],
+        'build_verification':'PASS','tested_environment':'Host archive/hash checks','hardware_verification':'NOT TESTED','known_limitations':limitations,
+        'bytes':p.stat().st_size,'sha256':hashlib.sha256(p.read_bytes()).hexdigest()})
+(DIST/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
+report=f'''# Snapshot 6 delivery report
 
-## A. Implemented functionality
+## A. Implemented
 
-Five Horizon-native applications: platform/SD/memory/controller/thread diagnostics;
-Mesa NVC0 EGL/OpenGL visible triangle and pixel readback; NVK device/queue/heap
-enumeration, GPU transfer and offscreen triangle; miniJVM interpreter with real
-Java 8 JAR tests and custom static native bridge; read-only Minecraft version
-inspection, inherited metadata, classpath/argument planning and saved settings.
-Minecraft is not playable. All Horizon execution remains NOT TESTED.
+Mainline targets 26.4-snapshot-6 and Vulkan. SDL3/VI swapchain and gamepad probe,
+exact base-feature profile, NVK offscreen tests, read-only launch planning and a
+hash-pinned Vulkan-only class transformation exist. Java is owned by the separate
+java-switch repository and consumed at a fixed commit.
 
-## B. Deliverable artifacts
+## B. Artifacts
 
-Source revision: `{revision}`. Tracked/untracked source modifications at package
-time: `{dirty}`. Paths below are relative to `{DIST}`.
+Source `{revision}`, Java source `{java_revision}`, dirty `{dirty}`.
+Paths are relative to `{DIST}`.
 
-| File | Bytes | SHA-256 |
+| Artifact | Bytes | SHA-256 |
 | --- | ---: | --- |
 '''
-for item in manifest["artifacts"]:report+=f'| `{item["name"]}` | {item["bytes"]} | `{item["sha256"]}` |\n'
-report+=f'''
-The extracted install layout is `dist/COPY_TO_SD/`. `dist/SHA256SUMS` also
-covers the manifest and this report. No placeholder AOT binary is present.
-
+for item in manifest['artifacts']:report+=f'| `{item["name"]}` | {item["bytes"]} | `{item["sha256"]}` |\n'
+report+='''
 ## C. Build validation
 
-All five NROs linked successfully using `{compiler}` and libnx 4.12.0 from
-the digest-pinned toolchain. NRO0/ASET, segment ranges, NACP identity/version,
-JPEG icon, AArch64 ELF and matching build IDs pass validation. {tests}.
-The real interpreter suite covers JAR loading, arithmetic, exceptions, reflection,
-threads, allocation, file I/O, static native calls and shutdown. It does not test
-standard JNI Invocation. Failed OpenJDK, AOT and initial build experiments are
-preserved under `docs/evidence/`.
+Six genuine NROs have matching AArch64 ELFs, NRO0/ASET/NACP/icons/build IDs.
+Host tests cover metadata, fake/truncated artifact rejection, feature gates and
+a synthetic executable renderer transformation. Independent runtime tests execute
+Java 8 JARs and Java 25 standard JNI/FFM downcall/upcall/structured JVM options.
+See build/host-tests.log and build/java-runtime.log for exact results.
 
-## D. Hardware testing
+## D. Hardware
 
-NOT TESTED: all controller/SD/memory/thread/JVM/GL/Vulkan execution on Horizon.
-No physical Switch was attached. No title screen, world, frame rate, usable game
-heap or Mod compatibility has been established.
+All Horizon execution is NOT TESTED. Java 25 VM is not built/linked. The Switch
+Minecraft title objective is NOT ACHIEVED. The Linux Java 25 llvmpipe Vulkan Demo
+reference did reach the title screen, including the strict Vulkan transformation;
+its screenshot and logs are explicitly labeled HOST ONLY.
 
 ## E. Installation
 
-Merge the ZIP's `switch/` and `minecraft/` folders onto the SD root; retain saves
-and real configuration. The ZIP contains no game files or real launcher.json.
-Start switch-diagnostics through application-mode hbmenu on Atmosphère. To inspect
-an existing legitimate installation, copy its versions/libraries/assets into
-sdmc:/minecraft/.minecraft or set another root in mc-runtime/config/launcher.json.
-The inspector only writes runtime settings/logs, not that installation.
+Merge COPY_TO_SD or the install ZIP onto the SD root, preserve saves/configuration,
+and use application-mode hbmenu. No game files or real launcher.json are included.
+Import an owned installation's versions/libraries/assets if testing the inspector.
 
 ## F. First three hardware sessions
 
-1. Run native menu/input, SD, memory and thread tests (HW-01 through HW-05).
-2. Run OpenGL context, visible triangle, pixel readback and restoration (HW-06/07).
-3. Run NVK enumeration, then buffer fill/readback (HW-08/09); only afterward try
-   the offscreen triangle and Java suite. Export all mc-runtime/logs afterward.
-
-The full case-by-case plan and fillable result sheet are `docs/TEST_PLAN.md`.
+1. Native menu, memory, SD and threads in switch-diagnostics.
+2. vulkan-present A for exact feature capture, then X for SDL3/VI/gamepad.
+3. vulkan-test transfer/offscreen rendering, then ffi-test downcall/W^X tests.
+The Java 8 suite is separate; it is not Java 25 compatibility. Export mc-runtime/logs.
 
 ## G. Architecture
 
-See `docs/ARCHITECTURE.md` (Mermaid) and `docs/architecture.svg`. Solid paths are
-implemented; dashed paths are future JVM/LWJGL/game/WSI work. The SD layout keeps
-standard .minecraft content separate from runtime binaries/configuration/logs.
+See docs/ARCHITECTURE.md and docs/architecture.svg. Java source/build boundaries
+and unavailable VM state are explicit; no Linux runtime is bundled for Horizon.
 
-## H. Known limitations
+## H. Limits
 
-OpenJDK and standard JNI Invocation are absent. miniJVM's incomplete Java 8 class
-library fails the isolated host Minecraft 1.12.2 attempt at missing APIs/AWT/LWJGL,
-ending in IncompatibleClassChangeError in Main.main before rendering. No fabricated
-authentication arguments were supplied. Modern Java 17/21/25 clients are metadata
-targets only. Vulkan presentation, Zink, LWJGL/GLFW/OpenAL, audio, authentication
-and Fabric/Mixin are unfinished. The Java heap target does not cap all native
-allocations. AOT needs missing external pz-switch/GraalVM/user game inputs.
-See `docs/KNOWN_ISSUES.md` and `docs/COMPATIBILITY.md`.
+Horizon JVM 25, class-library OS services, static LWJGL/native module loading,
+shaderc/VMA/SPIR-V Cross/audio integration and Java instrumentation remain open.
+Base Vulkan feature success alone does not establish game compatibility. Fabric
+and arbitrary Mods are not supported. NVK remains experimental on Maxwell.
 
 ## I. Next steps
 
-Collect hardware logs, repair any platform failures, add Vulkan WSI, reconstruct
-a self-contained OpenJDK port and integrate a small JNI/LWJGL bridge before
-attempting a game title screen. Preserve working diagnostic baselines; introduce
-Fabric only after actual runtime transformation and a real Mod test.
+Return native SDL/VI/feature and FFI closure logs; finish the Horizon OpenJDK 25
+OS layer (Zero plus libffi fallback linker first), then static JNI/FFM library
+loading and LWJGL bindings. Re-run the same pinned title test on the console.
 
-## J. Source changes and commits
+## J. Source and commits
 
-The originally empty repository now contains native apps/platform adapters,
-portable metadata code, the reviewed miniJVM patch, original Java tests, host
-tests, hash-locked dependencies, build/package/verification scripts, CI/Docker
-definitions and English engineering/hardware documentation. Original code is MIT;
-third-party licenses and full miniJVM Java/C source accompany the package.
-Exact compiler/dependency versions are in manifest.json and dependencies.lock.json.
+The legacy baseline is preserved on branch 1.12.2. main removes OpenGL and local
+Java implementation ownership, pins java-switch and SDL3, and packages explicit
+source/dependency/runtime/hardware evidence. Documents are English.
 
-```
 '''
-report+=subprocess.check_output(["git","log","--oneline","-12"],text=True)+"```\n"
-(DIST/"DELIVERY_REPORT.md").write_text(report)
-checks=[]
-for file in sorted(DIST.iterdir()):
-    if file.is_file() and file.name!="SHA256SUMS":checks.append(hashlib.sha256(file.read_bytes()).hexdigest()+"  "+file.name)
-(DIST/"SHA256SUMS").write_text('\n'.join(checks)+'\n')
-print("Packaged",len(verify.APPS),"verified NROs:",archive)
+report+='```\n'+subprocess.check_output(['git','log','--oneline','-12'],text=True)+'```\n'
+(DIST/'DELIVERY_REPORT.md').write_text(report)
+(DIST/'SHA256SUMS').write_text(''.join(hashlib.sha256(p.read_bytes()).hexdigest()+'  '+p.name+'\n' for p in sorted(DIST.iterdir()) if p.is_file() and p.name!='SHA256SUMS'))
+print('Packaged',len(verify.APPS),'verified NROs for snapshot 6:',zip_path)

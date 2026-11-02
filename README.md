@@ -1,103 +1,104 @@
-# Switchcraft
+# Switchcraft — 26.4-snapshot-6 / Vulkan
 
-Native Horizon homebrew diagnostics, a Java interpreter test, and a Minecraft
-installation inspector for Nintendo Switch 1. **Minecraft is not playable in
-this release. Every NRO is cross-compiled; Switch hardware execution is NOT TESTED.**
+`main` targets **Minecraft 26.4-snapshot-6, Java 25 and Vulkan**. The previous
+OpenGL/Java-8 research baseline is preserved on branch
+[`1.12.2`](https://github.com/a1c7e0/switchcraft/tree/1.12.2). Java runtime work
+now lives in [`java-switch`](https://github.com/a1c7e0/java-switch), consumed at
+an immutable commit from `dependencies.lock.json`.
 
-## Delivered applications
+**The snapshot reaches its title screen in the Linux Java-25/Vulkan reference.
+It does not yet run on Horizon: a native Java 25 VM is not built or linked.
+All Switch hardware execution is NOT TESTED.**
 
-| NRO | Implemented behavior |
+The reference uses the official Demo mode, no account credentials, and Mesa
+llvmpipe Vulkan. The image below is **HOST ONLY**, not a Switch screenshot:
+
+![HOST ONLY: snapshot 6 strict Vulkan demo title](docs/evidence/26.4-snapshot-6-HOST-ONLY-vulkan-strict-title.png)
+
+## Implemented and built
+
+| Artifact | Actual behavior |
 | --- | --- |
-| `switch-diagnostics.nro` | Controller menu, process memory query, bounded allocation, exclusive SD read/write, native threading, navigation to other NROs |
-| `opengl-test.nro` | Mesa NVC0/EGL context, API strings/extensions, visible green triangle, pixel readback and clean teardown |
-| `vulkan-test.nro` | Experimental Mesa NVK device/features/queues/heaps report, GPU buffer fill/readback, offscreen triangle with pixel verification |
-| `java-test.nro` | miniJVM interpreter, bundled Java 8 JAR suite, separate-JAR loading, reflection, threads, file I/O, allocation, exceptions, static native bridge; optional `user.jar` |
-| `minecraft-launcher.nro` | Installed version selection, inherited JSON resolution, rule evaluation, classpath/argument plan, missing-file/native checks, settings and diagnostics navigation |
+| `switch-diagnostics.nro` | Input, SD roundtrip, process/malloc memory, native threads and next-load navigation |
+| `vulkan-test.nro` | NVK enumeration, transfer/readback, offscreen triangle |
+| `vulkan-present.nro` | Exact snapshot-6 base-feature capture; SDL3 window/gamepad, VI surface, swapchain and presentation loop |
+| `minecraft-launcher.nro` | Read-only version/inheritance/dependency planning, strict Vulkan JVM/game arguments, saved configuration and honest Java-25 launch gate |
+| `java-test.nro` | Independent java-switch Java-8 interpreter diagnostic; this is not a Java-25 VM |
+| `ffi-test.nro` | AAPCS64 libffi downcalls and real libnx RW/RX upcall closures, prerequisites for Zero's fallback FFM linker |
+| `switchcraft-launcher-bridge.jar` | Hash-pinned renderer-method transformation; one Vulkan backend, no OpenGL fallback; host tested |
 
-The launcher exports a blocked launch plan. It does not execute Minecraft.
-The miniJVM bridge is not the standard JNI Invocation API. OpenJDK, Vulkan
-presentation, LWJGL, audio, Microsoft authentication and Fabric are unfinished.
+SDL3 is built without EGL, OpenGL or OpenGL ES. Its Switch port's unconditional
+EGL dependency was fixed in `patches/sdl3-vulkan-only.patch`. The original client
+still contains an OpenGL fallback; the bundled Java transformation restricts
+that single renderer-selection method without modifying authentication code.
+No Minecraft class bytes, assets, native desktop libraries or account data are
+redistributed. The bridge requires Java 25 and `java.instrument`, unavailable
+on Horizon until the VM port is completed.
 
-## Build
-
-Linux x86_64, Python 3.12+, GCC/G++, GNU Make 4.3+, `patch`, Git and HTTPS
-access are required. No root installation is necessary:
+## Build and install
 
 ```sh
 bash scripts/build-all.sh
 ```
 
-This fetches a digest-pinned devkitPro toolchain and hash-locked dependencies,
-builds five NROs, runs host tests, verifies NRO/ASET/NACP and AArch64 ELF metadata,
-then creates `dist/switch-minecraft-test-package.zip`, `dist/COPY_TO_SD/`,
-`dist/manifest.json` and `dist/SHA256SUMS`. Debug ELFs remain in `build/`.
-The first build needs several GB of disk; subsequent builds reuse downloads.
-See [BUILD.md](docs/BUILD.md) for Docker, proxy CA handling and exact versions.
+Linux x86_64, Python 3.12+, GCC/G++, Make, patch, Git and HTTPS access are required.
+The toolchain image, NVK archive, SDL3 source, host CMake wheel and Java repository
+revision are pinned. Access to the private `java-switch` repository is required.
+The toolchain and hash-verified caches can be reused; no root installation is
+needed. See [BUILD.md](docs/BUILD.md).
 
-## Install and first tests
+The pipeline builds six real NROs, tests the native/Java boundaries on the host,
+verifies AArch64/NRO/ASET/NACP/build IDs and creates:
 
-1. Extract `dist/switch-minecraft-test-package.zip` to the SD root. Merge
-   directories and preserve existing saves/configuration. No game files or real
-   `launcher.json` are included in the package.
-2. Use **application-mode Homebrew Menu** on Atmosphère, commonly by holding R
-   while starting an installed title. Start `switch-diagnostics`. Applet-mode
-   memory measurements do not represent full application memory.
-3. Run memory, SD and threading tests first; then test OpenGL and Vulkan
-   separately. Follow [TEST_PLAN.md](docs/TEST_PLAN.md) before the Java test.
+* `dist/switch-minecraft-test-package.zip` and `dist/COPY_TO_SD/`
+* `dist/switchcraft-corresponding-source.tar.gz`
+* `dist/manifest.json`, `dist/SHA256SUMS` and `dist/DELIVERY_REPORT.md`
 
-No Linux, Android, kernel patches, overclocking, proprietary SDK or external
-game-execution server is required by these NROs.
+Merge the package onto the SD root and preserve existing saves/configuration.
+Use **application-mode hbmenu** under Atmosphère on Switch 1. Start native
+memory/SD/thread tests, then `vulkan-present` A for feature capture and X for
+SDL3/VI presentation; then NVK offscreen and FFI tests. The detailed
+[TEST_PLAN.md](docs/TEST_PLAN.md) defines independent cases and recovery steps.
+No kernel patches, overclocking, Linux/Android installation or remote game
+execution are required by the NROs.
 
-## Import and configuration
+Copy a legitimately obtained installation's `versions/`, `libraries/` and
+`assets/` to `sdmc:/minecraft/.minecraft`, or configure another root. Runtime
+settings/logs remain under `sdmc:/switch/mc-runtime`; the installation is read
+only. Copy `launcher.example.json` to `launcher.json` to configure a root, or
+save in the launcher. Legacy graphics choices are migrated in memory to Vulkan;
+existing configuration is written only on explicit X/save.
 
-Copy your legitimately obtained installation's `versions/`, `libraries/` and
-`assets/` into `sdmc:/minecraft/.minecraft/`. Other normal directories may remain
-there. The inspector reads this root and never alters its game files or saves.
-It plans an isolated game directory under
-`sdmc:/switch/mc-runtime/instances/test/<version>/`.
+## Validation and remaining work
 
-For a different root, copy
-`sdmc:/switch/mc-runtime/config/launcher.example.json` to `launcher.json` and
-edit `minecraft_root`. In the inspector: D-pad selects a version, L selects a
-runtime target, R selects graphics, A inspects/exports, X saves settings, Y opens
-diagnostics, minus displays recent logs, plus exits. Runtime and graphics choices
-describe plans and diagnostic backends, not available Minecraft support.
+The main host suite tests metadata, artifact rejection, strict renderer behavior
+and profile gates. The independent runtime suite tests Java 8 and actual host
+Java 25 JNI creation/native registration/FFM downcalls/upcalls/teardown.
+The same JNI adapter is compiled into the Horizon SDK, where it reports
+`runtime-not-linked` because no Java 25 VM exists. No UI claims it can launch a
+game on Switch. OpenJDK 25 configuration actually fails on unsupported Horizon
+OS detection; real memory/fault/thread/class-library and static JNI/FFM module
+work is still needed. Linked Vulkan/SDL/FFI code awaits physical execution.
 
-The default planned heap is 256 MiB. The separate Java diagnostic uses a 64 MiB
-GC target; native allocations are not covered by a hard process quota.
+To reproduce the host reference, prepare a Linux X11/Vulkan environment and run:
 
-To try your own small Java 8 program, compile a class named `UserMain`, package
-it in `sdmc:/switch/mc-runtime/tests/user.jar`, and press X in `java-test`.
-It receives an isolated diagnostic directory as its first argument. Use your
-own trusted test code. Dynamic native loading and process creation are disabled.
+```sh
+python3 tools/snapshot6-reference.py --download-assets
+python3 tools/snapshot6-reference.py --run-demo
+```
 
-## Logs and evidence
+This downloads official game files into ignored `.cache/`, validates hashes,
+uses the built-in Demo mode and logs the actual renderer. It is a host reference,
+not a proposed way to execute the Switch game on another computer. See
+[HOST_REFERENCE.md](docs/HOST_REFERENCE.md) for exact evidence and limitations.
 
-Copy the entire `sdmc:/switch/mc-runtime/logs/` directory back after testing.
-It contains per-application plain-text logs and `launch-plan.json`. Logs contain
-no supplied account credentials; authentication placeholders remain unresolved.
-`dist/manifest.json` records source revision, dependency/toolchain versions,
-checksums, build verification and hardware status.
-
-Host tests pass for the interpreter suite and metadata behavior. An additional
-host Minecraft 1.12.2 bootstrap experiment reached its main class and failed in
-LWJGL initialization; no title screen or game rendering was reached. See
-[IMPLEMENTATION_STATUS.md](docs/IMPLEMENTATION_STATUS.md).
-
-## Engineering documents
-
-* [Architecture and diagrams](docs/ARCHITECTURE.md)
-* [Upstream source research and licensing](docs/UPSTREAM_RESEARCH.md)
-* [Build instructions](docs/BUILD.md)
-* [Hardware test plan](docs/TEST_PLAN.md)
+* [Architecture and diagram](docs/ARCHITECTURE.md)
+* [Upstream research](docs/UPSTREAM_RESEARCH.md)
+* [Status and evidence](docs/IMPLEMENTATION_STATUS.md)
 * [Compatibility](docs/COMPATIBILITY.md)
 * [Known issues](docs/KNOWN_ISSUES.md)
-* [Implementation evidence](docs/IMPLEMENTATION_STATUS.md)
-* [Decisions](docs/DECISIONS.md)
-* [Next steps](docs/NEXT_STEPS.md)
+* [Decisions](docs/DECISIONS.md) and [next steps](docs/NEXT_STEPS.md)
 
-Original project code is MIT. Third-party licenses are retained in `licenses/`.
-The miniJVM Java class library is GPL-2.0 with additional notices in individual
-files; its full source accompanies the install package. A binary-only
-distribution does not remove those obligations. No Minecraft game code,
-OptiFine, assets, Microsoft tokens or console keys are distributed.
+Original source is MIT. Third-party notices and the full miniJVM Java/C and
+libffi source accompany distributions. The Java class library retains GPL terms;
+binary-only redistribution does not remove source obligations.

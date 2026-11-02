@@ -1,50 +1,44 @@
-# Known issues and boundaries
+# Known issues
 
-* **All Switch hardware functionality is NOT TESTED.** Cross-compilation proves
-  format/link compatibility only. Atmosphère/libnx/driver behavior needs real hardware.
-* Minecraft is not playable. The inspector never starts a game. The independent
-  host 1.12.2 experiment fails in LWJGL initialization before a title screen.
-* OpenJDK 8 has partial upstream Horizon changes, but its runner, POSIX layer,
-  runtime image, signal/exception handling and build recipe are incomplete here.
-  No OpenJDK 17/21/25 port is implemented.
-* miniJVM is an experimental Java 8 diagnostic. It has a custom native interface,
-  not standard JNI Invocation. No desktop native `.so` can be loaded. JIT,
-  subprocesses, Immix memory mapping, AWT and LWJGL are unavailable.
-* The Java diagnostic's 64 MiB heap value is a collector target, not a hard cap
-  over native metadata, stacks or libraries. It runs once per process. An
-  unbounded user JAR can hang or exhaust memory; plus cannot interrupt an active
-  synchronous Java call. Use the HOME menu/relaunch for recovery.
-* Vulkan uses a nonconformant Maxwell NVK build whose constructor opts into
-  Mesa's experimental GPU exposure. No Vulkan feature level is assumed until
-  recorded on hardware. Instance API requests 1.0; reported device version is
-  logged separately. WSI/surface/swapchain presentation is not implemented.
-* Vulkan triangle rendering is offscreen RGBA8 with center/corner readback and
-  a console ASCII preview. It is not visible Vulkan swapchain presentation.
-* GPU commands use a five-second fence timeout. A kernel/driver call itself may
-  still hang. On fence timeout the application exits without destroying pending
-  resources; there is no verified GPU reset/recovery path.
-* OpenGL uses devkitPro Mesa 20.1.0 NVC0, separate from NVK's Mesa 25.0.7. The
-  console renderer is released during EGL rendering. Restoration/lifecycle and
-  repeated driver initialization need hardware testing.
-* Zink, OpenAL audio, networking tests, touch, remapping, performance tuning and
-  Fabric/Mixin are unimplemented. Linked networking/TLS code is not validated.
-* The launcher reads bounded JSON (4 MiB), limits scans to 512 versions and
-  inheritance to 16 levels. Maven `@extension` and OS-version regex rules are
-  not implemented. Asset object counts are inspected; object hashes/downloads
-  are not exhaustively verified. Rules target Horizon/aarch64, not Linux.
-* The generated classpath uses `;` because libnx SD paths contain `:`. A future
-  JVM backend must use the same separator or translate paths; Linux classpaths
-  cannot be copied blindly.
-* Metadata heap/JVM/game arguments are plans, not executed commands. Authentication
-  placeholders remain unresolved. There is no account authentication or bypass.
-* SD logs append and flush synchronously; there is no automatic log rotation or
-  crash dump handler. Driver crashes may lose the last message. SD failure is
-  shown on screen; an existing diagnostic temporary file is preserved.
-* NRO chaining depends on Homebrew Menu's next-load support and the packaged
-  absolute layout. Direct launch of each NRO remains available if chaining fails.
-* AOT cannot be reproduced from the inspected repository alone: external
-  `pz-switch`, musl-nx, GraalVM output and user-supplied patched JAR inputs are
-  missing. Its script requests 24 GiB host heap, beyond this executor's RAM.
-* CI/Docker definitions are supplied; only the local pinned-toolchain path was
-  executed. The NVK archive is hash-pinned, but upstream did not record the exact
-  nxvk commit used for that binary. Driver-source rebuild provenance remains open.
+* **Horizon Java 25 is absent. Minecraft title on Switch is NOT ACHIEVED.** The
+  verified Demo title is a Linux/llvmpipe reference only. No physical Switch is
+  attached; every native CPU/input/SD/graphics/runtime test is NOT TESTED.
+* OpenJDK 25 fails configuration at unsupported OS elf. A real OS/platform and
+  class-library port is needed: virtual memory, exceptions/safepoints, TLS and
+  threads, static natives/symbols, filesystem/network and runtime image.
+* The JNI adapter executes Java 25 JNI/FFM tests on host and reports unavailable
+  on Horizon. miniJVM is Java 8 only. No classfile-69/modern Minecraft support is
+  inferred from Java 8 class-loading or reflection tests.
+* libffi AAPCS64 and libnx RW/RX upcall code compile/link, but hardware permissions,
+  cache behavior, closure execution and teardown still need physical testing.
+  Failure returns actual libnx errors; no patches or overclocking are attempted.
+* NVK remains experimental/nonconformant on integrated Maxwell. Base-feature
+  success does not prove shader/presentation stability or complete game support.
+  The prebuilt archive does not identify its exact historical nxvk source commit.
+* SDL3/VI swapchain and gamepad paths are implemented and linked, with OpenGL/EGL
+  disabled. They are hardware untested. Driver calls may hang; fences have finite
+  timeouts, but queue/device idle calls may still block. No GPU reset guarantee.
+* Per-image present semaphores avoid reusing a presentation wait too early. The
+  baseline is deliberately serialized and not a performance benchmark. Offscreen
+  triangle coverage and presentation coverage are separate NRO tests.
+* Shaderc, VMA, SPIR-V Cross, FreeType, audio and static LWJGL loading into a real
+  Horizon JVM are not integrated. Native SDL3 alone does not implement Java FFM.
+* Strict Vulkan uses a Java 25 instrumentation/Class-File-API bridge. Those runtime
+  modules/services are unavailable on Horizon. It refuses unrecognized class
+  hashes and changes only renderer selection, without account/authentication changes.
+* Fabric/Mixin, arbitrary Mods, authentication and network/audio integration are
+  not implemented. The linked native networking/TLS code is not verified.
+* Metadata is bounded to 4 MiB/512 versions/16 inheritance levels. OS-version
+  regex and Maven @extension cases are limited. Assets are counted/planned, not
+  exhaustively checked by the console inspector. Official default-user-jvm flags
+  are recorded but not applied blindly to the Switch memory budget.
+* Heap settings do not cap all native memory. Usable process/malloc memory must
+  be measured in application-mode hbmenu; 4 GB physical RAM is not Java heap.
+* NRO chaining requires next-load support and the packaged SD layout. Launch
+  individual NROs directly if chaining is unsupported. SD logs have no rotation;
+  crash recovery is HOME/relaunch and matching ELF symbolication.
+* Legacy OpenGL artifacts remain on branch 1.12.2 and are excluded from main's
+  package. AOT is still blocked on missing external runtime/game build inputs.
+* Docker/CI are supplied but not independently executed here. Private cross-repo
+  CI checkout needs a read token configured in GitHub; local authenticated builds
+  do not need it embedded in source.

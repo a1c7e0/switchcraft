@@ -1,5 +1,5 @@
 name: Build and verify Horizon diagnostics
-on: [push, pull_request, workflow_dispatch]
+on: [workflow_dispatch]
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -8,6 +8,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+      - uses: actions/checkout@v4
+        with:
+          repository: a1c7e0/java-switch
+          path: .deps/java-switch
+          token: ${{ secrets.JAVA_SWITCH_READ_TOKEN }}
+          fetch-depth: 0
+      - run: git config --global --add safe.directory "$GITHUB_WORKSPACE/.deps/java-switch"
       - run: bash scripts/build-all.sh
       - uses: actions/upload-artifact@v4
         with:

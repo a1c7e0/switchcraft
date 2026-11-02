@@ -17,9 +17,11 @@ with zipfile.ZipFile(root/'switch-minecraft-test-package.zip') as archive:
     names=archive.namelist()
     assert not any('/saves/' in name and not name.endswith('/') for name in names)
     assert not any(name.endswith(('.dat','.mca')) for name in names)
-    for app in ['switch-diagnostics','opengl-test','vulkan-test','java-test','minecraft-launcher']:
+    for app in ['switch-diagnostics','vulkan-test','vulkan-present','java-test','ffi-test','minecraft-launcher']:
         assert archive.read(f'switch/{app}/{app}.nro')==(root/(app+'.nro')).read_bytes()
     for resource in manifest['sd_resources']:
         assert hashlib.sha256(archive.read(resource['path'])).hexdigest()==resource['sha256']
+    assert not any('/opengl-test/' in name for name in names)
+    assert len([name for name in names if name.endswith('.jar')])==5
 print('Manifest, SHA256SUMS, ZIP layout and all packaged NROs: PASS')
 PY

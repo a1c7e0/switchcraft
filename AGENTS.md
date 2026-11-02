@@ -1,57 +1,42 @@
-# Switchcraft engineering guide
+# Switchcraft continuation guide
 
-All documentation is written in English. Commit meaningful milestones.
-Never claim hardware execution from a successful cross-compilation.
-Never ship placeholder NROs, game JARs, credentials, or authentication bypasses.
+Write documentation in English; make focused commits and push authorized
+changes. Target fixed by the user: 26.4-snapshot-6, Java 25, Vulkan only.
+`1.12.2` preserves the legacy baseline at feb2f4d. Do not rewrite that branch.
 
-## Layout and commands
+Java runtime ownership is a1c7e0/java-switch. Pin its full commit in
+`dependencies.lock.json`; do not duplicate its implementation back here.
+`python3 scripts/bootstrap-deps.py` clones the pin and shares ignored caches.
+`bash scripts/build-all.sh` builds six NROs, runtime and host tests, renderer
+bridge, verifies formats and packages the SD layout. `make host-test` runs the
+main suite; external runtime results are in build/java-runtime.log.
 
-* `src/`: Horizon applications and shared platform services.
-* `scripts/`: pinned toolchain bootstrap, builds, validation and packaging.
-* `tests/`: host tests and original Java diagnostic programs.
-* `docs/`: evidence, architecture, upstream decisions and hardware test plan.
-* `dist/`: generated artifacts, ignored by Git.
+src/platform.c owns libnx, metadata.cpp is portable, vulkan.c is the offscreen
+baseline, vulkan_present.c owns SDL3/VI/base-profile tests. SDL3 source and the
+host CMake wheel are hash-pinned; patches/sdl3-vulkan-only.patch removes EGL
+requirements. Keep OpenGL out of main's targets and final linked APIs.
 
-Bootstrap: `python3 scripts/bootstrap-toolchain.py` (Python 3.12+).
-The OCI extraction fallback avoids Docker vfs copy amplification on small disks.
-The image digest is pinned in the script; do not change it without rebuilding.
+The official client was downloaded only to /tmp for research, never committed
+or packaged. A Linux Java 25 / llvmpipe Vulkan Demo reference reached the title
+screen, including a hash-pinned single-renderer transformation. Evidence is
+explicitly HOST ONLY. Horizon Java 25 is NOT IMPLEMENTED; native title is NOT
+ACHIEVED, all physical execution NOT TESTED. Never turn these into a pass based
+on a cross-link or host screenshot.
 
-Use libnx application mode for memory testing. No Linux/Android on the console,
-kernel patches, overclocking, proprietary SDKs, or remote game execution.
-Keep platform code separate from metadata processing. Treat native PC libraries
-as incompatible until a Horizon implementation is linked and verified.
+java-switch exports a versioned C SDK, actual standard JNI adapter and libffi
+AAPCS64/W^X prerequisites. JNI/FFM tests pass on host. No Horizon libjvm is linked,
+so the launch gate must return JS_UNAVAILABLE; do not add a fake Play action.
+OpenJDK 25/Zero configuration fails at unsupported OS elf. Port actual memory,
+exceptions, threads/TLS, class libraries, static symbols and fallback FFM next.
 
-## Current evidence and constraints
+The bridge uses the public Java 25 Class-File API and java.instrument; it only
+changes the hash-pinned PreferredGraphicsApi.getBackendsToTry method. No account
+or authentication bypasses. Native loader/Java 25 instrumentation on Horizon
+is still absent. Do not bundle game JARs, assets, desktop runtime binaries,
+credentials or console keys. Respect original SD saves/configuration.
 
-The initial GitHub repository was empty. The managed environment has GCC,
-Python and a working Docker daemon but only 7.9 GB disk. Docker vfs exhausted
-disk during container creation; the pinned-image extraction is the fallback.
-See `docs/IMPLEMENTATION_STATUS.md` for current milestones and next actions.
-
-## Completed baseline and continuation
-
-`bash scripts/build-all.sh` verifies dependencies, builds five NROs, runs host
-tests and packages/validates the SD ZIP. `make host-test` exercises real Java
-JARs through the patched miniJVM interpreter plus metadata and NRO validation.
-Run `python3 scripts/bootstrap-deps.py` after changing the miniJVM patch; it
-recreates `.deps/minijvm` before rebuilding. Never edit generated `.deps` as the
-only record of a fix: update `patches/minijvm-horizon.patch` or tracked adapters.
-
-`dependencies.lock.json` fixes image/archive revisions and hashes. OpenGL uses
-the image's Mesa 20.1.0; NVK is a separate Mesa 25.0.7 static binary release.
-Do not link both drivers into one NRO. Vulkan currently renders offscreen only.
-miniJVM uses classic GC, disabled JIT, semicolon classpaths, no subprocesses or
-dynamic natives. Its static native method ABI is not standard JNI Invocation.
-The host Java suite passes; Horizon execution remains NOT TESTED.
-
-The inspector reads `.minecraft` and writes only runtime settings/logs/plans.
-It always exports `launchable=false` until a Minecraft-capable backend exists.
-Do not add a nonfunctional Play button. Official metadata covers Java 8/17/21/25.
-The separate host 1.12.2 bootstrap failed at missing Java APIs/AWT/LWJGL; no game
-files are tracked or packaged. AOT is blocked on absent external pz-switch and
-GraalVM/game inputs. Preserve these boundaries in documentation and manifest.
-
-Next: collect physical Switch logs using `docs/TEST_PLAN.md`, fix any platform
-failure, add Vulkan presentation, reconstruct a self-contained OpenJDK port,
-then integrate LWJGL and a legitimate game instance. Keep debug ELFs to resolve
-crash offsets. Final release hashes and source revision live in `dist/manifest.json`.
+Use application-mode hbmenu; no Linux/Android boot, patches, proprietary SDK or
+overclocking. Docker vfs previously exhausted the small disk; the tested pinned
+OCI toolchain extraction fallback is available. CI cross-private checkout needs
+JAVA_SWITCH_READ_TOKEN configured in GitHub; do not request or print tokens in
+agent conversations. Hardware tests and log export: docs/TEST_PLAN.md.

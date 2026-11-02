@@ -1,3 +1,27 @@
+# Mainline update: fixed snapshot 6
+
+Java runtime ownership moved to [a1c7e0/java-switch](https://github.com/a1c7e0/java-switch).
+Its exact commit is in dependencies.lock.json. The preserved original investigation
+below describes the legacy baseline; mainline integration decisions are updated here.
+
+| Source / pin | Inspected implementation and result | Integration / limits / license |
+| --- | --- | --- |
+| etonedemid/SDL `1e3b67ef787c0fdba47b42fc663c70613c8b04db` | Read Switch video/Vulkan/input code and CMake. Real SDL3 VI surface/window path, but unconditional EGL references broke Vulkan-only builds. Patched guards/window creation; static library and NRO link succeed with GL/EGL off. | Selected native SDL3/input/VI adapter. Zlib license retained. Hardware NOT TESTED. |
+| OpenJDK jdk25u `275848b087112429235f4f235822e294a1a288ef` | Read Zero foreignGlobals, fallback linker Java/C and autoconf. Actual configure reaches unsupported OS elf. Zero's assembly foreign linker is absent, but libffi fallback is enabled by default. | Required runtime source-port route; no Horizon VM binary. GPL/ClassPath/assembly exceptions retained per source; no desktop runtime redistributed. |
+| libffi `v3.8.0`, hash in Java repository | AAPCS64 source/configuration compiles. Replaced malloc-backed executable closure allocation with real libnx JIT RW/RX/cache/teardown APIs; native downcall/upcall NRO builds. | Java repo SDK prerequisite, hardware NOT TESTED. MIT notice/source retained. |
+| Temurin `25.0.5+8`, locked SHA-256 | Actual host JNI creation/native registration/options/FFM downcall/upcall/teardown pass. Snapshot 6 Demo title passes with strict Vulkan transformation. | Host build/reference tool only, no Horizon runtime claim or bundled Linux JDK. |
+| Official snapshot 6 metadata/client | Metadata SHA-1 `04be0f389fdac9f1c8b9b551c1e717104a08899d`, client SHA-1 `8a97d5dafe80783525a2807b220527b65df724a5`. Inspected VulkanFeatureSets, VulkanInstance, SDL Window and renderer preference bytecode. | Fixed Java25/Vulkan1.2 base/SDL3 target. Client retains GL fallback; original hash-pinned renderer transformation removes that fallback. No game bytes/credentials redistributed. |
+
+Renderer-class SHA-256 is pinned in profiles/26.4-snapshot-6.json. A public
+Class-File-API/Java-instrumentation bridge transforms one method; synthetic
+fixtures and the actual host title test pass. A custom child-loader attempt
+failed, so the final implementation preserves the normal loader. No account
+or authentication code is patched. Full source OS/FFM/native module integration
+on Horizon remains open. Read HOST_REFERENCE.md and the independent Java port
+notes before interpreting the host title screenshot.
+
+## Preserved original upstream investigation
+
 # Upstream source research
 
 Sources were inspected on 2026-11-02. Revisions are immutable observations, not
