@@ -173,10 +173,10 @@ static bool test(int mode) {
     VkFenceCreateInfo fci={.sType=VK_STRUCTURE_TYPE_FENCE_CREATE_INFO};CHECK(pCreateFence(device,&fci,NULL,&fence));
     VkSubmitInfo submit={.sType=VK_STRUCTURE_TYPE_SUBMIT_INFO,.commandBufferCount=1,.pCommandBuffers=&command};
     CHECK(pQueueSubmit(queue,1,&submit,fence));
+    sc_log("STAGE GPU fence: submitted mode=%d, waiting up to 5 seconds\n",mode);
     VkResult wait=pWaitForFences(device,1,&fence,VK_TRUE,5000000000ull);
     sc_log("GPU fence -> %d\n",wait);
-    if(wait==VK_TIMEOUT){sc_log("GPU timeout; exiting without destroying pending resources\n");return false;}
-    if(wait!=VK_SUCCESS)goto done;
+    if(wait!=VK_SUCCESS){sc_log("GPU wait failed; exiting without destroying potentially pending resources\n");return false;}
     CHECK(pMapMemory(device,buffer_mem,0,VK_WHOLE_SIZE,0,&mapped));
     VkMappedMemoryRange range={.sType=VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE,.memory=buffer_mem,.offset=0,.size=VK_WHOLE_SIZE};
     CHECK(pInvalidateMappedMemoryRanges(device,1,&range));
