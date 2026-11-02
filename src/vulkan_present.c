@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <switchcraft/native_lookup.h>
 
 extern PFN_vkVoidFunction vkGetInstanceProcAddr(VkInstance,const char *);
 #define INST(X) X(DestroyInstance) X(EnumeratePhysicalDevices) X(GetPhysicalDeviceProperties) X(GetPhysicalDeviceFeatures2) X(GetPhysicalDeviceQueueFamilyProperties) X(EnumerateDeviceExtensionProperties) X(GetDeviceProcAddr) X(CreateDevice)
@@ -16,7 +17,7 @@ extern PFN_vkVoidFunction vkGetInstanceProcAddr(VkInstance,const char *);
 #define DEV(X) X(DestroyDevice) X(GetDeviceQueue) X(DeviceWaitIdle) X(CreateSwapchainKHR) X(DestroySwapchainKHR) X(GetSwapchainImagesKHR) X(AcquireNextImageKHR) X(QueuePresentKHR) X(CreateCommandPool) X(DestroyCommandPool) X(AllocateCommandBuffers) X(ResetCommandBuffer) X(BeginCommandBuffer) X(EndCommandBuffer) X(CmdPipelineBarrier) X(CmdClearColorImage) X(CreateSemaphore) X(DestroySemaphore) X(CreateFence) X(DestroyFence) X(WaitForFences) X(ResetFences) X(QueueSubmit) X(QueueWaitIdle)
 #define DECL(n) PFN_vk##n n;
 typedef struct {INST(DECL) WSI(DECL) DEV(DECL)} Dispatch;
-#define TRY(call) do{VkResult result=(call);if(result!=VK_SUCCESS){sc_log("%s -> %d\n",#call,result);goto cleanup;}}while(0)
+#define TRY(call) do{VkResult result=(call);if(result!=VK_SUCCESS){failed=true;sc_log("%s -> %d\n",#call,result);goto cleanup;}}while(0)
 
 static void json_string(FILE *f,const char *s){
     fputc('"',f);for(;*s;s++){unsigned char c=(unsigned char)*s;if(c=='"'||c=='\\'){fputc('\\',f);fputc(c,f);}else if(c<32)fprintf(f,"\\u%04x",c);else fputc(c,f);}fputc('"',f);
@@ -38,13 +39,15 @@ static bool profile(Dispatch *d,VkPhysicalDevice physical) {
     const char *needed[]={"VK_KHR_synchronization2","VK_EXT_vertex_attribute_divisor","VK_KHR_swapchain"};
     uint32_t count=0;VkResult r=d->EnumerateDeviceExtensionProperties(physical,NULL,&count,NULL);
     if(r!=VK_SUCCESS){sc_log("Device extension count -> %d\n",r);return false;}
+    if(count>65536){sc_log("Device extension count exceeds limit: %u\n",count);return false;}
     VkExtensionProperties *extensions=calloc(count?count:1,sizeof(*extensions));if(!extensions)return false;
     r=d->EnumerateDeviceExtensionProperties(physical,NULL,&count,extensions);
-    if(r!=VK_SUCCESS){free(extensions);return false;}
+    if(r!=VK_SUCCESS){sc_log("Device extension enumeration -> %d\n",r);free(extensions);return false;}
     bool ok=props.apiVersion>=VK_API_VERSION_1_2;
     sc_log("Snapshot 6 Vulkan base profile: GPU=%s API=%u.%u.%u\n",props.deviceName,VK_VERSION_MAJOR(props.apiVersion),VK_VERSION_MINOR(props.apiVersion),VK_VERSION_PATCH(props.apiVersion));
+    sc_log("Device vendor=0x%x device=0x%x type=%u driver=0x%x\n",props.vendorID,props.deviceID,props.deviceType,props.driverVersion);
     FILE *f=fopen(SC_LOGS "/snapshot-vulkan.json","w");
-    if(f){fprintf(f,"{\"target\":\"26.4-snapshot-6\",\"gpu\":");json_string(f,props.deviceName);fprintf(f,",\"api_version\":%u,\"features\":{",props.apiVersion);}
+    if(f){fprintf(f,"{\"target\":\"26.4-snapshot-6\",\"gpu\":");json_string(f,props.deviceName);fprintf(f,",\"api_version\":%u,\"vendor_id\":%u,\"device_id\":%u,\"device_type\":%u,\"driver_version\":%u,\"features\":{",props.apiVersion,props.vendorID,props.deviceID,props.deviceType,props.driverVersion);}
     for(unsigned i=0;i<8;i++){
         sc_log("%s=%u\n",names[i],values[i]);if(!values[i])ok=false;
         if(f){if(i)fputc(',',f);json_string(f,names[i]);fprintf(f,":%s",values[i]?"true":"false");}
@@ -58,7 +61,7 @@ static bool profile(Dispatch *d,VkPhysicalDevice physical) {
 
 static bool run(bool present) {
     Dispatch d={0};SDL_Window *window=NULL;SDL_Gamepad *gamepad=NULL;
-    bool sdl=false,screen=false,submitted=false;unsigned frames=0;bool complete=false;
+    bool sdl=false,screen=false,submitted=false,failed=false;unsigned frames=0;bool complete=false;
     VkInstance instance=VK_NULL_HANDLE;VkDevice device=VK_NULL_HANDLE;VkSurfaceKHR surface=VK_NULL_HANDLE;
     VkSwapchainKHR chain=VK_NULL_HANDLE;VkCommandPool pool=VK_NULL_HANDLE;VkSemaphore acquired=VK_NULL_HANDLE,*rendered=NULL;
     uint32_t chain_image_count=0;
@@ -66,6 +69,10 @@ static bool run(bool present) {
     const char *const *extensions=NULL;Uint32 extension_count=0;
     if(present){
         sc_log("Entering SDL3 / Vulkan-only window / VI surface test\n");sc_console(false);screen=true;
+        sc_log("Static native lookup SDL_CreateWindow=%s SDL_Vulkan_CreateSurface=%s vkGetInstanceProcAddr=%s\n",
+            sc_horizon_native_lookup("SDL3","SDL_CreateWindow")?"present":"MISSING",
+            sc_horizon_native_lookup("SDL3","SDL_Vulkan_CreateSurface")?"present":"MISSING",
+            sc_horizon_native_lookup("vulkan","vkGetInstanceProcAddr")?"present":"MISSING");
         SDL_SetMainReady();
         sdl=true;
         if(!SDL_Init(SDL_INIT_VIDEO|SDL_INIT_GAMEPAD)){sc_log("SDL_Init: %s\n",SDL_GetError());goto cleanup;}
@@ -79,6 +86,8 @@ static bool run(bool present) {
         extensions=SDL_Vulkan_GetInstanceExtensions(&extension_count);
         if(!extensions||!extension_count){sc_log("No SDL Vulkan instance extensions: %s\n",SDL_GetError());goto cleanup;}
     }
+    sc_log("STAGE vulkan-instance: create API 1.2 extensions=%u\n",extension_count);
+    for(Uint32 i=0;i<extension_count;i++)sc_log("Instance extension[%u]=%s\n",i,extensions[i]);
     PFN_vkCreateInstance create=(PFN_vkCreateInstance)vkGetInstanceProcAddr(NULL,"vkCreateInstance");
     if(!create){sc_log("No Vulkan create instance function\n");goto cleanup;}
     VkApplicationInfo app={.sType=VK_STRUCTURE_TYPE_APPLICATION_INFO,.pApplicationName="Switchcraft snapshot 6",.apiVersion=VK_API_VERSION_1_2};
@@ -87,7 +96,7 @@ static bool run(bool present) {
 #define LOADI(n) d.n=(PFN_vk##n)vkGetInstanceProcAddr(instance,"vk" #n);if(!d.n){sc_log("Missing vk" #n "\n");goto cleanup;}
     INST(LOADI)
     if(present){WSI(LOADI)}
-    if(present&&!SDL_Vulkan_CreateSurface(window,instance,NULL,&surface)){sc_log("SDL_Vulkan_CreateSurface: %s\n",SDL_GetError());goto cleanup;}
+    if(present){sc_log("STAGE surface: SDL_Vulkan_CreateSurface\n");if(!SDL_Vulkan_CreateSurface(window,instance,NULL,&surface)){sc_log("SDL_Vulkan_CreateSurface: %s\n",SDL_GetError());goto cleanup;}}
     uint32_t nphysical=0;TRY(d.EnumeratePhysicalDevices(instance,&nphysical,NULL));
     if(!nphysical||nphysical>16){sc_log("Physical device count=%u\n",nphysical);goto cleanup;}
     VkPhysicalDevice physicals[16];TRY(d.EnumeratePhysicalDevices(instance,&nphysical,physicals));
@@ -99,6 +108,7 @@ static bool run(bool present) {
     d.GetPhysicalDeviceQueueFamilyProperties(physical,&nqueues,queues);uint32_t family=UINT32_MAX;
     for(uint32_t i=0;i<nqueues;i++){
         VkBool32 supported=0;VkResult r=d.GetPhysicalDeviceSurfaceSupportKHR(physical,i,surface,&supported);
+        sc_log("Queue family=%u flags=0x%x count=%u surface_result=%d present=%u\n",i,queues[i].queueFlags,queues[i].queueCount,r,supported);
         if(r==VK_SUCCESS&&supported&&queues[i].queueCount&&(queues[i].queueFlags&VK_QUEUE_GRAPHICS_BIT)){family=i;break;}
     }
     free(queues);if(family==UINT32_MAX){sc_log("No graphics/present queue\n");goto cleanup;}
@@ -110,6 +120,7 @@ static bool run(bool present) {
     DEV(LOADD)
     VkQueue queue;d.GetDeviceQueue(device,family,0,&queue);
     VkSurfaceCapabilitiesKHR caps;TRY(d.GetPhysicalDeviceSurfaceCapabilitiesKHR(physical,surface,&caps));
+    sc_log("Surface min/max images=%u/%u usage=0x%x transforms=0x%x current=0x%x composite=0x%x\n",caps.minImageCount,caps.maxImageCount,caps.supportedUsageFlags,caps.supportedTransforms,caps.currentTransform,caps.supportedCompositeAlpha);
     if(!(caps.supportedUsageFlags&VK_IMAGE_USAGE_TRANSFER_DST_BIT)){sc_log("Surface lacks transfer-destination usage\n");goto cleanup;}
     VkExtent2D extent=caps.currentExtent;
     if(extent.width==UINT32_MAX){extent=(VkExtent2D){1280,720};if(extent.width<caps.minImageExtent.width)extent.width=caps.minImageExtent.width;if(extent.width>caps.maxImageExtent.width)extent.width=caps.maxImageExtent.width;if(extent.height<caps.minImageExtent.height)extent.height=caps.minImageExtent.height;if(extent.height>caps.maxImageExtent.height)extent.height=caps.maxImageExtent.height;}
@@ -117,7 +128,7 @@ static bool run(bool present) {
     if(!count||count>256)goto cleanup;
     VkSurfaceFormatKHR *formats=calloc(count,sizeof(*formats));if(!formats)goto cleanup;
     VkResult format_result=d.GetPhysicalDeviceSurfaceFormatsKHR(physical,surface,&count,formats);
-    if(format_result!=VK_SUCCESS){free(formats);goto cleanup;}
+    if(format_result!=VK_SUCCESS){sc_log("Surface formats -> %d\n",format_result);free(formats);goto cleanup;}
     VkSurfaceFormatKHR format=formats[0];
     for(uint32_t i=0;i<count;i++)if(formats[i].format==VK_FORMAT_B8G8R8A8_UNORM||formats[i].format==VK_FORMAT_R8G8B8A8_UNORM){format=formats[i];break;}
     free(formats);if(format.format==VK_FORMAT_UNDEFINED)format.format=VK_FORMAT_B8G8R8A8_UNORM;
@@ -126,6 +137,7 @@ static bool run(bool present) {
     if(!(caps.supportedCompositeAlpha&alpha))alpha=(VkCompositeAlphaFlagBitsKHR)(caps.supportedCompositeAlpha&(~caps.supportedCompositeAlpha+1));
     VkSwapchainCreateInfoKHR sci={.sType=VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR,.surface=surface,.minImageCount=image_count,.imageFormat=format.format,.imageColorSpace=format.colorSpace,
         .imageExtent=extent,.imageArrayLayers=1,.imageUsage=VK_IMAGE_USAGE_TRANSFER_DST_BIT,.imageSharingMode=VK_SHARING_MODE_EXCLUSIVE,.preTransform=caps.currentTransform,.compositeAlpha=alpha,.presentMode=VK_PRESENT_MODE_FIFO_KHR,.clipped=VK_TRUE};
+    sc_log("STAGE swapchain: create FIFO extent=%ux%u requested_images=%u\n",extent.width,extent.height,image_count);
     TRY(d.CreateSwapchainKHR(device,&sci,NULL,&chain));
     count=0;TRY(d.GetSwapchainImagesKHR(device,chain,&count,NULL));if(!count||count>32)goto cleanup;
     images=calloc(count,sizeof(*images));if(!images)goto cleanup;TRY(d.GetSwapchainImagesKHR(device,chain,&count,images));
@@ -137,17 +149,17 @@ static bool run(bool present) {
     rendered=calloc(chain_image_count,sizeof(*rendered));if(!rendered)goto cleanup;
     for(uint32_t i=0;i<chain_image_count;i++)TRY(d.CreateSemaphore(device,&sem,NULL,&rendered[i]));
     VkFenceCreateInfo fi={.sType=VK_STRUCTURE_TYPE_FENCE_CREATE_INFO};TRY(d.CreateFence(device,&fi,NULL,&fence));
-    sc_log("VI swapchain %ux%u images=%u format=%u; plus/Start or B exits\n",extent.width,extent.height,count,format.format);
+    sc_log("STAGE present: family=%u extent=%ux%u images=%u format=%u colorspace=%u FIFO alpha=0x%x; SDL Start/East exits\n",family,extent.width,extent.height,count,format.format,format.colorSpace,alpha);
     bool quit=false;
     while(appletMainLoop()&&!quit&&frames<300){
         SDL_Event event;while(SDL_PollEvent(&event)){
             if(event.type==SDL_EVENT_QUIT)quit=true;
-            if(event.type==SDL_EVENT_GAMEPAD_BUTTON_DOWN){sc_log("SDL gamepad button=%u\n",event.gbutton.button);if(event.gbutton.button==SDL_GAMEPAD_BUTTON_START||event.gbutton.button==SDL_GAMEPAD_BUTTON_EAST)quit=true;}
+            if(event.type==SDL_EVENT_GAMEPAD_BUTTON_DOWN){const char *button=SDL_GetGamepadStringForButton((SDL_GamepadButton)event.gbutton.button);sc_log("SDL gamepad instance=%u button=%u name=%s\n",event.gbutton.which,event.gbutton.button,button?button:"unknown");if(event.gbutton.button==SDL_GAMEPAD_BUTTON_START||event.gbutton.button==SDL_GAMEPAD_BUTTON_EAST)quit=true;}
         }
         if(quit)break;
         uint32_t index=0;VkResult r=d.AcquireNextImageKHR(device,chain,5000000000ull,acquired,VK_NULL_HANDLE,&index);
-        if(r!=VK_SUCCESS&&r!=VK_SUBOPTIMAL_KHR){sc_log("AcquireNextImageKHR frame=%u -> %d\n",frames,r);break;}
-        if(index>=count){sc_log("Swapchain returned invalid image index\n");break;}
+        if(r!=VK_SUCCESS&&r!=VK_SUBOPTIMAL_KHR){failed=true;sc_log("AcquireNextImageKHR frame=%u -> %d\n",frames,r);break;}
+        if(index>=count){failed=true;sc_log("Swapchain returned invalid image index=%u count=%u\n",index,count);break;}
         TRY(d.ResetCommandBuffer(command,0));VkCommandBufferBeginInfo begin={.sType=VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO,.flags=VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT};TRY(d.BeginCommandBuffer(command,&begin));
         VkImageSubresourceRange range={VK_IMAGE_ASPECT_COLOR_BIT,0,1,0,1};
         VkImageMemoryBarrier barrier={.sType=VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER,.dstAccessMask=VK_ACCESS_TRANSFER_WRITE_BIT,.oldLayout=VK_IMAGE_LAYOUT_UNDEFINED,.newLayout=VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
@@ -163,16 +175,17 @@ static bool run(bool present) {
         VkPresentInfoKHR pi={.sType=VK_STRUCTURE_TYPE_PRESENT_INFO_KHR,.waitSemaphoreCount=1,.pWaitSemaphores=&rendered[index],.swapchainCount=1,.pSwapchains=&chain,.pImageIndices=&index};
         r=d.QueuePresentKHR(queue,&pi);
         VkResult wait=d.WaitForFences(device,1,&fence,VK_TRUE,5000000000ull);
-        if(wait!=VK_SUCCESS){sc_log("Present fence -> %d; exiting without destroying pending objects\n",wait);return false;}
+        if(wait!=VK_SUCCESS){sc_log("Present fence frame=%u -> %d; exiting without destroying pending objects\n",frames,wait);return false;}
+        if(r!=VK_SUCCESS&&r!=VK_SUBOPTIMAL_KHR){sc_log("QueuePresentKHR frame=%u -> %d; exiting without blocking teardown\n",frames,r);return false;}
         /* Per-image present semaphore is reused only after reacquiring that image. */
+        if(frames==0)sc_log("STAGE present: first fence signaled; waiting for queue idle (driver may block)\n");
         TRY(d.QueueWaitIdle(queue));submitted=false;TRY(d.ResetFences(device,1,&fence));
-        if(r!=VK_SUCCESS&&r!=VK_SUBOPTIMAL_KHR){sc_log("QueuePresentKHR -> %d\n",r);break;}
         frames++;
     }
-    complete=frames>0;
+    complete=frames>0&&!failed;
 cleanup:
     if(submitted){sc_log("GPU work pending; application exits for process teardown\n");return false;}
-    if(device&&d.DeviceWaitIdle)d.DeviceWaitIdle(device);
+    if(device&&d.DeviceWaitIdle){sc_log("STAGE cleanup: vkDeviceWaitIdle (driver may block)\n");VkResult idle=d.DeviceWaitIdle(device);if(idle!=VK_SUCCESS)sc_log("vkDeviceWaitIdle -> %d\n",idle);}
     if(fence&&d.DestroyFence)d.DestroyFence(device,fence,NULL);
     if(rendered&&d.DestroySemaphore)for(uint32_t i=0;i<chain_image_count;i++)if(rendered[i])d.DestroySemaphore(device,rendered[i],NULL);
     if(acquired&&d.DestroySemaphore)d.DestroySemaphore(device,acquired,NULL);

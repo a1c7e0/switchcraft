@@ -8,6 +8,7 @@ fi
 python3 scripts/bootstrap-deps.py
 mkdir -p build
 make -j2 all 2>&1 | tee build/cross-build.log
+python3 scripts/verify-native-link.py | tee build/native-link.log
 make host-test 2>&1 | tee build/host-tests.log
 python3 scripts/verify-artifacts.py | tee build/verification.json
 scripts/package.sh

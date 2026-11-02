@@ -7,6 +7,7 @@
 #include <sys/stat.h>
 #include <time.h>
 #include <malloc.h>
+#include "build-info.h"
 
 static FILE *log_file;
 static PadState pad;
@@ -43,7 +44,7 @@ void sc_init(const char *name) {
     sc_mkdirs(SC_LOGS);
     char path[256]; snprintf(path,sizeof(path),SC_LOGS "/%s.log",name);
     log_file=fopen(path,"a");
-    sc_log("\nSwitchcraft %s 0.1.0 | hardware status: NOT TESTED\n",name);
+    sc_log("\nSESSION start tick=%llu app=%s version=0.1.0 source=%s | hardware status: NOT TESTED\n",(unsigned long long)armGetSystemTick(),name,SC_BUILD_REVISION);
     u32 version=hosversionGet();
     sc_log("Applet type=%d (Application=%d); firmware=%u.%u.%u\n",
         appletGetAppletType(),AppletType_Application,(version>>16)&255,
