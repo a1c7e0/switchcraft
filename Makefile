@@ -7,7 +7,7 @@ CFLAGS := $(ARCH) -O2 -g -Wall -Wextra -ffunction-sections -fdata-sections -D__S
 CXXFLAGS := $(CFLAGS) -std=c++17 -Ivendor
 LDFLAGS := $(ARCH) -specs=$(DEVKITPRO)/libnx/switch.specs -L$(DEVKITPRO)/libnx/lib -L$(PORT)/lib -Wl,--gc-sections
 TOOLS := $(DEVKITPRO)/tools/bin
-APPS := switch-diagnostics opengl-test vulkan-test minecraft-launcher
+APPS := switch-diagnostics opengl-test vulkan-test minecraft-launcher java-test
 
 .PHONY: all clean host-test
 all: $(APPS:%=dist/%.nro)
@@ -27,9 +27,19 @@ build/metadata.o: src/metadata.cpp src/metadata.hpp vendor/json.hpp | build
 	$(DK)g++ $(CXXFLAGS) -c $< -o $@
 build/minecraft-launcher.elf: src/launcher.cpp build/metadata.o build/platform.o
 	$(DK)g++ $(CXXFLAGS) $(LDFLAGS) $^ -lnx -o $@ -Wl,-Map,$@.map
+build/libminijvm.a: scripts/build-minijvm.py patches/minijvm-horizon.patch src/minijvm_mman.h src/minijvm_compat.h | build
+	python3 scripts/build-minijvm.py
+build/java_vm.o: src/java_vm.c build/libminijvm.a
+	$(DK)gcc $(CFLAGS) -I.deps/minijvm/jvm -I.deps/minijvm/utils -c $< -o $@
+build/java-test.elf: src/java_test.c build/java_vm.o build/platform.o build/libminijvm.a
+	$(DK)gcc $(CFLAGS) $(LDFLAGS) $^ -lnx -lm -o $@ -Wl,-Map,$@.map
+build/java-test-host: scripts/build-minijvm.py src/java_vm.c src/java_host.c build/libminijvm.a
+	python3 scripts/build-minijvm.py --host
+build/minijvm_rt.jar build/diagnostic-tests.jar build/dependency.jar &: scripts/build-java-tests.py tests/java/DiagnosticSmoke.java tests/java/JarDependency.java | build
+	python3 scripts/build-java-tests.py
 build/switchcraft-inspect: src/metadata.cpp src/inspect.cpp src/metadata.hpp vendor/json.hpp | build
 	g++ -std=c++17 -O2 -Wall -Wextra -Ivendor -Isrc src/metadata.cpp src/inspect.cpp -o $@
-host-test: build/switchcraft-inspect
+host-test: build/switchcraft-inspect build/java-test-host build/minijvm_rt.jar build/diagnostic-tests.jar build/dependency.jar
 	python3 -m unittest discover -s tests -v
 dist/%.nro: build/%.elf | dist
 	$(TOOLS)/nacptool --create "$*" Switchcraft 0.1.0 build/$*.nacp

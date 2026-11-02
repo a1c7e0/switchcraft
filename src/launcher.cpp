@@ -14,7 +14,7 @@ int main() {
     unsigned selected=0;
     auto it=std::find(versions.begin(),versions.end(),config.version);
     if(it!=versions.end())selected=it-versions.begin();
-    const char *runtimes[]={"diagnostic","openjdk8","openjdk21","openjdk25","aot"};
+    const char *runtimes[]={"diagnostic","minijvm","openjdk8","openjdk21","openjdk25","aot"};
     const char *backends[]={"nvc0","nvk","zink"};
     bool redraw=true;u64 keys;
     while(sc_frame(&keys)) {
@@ -23,7 +23,7 @@ int main() {
             if(keys&HidNpadButton_Up){selected=(selected+versions.size()-1)%versions.size();redraw=true;}
             config.version=versions[selected];
         }
-        if(keys&HidNpadButton_L){for(unsigned i=0;i<5;i++)if(config.runtime==runtimes[i]){config.runtime=runtimes[(i+1)%5];break;}redraw=true;}
+        if(keys&HidNpadButton_L){for(unsigned i=0;i<6;i++)if(config.runtime==runtimes[i]){config.runtime=runtimes[(i+1)%6];break;}redraw=true;}
         if(keys&HidNpadButton_R){for(unsigned i=0;i<3;i++)if(config.graphics==backends[i]){config.graphics=backends[(i+1)%3];break;}redraw=true;}
         if(redraw) {
             consoleClear();
@@ -31,8 +31,9 @@ int main() {
             printf("Installed version JSONs: %u\n",(unsigned)versions.size());
             if(versions.empty())printf("No versions found. Import your legitimate PC installation.\n");
             else {unsigned start=selected>3?selected-3:0;for(unsigned i=start;i<versions.size()&&i<start+7;i++)printf("%s %s\n",i==selected?">":" ",versions[i].c_str());}
-            printf("\nRuntime: %s [not linked; diagnostic has no JVM]\nGraphics: %s [%s]\nHeap setting: %u MiB [planning only]\n",
-                config.runtime.c_str(),config.graphics.c_str(),config.graphics=="zink"?"not implemented":"experimental / hardware untested",config.heap_mib);
+            printf("\nRuntime: %s [%s]\nGraphics: %s [%s]\nHeap setting: %u MiB [planning only]\n",
+                config.runtime.c_str(),config.runtime=="minijvm"?"separate diagnostic; no Minecraft integration":"no game runtime linked",
+                config.graphics.c_str(),config.graphics=="zink"?"not implemented":"experimental / hardware untested",config.heap_mib);
             printf("\nD-pad: version | L: runtime | R: graphics\nA: inspect/export launch plan | X: save settings\nY: diagnostics | -: show recent launcher log | +: exit\n\n");
             printf("%s\n",message.c_str());redraw=false;
         }

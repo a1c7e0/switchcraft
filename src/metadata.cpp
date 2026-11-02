@@ -37,7 +37,7 @@ static void validate_config(const Config &c) {
         c.root.find_first_of("\r\n\t")!=c.root.npos)throw std::runtime_error("Invalid Minecraft root");
     if(!c.version.empty()&&!safe_id(c.version))throw std::runtime_error("Invalid version ID");
     if(c.heap_mib<64||c.heap_mib>1024)throw std::runtime_error("Heap must be 64..1024 MiB");
-    if(c.runtime!="diagnostic"&&c.runtime!="openjdk8"&&c.runtime!="openjdk21"&&c.runtime!="openjdk25"&&c.runtime!="aot")throw std::runtime_error("Unknown runtime");
+    if(c.runtime!="diagnostic"&&c.runtime!="minijvm"&&c.runtime!="openjdk8"&&c.runtime!="openjdk21"&&c.runtime!="openjdk25"&&c.runtime!="aot")throw std::runtime_error("Unknown runtime");
     if(c.graphics!="nvc0"&&c.graphics!="nvk"&&c.graphics!="zink")throw std::runtime_error("Unknown graphics backend");
 }
 Config load_config(const std::string &path) {
@@ -159,7 +159,10 @@ Json make_plan(const Config &config,const std::string &runtime_root) {
     plan["game_directory"]=instance;
     plan["native_directory"]=runtime_root+"/natives/"+config.graphics;
     std::string classpath;
-    auto add=[&](const std::string &path){plan["classpath"].push_back(path);if(!file_exists(path))plan["missing_files"].push_back(path);if(!classpath.empty())classpath+=':';classpath+=path;};
+    // A colon is part of libnx's device path. A Horizon JVM adapter must use
+    // the matching semicolon path separator, as the miniJVM diagnostic does.
+    plan["classpath_separator"]=";";
+    auto add=[&](const std::string &path){plan["classpath"].push_back(path);if(!file_exists(path))plan["missing_files"].push_back(path);if(!classpath.empty())classpath+=';';classpath+=path;};
     for(const auto &lib:version["libraries"]) {
         std::string name=lib.at("name").get<std::string>();
         if(!allowed(lib)){plan["skipped_libraries"].push_back(name);continue;}
@@ -194,7 +197,7 @@ Json make_plan(const Config &config,const std::string &runtime_root) {
     std::map<std::string,std::string> vars={{"version_name",config.version},{"version_type",version.value("type","custom")},
         {"assets_root",config.root+"/assets"},{"game_assets",config.root+"/assets/virtual/legacy"},{"assets_index_name",assets},
         {"game_directory",instance},{"natives_directory",plan["native_directory"].get<std::string>()},
-        {"library_directory",config.root+"/libraries"},{"classpath",classpath},{"classpath_separator",":"},
+        {"library_directory",config.root+"/libraries"},{"classpath",classpath},{"classpath_separator",";"},
         {"launcher_name","Switchcraft"},{"launcher_version","0.1.0"}};
     for(auto *list:{&jvm,&game})for(auto &argument:*list) {
         for(const auto &pair:vars) {
@@ -205,7 +208,8 @@ Json make_plan(const Config &config,const std::string &runtime_root) {
             plan["unresolved_placeholders"].push_back(argument.substr(pos,end-pos+1));pos=end+1;}
     }
     plan["jvm_arguments"]=jvm;plan["game_arguments"]=game;
-    plan["blockers"].push_back("No linked Horizon JVM or Minecraft AOT backend");
+    plan["blockers"].push_back("No Minecraft-capable Horizon JVM or AOT backend integrated in launcher");
+    if(config.runtime=="minijvm")plan["blockers"].push_back("miniJVM is a separate Java 8 diagnostic; Minecraft compatibility is unimplemented");
     plan["blockers"].push_back("LWJGL/GLFW/OpenAL JNI substitutions not integrated");
     if(config.graphics=="zink")plan["blockers"].push_back("Zink is not built");
     if(!plan["missing_files"].empty())plan["blockers"].push_back("Installation files missing");

@@ -1,0 +1,25 @@
+{
+  "toolchain_image": "devkitpro/devkita64@sha256:1fc388c3a0d34bd2045a6dadcb1020e069d5f876a187fd705de14b4440c00282",
+  "nvk": {
+    "url": "https://github.com/jhuz0/nvk-switch/releases/download/nvk-switch-mesa-25.0.7-r1/nvk-switch-25.0.7.tar.xz",
+    "sha256": "4ab244f982dc078aaff8c58640d7cf8a0f3ab43bbf2daadfd00c02fbf352af86",
+    "library_sha256": "ff65a74b46fe749f6be73eac3c8968d70e312c7646f815f26b69f4aa35737d26"
+  },
+  "vulkan_headers": {
+    "url": "https://github.com/KhronosGroup/Vulkan-Headers/archive/refs/tags/v1.4.305.tar.gz",
+    "sha256": "7581c5ed0337ffeef0707651561f722700081bc69c62c582c470cd77c2be0920"
+  },
+  "minijvm": {
+    "revision": "87c9808145fabbf13c7a0d6b6d1e5bfbdbdba5a8",
+    "url": "https://github.com/digitalgust/miniJVM/archive/87c9808145fabbf13c7a0d6b6d1e5bfbdbdba5a8.tar.gz",
+    "sha256": "958f02ebc3e13831ce57e49a87c727f997c0537a625b1abe8ec14130d07f3a6e"
+  },
+  "host_jdk8": {
+    "url": "https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u504-b01/OpenJDK8U-jdk_x64_linux_hotspot_8u504b01.tar.gz",
+    "sha256": "9c70e102f527ac674ac2fe9c7d47b9a04e2d19842ba5ab8e9b33f368bbadfaea"
+  },
+  "nlohmann_json": {
+    "version": "3.11.3",
+    "sha256": "9bea4c8066ef4a1c206b2be5a36302f8926f7fdc6087af5d20b417d0cf103ea6"
+  }
+}

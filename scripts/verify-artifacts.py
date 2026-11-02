@@ -7,7 +7,7 @@ import struct
 import sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
-APPS = ("switch-diagnostics", "opengl-test", "vulkan-test", "minecraft-launcher")
+APPS = ("switch-diagnostics", "opengl-test", "vulkan-test", "minecraft-launcher", "java-test")
 
 def verify(nro, elf):
     data = pathlib.Path(nro).read_bytes()
