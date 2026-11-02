@@ -21,5 +21,14 @@
   "nlohmann_json": {
     "version": "3.11.3",
     "sha256": "9bea4c8066ef4a1c206b2be5a36302f8926f7fdc6087af5d20b417d0cf103ea6"
+  },
+  "sdl3": {
+    "revision": "1e3b67ef787c0fdba47b42fc663c70613c8b04db",
+    "url": "https://github.com/etonedemid/SDL/archive/1e3b67ef787c0fdba47b42fc663c70613c8b04db.tar.gz",
+    "sha256": "9d2eddce60f7fe8373aebd3071ad496240f8b67b69f203a0c4783f8b27ee626d"
+  },
+  "java_switch": {
+    "url": "https://github.com/a1c7e0/java-switch.git",
+    "revision": "2f763d5"
   }
 }

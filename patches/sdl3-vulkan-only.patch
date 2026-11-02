@@ -1,0 +1,210 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 20287e1..d0935b1 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -3444,7 +3444,9 @@ elseif(NINTENDO_SWITCH)
+     sdl_glob_sources("${SDL3_SOURCE_DIR}/src/video/switch/*.c")
+     set(HAVE_SDL_VIDEO TRUE)
+ 
+-    CheckEGL()
++    if(SDL_OPENGL OR SDL_OPENGLES)
++      CheckEGL()
++    endif()
+     if(HAVE_OPENGL_EGL)
+       sdl_link_dependency(opengl LIBS EGL stdc++ glapi drm_nouveau)
+     endif()
+@@ -3452,7 +3454,8 @@ elseif(NINTENDO_SWITCH)
+     if(SDL_VULKAN)
+       set(SDL_VIDEO_VULKAN 1)
+       set(HAVE_VULKAN TRUE)
+-      sdl_link_dependency(vulkan LIBS vulkan_nouveau)
++      set(SDL_SWITCH_VULKAN_LIBRARY "vulkan_nouveau" CACHE STRING "Horizon Vulkan static library")
++      sdl_link_dependency(vulkan LIBS ${SDL_SWITCH_VULKAN_LIBRARY})
+       if(SDL_RENDER_VULKAN)
+         set(SDL_VIDEO_RENDER_VULKAN 1)
+         set(HAVE_RENDER_VULKAN TRUE)
+diff --git a/src/video/switch/SDL_switchopengles.c b/src/video/switch/SDL_switchopengles.c
+index 66fd2bd..8b250dc 100644
+--- a/src/video/switch/SDL_switchopengles.c
++++ b/src/video/switch/SDL_switchopengles.c
+@@ -22,7 +22,7 @@
+ #include "SDL_internal.h"
+ #include "../../SDL_log_c.h"
+ 
+-#if SDL_VIDEO_DRIVER_SWITCH
++#if SDL_VIDEO_DRIVER_SWITCH && defined(SDL_VIDEO_OPENGL_EGL)
+ 
+ #include "SDL_switchopengles.h"
+ #include "SDL_switchvideo.h"
+diff --git a/src/video/switch/SDL_switchvideo.c b/src/video/switch/SDL_switchvideo.c
+index 0d812b0..8aa1bad 100644
+--- a/src/video/switch/SDL_switchvideo.c
++++ b/src/video/switch/SDL_switchvideo.c
+@@ -163,6 +163,7 @@ static SDL_VideoDevice *SWITCH_CreateDevice()
+     device->Vulkan_DestroySurface = SWITCH_Vulkan_DestroySurface;
+ #endif
+ 
++#ifdef SDL_VIDEO_OPENGL_EGL
+     device->GL_LoadLibrary = SWITCH_GLES_LoadLibrary;
+     device->GL_GetProcAddress = SWITCH_GLES_GetProcAddress;
+     device->GL_UnloadLibrary = SWITCH_GLES_UnloadLibrary;
+@@ -174,6 +175,8 @@ static SDL_VideoDevice *SWITCH_CreateDevice()
+     device->GL_DestroyContext = SWITCH_GLES_DestroyContext;
+     device->GL_DefaultProfileConfig = SWITCH_GLES_DefaultProfileConfig;
+ 
++#endif
++
+     device->StartTextInput = SWITCH_StartTextInput;
+     device->StopTextInput = SWITCH_StopTextInput;
+     device->HasScreenKeyboardSupport = SWITCH_HasScreenKeyboardSupport;
+@@ -241,11 +244,13 @@ void SWITCH_VideoQuit(SDL_VideoDevice *_this)
+ {
+     // this should not be needed if user code is right (SDL_GL_LoadLibrary/SDL_GL_UnloadLibrary calls match)
+     // this (user) error doesn't have the same effect on switch thought, as the driver needs to be unloaded (crash)
++#ifdef SDL_VIDEO_OPENGL_EGL
+     if (_this->gl_config.driver_loaded > 0) {
+         SWITCH_GLES_UnloadLibrary(_this);
+         _this->gl_config.driver_loaded = 0;
+     }
+ 
++#endif
+     // exit touch
+     SWITCH_QuitTouch();
+     // exit keyboard
+@@ -293,17 +298,8 @@ bool SWITCH_SetDisplayMode(SDL_VideoDevice *_this, SDL_VideoDisplay *display, SD
+         return true;
+     }
+ 
+-    SDL_WindowData *data = (SDL_WindowData *)switch_window->internal;
+-    SDL_GLContext ctx = SDL_GL_GetCurrentContext();
+-    NWindow *nWindow = nwindowGetDefault();
+-
+-    if (data != NULL && data->egl_surface != EGL_NO_SURFACE) {
+-        SDL_EGL_MakeCurrent(_this, NULL, NULL);
+-        SDL_EGL_DestroySurface(_this, data->egl_surface);
+-        nwindowSetDimensions(nWindow, mode->w, mode->h);
+-        data->egl_surface = SDL_EGL_CreateSurface(_this, switch_window, nWindow);
+-        SDL_EGL_MakeCurrent(_this, data->egl_surface, ctx);
+-    }
++    Result rc=nwindowSetDimensions(nwindowGetDefault(),mode->w,mode->h);
++    if(R_FAILED(rc))return SDL_SetError("NWindow resize failed: 0x%x",rc);
+ 
+     return true;
+ }
+@@ -318,9 +314,11 @@ static bool SWITCH_CreateWindow(SDL_VideoDevice *_this, SDL_Window *window, SDL_
+         return SDL_SetError("Switch only supports one window");
+     }
+ 
+-    if (!_this->egl_data) {
++#ifdef SDL_VIDEO_OPENGL_EGL
++    if (!(window->flags & SDL_WINDOW_VULKAN) && !_this->egl_data) {
+         return SDL_SetError("EGL not initialized");
+     }
++#endif
+ 
+     window_data = (SDL_WindowData *)SDL_calloc(1, sizeof(SDL_WindowData));
+     if (window_data == NULL) {
+@@ -334,12 +332,18 @@ static bool SWITCH_CreateWindow(SDL_VideoDevice *_this, SDL_Window *window, SDL_
+         return SDL_SetError("Could not set NWindow dimensions: 0x%x", rc);
+     }
+ 
++    window_data->native_window=nWindow;
++#ifdef SDL_VIDEO_OPENGL_EGL
+     if (window->flags & SDL_WINDOW_VULKAN) {
+-        // the Vulkan swapchain configures the window's buffers itself
+-        window_data->egl_surface = EGL_NO_SURFACE;
+-    } else if ((window_data->egl_surface = SDL_EGL_CreateSurface(_this, window, nWindow)) == EGL_NO_SURFACE) {
+-        return SDL_SetError("Could not create GLES window surface");
++        window_data->egl_surface=EGL_NO_SURFACE;
++    } else if ((window_data->egl_surface=SDL_EGL_CreateSurface(_this,window,nWindow))==EGL_NO_SURFACE) {
++        SDL_free(window_data);return SDL_SetError("Could not create EGL surface");
+     }
++#else
++    if (!(window->flags & SDL_WINDOW_VULKAN)) {
++        SDL_free(window_data);return SDL_SetError("This Switch build supports Vulkan windows only");
++    }
++#endif
+ 
+     /* Setup driver data for this window */
+     window->internal = window_data;
+@@ -362,11 +366,14 @@ static void SWITCH_DestroyWindow(SDL_VideoDevice *_this, SDL_Window *window)
+ 
+     if (window == switch_window) {
+         if (data != NULL) {
++#ifdef SDL_VIDEO_OPENGL_EGL
+             if (data->egl_surface != EGL_NO_SURFACE) {
+                 SDL_EGL_MakeCurrent(_this, NULL, NULL);
+                 SDL_EGL_DestroySurface(_this, data->egl_surface);
+             }
+ 
++#endif
++
+             SDL_free(window->internal);
+             window->internal = NULL;
+         }
+@@ -390,20 +397,10 @@ static bool SWITCH_SetWindowPosition(SDL_VideoDevice *_this, SDL_Window *window)
+ 
+ static void SWITCH_SetWindowSize(SDL_VideoDevice *_this, SDL_Window *window)
+ {
+-    u32 w = 0, h = 0;
+-    SDL_WindowData *data = (SDL_WindowData *)window->internal;
+-    SDL_GLContext ctx = SDL_GL_GetCurrentContext();
+-    NWindow *nWindow = nwindowGetDefault();
+-
+-    if (window->w != w || window->h != h) {
+-        if (data != NULL && data->egl_surface != EGL_NO_SURFACE) {
+-            SDL_EGL_MakeCurrent(_this, NULL, NULL);
+-            SDL_EGL_DestroySurface(_this, data->egl_surface);
+-            nwindowSetDimensions(nWindow, window->w, window->h);
+-            data->egl_surface = SDL_EGL_CreateSurface(_this, window, nWindow);
+-            SDL_EGL_MakeCurrent(_this, data->egl_surface, ctx);
+-        }
+-    }
++    (void)_this;
++    Result rc=nwindowSetDimensions(nwindowGetDefault(),window->w,window->h);
++    if(R_FAILED(rc))SDL_SetError("NWindow resize failed: 0x%x",rc);
++
+ }
+ 
+ static void SWITCH_ShowWindow(SDL_VideoDevice *_this, SDL_Window *window)
+diff --git a/src/video/switch/SDL_switchvideo.h b/src/video/switch/SDL_switchvideo.h
+index 3d37d2c..22743cd 100644
+--- a/src/video/switch/SDL_switchvideo.h
++++ b/src/video/switch/SDL_switchvideo.h
+@@ -27,11 +27,16 @@
+ 
+ #include <switch.h>
+ 
++#ifdef SDL_VIDEO_OPENGL_EGL
+ #include "../SDL_egl_c.h"
++#endif
+ 
+ typedef struct SDL_WindowData
+ {
++    NWindow *native_window;
++#ifdef SDL_VIDEO_OPENGL_EGL
+     EGLSurface egl_surface;
++#endif
+ } SDL_WindowData;
+ 
+ #endif /* SDL_VIDEO_DRIVER_SWITCH */
+diff --git a/src/video/switch/SDL_switchvulkan.c b/src/video/switch/SDL_switchvulkan.c
+index ce3ed4a..e695858 100644
+--- a/src/video/switch/SDL_switchvulkan.c
++++ b/src/video/switch/SDL_switchvulkan.c
+@@ -80,11 +80,15 @@ bool SWITCH_Vulkan_CreateSurface(SDL_VideoDevice *_this, SDL_Window *window, VkI
+ 
+     // The swapchain needs the window's buffer queue to itself: a GL surface
+     // made for this window (SDL_GPU claims plain windows) has to go first.
++#ifdef SDL_VIDEO_OPENGL_EGL
+     if (data && data->egl_surface != EGL_NO_SURFACE) {
+         SDL_EGL_MakeCurrent(_this, NULL, NULL);
+         SDL_EGL_DestroySurface(_this, data->egl_surface);
+         data->egl_surface = EGL_NO_SURFACE;
+     }
++#else
++    (void)data;
++#endif
+ 
+     VkViSurfaceCreateInfoNN createInfo;
+     SDL_zero(createInfo);
