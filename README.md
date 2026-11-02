@@ -28,7 +28,7 @@ llvmpipe Vulkan. The image below is **HOST ONLY**, not a Switch screenshot:
 | `vulkan-present.nro` | Exact snapshot-6 base-feature capture; SDL3 window/gamepad, VI surface, swapchain and presentation loop |
 | `minecraft-launcher.nro` | Read-only version/inheritance/dependency planning, strict Vulkan JVM/game arguments, saved configuration and honest Java-25 launch gate |
 | `java-test.nro` | Independent java-switch Java-8 interpreter diagnostic; this is not a Java-25 VM |
-| `ffi-test.nro` | AAPCS64 libffi downcalls and real libnx RW/RX upcall closures, prerequisites for Zero's fallback FFM linker |
+| `ffi-test.nro` | AAPCS64 downcalls, libnx RW/RX upcall closures and whole-region virtual-memory probe |
 | `switchcraft-launcher-bridge.jar` | Hash-pinned renderer-method transformation; one Vulkan backend, no OpenGL fallback; host tested |
 
 SDL3 is built without EGL, OpenGL or OpenGL ES. Its Switch port's unconditional

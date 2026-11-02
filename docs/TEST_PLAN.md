@@ -145,6 +145,19 @@ Minecraft title PASS. Standard JNI/FFM host tests are not Horizon runtime tests.
 * **Risk level:** Moderate: supported executable-memory APIs.
 * **Recovery steps:** HOME/relaunch; do not install kernel patches or overclock to force a pass.
 
+## F-03 — ffi-test.nro virtual memory
+
+* **File:** `ffi-test.nro`.
+* **Installation requirements:** Common setup; application-mode hbmenu and the latest test package.
+* **How to launch:** Start `ffi-test` from application-mode hbmenu.
+* **Controller operations / actions:** Press Y once, wait for all results, then + to exit.
+* **Expected screen/output and successful result:** 64 KiB reserved, commit/readback PASS, uncommit, recommit and release status=0 and Result=0.
+* **Failure symptoms:** Reservation failure, nonzero status/Result, failed readback, hang or crash.
+* **Log location:** `sdmc:/switch/mc-runtime/logs/ffi-test.log`.
+* **Information to report:** Each status and Result, last stage, package hash and launch mode.
+* **Risk level:** Moderate: supported native address-space and mapping syscalls.
+* **Recovery steps:** Use HOME/relaunch if necessary; preserve logs and crash report. A denied syscall is a diagnostic result; do not add system patches.
+
 ## J-01 — java-test.nro
 
 * **File:** `java-test.nro`.
@@ -274,6 +287,7 @@ Launch mode: ____ Docked/handheld: ____ Package source/hash: ____
 | V-04 | NOT TESTED | | | |
 | F-01 | NOT TESTED | | | |
 | F-02 | NOT TESTED | | | |
+| F-03 | NOT TESTED | | | |
 | J-01 | NOT TESTED | | | |
 | J-02 | NOT TESTED | | | |
 | L-01 | NOT TESTED | | | |

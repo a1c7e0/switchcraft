@@ -20,7 +20,7 @@
   },
   "java_switch": {
     "url": "https://github.com/a1c7e0/java-switch.git",
-    "revision": "fcfaaf8307e767de544521b78ab735191b6ef338"
+    "revision": "9f6ac4efc04a1750fe54c62d72c4401fda89e68a"
   },
   "host_cmake": {
     "url": "https://files.pythonhosted.org/packages/7e/d5/664ea06d01864f25d6067f09fa218404e4d588edd5e495135ac91429fecb/cmake-4.4.4-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl",

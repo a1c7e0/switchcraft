@@ -23,7 +23,7 @@ purposes={'switch-diagnostics.nro':'Native memory, SD, input, threads and next-l
  'vulkan-present.nro':'Exact snapshot-6 base features, SDL3 gamepad/window and VI swapchain presentation',
  'minecraft-launcher.nro':'Read-only instance planning, strict Vulkan arguments and explicit Java-25 runtime gate',
  'java-test.nro':'Independent java-switch Java-8 interpreter diagnostic; not a Java-25 VM',
- 'ffi-test.nro':'AAPCS64 libffi downcalls and real libnx W^X upcall prerequisite test'}
+ 'ffi-test.nro':'AAPCS64 downcalls, libnx W^X upcalls and whole-region memory probe'}
 for item in records:
     item.update(purpose=purposes[item['name']],source_revision=revision,java_switch_revision=java_revision,source_dirty=dirty,build_date=now,toolchain=toolchain,
         bundled_dependencies=['libnx/newlib', 'Pinned NVK/SDL3 or java-switch component as applicable'],tested_environment='Linux cross-build and host checks; NRO not executed',known_limitations=limitations)

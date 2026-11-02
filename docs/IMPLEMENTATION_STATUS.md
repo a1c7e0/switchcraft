@@ -14,6 +14,7 @@ The legacy branch is legacy/1.12.2; Java ownership is the independent java-switc
 | Standard JNI invocation adapter | Yes | SDK | Real Java 25 VM/native registration/options/teardown | No VM linked |
 | Java 25 FFM downcalls/upcalls | Adapter/reference tests | Host JAR | PASS on Linux JDK 25 | NOT TESTED |
 | libffi AAPCS64/libnx W^X prerequisites | Yes | NRO/SDK | Native link | NOT TESTED |
+| Whole-region reserve/commit/uncommit probe | Yes | NRO/SDK | Mocked states/failures | NOT TESTED |
 | OpenJDK 25 Horizon VM | OS port not implemented | NO | Configure attempted, unsupported OS elf | NOT AVAILABLE |
 | Read-only launch planner/SDK gate | Yes | NRO/host inspector | Inheritance/rules/read-only/version/profile | NOT TESTED |
 | Strict Vulkan renderer transformation | Yes | Original Java JAR | Synthetic execution + actual snapshot title | VM/instrumentation absent |
