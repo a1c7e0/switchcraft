@@ -310,7 +310,7 @@ Alternatively, on a computer with Python 3 use the installed helper (replace the
 SD path for your system, and write the output outside the SD root):
 
 ```sh
-python3 switchcraft-docs/collect-feedback.py --sd-root /media/switch-sd --output switchcraft-feedback.zip
+python3 /media/switch-sd/switchcraft-docs/collect-feedback.py --sd-root /media/switch-sd --output switchcraft-feedback.zip
 ```
 
 It copies only the manifest, six named diagnostic logs and snapshot-vulkan.json;

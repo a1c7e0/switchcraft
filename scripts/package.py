@@ -99,7 +99,10 @@ report=f'''# Snapshot 6 delivery report
 Mainline targets 26.4-snapshot-6 and Vulkan. SDL3/VI swapchain and gamepad probe,
 exact base-feature profile, NVK offscreen tests, read-only launch planning and a
 hash-pinned Vulkan-only class transformation exist. Java is owned by the separate
-java-switch repository and consumed at a fixed commit.
+java-switch repository and consumed at a fixed commit. A limited static SDL/Vulkan
+symbol lookup is linked into the presentation probe; it is not a Java loader.
+Session/stage diagnostics, an allowlisted feedback collector and matching debug
+ELFs are included. Physical execution remains NOT TESTED.
 
 ## B. Artifacts
 
@@ -114,9 +117,11 @@ report+='''
 ## C. Build validation
 
 Six genuine NROs have matching AArch64 ELFs, NRO0/ASET/NACP/icons/build IDs.
-Host tests cover metadata, fake/truncated artifact rejection, feature gates and
-a synthetic executable renderer transformation. Independent runtime tests execute
-Java 8 JARs and Java 25 standard JNI/FFM downcall/upcall/structured JVM options.
+Host tests cover metadata, fake/truncated artifact rejection, feature gates,
+feedback allowlisting, native lookup and a synthetic renderer transformation.
+When SWITCHCRAFT_CLIENT_JAR is supplied, its SHA-1 and renderer-class SHA-256
+are verified and the actual class transformation is checked. Independent runtime
+tests execute Java 8 JARs and Java 25 standard JNI/FFM/options on the host.
 See build/host-tests.log and build/java-runtime.log for exact results.
 
 ## D. Hardware
@@ -138,6 +143,8 @@ Import an owned installation's versions/libraries/assets if testing the inspecto
 2. vulkan-present A for exact feature capture, then X for SDL3/VI/gamepad.
 3. vulkan-test transfer/offscreen rendering, then ffi-test downcall/W^X tests.
 The Java 8 suite is separate; it is not Java 25 compatibility. Export mc-runtime/logs.
+The packaged collect-feedback.py creates a new archive of allowlisted logs and
+the manifest. Review it and any separately attached crash reports before sharing.
 
 ## G. Architecture
 
@@ -148,6 +155,8 @@ and unavailable VM state are explicit; no Linux runtime is bundled for Horizon.
 
 Horizon JVM 25, class-library OS services, static LWJGL/native module loading,
 shaderc/VMA/SPIR-V Cross/audio integration and Java instrumentation remain open.
+See docs/JAVA_INTEGRATION_HANDOFF.md and docs/NATIVE_BINDINGS.md for the exact
+SDK boundary, currently linked symbols and integration requests.
 Base Vulkan feature success alone does not establish game compatibility. Fabric
 and arbitrary Mods are not supported. NVK remains experimental on Maxwell.
 
