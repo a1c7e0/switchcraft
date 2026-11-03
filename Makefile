@@ -8,10 +8,12 @@ CXXFLAGS := $(CFLAGS) -std=c++17 -Ivendor
 LDFLAGS := $(ARCH) -specs=$(DEVKITPRO)/libnx/switch.specs -L$(DEVKITPRO)/libnx/lib -L$(PORT)/lib -Wl,--gc-sections
 TOOLS := $(DEVKITPRO)/tools/bin
 JAVA_SWITCH_SOURCE ?= $(CURDIR)/.deps/java-switch
-APPS := switch-diagnostics vulkan-test vulkan-present minecraft-launcher java-test ffi-test
+APPS := switch-diagnostics vulkan-test vulkan-present minecraft-launcher java-test ffi-test zero-services-test java25-test switchcraft-java25
+JAVA25 := build/java25-integrated/runtime/openjdk25-horizon-runtime
+JAVASDK := build/java25-integrated/sdk
 
 .PHONY: all clean host-test FORCE
-all: $(APPS:%=dist/%.nro) build/switchcraft-launcher-bridge.jar
+all: $(APPS:%=dist/%.nro) build/switchcraft-launcher-bridge.jar build/switchcraft-lwjgl-horizon.jar
 build dist:
 	mkdir -p $@
 build/build-info.h: FORCE scripts/build-info.py | build
@@ -27,13 +29,25 @@ build/vulkan-test.elf: build/vulkan.o build/platform.o
 build/metadata.o: src/metadata.cpp src/metadata.hpp vendor/json.hpp | build
 	$(DK)g++ $(CXXFLAGS) -c $< -o $@
 build/minecraft-launcher.elf: src/launcher.cpp build/metadata.o build/platform.o build/java-runtime.stamp
-	$(DK)g++ $(CXXFLAGS) -I$(JAVA_SWITCH_SOURCE)/include $(LDFLAGS) src/launcher.cpp build/metadata.o build/platform.o $(JAVA_SWITCH_SOURCE)/build/sdk/libjavaswitch.a -lnx -lm -o $@ -Wl,-Map,$@.map
-build/java-runtime.stamp: dependencies.lock.json scripts/build-java-runtime.sh | build dist
+	$(DK)g++ $(CXXFLAGS) -I$(JAVASDK)/include $(LDFLAGS) src/launcher.cpp build/metadata.o build/platform.o $(JAVASDK)/lib/libjavaswitch.a -lnx -lm -o $@ -Wl,-Map,$@.map
+build/java-runtime.stamp: dependencies.lock.json scripts/build-java-runtime.sh scripts/prepare-java25-runtime.py | build dist
 	JAVA_SWITCH_SOURCE=$(JAVA_SWITCH_SOURCE) bash scripts/build-java-runtime.sh > build/java-runtime.log 2>&1
 build/switchcraft-launcher-bridge.jar: scripts/build-launcher-bridge.py java/org/switchcraft/launcher/VulkanOnlyAgent.java java/org/switchcraft/launcher/VulkanOnlyTransform.java build/java-runtime.stamp
 	python3 scripts/build-launcher-bridge.py
-dist/java-test.nro dist/ffi-test.nro: build/java-runtime.stamp
+build/switchcraft-lwjgl-horizon.jar: scripts/build-lwjgl-horizon.py vendor/lwjgl-horizon/org/lwjgl/system/Platform.java vendor/lwjgl-horizon/org/lwjgl/system/Library.java licenses/LWJGL-BSD-3-Clause.txt dependencies.lock.json build/java-runtime.stamp | build
+	python3 scripts/build-lwjgl-horizon.py
+dist/java-test.nro dist/ffi-test.nro dist/zero-services-test.nro dist/java25-test.nro: build/java-runtime.stamp
 	cp $(JAVA_SWITCH_SOURCE)/dist/$(notdir $@) $@
+build/composite_resolver.o: src/composite_resolver.c include/switchcraft/composite_resolver.h build/java-runtime.stamp
+	$(DK)gcc $(CFLAGS) -mno-outline-atomics -I$(JAVASDK)/include -c $< -o $@
+build/libswitchcraft-java-resolver.a: build/composite_resolver.o
+	$(DK)ar rcs $@ $^
+build/jdk_native_resolver.o: build/java-runtime.stamp
+	$(DK)gcc $(CFLAGS) -mno-outline-atomics -I$(JAVASDK)/include -c $(JAVA25)/native/native_resolver.c -o $@
+build/java25_integration.o: src/java25_integration.c src/platform.h include/switchcraft/composite_resolver.h build/java-runtime.stamp
+	$(DK)gcc $(CFLAGS) -mno-outline-atomics -I$(JAVASDK)/include -c $< -o $@
+build/switchcraft-java25.elf: build/java25_integration.o build/libswitchcraft-java-resolver.a build/jdk_native_resolver.o build/platform.o build/libswitchcraft-native.a
+	$(DK)g++ $(LDFLAGS) -mno-outline-atomics -Wl,-u,JNI_CreateJavaVM $^ .deps/sdl3/lib/libSDL3.a .deps/nvk/lib/libvulkan.a -Wl,--start-group $(JAVA25)/native/libjava.a $(JAVA25)/native/libzip.a $(JAVA25)/native/libjimage.a $(JAVA25)/native/libverify.a $(JAVA25)/native/libnet.a $(JAVA25)/native/libnio.a $(JAVA25)/native/libfallbackLinker.a $(JAVA25)/native/libsyslookup.a $(JAVA25)/native/libjli_manifest.a $(JAVA25)/native/libinstrument.a $(JAVA25)/native/libjvm.a $(JAVASDK)/lib/libjavaswitch.a -ldrm_nouveau -lzstd -lz -lnx -lc -lm -Wl,--end-group -o $@ -Wl,-Map,$@.map
 build/sdl3.stamp: dependencies.lock.json patches/sdl3-vulkan-only.patch scripts/build-sdl3.py | build
 	python3 scripts/build-sdl3.py > build/sdl3-build.log 2>&1
 build/vulkan_present.o: src/vulkan_present.c build/sdl3.stamp | build

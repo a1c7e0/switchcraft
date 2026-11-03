@@ -163,6 +163,8 @@ Json make_plan(const Config &config,const std::string &runtime_root) {
     // the matching semicolon path separator, as the miniJVM diagnostic does.
     plan["classpath_separator"]=";";
     auto add=[&](const std::string &path){plan["classpath"].push_back(path);if(!file_exists(path))plan["missing_files"].push_back(path);if(!classpath.empty())classpath+=';';classpath+=path;};
+    // Override the pinned LWJGL classes before the original library JAR.
+    if(config.version=="26.4-snapshot-6")add(runtime_root+"/launchers/switchcraft-lwjgl-horizon.jar");
     for(const auto &lib:version["libraries"]) {
         std::string name=lib.at("name").get<std::string>();
         if(!allowed(lib)){plan["skipped_libraries"].push_back(name);continue;}
@@ -199,6 +201,8 @@ Json make_plan(const Config &config,const std::string &runtime_root) {
         game.push_back("--graphicsBackend");game.push_back("VULKAN");
         plan["target_profile"]="26.4-snapshot-6";
         jvm.push_back("-javaagent:"+runtime_root+"/launchers/switchcraft-launcher-bridge.jar");
+        jvm.push_back("--enable-native-access=ALL-UNNAMED");
+        jvm.push_back("--add-exports=java.base/jdk.internal.misc=ALL-UNNAMED");
         plan["required_runtime_modules"]={"java.base","java.instrument"};
     }
     if(version.contains("minecraftArguments"))game=split_legacy(version["minecraftArguments"].get<std::string>());

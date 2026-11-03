@@ -14,7 +14,7 @@ dk=pathlib.Path(os.environ.get('DEVKITPRO',str(ROOT/'.toolchain/opt/devkitpro'))
 toolchain={'image':LOCK['toolchain_image'],'compiler':subprocess.check_output([str(dk/'devkitA64/bin/aarch64-none-elf-gcc'),'--version'],text=True).splitlines()[0],
     'packages':sorted(p.name for p in (dk/'pacman/var/lib/pacman/local').glob('*') if p.is_dir())}
 now=datetime.datetime.now(datetime.timezone.utc).isoformat()
-limitations=['Horizon execution NOT TESTED','Java 25 Horizon VM not built or linked; no Minecraft title on Switch',
+limitations=['Horizon execution NOT TESTED','Java 25 Zero VM cross-linked in diagnostic NROs; startup and execution unverified; no Minecraft title on Switch',
     'Host-only strict Vulkan demo title verified; this is not a Horizon result','NVK Maxwell is experimental/nonconformant',
     'SDL3/VI presentation and libffi W^X closures compiled, awaiting physical tests','LWJGL static native loading, shaderc/VMA/SPIR-V Cross/audio bindings not integrated into a Horizon JVM',
     'Fabric, account authentication and arbitrary Mods not implemented']
@@ -23,7 +23,10 @@ purposes={'switch-diagnostics.nro':'Native memory, SD, input, threads and next-l
  'vulkan-present.nro':'Exact snapshot-6 base features, SDL3 gamepad/window and VI swapchain presentation',
  'minecraft-launcher.nro':'Read-only instance planning, strict Vulkan arguments and explicit Java-25 runtime gate',
  'java-test.nro':'Independent java-switch Java-8 interpreter diagnostic; not a Java-25 VM',
- 'ffi-test.nro':'AAPCS64 downcalls, libnx W^X upcalls and whole-region memory probe'}
+ 'ffi-test.nro':'AAPCS64 downcalls, libnx W^X upcalls and whole-region memory probe',
+ 'zero-services-test.nro':'Standalone OpenJDK native service diagnostic, without a VM',
+ 'java25-test.nro':'Independent genuine Java 25 VM A/X/Y diagnostic; Horizon startup untested',
+ 'switchcraft-java25.nro':'Genuine Java 25 Hello diagnostic with composed JDK/SDL/Vulkan provider; Horizon startup untested'}
 for item in records:
     item.update(purpose=purposes[item['name']],source_revision=revision,java_switch_revision=java_revision,source_dirty=dirty,build_date=now,toolchain=toolchain,
         bundled_dependencies=['libnx/newlib', 'Pinned NVK/SDL3 or java-switch component as applicable'],tested_environment='Linux cross-build and host checks; NRO not executed',known_limitations=limitations)
@@ -33,9 +36,18 @@ for app in verify.APPS:
     dest=sd/'switch'/app;dest.mkdir(parents=True);shutil.copyfile(DIST/(app+'.nro'),dest/(app+'.nro'))
 runtime=sd/'switch/mc-runtime'
 for sub in ['config','logs','runtimes/minijvm','tests','launchers','profiles','instances/java-smoke','tmp','licenses']:(runtime/sub).mkdir(parents=True,exist_ok=True)
-shutil.copyfile(JAVA/'build/minijvm_rt.jar',runtime/'runtimes/minijvm/minijvm_rt.jar')
-for name in ['diagnostic-tests.jar','dependency.jar','java25-tests.jar']:shutil.copyfile(JAVA/'build'/name,runtime/'tests'/name)
+java_manifest=json.loads((JAVA/'dist/manifest.json').read_text())
+java_zip=JAVA/'dist/java-switch-test-package.zip'
+java_zip_record=next(x for x in java_manifest['artifacts'] if x['name']==java_zip.name)
+if hashlib.sha256(java_zip.read_bytes()).hexdigest()!=java_zip_record['sha256']:raise RuntimeError('Java test ZIP hash mismatch')
+with zipfile.ZipFile(java_zip) as package:
+    (runtime/'runtimes/minijvm/minijvm_rt.jar').write_bytes(package.read('switch/mc-runtime/runtimes/minijvm/minijvm_rt.jar'))
+    for name in ['diagnostic-tests.jar','dependency.jar','java25-tests.jar','java25-hello.jar','java25-agent-smoke-agent.jar','java25-agent-smoke-app.jar']:
+        (runtime/'tests'/name).write_bytes(package.read('switch/mc-runtime/tests/'+name))
 shutil.copyfile(ROOT/'build/switchcraft-launcher-bridge.jar',runtime/'launchers/switchcraft-launcher-bridge.jar')
+shutil.copyfile(ROOT/'build/switchcraft-lwjgl-horizon.jar',runtime/'launchers/switchcraft-lwjgl-horizon.jar')
+image=ROOT/'build/java25-integrated/runtime/openjdk25-horizon-runtime/runtime'
+shutil.copytree(image,runtime/'runtimes/openjdk25')
 shutil.copyfile(ROOT/'profiles/26.4-snapshot-6.json',runtime/'profiles/26.4-snapshot-6.json')
 shutil.copyfile(ROOT/'config/launcher.example.json',runtime/'config/launcher.example.json')
 for base in [ROOT/'licenses',JAVA/'licenses']:
@@ -48,22 +60,24 @@ for sub in ['versions','libraries','assets','mods','config','saves','resourcepac
 for name in ['README.md','docs/TEST_PLAN.md','docs/KNOWN_ISSUES.md','docs/HOST_REFERENCE.md']:
     dest=sd/'switchcraft-docs'/pathlib.Path(name).name;dest.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(ROOT/name,dest)
 shutil.copyfile(ROOT/'tools/collect-feedback.py',sd/'switchcraft-docs/collect-feedback.py')
-(sd/'INSTALL.txt').write_text('Merge switch/ and minecraft/ onto the SD root. Preserve saves and real configuration.\nUse application-mode hbmenu. Start switch-diagnostics, then vulkan-present.\nHardware execution NOT TESTED. Java 25 VM is absent; Minecraft does not yet run on Horizon.\nSee switchcraft-docs/TEST_PLAN.md. No game files or credentials are included.\n')
+(sd/'INSTALL.txt').write_text('Merge switch/ and minecraft/ onto the SD root. Preserve saves and real configuration.\nUse application-mode hbmenu. Run java25-test A, X and Y in separate fresh processes.\nHardware execution NOT TESTED. Java 25 VM is cross-linked; Minecraft does not yet run on Horizon.\nSee switchcraft-docs/TEST_PLAN.md. No game files or credentials are included.\n')
 source=DIST/'switchcraft-corresponding-source.tar.gz'
-with tarfile.open(source,'w:gz') as archive:
+with tarfile.open(source,'w:gz',dereference=True) as archive:
     for repository,prefix in [(ROOT,'switchcraft'),(JAVA,'java-switch')]:
         for name in subprocess.check_output(['git','ls-files','-z'],cwd=repository).split(b'\0'):
             if name:archive.add(repository/os.fsdecode(name),arcname=prefix+'/'+os.fsdecode(name))
     for directory in ['minijvm-source','minijvm','libffi-source']:
         archive.add(JAVA/'.deps'/directory,arcname='third-party/'+directory)
+    archive.add(JAVA/'.deps/openjdk25.archive',arcname='third-party/openjdk25-upstream.tar.gz')
 shutil.copyfile(source,sd/source.name)
 host_result=json.loads((ROOT/'docs/evidence/snapshot6-host-result.json').read_text())
 manifest={'project':'Switchcraft','target':'26.4-snapshot-6','source_revision':revision,'java_switch_revision':java_revision,'source_dirty':dirty,
- 'build_date':now,'toolchain':toolchain,'dependency_lock':LOCK,'hardware_verification':'NOT TESTED','java25_horizon_runtime':'NOT AVAILABLE',
- 'minecraft_title_on_horizon':'NOT ACHIEVED','host_reference':host_result,'artifacts':records,'sd_resources':[],
+ 'build_date':now,'toolchain':toolchain,'dependency_lock':LOCK,'hardware_verification':'NOT TESTED','java25_horizon_runtime':'CROSS-LINKED; STARTUP NOT TESTED',
+ 'minecraft_title_on_horizon':'NOT ACHIEVED','host_reference':host_result,'host_reference_note':'Historical host capture; its VM status describes the capture date, not the later cross-linked runtime', 'artifacts':records,'sd_resources':[],
  'known_limitations':limitations,'not_produced':{'opengl-test.nro':'Legacy branch legacy/1.12.2 only','minecraft-aot-test.nro':'No viable self-contained AOT runtime'},
  'package_manifest_note':'Internal ZIP manifest records NRO/resources; external manifest additionally hashes the final archives.'}
 for file in sorted(runtime.rglob('*.jar')):manifest['sd_resources'].append({'path':file.relative_to(sd).as_posix(),'bytes':file.stat().st_size,'sha256':hashlib.sha256(file.read_bytes()).hexdigest()})
+manifest['runtime_image_files']=[{'path':file.relative_to(sd).as_posix(),'sha256':hashlib.sha256(file.read_bytes()).hexdigest()} for file in sorted((runtime/'runtimes/openjdk25').rglob('*')) if file.is_file()]
 (DIST/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n');shutil.copyfile(DIST/'manifest.json',sd/'manifest.json')
 zip_path=DIST/'switch-minecraft-test-package.zip'
 with zipfile.ZipFile(zip_path,'w',zipfile.ZIP_DEFLATED,compresslevel=6) as archive:
@@ -76,15 +90,20 @@ with zipfile.ZipFile(debug_path,'w',zipfile.ZIP_DEFLATED,compresslevel=6) as deb
         'apps':{item['name']:item['build_id'] for item in records}},indent=2)+'\n')
     for app in verify.APPS:
         debug.write(ROOT/'build'/(app+'.elf'),app+'.elf')
-        mapfile=ROOT/'build'/(app+'.elf.map')
+        # External Java maps must come from the same pinned dependency build;
+        # never reuse an old local map for a newly copied ELF.
+        external={'java-test','ffi-test','zero-services-test','java25-test'}
+        mapfile=(JAVA/'build'/(app+'.elf.map')) if app in external else (ROOT/'build'/(app+'.elf.map'))
         if mapfile.is_file():debug.write(mapfile,app+'.elf.map')
 native_sdk=DIST/'switchcraft-native-sdk.tar.gz'
 with tarfile.open(native_sdk,'w:gz') as sdk:
     sdk.add(ROOT/'include/switchcraft/native_lookup.h',arcname='include/switchcraft/native_lookup.h')
+    sdk.add(ROOT/'include/switchcraft/composite_resolver.h',arcname='include/switchcraft/composite_resolver.h')
     sdk.add(ROOT/'build/libswitchcraft-native.a',arcname='lib/libswitchcraft-native.a')
+    sdk.add(ROOT/'build/libswitchcraft-java-resolver.a',arcname='lib/libswitchcraft-java-resolver.a')
     sdk.add(ROOT/'docs/NATIVE_BINDINGS.md',arcname='NATIVE_BINDINGS.md')
     contract=json.dumps({'source_revision':revision,'java_switch_revision':java_revision,'target':'AArch64 Horizon libnx',
-        'hardware_verification':'NOT TESTED','java_loader_integrated':False,'requires':'pinned SDL3, NVK and libnx at final link'},indent=2).encode()+b'\n'
+        'hardware_verification':'NOT TESTED','java_loader_integrated':False,'requires':'pinned java-switch ABI 1 SDK/JDK resolver, SDL3, NVK and libnx at final link'},indent=2).encode()+b'\n'
     entry=tarfile.TarInfo('native-contract.json');entry.size=len(contract);sdk.addfile(entry,io.BytesIO(contract))
 for p,purpose in [(zip_path,'Installable native snapshot-6 bring-up package'),(source,'Project, runtime and Java class-library corresponding source'),(debug_path,'Matching AArch64 debug ELFs and available linker maps'),(native_sdk,'Experimental static native symbol lookup SDK')]:
     manifest['artifacts'].append({'name':p.name,'purpose':purpose,'source_revision':revision,'java_switch_revision':java_revision,'source_dirty':dirty,
@@ -116,7 +135,7 @@ for item in manifest['artifacts']:report+=f'| `{item["name"]}` | {item["bytes"]}
 report+='''
 ## C. Build validation
 
-Six genuine NROs have matching AArch64 ELFs, NRO0/ASET/NACP/icons/build IDs.
+Nine genuine NROs have matching AArch64 ELFs, NRO0/ASET/NACP/icons/build IDs.
 Host tests cover metadata, fake/truncated artifact rejection, feature gates,
 feedback allowlisting, native lookup and a synthetic renderer transformation.
 When SWITCHCRAFT_CLIENT_JAR is supplied, its SHA-1 and renderer-class SHA-256
@@ -126,7 +145,8 @@ See build/host-tests.log and build/java-runtime.log for exact results.
 
 ## D. Hardware
 
-All Horizon execution is NOT TESTED. Java 25 VM is not built/linked. The Switch
+All Horizon execution is NOT TESTED. Java 25 VM is cross-linked in diagnostics,
+but startup and Java execution have not been verified. The Switch
 Minecraft title objective is NOT ACHIEVED. The Linux Java 25 llvmpipe Vulkan Demo
 reference did reach the title screen, including the strict Vulkan transformation;
 its screenshot and logs are explicitly labeled HOST ONLY.
@@ -153,8 +173,8 @@ and unavailable VM state are explicit; no Linux runtime is bundled for Horizon.
 
 ## H. Limits
 
-Horizon JVM 25, class-library OS services, static LWJGL/native module loading,
-shaderc/VMA/SPIR-V Cross/audio integration and Java instrumentation remain open.
+Horizon JVM 25 execution, static LWJGL/native module loading,
+shaderc/VMA/SPIR-V Cross/audio integration and device instrumentation remain open.
 See docs/JAVA_INTEGRATION_HANDOFF.md and docs/NATIVE_BINDINGS.md for the exact
 SDK boundary, currently linked symbols and integration requests.
 Base Vulkan feature success alone does not establish game compatibility. Fabric
@@ -162,9 +182,9 @@ and arbitrary Mods are not supported. NVK remains experimental on Maxwell.
 
 ## I. Next steps
 
-Return native SDL/VI/feature and FFI closure logs; finish the Horizon OpenJDK 25
-OS layer (Zero plus libffi fallback linker first), then static JNI/FFM library
-loading and LWJGL bindings. Re-run the same pinned title test on the console.
+Return native SDL/VI/feature and Java25 A/X/Y/combined Hello logs; resolve actual
+device failures with the independent Java task, then complete static LWJGL/FFM
+and other native bindings before trying the pinned title on the console.
 
 ## J. Source and commits
 

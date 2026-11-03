@@ -91,3 +91,13 @@ class MetadataTests(unittest.TestCase):
         p=subprocess.run([str(ROOT/"build/switchcraft-inspect"),"--manifest",str(self.root/"manifest.json")],capture_output=True,text=True)
         self.assertEqual(p.returncode,0,p.stderr)
         self.assertEqual(p.stdout.splitlines(),["1.20.1","26.4-snapshot"])
+
+    def test_snapshot_horizon_overrides_precede_lwjgl_and_options_are_explicit(self):
+        self.version('26.4-snapshot-6',mainClass='net.minecraft.client.main.Main',
+                     javaVersion={'majorVersion':25},libraries=[{'name':'org.lwjgl:lwjgl:3.4.3'}])
+        plan=self.inspect('26.4-snapshot-6')
+        self.assertTrue(plan['classpath'][0].endswith('/launchers/switchcraft-lwjgl-horizon.jar'))
+        self.assertIn('lwjgl-3.4.3.jar',plan['classpath'][1])
+        self.assertIn('--enable-native-access=ALL-UNNAMED',plan['jvm_arguments'])
+        self.assertIn('--add-exports=java.base/jdk.internal.misc=ALL-UNNAMED',plan['jvm_arguments'])
+        self.assertFalse(plan['launchable'])

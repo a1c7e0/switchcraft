@@ -1,0 +1,70 @@
+#!/usr/bin/env python3
+"""Validate and unpack the exact independently-built Java 25 SDK/image."""
+import hashlib,json,os,pathlib,subprocess,tarfile,tempfile
+ROOT=pathlib.Path(__file__).resolve().parents[1]
+JAVA=pathlib.Path(os.environ.get('JAVA_SWITCH_SOURCE',ROOT/'.deps/java-switch')).resolve()
+PIN=json.loads((ROOT/'dependencies.lock.json').read_text())['java_switch']['revision']
+def sha(path):
+    with path.open('rb') as f:return hashlib.file_digest(f,'sha256').hexdigest()
+def verify_unpacked(base):
+    runtime=base/'runtime/openjdk25-horizon-runtime';sdk=base/'sdk'
+    with tarfile.open(JAVA/'dist/javaswitch-horizon-sdk.tar.gz') as source:
+        expected_sdk={}
+        for member in source:
+            if member.isfile():
+                stream=source.extractfile(member)
+                expected_sdk[member.name]=hashlib.file_digest(stream,'sha256').hexdigest()
+        actual_sdk={p.relative_to(sdk).as_posix() for p in sdk.rglob('*') if p.is_file()}
+        if actual_sdk!=set(expected_sdk):raise RuntimeError('Unexpected SDK inventory')
+        for name,digest in expected_sdk.items():
+            if sha(sdk/name)!=digest:raise RuntimeError('SDK content mismatch: '+name)
+    contract=json.loads((sdk/'runtime-contract.json').read_text())
+    data=json.loads((runtime/'runtime-package.json').read_text())
+    if contract['abi']!=1 or contract['built_backends']['openjdk25'] is not False:raise RuntimeError('Unexpected SDK baseline contract')
+    if not data['java_instrument'] or set(data['runtime_image_modules'])!={'java.base','java.instrument'}:
+        raise RuntimeError('Instrument-enabled runtime image required')
+    if sha(sdk/'lib/libjavaswitch.a')!=data['sdk_libjavaswitch_sha256'] or sha(runtime/'native/libjvm.a')!=data['upstream_libjvm_archive_sha256']:
+        raise RuntimeError('SDK or VM archive mismatch')
+    if (sdk/'include/javaswitch/runtime.h').read_bytes()!=(runtime/'include/javaswitch/runtime.h').read_bytes():
+        raise RuntimeError('SDK/runtime ABI header mismatch')
+    for module,entry in data['native_archives'].items():
+        if sha(runtime/'native'/entry['name'])!=entry['sha256']:raise RuntimeError('Provider mismatch: '+module)
+    for name,digest in data['runtime_image_files'].items():
+        if sha(runtime/'runtime'/name)!=digest:raise RuntimeError('Runtime image mismatch: '+name)
+    for suffix,digest in data['native_resolver'].items():
+        name={'c_sha256':'native_resolver.c','json_sha256':'native_resolver.json'}[suffix]
+        if sha(runtime/'native'/name)!=digest:raise RuntimeError('Resolver mismatch: '+name)
+    for name,digest in data['jni_headers'].items():
+        if sha(runtime/'include'/name)!=digest:raise RuntimeError('JNI header mismatch: '+name)
+    for name,digest in data['agent_smoke_jars'].items():
+        if sha(runtime/'smoke-tests'/name)!=digest:raise RuntimeError('Agent smoke mismatch: '+name)
+    actual={p.relative_to(runtime/'runtime').as_posix() for p in (runtime/'runtime').rglob('*') if p.is_file()}
+    if actual!=set(data['runtime_image_files']):raise RuntimeError('Unexpected runtime image inventory')
+def main():
+    rev=subprocess.check_output(['git','rev-parse','HEAD'],cwd=JAVA,text=True).strip()
+    if rev!=PIN or subprocess.check_output(['git','status','--porcelain'],cwd=JAVA,text=True).strip():
+        raise RuntimeError('Java SDK checkout must be clean and at the exact locked revision')
+    manifest=json.loads((JAVA/'dist/manifest.json').read_text())
+    if manifest['source_revision']!=PIN:raise RuntimeError('Java artifact manifest revision differs from lock')
+    artifacts={a['name']:a for a in manifest['artifacts']}
+    files=['javaswitch-horizon-sdk.tar.gz','openjdk25-horizon-runtime.tar.gz','java-switch-source.tar.gz',
+           'java-test.nro','ffi-test.nro','zero-services-test.nro','java25-test.nro','java-switch-test-package.zip']
+    for name in files:
+        if name not in artifacts or sha(JAVA/'dist'/name)!=artifacts[name]['sha256']:
+            raise RuntimeError('Missing or mismatched Java artifact: '+name)
+    target=ROOT/'build/java25-integrated';marker=target/'verified-inputs.json'
+    expected={'revision':PIN,'sdk':artifacts[files[0]]['sha256'],'runtime':artifacts[files[1]]['sha256']}
+    if marker.exists() and json.loads(marker.read_text())==expected:
+        verify_unpacked(target)
+        print('Java 25 SDK and instrument runtime input hashes verified:',PIN);return
+    if target.exists():raise RuntimeError('Existing generated SDK differs; move build/java25-integrated aside before rebuilding')
+    with tempfile.TemporaryDirectory(dir=ROOT/'build',prefix='java25-prepare-') as directory:
+        temp=pathlib.Path(directory)
+        for name,dest in [(files[0],'sdk'),(files[1],'runtime')]:
+            d=temp/dest;d.mkdir()
+            with tarfile.open(JAVA/'dist'/name) as archive:archive.extractall(d,filter='data')
+        verify_unpacked(temp)
+        marker_tmp=temp/'verified-inputs.json';marker_tmp.write_text(json.dumps(expected,indent=2)+'\n')
+        temp.rename(target)
+    print('Java 25 SDK and instrument runtime input hashes verified:',PIN)
+if __name__=='__main__':main()

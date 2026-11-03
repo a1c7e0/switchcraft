@@ -26,5 +26,17 @@
     "url": "https://files.pythonhosted.org/packages/7e/d5/664ea06d01864f25d6067f09fa218404e4d588edd5e495135ac91429fecb/cmake-4.4.4-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl",
     "sha256": "f773a0544c66370408f451acd487c2c643b0dfebb48c5d64f3638bc1bb820238",
     "version": "4.4.4"
+  },
+  "lwjgl_core": {
+    "version": "3.4.3",
+    "source_revision": "30fac9b95f99cda97312232be25ba55297bf9951",
+    "url": "https://libraries.minecraft.net/org/lwjgl/lwjgl/3.4.3/lwjgl-3.4.3.jar",
+    "sha256": "46eeca5471833c3cf5da3c1da015b41e3bb3eb16dd3da03f366886da10096751",
+    "platform_source_sha256": "0b3093df7948997ba3ee9749e7f6d08143b480fccd4a710a59629cb79de4479a",
+    "library_source_sha256": "ec87813512317f1c4e0b7ea3211b8eaf1f710c9931ea9e58a4d8a5e0f41ebbc2"
+  },
+  "jspecify": {
+    "url": "https://libraries.minecraft.net/org/jspecify/jspecify/1.0.0/jspecify-1.0.0.jar",
+    "sha256": "1fad6e6be7557781e4d33729d49ae1cdc8fdda6fe477bb0cc68ce351eafdfbab"
   }
 }

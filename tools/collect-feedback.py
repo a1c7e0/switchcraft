@@ -9,7 +9,9 @@ import zipfile
 
 LOG_NAMES = ('switch-diagnostics.log', 'vulkan-test.log', 'vulkan-present.log',
              'minecraft-launcher.log', 'java-test.log', 'ffi-test.log',
-             'snapshot-vulkan.json')
+             'snapshot-vulkan.json', 'zero-services-test.log', 'java25-test.log',
+             'java25-vm-stdout.log', 'java25-vm-stderr.log', 'switchcraft-java25.log',
+             'switchcraft-java25-vm-stdout.log', 'switchcraft-java25-vm-stderr.log')
 LIMIT = 8 * 1024 * 1024
 
 
