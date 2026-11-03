@@ -37,5 +37,8 @@ host-only JNI fixture proves dispatch/failure handling, not Horizon execution.
 The combined Java25 diagnostic composes the generated JDK provider with the
 actual static SDL3/Vulkan lookup before the JVM seals the resolver. It links the
 real agent and VM archives and checks required symbol definitions. It executes
-only the Java25 Hello workload if selected on hardware; no Java graphics path is
-claimed. Further LWJGL native JNI/FFM integration is still required.
+the Java25 Hello or JNI/FFM SDL_GetVersion workload if selected on hardware; no
+Java window or graphics path is claimed. The JNI callback resolves exact static
+module and symbol names, returns real linked function addresses, and returns zero
+for missing entries. The host test calls a host-only fixture via the same SDK
+and JNI/FFM bridge. Further LWJGL native JNI/FFM integration is still required.

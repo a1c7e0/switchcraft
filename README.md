@@ -31,7 +31,7 @@ llvmpipe Vulkan. The image below is **HOST ONLY**, not a Switch screenshot:
 | `ffi-test.nro` | AAPCS64 downcalls, libnx RW/RX upcall closures and whole-region virtual-memory probe |
 | `zero-services-test.nro` | Independent native VM service probes; no VM |
 | `java25-test.nro` | Genuine Zero VM with Hello, JNI/FFM and startup-agent actions; hardware untested |
-| `switchcraft-java25.nro` | Genuine VM and composed JDK/SDL/Vulkan resolver; Hello attempt; hardware untested |
+| `switchcraft-java25.nro` | Genuine VM and composed JDK/SDL/Vulkan resolver; Hello and Java JNI/FFM SDL version attempts; hardware untested |
 | `switchcraft-lwjgl-horizon.jar` | Horizon platform identity and JNI load dispatch; native FFM SharedLibrary remains unavailable |
 | `switchcraft-launcher-bridge.jar` | Hash-pinned renderer-method transformation; one Vulkan backend, no OpenGL fallback; host tested |
 

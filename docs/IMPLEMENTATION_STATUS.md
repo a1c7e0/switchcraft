@@ -18,6 +18,7 @@ The legacy branch is legacy/1.12.2; Java ownership is the independent java-switc
 | Whole-region reserve/commit/uncommit probe | Yes | NRO/SDK | Mocked states/failures | NOT TESTED |
 | OpenJDK 25 Horizon VM / JVMTI / instrumentation | Genuine Zero archive and two-module image | Standalone + combined NRO | Cross-link, zero unresolved; host agent/JNI controls PASS | Startup and execution NOT TESTED |
 | LWJGL 3.4.3 Horizon identity / JNI load | Upstream platform and Library overrides | Original override JAR | Real LWJGL classes + host fixture | NOT TESTED; FFM SharedLibrary missing |
+| Java -> JNI static lookup -> FFM SDL version | Actual JNI callback and real target SDL symbol | Combined NRO and classfile-69 JAR | Host JDK + SDK + native fixture | NOT TESTED |
 | Read-only launch planner/SDK gate | Yes | NRO/host inspector | Inheritance/rules/read-only/version/profile | NOT TESTED |
 | Strict Vulkan renderer transformation | Yes | Original Java JAR | Synthetic execution + actual snapshot title | VM/instrumentation absent |
 | Snapshot 6 Demo title | Reference only | No game NRO | PASS, Linux Java 25 / llvmpipe Vulkan | NOT ACHIEVED |

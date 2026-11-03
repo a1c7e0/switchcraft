@@ -57,6 +57,21 @@ Minecraft title PASS. Standard JNI/FFM host tests are not Horizon runtime tests.
 * **Risk/recovery:** Moderate; HOME/close on a stall. These results do not prove
   LWJGL FFM, Minecraft initialization, rendering or a title screen.
 
+## J25-04 — Java JNI/FFM call to linked SDL3
+
+* **File:** `switchcraft-java25.nro`; J25-01/02/03 passed and the complete
+  package including `switchcraft-native-smoke.jar` is installed.
+* **Launch/action:** Start in another fresh application-mode process and press X.
+* **Pass:** Provider preflight passes, VM stage is `completed` and VM stdout
+  contains `SWITCHCRAFT_SDL_FFM_PASS SDL_version=` with SDL major 3. The Java
+  workload registers JNI methods, resolves real SDL/Vulkan addresses and calls
+  SDL_GetVersion via the JDK FFM fallback. It does not create a window.
+* **Failure/report:** Complete three combined VM logs, first Java exception,
+  raw Result, package hash, firmware, mode, last action, wait and crash report.
+* **Logs:** The three `switchcraft-java25` logs from J25-03.
+* **Risk/recovery:** Moderate; HOME/close if stalled; reopen hbmenu for each
+  attempt. Do not infer Minecraft, SDL rendering or title compatibility.
+
 ## N-01 — switch-diagnostics.nro
 
 * **File:** `switch-diagnostics.nro`.
@@ -336,6 +351,7 @@ Launch mode: ____ Docked/handheld: ____ Package source/hash: ____
 | J25-01 | NOT TESTED | | | |
 | J25-02 | NOT TESTED | | | |
 | J25-03 | NOT TESTED | | | |
+| J25-04 | NOT TESTED | | | |
 | L-01 | NOT TESTED | | | |
 | L-02 | NOT TESTED | | | |
 | L-03 | NOT TESTED | | | |

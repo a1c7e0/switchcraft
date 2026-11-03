@@ -59,7 +59,10 @@ No Linux library is selected by the override. Host tests exercise original and
 patched Platform/Library with a real LWJGL JAR and a host-only JNI fixture.
 
 On physical hardware, run java25-test A, X and Y in fresh application-mode
-processes, then switchcraft-java25 A. Preserve all VM stdout/stderr, native logs,
+processes, then switchcraft-java25 A and X in separate fresh processes. X uses
+RegisterNatives and Java FFM to call the real linked SDL_GetVersion through the
+composed provider. The host test uses a real host JVM and an explicitly host-only
+native fixture; it does not establish device behavior. Preserve all VM stdout/stderr, native logs,
 firmware/Atmosphere/mode and any crash report; report exact runtime and
 Switchcraft SHAs. Do not close a runtime execution issue based on cross-linking.
 Next, implement real LWJGL core and FFM SharedLibrary provider bindings, SDL3 and
