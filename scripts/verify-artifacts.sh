@@ -28,7 +28,7 @@ with zipfile.ZipFile(root/'switch-minecraft-test-package.zip') as archive:
     assert not any('/opengl-test/' in name for name in names)
     assert not any(name.lower().endswith(('.so','.dll','.dylib')) for name in names)
     assert 'switchcraft-docs/collect-feedback.py' in names
-    assert len([name for name in names if name.endswith('.jar')])==9
+    assert len([name for name in names if name.endswith('.jar')])==10
 with zipfile.ZipFile(root/'switchcraft-debug-symbols.zip') as debug:
     assert debug.testzip() is None
     identities=json.loads(debug.read('build-identities.json'))

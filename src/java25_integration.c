@@ -3,6 +3,7 @@
 #include <javaswitch/runtime.h>
 #include <javaswitch/native_resolver.h>
 #include <switchcraft/composite_resolver.h>
+#include <switchcraft/native_symbols_jni.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
@@ -23,7 +24,7 @@ static atomic_bool finished;
 static JsLaunchResult launch_result;
 static int launch_status=JS_UNAVAILABLE;
 static const char *const options[]={"--add-exports=java.base/jdk.internal.misc=ALL-UNNAMED"};
-static const JsLaunchRequest request={
+static JsLaunchRequest request={
     .abi_version=JS_ABI_VERSION,.required_java_major=25,.backend="openjdk25",
     .classpath=SC_ROOT "/tests/java25-hello.jar",.main_class="HelloHorizon25",.heap_mib=128
 };
@@ -44,13 +45,22 @@ int main(void){
     sc_memory();
     sc_log("Native heap=%zu loader override=%d bytes=%llu; worker stack=4 MiB Java heap=128 MiB\n",
            __nx_heap_size,envHasHeapOverride(),(unsigned long long)(envHasHeapOverride()?envGetHeapOverrideSize():0));
-    sc_log("A: attempt classfile-69 Hello in this process; +: exit without a VM.\n"
+    sc_log("A: classfile-69 Hello | X: Java JNI/FFM SDL version smoke | +: exit without a VM.\n"
            "Use standalone java25-test A/X/Y in separate fresh application processes first.\n");
-    u64 keys=0;bool selected=false;
-    while(sc_frame(&keys)){if(keys&HidNpadButton_A){selected=true;break;}}
+    u64 keys=0;bool selected=false,ffi_smoke=false;
+    while(sc_frame(&keys)){
+        if(keys&HidNpadButton_A){selected=true;break;}
+        if(keys&HidNpadButton_X){selected=true;ffi_smoke=true;break;}
+    }
     if(!selected){sc_exit();return 0;}
     if(appletGetAppletType()!=AppletType_Application){
         sc_log("Application-mode hbmenu is required; VM startup skipped.\n");goto done;
+    }
+    if(ffi_smoke){
+        request.classpath=SC_ROOT "/tests/switchcraft-native-smoke.jar";
+        request.main_class="org/switchcraft/runtime/HorizonResolverSmoke";
+        request.on_vm_ready=sc_register_native_symbols;
+        sc_log("Selected Java JNI/FFM SDL version test; requires real fallback linker.\n");
     }
     int rc=sc_install_composite_resolver();
     sc_log("STAGE install combined resolver=%d\n",rc);

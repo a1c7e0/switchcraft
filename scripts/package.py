@@ -26,7 +26,7 @@ purposes={'switch-diagnostics.nro':'Native memory, SD, input, threads and next-l
  'ffi-test.nro':'AAPCS64 downcalls, libnx W^X upcalls and whole-region memory probe',
  'zero-services-test.nro':'Standalone OpenJDK native service diagnostic, without a VM',
  'java25-test.nro':'Independent genuine Java 25 VM A/X/Y diagnostic; Horizon startup untested',
- 'switchcraft-java25.nro':'Genuine Java 25 Hello diagnostic with composed JDK/SDL/Vulkan provider; Horizon startup untested'}
+ 'switchcraft-java25.nro':'Genuine Java 25 Hello and JNI/FFM SDL version diagnostics with composed provider; Horizon startup untested'}
 for item in records:
     item.update(purpose=purposes[item['name']],source_revision=revision,java_switch_revision=java_revision,source_dirty=dirty,build_date=now,toolchain=toolchain,
         bundled_dependencies=['libnx/newlib', 'Pinned NVK/SDL3 or java-switch component as applicable'],tested_environment='Linux cross-build and host checks; NRO not executed',known_limitations=limitations)
@@ -44,6 +44,7 @@ with zipfile.ZipFile(java_zip) as package:
     (runtime/'runtimes/minijvm/minijvm_rt.jar').write_bytes(package.read('switch/mc-runtime/runtimes/minijvm/minijvm_rt.jar'))
     for name in ['diagnostic-tests.jar','dependency.jar','java25-tests.jar','java25-hello.jar','java25-agent-smoke-agent.jar','java25-agent-smoke-app.jar']:
         (runtime/'tests'/name).write_bytes(package.read('switch/mc-runtime/tests/'+name))
+shutil.copyfile(ROOT/'build/switchcraft-native-smoke.jar',runtime/'tests/switchcraft-native-smoke.jar')
 shutil.copyfile(ROOT/'build/switchcraft-launcher-bridge.jar',runtime/'launchers/switchcraft-launcher-bridge.jar')
 shutil.copyfile(ROOT/'build/switchcraft-lwjgl-horizon.jar',runtime/'launchers/switchcraft-lwjgl-horizon.jar')
 image=ROOT/'build/java25-integrated/runtime/openjdk25-horizon-runtime/runtime'
@@ -99,6 +100,7 @@ native_sdk=DIST/'switchcraft-native-sdk.tar.gz'
 with tarfile.open(native_sdk,'w:gz') as sdk:
     sdk.add(ROOT/'include/switchcraft/native_lookup.h',arcname='include/switchcraft/native_lookup.h')
     sdk.add(ROOT/'include/switchcraft/composite_resolver.h',arcname='include/switchcraft/composite_resolver.h')
+    sdk.add(ROOT/'include/switchcraft/native_symbols_jni.h',arcname='include/switchcraft/native_symbols_jni.h')
     sdk.add(ROOT/'build/libswitchcraft-native.a',arcname='lib/libswitchcraft-native.a')
     sdk.add(ROOT/'build/libswitchcraft-java-resolver.a',arcname='lib/libswitchcraft-java-resolver.a')
     sdk.add(ROOT/'docs/NATIVE_BINDINGS.md',arcname='NATIVE_BINDINGS.md')

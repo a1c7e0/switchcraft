@@ -8,7 +8,7 @@
 extern PFN_vkVoidFunction vkGetInstanceProcAddr(VkInstance, const char *);
 #define SDL_SYM(name) {"SDL3", #name, (ScNativeFunction)name}
 static const ScNativeSymbol symbols[] = {
-    SDL_SYM(SDL_Init), SDL_SYM(SDL_Quit), SDL_SYM(SDL_GetError),
+    SDL_SYM(SDL_Init), SDL_SYM(SDL_Quit), SDL_SYM(SDL_GetError), SDL_SYM(SDL_GetVersion),
     SDL_SYM(SDL_CreateWindow), SDL_SYM(SDL_DestroyWindow),
     SDL_SYM(SDL_PollEvent), SDL_SYM(SDL_GetGamepads),
     SDL_SYM(SDL_OpenGamepad), SDL_SYM(SDL_CloseGamepad),

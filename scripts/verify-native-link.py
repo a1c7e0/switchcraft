@@ -20,7 +20,7 @@ output=subprocess.check_output([str(nm),'--defined-only',str(combined)],text=Tru
 linked={line.split()[-1] for line in output.splitlines() if line.split()}
 required={'JNI_CreateJavaVM','JNI_OnLoad_java','Agent_OnLoad_instrument',
           'JNI_OnLoad_instrument','JLI_ManifestIterate','js_openjdk25_native_resolver',
-          'sc_install_composite_resolver','SDL_CreateWindow','SDL_Vulkan_CreateSurface','vkGetInstanceProcAddr'}
+          'sc_install_composite_resolver','sc_register_native_symbols','SDL_GetVersion','SDL_CreateWindow','SDL_Vulkan_CreateSurface','vkGetInstanceProcAddr'}
 if required-linked:raise SystemExit('Combined VM link missing: '+', '.join(sorted(required-linked)))
 undefined=subprocess.check_output([str(nm),'-u',str(combined)],text=True).strip()
 if undefined:raise SystemExit('Combined VM has unresolved symbols:\n'+undefined)
