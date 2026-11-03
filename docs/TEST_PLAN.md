@@ -11,8 +11,11 @@ root and start `sdmc:/switch/<name>/<name>.nro` in application-mode hbmenu, or u
 the explicitly named diagnostic next-load action. Logs named below are relative
 to `sdmc:/switch/mc-runtime/logs/`. The common prerequisites apply to every case.
 
-First three sessions: N-01 through N-04; V-01 then V-02/03; V-04 then F-01/02.
-Proceed to Java8 and launcher checks afterward. A feature-profile PASS is not a
+For a first session, follow [DEVICE_TEST_QUICKSTART.md](DEVICE_TEST_QUICKSTART.md).
+Run N-01 through N-04, J-01, F-01 through F-04 and Z-01 through Z-04 before
+the genuine Java25 sessions. Z-05 is an advanced deliberate-fault probe; export
+ordinary logs before attempting it. Graphics V-01 through V-04 are an independent
+branch. Proceed to optional launcher checks afterward. A feature-profile PASS is not a
 Minecraft title PASS. Standard JNI/FFM host tests are not Horizon runtime tests.
 
 ## J25-01 — independent Java 25 Hello
@@ -33,6 +36,8 @@ Minecraft title PASS. Standard JNI/FFM host tests are not Horizon runtime tests.
 * **File:** `java25-test.nro`; J25-01 passed and the complete package is installed.
 * **Launch/action:** In a fresh process press X; after exit start another fresh
   process and press Y for the genuine startup-agent/Class-File API test.
+  Y requires the packaged instrument-enabled image and both
+  `java25-agent-smoke-agent.jar` and `java25-agent-smoke-app.jar` in tests/.
 * **Pass:** X prints `JAVA25 JNI FFM SUITE PASS`; Y prints
   `JAVA25_AGENT_SMOKE_PASS`, with stage `completed`. Host markers do not count.
 * **Failure/report:** Preserve every line and actual native Result/exception,
@@ -215,6 +220,43 @@ Minecraft title PASS. Standard JNI/FFM host tests are not Horizon runtime tests.
 * **Risk level:** Moderate: supported native address-space and mapping syscalls.
 * **Recovery steps:** Use HOME/relaunch if necessary; preserve logs and crash report. A denied syscall is a diagnostic result; do not add system patches.
 
+## F-04 — ffi-test.nro partial virtual memory
+
+* **File/action:** `ffi-test.nro`, B, after ordinary downcalls and the Y memory probe.
+* **Pass:** 64 KiB-aligned reservation; middle two-page mapping/readback;
+  R/NONE/RW protection changes; partial uncommit/recommit and release succeed.
+* **Report:** Every status and raw Result from `ffi-test.log`. The probe never
+  deliberately accesses NONE or unmapped memory. A denied syscall is not PASS.
+* **Recovery:** A failed release is retained; Y/B first retries cleanup before
+  another reservation. HOME/close if stalled; keep the last stage and wait time.
+
+## Z-01 through Z-04 — standalone VM service prerequisites
+
+* **File/setup:** `zero-services-test.nro`, complete package, application-mode
+  hbmenu. This contains native OpenJDK components, no Java VM.
+* **Z-01 / A:** Clocks, semaphore accounting, Atomics, monitor timeout/reacquisition
+  and coalesced event permits complete without errors.
+* **Z-02 / X:** Native worker ID/stack/TLS isolation, 64 permit exchanges, checked
+  join/close. Record the last stage if it does not return.
+* **Z-03 / B:** Deferred native thread ownership/reaper joins after exit and closes.
+* **Z-04 / L:** Actual Alias reserve/commit/protect/recommit/query, middle-page
+  release, retained canaries and separate SDK/VM reservation ownership succeed.
+* **Logs/report:** `zero-services-test.log`, all status/Result lines, launch mode,
+  package hash, last action and actual wait. These do not establish Java execution.
+* **Exit/recovery:** + closes the application process. Reopen application-mode
+  hbmenu afterward. Use HOME/close on a stall and preserve any crash report.
+
+## Z-05 — advanced SafeFetch deliberate-fault probe
+
+* **File/action:** `zero-services-test.nro`, Y, after ordinary A/X/B/L probes
+  and exporting their logs. This intentionally faults and may abort or stall.
+* **Pass:** Address zero is confirmed unreadable; valid loads pass and actual
+  faulting SafeFetch32/N reads return -12345/-67890. If Y returns, run X again
+  and report its result before restarting the application process.
+* **Evidence:** `zero-services-test.log`, complete crash report if any, last
+  stage, actual wait and HOME responsiveness. Emulator/host successes do not
+  count as a hardware PASS. HOME/close if stalled.
+
 ## J-01 — java-test.nro
 
 * **File:** `java-test.nro`.
@@ -346,6 +388,12 @@ Launch mode: ____ Docked/handheld: ____ Package source/hash: ____
 | F-01 | NOT TESTED | | | |
 | F-02 | NOT TESTED | | | |
 | F-03 | NOT TESTED | | | |
+| F-04 | NOT TESTED | | | |
+| Z-01 | NOT TESTED | | | |
+| Z-02 | NOT TESTED | | | |
+| Z-03 | NOT TESTED | | | |
+| Z-04 | NOT TESTED | | | |
+| Z-05 | NOT TESTED | | | |
 | J-01 | NOT TESTED | | | |
 | J-02 | NOT TESTED | | | |
 | J25-01 | NOT TESTED | | | |
@@ -363,6 +411,8 @@ Launch mode: ____ Docked/handheld: ____ Package source/hash: ____
 
 Copy the entire `sdmc:/switch/mc-runtime/logs/` directory to the PC with the exact
 manifest/SHA256SUMS and case sheet. Separate sessions by source revision. Preserve
+per-attempt copies before rerunning: most logs append, while snapshot-vulkan.json
+and launch-plan.json are overwritten. Preserve
 Atmosphere crash reports and the matching `build/<app>.elf`. Symbolicate using
 `aarch64-none-elf-addr2line -Cfipe build/<app>.elf <module-relative-PC>`. Report the
 last flushed stage and whether HOME responded. Do not send Microsoft credentials,

@@ -68,6 +68,9 @@ Use **application-mode hbmenu** under Atmosphère on Switch 1. Start native
 memory/SD/thread tests, then `vulkan-present` A for feature capture and X for
 SDL3/VI presentation; then NVK offscreen and FFI tests. The detailed
 [TEST_PLAN.md](docs/TEST_PLAN.md) defines independent cases and recovery steps.
+For the first physical session, use the shorter
+[device checklist](docs/DEVICE_TEST_QUICKSTART.md) for controls, pass markers
+and per-attempt log collection.
 No kernel patches, overclocking, Linux/Android installation or remote game
 execution are required by the NROs.
 

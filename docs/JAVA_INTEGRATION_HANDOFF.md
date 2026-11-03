@@ -45,6 +45,13 @@ reports 17 host tests and complete workflow/package verification PASS. This
 documentation update changes no runtime code or SDK ABI and needs no pin update.
 It establishes no Horizon execution result.
 
+The later documentation revision `8e6c732257937fb01108850b2e1e6838d4d33cfd`
+adds complete base-profile acceptance at the same pin: 17 host tests, 553 ARM64
+VM archive members, java.base and zero missing link symbols, with full package
+verification. Its instrument evidence remains 577 members and two modules.
+Issues #1 and #2 are now closed for these build defects. These are build/host
+results; Horizon startup and execution remain NOT TESTED.
+
 ## Contract and lifecycle
 
 `runtime.h` is byte-identical to ABI 1. `js_runtime_query`,
