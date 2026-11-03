@@ -20,20 +20,26 @@ host CMake wheel are hash-pinned; patches/sdl3-vulkan-only.patch removes EGL
 requirements. Keep OpenGL out of main's targets and final linked APIs.
 
 The official client was downloaded only to /tmp for research, never committed
-or packaged. A Linux Java 25 / llvmpipe Vulkan Demo reference reached the title
-screen, including a hash-pinned single-renderer transformation. Evidence is
-explicitly HOST ONLY. The pinned genuine Java 25 VM is cross-linked into the
-standalone and combined diagnostic NROs; startup is NOT TESTED. Native title
-is NOT ACHIEVED. Never turn a cross-link or host screenshot into a device pass.
+or packaged. Linux host Java 25 has reached the 26.4-snapshot-6 title with the
+strict Vulkan renderer; screenshot and logs are HOST ONLY. The pinned genuine
+Java 25 VM is cross-linked into the standalone and combined diagnostic NROs.
+Horizon startup and all Horizon execution remain NOT TESTED. Never turn a
+cross-link or host screenshot into a device pass.
 
 java-switch exports ABI 1 and a real cross-built OpenJDK 25/Zero runtime, image,
 instrumentation and resolver. The regular minecraft-launcher remains VM-free;
 its gate must return JS_UNAVAILABLE. The separate switchcraft-java25 NRO links
 the VM and composed provider; availability indicates symbols, not startup.
-The independent
-java-switch task owns the VM, OS/class-library and FFM port. Do not modify that
-repository; coordinate via docs/JAVA_INTEGRATION_HANDOFF.md and committed SHAs.
-Switchcraft owns Vulkan/SDL/native-library integration and hardware feedback.
+The main assistant may directly edit, commit and push java-switch when needed.
+Use an isolated worktree, clean focused commits and immutable full-SHA pins;
+keep Switchcraft's pin unchanged unless the integration requires an intentional
+pin update. Actively delegate bounded tasks to `gpt-6-luna` with
+`reasoning_effort` set to `high`, using disjoint files and explicit ownership.
+The main assistant reviews all changes and runs the relevant checks;
+agents must not overwrite one another's
+work. Coordinate runtime defects and integration through
+docs/JAVA_INTEGRATION_HANDOFF.md. Switchcraft owns Vulkan/SDL/native-library
+integration and hardware feedback.
 
 `build/libswitchcraft-native.a` is a limited AArch64 static SDL/Vulkan symbol
 lookup, not a Java loader. Run scripts/verify-native-link.py after linking. The

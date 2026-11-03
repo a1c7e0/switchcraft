@@ -1,13 +1,22 @@
 # Java SDK integration handoff
 
 Switchcraft pins `a1c7e0/java-switch` at
-`b7c2ac7fd422bc2543e5c698db4e33a01cc0312d`. The independent Java task owns the
-VM, JDK class libraries and platform services. Switchcraft owns launcher, LWJGL,
-SDL/Vulkan and application-native provider integration. Do not edit Java sources
-here. Report reproducible runtime defects at https://github.com/a1c7e0/java-switch/issues;
-search first, preserve complete logs, and validate fixes at immutable SHAs.
+`b7c2ac7fd422bc2543e5c698db4e33a01cc0312d`. The main assistant is authorized
+to edit, commit and push java-switch directly. Use an isolated worktree, focused
+clean commits and immutable full-SHA references; update this pin only as an
+intentional integration change. Actively delegate bounded tasks to `gpt-6-luna`
+with `reasoning_effort` set to `high` and disjoint file ownership. The main
+assistant reviews changes and runs relevant checks, protecting other agents' work. Switchcraft
+owns launcher, LWJGL, SDL/Vulkan and application-native provider integration.
+Report reproducible runtime defects at
+https://github.com/a1c7e0/java-switch/issues; search first, preserve complete
+logs, and validate fixes at immutable SHAs.
 
 ## Verified evidence
+
+Linux host Java 25 has reached the 26.4-snapshot-6 title with strict Vulkan;
+the screenshot and logs are HOST ONLY. Horizon startup and all Horizon execution
+remain NOT TESTED.
 
 The pinned instrument-enabled OpenJDK 25/Zero archive, ten real provider archives,
 `java.base`/`java.instrument` image (7,336 classfile-69 classes), and standalone
@@ -27,6 +36,14 @@ relative to the previous pin, the runtime source itself is unchanged:
 * https://github.com/a1c7e0/java-switch/issues/2 — one host test failed to find a
   valid symlinked JDK cache; the current pin follows the link. Neither issue is
   device evidence.
+
+Upstream documentation revision `534749db60e00feb35d2b7810d683a597aff6cac`
+records an independent instrument build at the same `b7c2ac7` pin, starting
+without its native build directory and with a symlinked host JDK cache. Its
+[immutable evidence](https://github.com/a1c7e0/java-switch/blob/534749db60e00feb35d2b7810d683a597aff6cac/docs/evidence/issues-1-2-clean-instrument.json)
+reports 17 host tests and complete workflow/package verification PASS. This
+documentation update changes no runtime code or SDK ABI and needs no pin update.
+It establishes no Horizon execution result.
 
 ## Contract and lifecycle
 
@@ -69,5 +86,6 @@ Switchcraft SHAs. Do not close a runtime execution issue based on cross-linking.
 Next, implement real LWJGL core and FFM SharedLibrary provider bindings, SDL3 and
 Vulkan paths, then missing VMA/shaderc/SPIR-V Cross/FreeType/OpenAL/STB/jemalloc
 families. Check actual incidentally loaded lwjgl_opengl initialization without
-adding an OpenGL renderer. Only after real Java/agent/native smoke success,
-attempt the exact snapshot's strict Vulkan title with owned game files.
+adding an OpenGL renderer. The host title result does not establish Horizon
+behavior. On Horizon, attempt the exact snapshot title with owned game files
+after real Java/agent/native smoke succeeds.
