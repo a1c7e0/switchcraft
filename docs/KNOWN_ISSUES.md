@@ -1,13 +1,14 @@
 # Known issues
 
-* **Horizon Java 25 is absent. Minecraft title on Switch is NOT ACHIEVED.** The
+* **Horizon Java 25 startup is untested. Minecraft title on Switch is NOT ACHIEVED.** The
   verified Demo title is a Linux/llvmpipe reference only. No physical Switch is
   attached; every native CPU/input/SD/graphics/runtime test is NOT TESTED.
-* OpenJDK 25 fails configuration at unsupported OS elf. A real OS/platform and
-  class-library port is needed: virtual memory, exceptions/safepoints, TLS and
-  threads, static natives/symbols, filesystem/network and runtime image.
-* The JNI adapter executes Java 25 JNI/FFM tests on host and reports unavailable
-  on Horizon. miniJVM is Java 8 only. No classfile-69/modern Minecraft support is
+* The genuine Zero VM, native providers and java.base/java.instrument image are
+  cross-built, but memory, exceptions/safepoints, TLS, threads and filesystem/
+  network behavior have not been verified on Horizon.
+* The JNI adapter executes Java 25 JNI/FFM tests on host. VM-free executables
+  report unavailable; linked diagnostic availability is only symbol presence.
+  miniJVM is Java 8 only. No classfile-69/modern Minecraft support is
   inferred from Java 8 class-loading or reflection tests.
 * libffi AAPCS64 and libnx RW/RX upcall code compile/link, but hardware permissions,
   cache behavior, closure execution and teardown still need physical testing.
@@ -24,7 +25,7 @@
 * Shaderc, VMA, SPIR-V Cross, FreeType, audio and static LWJGL loading into a real
   Horizon JVM are not integrated. Native SDL3 alone does not implement Java FFM.
 * Strict Vulkan uses a Java 25 instrumentation/Class-File-API bridge. Those runtime
-  modules/services are unavailable on Horizon. It refuses unrecognized class
+  modules are cross-built, but startup/instrumentation are untested on Horizon. It refuses unrecognized class
   hashes and changes only renderer selection, without account/authentication changes.
 * Fabric/Mixin, arbitrary Mods, authentication and network/audio integration are
   not implemented. The linked native networking/TLS code is not verified.

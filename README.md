@@ -11,8 +11,8 @@ GitHub's default branch is `main`. Use `legacy/1.12.2` for the preserved older
 implementation.
 
 **The snapshot reaches its title screen in the Linux Java-25/Vulkan reference.
-It does not yet run on Horizon: a native Java 25 VM is not built or linked.
-All Switch hardware execution is NOT TESTED.**
+A genuine Horizon Java 25 VM is cross-linked in diagnostic NROs; its startup,
+Java execution and the Minecraft title on Switch remain NOT TESTED.**
 
 The reference uses the official Demo mode, no account credentials, and Mesa
 llvmpipe Vulkan. The image below is **HOST ONLY**, not a Switch screenshot:
@@ -29,6 +29,10 @@ llvmpipe Vulkan. The image below is **HOST ONLY**, not a Switch screenshot:
 | `minecraft-launcher.nro` | Read-only version/inheritance/dependency planning, strict Vulkan JVM/game arguments, saved configuration and honest Java-25 launch gate |
 | `java-test.nro` | Independent java-switch Java-8 interpreter diagnostic; this is not a Java-25 VM |
 | `ffi-test.nro` | AAPCS64 downcalls, libnx RW/RX upcall closures and whole-region virtual-memory probe |
+| `zero-services-test.nro` | Independent native VM service probes; no VM |
+| `java25-test.nro` | Genuine Zero VM with Hello, JNI/FFM and startup-agent actions; hardware untested |
+| `switchcraft-java25.nro` | Genuine VM and composed JDK/SDL/Vulkan resolver; Hello attempt; hardware untested |
+| `switchcraft-lwjgl-horizon.jar` | Horizon platform identity and JNI load dispatch; native FFM SharedLibrary remains unavailable |
 | `switchcraft-launcher-bridge.jar` | Hash-pinned renderer-method transformation; one Vulkan backend, no OpenGL fallback; host tested |
 
 SDL3 is built without EGL, OpenGL or OpenGL ES. Its Switch port's unconditional
@@ -36,8 +40,8 @@ EGL dependency was fixed in `patches/sdl3-vulkan-only.patch`. The original clien
 still contains an OpenGL fallback; the bundled Java transformation restricts
 that single renderer-selection method without modifying authentication code.
 No Minecraft class bytes, assets, native desktop libraries or account data are
-redistributed. The bridge requires Java 25 and `java.instrument`, unavailable
-on Horizon until the VM port is completed.
+redistributed. The bridge requires Java 25 and `java.instrument`, cross-built
+in the pinned runtime image; Horizon startup/instrumentation are NOT TESTED.
 
 ## Build and install
 
@@ -51,7 +55,7 @@ revision are pinned. Access to the private `java-switch` repository is required.
 The toolchain and hash-verified caches can be reused; no root installation is
 needed. See [BUILD.md](docs/BUILD.md).
 
-The pipeline builds six real NROs, tests the native/Java boundaries on the host,
+The pipeline builds nine real NROs, tests the native/Java boundaries on the host,
 verifies AArch64/NRO/ASET/NACP/build IDs and creates:
 
 * `dist/switch-minecraft-test-package.zip` and `dist/COPY_TO_SD/`
@@ -79,11 +83,11 @@ existing configuration is written only on explicit X/save.
 The main host suite tests metadata, artifact rejection, strict renderer behavior
 and profile gates. The independent runtime suite tests Java 8 and actual host
 Java 25 JNI creation/native registration/FFM downcalls/upcalls/teardown.
-The same JNI adapter is compiled into the Horizon SDK, where it reports
-`runtime-not-linked` because no Java 25 VM exists. No UI claims it can launch a
-game on Switch. OpenJDK 25 configuration actually fails on unsupported Horizon
-OS detection; real memory/fault/thread/class-library and static JNI/FFM module
-work is still needed. Linked Vulkan/SDL/FFI code awaits physical execution.
+The baseline SDK and minecraft-launcher remain VM-free and report
+`runtime-not-linked`. Separate experimental NROs link the genuine VM; their
+availability query proves symbol presence, not startup. The game launch remains
+blocked on tested VM execution and LWJGL/FFM/native bindings. All Switch
+Vulkan/SDL/FFI/runtime execution awaits physical testing.
 
 To reproduce the host reference, prepare a Linux X11/Vulkan environment and run:
 

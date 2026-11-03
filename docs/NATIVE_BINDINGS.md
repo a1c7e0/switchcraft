@@ -21,3 +21,21 @@ is implemented here. VMA, shaderc, SPIR-V Cross, FreeType, OpenAL, STB, jemalloc
 LWJGL core native/FFM marshalling and Java static-library registration have not
 been integrated into a Horizon JVM. That work remains blocked on actual runtime
 interfaces and dependencies. No claim of Joy-Con gameplay is made.
+
+## Horizon platform and library initialization
+
+The modified LWJGL 3.4.3 `Platform` and `Library` sources under
+`vendor/lwjgl-horizon/` derive from upstream commit
+`30fac9b95f99cda97312232be25ba55297bf9951` under its BSD license. The compiled
+override JAR precedes the original classpath entry for the exact snapshot.
+Horizon is an explicit enum with AArch64 recognition and no Linux identity.
+JNI load requests are passed by name to the JVM's real static loader; missing
+`lwjgl` core providers fail normally. Native `SharedLibrary`/FFM lookup remains
+explicitly unavailable. A host test using the real pinned LWJGL JAR and a
+host-only JNI fixture proves dispatch/failure handling, not Horizon execution.
+
+The combined Java25 diagnostic composes the generated JDK provider with the
+actual static SDL3/Vulkan lookup before the JVM seals the resolver. It links the
+real agent and VM archives and checks required symbol definitions. It executes
+only the Java25 Hello workload if selected on hardware; no Java graphics path is
+claimed. Further LWJGL native JNI/FFM integration is still required.

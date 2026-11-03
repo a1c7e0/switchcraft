@@ -16,7 +16,9 @@ flowchart TD
   M --> INSTALL[Read-only standard .minecraft]
   M --> PLAN[Strict Vulkan plan / separate runtime logs and config]
   L --> SDK[Pinned java-switch C SDK / JNI adapter]
-  SDK -. no VM linked .-> JVM[Horizon OpenJDK 25 / class library / JNI / FFM]
+  D --> VMTEST[Java25 and combined resolver diagnostics]
+  VMTEST --> JVM[Cross-linked Horizon OpenJDK 25 / class library / JNI / FFM]
+  SDK -. baseline launcher VM-free .-> JVM
   JVM -. required .-> LW[Static LWJGL / SDL3 / VMA / shaderc / SPVC / audio]
   W --> LOOKUP[Limited static SDL / Vulkan symbol lookup]
   LW -. future resolver handoff .-> LOOKUP
@@ -32,11 +34,11 @@ libffi code. This repository consumes a fixed commit, builds/repacks its NROs an
 links its SDK. `src/platform.c` owns Horizon console/input/SD/memory/threads;
 `metadata.cpp` is shared with host tools; `vulkan_present.c` owns SDL/VI behavior.
 
-The launcher cannot start a Java 25 game because the actual VM is absent. Its
-real SDK call returns JS_UNAVAILABLE/runtime-not-linked. No Play action claims
-otherwise. Next-load replaces the current NRO via hbmenu; there is no fork/exec
-or simultaneous launcher/game process. A future Java VM enters the same process
-or uses an explicit serialized handoff.
+The Minecraft launcher remains VM-free and returns JS_UNAVAILABLE/runtime-not-linked.
+Separate Java25 diagnostics link the actual VM in-process; VM startup, the
+composed provider and all Java execution remain untested on Horizon. No Play
+action claims Minecraft is ready. The diagnostics terminate their application
+process after a VM session; there is no fork/exec or VM reuse in the loader.
 
 ## Graphics path
 
@@ -82,10 +84,9 @@ flowchart TD
 ```
 
 The SDK's JNI creation/options/native-registration/teardown and FFM tests pass
-against a real **host** Java 25 VM. OpenJDK Zero defaults to a libffi fallback
-foreign linker, which motivates the native AAPCS64 and W^X tests. A complete
-Horizon OS/class-library implementation remains required; mmap/dlopen/signals
-cannot be assumed from Linux or replaced by fake successful stubs.
+against a real **host** Java 25 VM. The independent Horizon Zero VM, native
+providers and java.base/java.instrument image are cross-built; no physical VM
+startup is established. Unsupported OS services remain explicit failures.
 
 The strict renderer bridge uses Java 25's public Class-File API/instrumentation
 and checks the exact original renderer-class hash. It modifies only backend
@@ -95,12 +96,13 @@ contains original source-generated code, not game class bytes.
 ## Filesystem and failure boundaries
 
 ```text
-sdmc:/switch/{switch-diagnostics,vulkan-test,vulkan-present,minecraft-launcher,java-test,ffi-test}/<name>.nro
+sdmc:/switch/{switch-diagnostics,vulkan-test,vulkan-present,minecraft-launcher,java-test,ffi-test,zero-services-test,java25-test,switchcraft-java25}/<name>.nro
 sdmc:/switch/mc-runtime/
   config/{launcher.example.json,launcher.json}
   logs/{<application>.log,launch-plan.json,snapshot-vulkan.json}
   profiles/26.4-snapshot-6.json
-  launchers/switchcraft-launcher-bridge.jar
+  launchers/{switchcraft-launcher-bridge,switchcraft-lwjgl-horizon}.jar
+  runtimes/openjdk25/{lib/modules,conf,legal,...}
   runtimes/minijvm/minijvm_rt.jar
   tests/{diagnostic-tests,dependency,java25-tests,user}.jar
   instances/{java-smoke,test/<version>}/

@@ -21,9 +21,20 @@ its own miniJVM/libffi/Temurin build-tool locks; no Linux JVM is shipped for Hor
 
 The pipeline checks out Java at the exact commit, builds/tests its standalone
 NROs and reusable SDK, builds SDL3 with GL/EGL disabled, links the native apps,
-builds the original renderer bridge with Java 25, runs host tests and packages.
-The SDK has a real JNI adapter but no Horizon Java 25 VM; runtime availability
-remains false. Host JNI/FFM tests load a host JDK intentionally.
+builds the original renderer bridge and LWJGL overrides with Java 25, runs host
+tests and packages. With a prepared runtime checkout, the same build can be run
+as `JAVA_SWITCH_SOURCE=/path/to/clean/pinned/java-switch bash scripts/build-all.sh`.
+The checkout must contain its verified instrument-enabled SDK and runtime output;
+if absent the build invokes `bash scripts/build-openjdk25-runtime.sh --with-instrument`.
+The first such build may be large and slow. It also needs a real directory (or a
+fixed upstream test) for the pinned host JDK cache. The exact known workarounds,
+logs and issue URLs are in JAVA_INTEGRATION_HANDOFF.md.
+The baseline SDK has a real JNI adapter without a VM. The instrument-enabled
+runtime is separately built and linked into java25-test and switchcraft-java25.
+Symbol availability does not establish VM startup. Host JNI/FFM tests load a
+host JDK intentionally. Fresh pinned runtime build issue #1 is worked around by
+creating its build/openjdk25-horizon directory before invoking its build script;
+a symlinked JDK cache can hit issue #2. See JAVA_INTEGRATION_HANDOFF.md.
 
 ```sh
 make -j2 all
@@ -60,9 +71,9 @@ requested by these scripts. Keep session proxy/CA settings and TLS verification.
 The bridge uses Java 25's public Class-File API; it does not bundle or rewrite
 a game JAR on disk. Runtime transformation is limited by class SHA-256 and method
 signature. The built bridge is packaged as an original JAR under mc-runtime/launchers.
-The current Horizon VM cannot run it; java.instrument still needs a runtime port.
+The runtime image contains java.instrument, but startup agents have not run on
+Horizon. The snapshot-specific bridge remains unverified on that VM.
 
-The full OpenJDK 25 source configuration was actually attempted after obtaining
-compatible host JDK/autoconf/m4 tools. It fails on `unsupported operating system
-elf`; this is an OS port requirement, not a successful VM build. The independent
-Java repo records the log and libffi fallback-linker investigation.
+The earlier `unsupported operating system elf` experiment predates the independent
+java-switch Horizon port. The current pinned Zero archive, instrument providers,
+two-module image and diagnostic NRO cross-build; hardware execution is untested.

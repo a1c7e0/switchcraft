@@ -15,6 +15,48 @@ First three sessions: N-01 through N-04; V-01 then V-02/03; V-04 then F-01/02.
 Proceed to Java8 and launcher checks afterward. A feature-profile PASS is not a
 Minecraft title PASS. Standard JNI/FFM host tests are not Horizon runtime tests.
 
+## J25-01 — independent Java 25 Hello
+
+* **File:** `java25-test.nro`; install the complete package including the
+  OpenJDK image, Java25 JARs, source and notices.
+* **Launch/action:** Start via application-mode hbmenu in a fresh process and
+  press A once. The 4 MiB worker join pauses UI updates.
+* **Pass:** SDK stage `completed` and `Hello from Horizon Java 25` in VM stdout.
+* **Failure/report:** Capture status/stage, raw Results, firmware, Atmosphere,
+  application mode, package hash, last action, approximate wait and crash report.
+* **Logs:** `java25-test.log`, `java25-vm-stdout.log`, `java25-vm-stderr.log`.
+* **Risk/recovery:** Moderate; HOME and close the application if stalled. After
+  a completed VM session use + and reopen application-mode hbmenu in a new process.
+
+## J25-02 — JNI/FFM and agent, separate fresh processes
+
+* **File:** `java25-test.nro`; J25-01 passed and the complete package is installed.
+* **Launch/action:** In a fresh process press X; after exit start another fresh
+  process and press Y for the genuine startup-agent/Class-File API test.
+* **Pass:** X prints `JAVA25 JNI FFM SUITE PASS`; Y prints
+  `JAVA25_AGENT_SMOKE_PASS`, with stage `completed`. Host markers do not count.
+* **Failure/report:** Preserve every line and actual native Result/exception,
+  last action, approximate wait, firmware, mode, package hash and crash report.
+* **Logs:** All three files named in J25-01.
+* **Risk/recovery:** Moderate; HOME/close on stall. Do not reuse a VM process or
+  apply privileges/patches to force a pass.
+
+## J25-03 — combined Switchcraft/JDK resolver
+
+* **File:** `switchcraft-java25.nro`; J25-01/02 passed and application-mode
+  hbmenu is active. Install the full openjdk25 image and `java25-hello.jar`.
+* **Launch/action:** Start in a fresh process and press A once. Resolver preflight
+  checks JDK, SDL3 and Vulkan real symbol addresses, then attempts Java25 Hello.
+* **Pass:** All preflight statuses 0, VM stage `completed`, and `Hello from
+  Horizon Java 25` in the combined VM stdout log. The application exits its
+  process; reopen hbmenu before further tests.
+* **Failure/report:** All status/Result lines, process memory/heap override,
+  artifact hash, firmware, application mode, action, wait and crash report.
+* **Logs:** `switchcraft-java25.log`, `switchcraft-java25-vm-stdout.log`,
+  `switchcraft-java25-vm-stderr.log` under the common log root.
+* **Risk/recovery:** Moderate; HOME/close on a stall. These results do not prove
+  LWJGL FFM, Minecraft initialization, rendering or a title screen.
+
 ## N-01 — switch-diagnostics.nro
 
 * **File:** `switch-diagnostics.nro`.
@@ -200,7 +242,7 @@ Minecraft title PASS. Standard JNI/FFM host tests are not Horizon runtime tests.
 ## L-02 — minecraft-launcher.nro
 
 * **File:** `minecraft-launcher.nro`.
-* **Installation requirements:** Common setup; No Horizon Java25 VM supplied in this release.
+* **Installation requirements:** Common setup; this particular launcher links the VM-free SDK only.
 * **How to launch:** Common hbmenu launch for the named NRO; the explicitly marked host/future cases are exceptions.
 * **Controller operations / actions:** L checks actual SDK runtime gate; R opens Vulkan test.
 * **Expected screen/output and successful result:** JS_UNAVAILABLE/runtime-not-linked and no game code invoked; no fake Play/success. This expected limitation is BLOCKED for Minecraft.
@@ -208,7 +250,7 @@ Minecraft title PASS. Standard JNI/FFM host tests are not Horizon runtime tests.
 * **Log location:** `minecraft-launcher.log` under the common log root unless explicitly host/manifest.
 * **Information to report:** Code/stage; report Horizon Minecraft title as NOT ACHIEVED.
 * **Risk level:** Low.
-* **Recovery steps:** Return to diagnostics; actual Java25 runtime integration is next work.
+* **Recovery steps:** Return to diagnostics; run the separate Java25 NROs first.
 
 ## L-03 — minecraft-launcher.nro
 
@@ -249,9 +291,9 @@ Minecraft title PASS. Standard JNI/FFM host tests are not Horizon runtime tests.
 * **Risk level:** Not currently executable.
 * **Recovery steps:** Return to independent native tests; runtime source work must precede this test.
 
-## X-01 — All six NROs
+## X-01 — All nine NROs
 
-* **File:** `All six NROs`.
+* **File:** `All nine NROs`.
 * **Installation requirements:** Common setup; Complete packaged layout and next-load-capable hbmenu.
 * **How to launch:** Common hbmenu launch for the named NRO; the explicitly marked host/future cases are exceptions.
 * **Controller operations / actions:** Use menu chaining, test + exits; copy all logs after session.
@@ -266,8 +308,9 @@ Minecraft title PASS. Standard JNI/FFM host tests are not Horizon runtime tests.
 
 OpenGL context/triangle tests exist on branch legacy/1.12.2 only and are excluded from
 mainline. Standard JNI Invocation, Java25 JAR/FFM execution and Minecraft bootstrap
-on Horizon require the missing native VM; do not mark them passed from the Java8
-suite or host title. Fabric/Mixin/world rendering remain unimplemented.
+on Horizon require actual execution of the cross-linked VM; do not mark them
+passed from the Java8 suite or host title. Fabric/Mixin/world rendering remain
+unimplemented.
 
 ## Fillable return sheet
 
@@ -290,6 +333,9 @@ Launch mode: ____ Docked/handheld: ____ Package source/hash: ____
 | F-03 | NOT TESTED | | | |
 | J-01 | NOT TESTED | | | |
 | J-02 | NOT TESTED | | | |
+| J25-01 | NOT TESTED | | | |
+| J25-02 | NOT TESTED | | | |
+| J25-03 | NOT TESTED | | | |
 | L-01 | NOT TESTED | | | |
 | L-02 | NOT TESTED | | | |
 | L-03 | NOT TESTED | | | |
@@ -313,7 +359,7 @@ SD path for your system, and write the output outside the SD root):
 python3 /media/switch-sd/switchcraft-docs/collect-feedback.py --sd-root /media/switch-sd --output switchcraft-feedback.zip
 ```
 
-It copies only the manifest, six named diagnostic logs and snapshot-vulkan.json;
+It copies only the manifest, explicitly named diagnostic/VM logs and snapshot-vulkan.json;
 missing entries are listed in collection.json. It never scans .minecraft or
 overwrites an output. Review the archive before sharing. Crash reports and
 launch-plan.json are excluded: review and attach relevant crash reports manually.

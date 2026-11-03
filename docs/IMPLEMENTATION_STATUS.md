@@ -12,11 +12,12 @@ The legacy branch is legacy/1.12.2; Java ownership is the independent java-switc
 | Limited SDL/Vulkan static symbol lookup | Yes | AArch64 archive/NRO | Host lookup; linked-symbol check | NOT TESTED |
 | VI surface/swapchain/presentation | Yes | NRO | Format/link | NOT TESTED |
 | Java 8 interpreter diagnostic | Independent Java repo | NRO/SDK | Real JAR/reflection/thread/I/O/native bridge | NOT TESTED |
-| Standard JNI invocation adapter | Yes | SDK | Real Java 25 VM/native registration/options/teardown | No VM linked |
+| Standard JNI invocation adapter | Yes | SDK / VM diagnostics | Real Java 25 VM/native registration/options/teardown on host | NOT TESTED |
 | Java 25 FFM downcalls/upcalls | Adapter/reference tests | Host JAR | PASS on Linux JDK 25 | NOT TESTED |
 | libffi AAPCS64/libnx W^X prerequisites | Yes | NRO/SDK | Native link | NOT TESTED |
 | Whole-region reserve/commit/uncommit probe | Yes | NRO/SDK | Mocked states/failures | NOT TESTED |
-| OpenJDK 25 Horizon VM | OS port not implemented | NO | Configure attempted, unsupported OS elf | NOT AVAILABLE |
+| OpenJDK 25 Horizon VM / JVMTI / instrumentation | Genuine Zero archive and two-module image | Standalone + combined NRO | Cross-link, zero unresolved; host agent/JNI controls PASS | Startup and execution NOT TESTED |
+| LWJGL 3.4.3 Horizon identity / JNI load | Upstream platform and Library overrides | Original override JAR | Real LWJGL classes + host fixture | NOT TESTED; FFM SharedLibrary missing |
 | Read-only launch planner/SDK gate | Yes | NRO/host inspector | Inheritance/rules/read-only/version/profile | NOT TESTED |
 | Strict Vulkan renderer transformation | Yes | Original Java JAR | Synthetic execution + actual snapshot title | VM/instrumentation absent |
 | Snapshot 6 Demo title | Reference only | No game NRO | PASS, Linux Java 25 / llvmpipe Vulkan | NOT ACHIEVED |
