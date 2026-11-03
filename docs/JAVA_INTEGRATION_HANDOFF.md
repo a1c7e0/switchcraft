@@ -1,7 +1,7 @@
 # Java SDK integration handoff
 
 Switchcraft pins `a1c7e0/java-switch` at
-`698a9a62ccd35f803088abace73ad9c6be5aaa75`. The independent Java task owns the
+`b7c2ac7fd422bc2543e5c698db4e33a01cc0312d`. The independent Java task owns the
 VM, JDK class libraries and platform services. Switchcraft owns launcher, LWJGL,
 SDL/Vulkan and application-native provider integration. Do not edit Java sources
 here. Report reproducible runtime defects at https://github.com/a1c7e0/java-switch/issues;
@@ -18,14 +18,15 @@ SDL/Vulkan symbol provider with no undefined symbols. Host JNI/FFM and agent
 positive/no-agent-negative controls pass. These are host/build results. Horizon
 startup, Hello, JNI, FFM, instrumentation and Minecraft remain NOT TESTED.
 
-The clean pinned build encountered two independent host/build defects:
+The previous pin `698a9a62ccd35f803088abace73ad9c6be5aaa75` encountered two
+independent host/build defects. The current pin contains upstream fixes for both;
+relative to the previous pin, the runtime source itself is unchanged:
 
-* https://github.com/a1c7e0/java-switch/issues/1 — clean configure needs an
-  existing build parent; creating the generated directory allows the build to
-  proceed without source modification.
-* https://github.com/a1c7e0/java-switch/issues/2 — one host test fails to find a
-  valid symlinked JDK cache. Using a real directory allowed the host suite and
-  complete package/source verification to pass. Neither issue is device evidence.
+* https://github.com/a1c7e0/java-switch/issues/1 — clean configure required an
+  existing build parent; the current pin creates it.
+* https://github.com/a1c7e0/java-switch/issues/2 — one host test failed to find a
+  valid symlinked JDK cache; the current pin follows the link. Neither issue is
+  device evidence.
 
 ## Contract and lifecycle
 

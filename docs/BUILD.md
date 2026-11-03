@@ -26,15 +26,12 @@ tests and packages. With a prepared runtime checkout, the same build can be run
 as `JAVA_SWITCH_SOURCE=/path/to/clean/pinned/java-switch bash scripts/build-all.sh`.
 The checkout must contain its verified instrument-enabled SDK and runtime output;
 if absent the build invokes `bash scripts/build-openjdk25-runtime.sh --with-instrument`.
-The first such build may be large and slow. It also needs a real directory (or a
-fixed upstream test) for the pinned host JDK cache. The exact known workarounds,
-logs and issue URLs are in JAVA_INTEGRATION_HANDOFF.md.
+The first such build may be large and slow. Earlier build issues and their
+upstream fixes are recorded in JAVA_INTEGRATION_HANDOFF.md.
 The baseline SDK has a real JNI adapter without a VM. The instrument-enabled
 runtime is separately built and linked into java25-test and switchcraft-java25.
 Symbol availability does not establish VM startup. Host JNI/FFM tests load a
-host JDK intentionally. Fresh pinned runtime build issue #1 is worked around by
-creating its build/openjdk25-horizon directory before invoking its build script;
-a symlinked JDK cache can hit issue #2. See JAVA_INTEGRATION_HANDOFF.md.
+host JDK intentionally.
 
 ```sh
 make -j2 all

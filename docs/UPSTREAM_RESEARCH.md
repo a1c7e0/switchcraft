@@ -70,4 +70,4 @@ against metadata SHA-1 values, and executed without credentials or fabricated
 tokens. The run failed at missing class-library/LWJGL functionality. Those game
 JARs are excluded from Git, SD layout and release archives.
 
-The later java-switch pin 698a9a62ccd35f803088abace73ad9c6be5aaa75 supersedes the earlier unsupported-elf investigation above: its genuine instrument-enabled Horizon Zero VM and image cross-build, with execution still NOT TESTED. See JAVA_INTEGRATION_HANDOFF.md.
+The java-switch pin b7c2ac7fd422bc2543e5c698db4e33a01cc0312d supersedes the earlier unsupported-elf investigation above: its genuine instrument-enabled Horizon Zero VM and image cross-build, with execution still NOT TESTED. See JAVA_INTEGRATION_HANDOFF.md.
