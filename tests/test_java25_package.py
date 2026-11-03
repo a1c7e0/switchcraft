@@ -14,9 +14,9 @@ class Java25PackageTests(unittest.TestCase):
             prepare.verify_unpacked(root)
             cfg=root/'runtime/openjdk25-horizon-runtime/runtime/conf/net.properties'
             original=cfg.read_bytes();cfg.write_bytes(original+b'\nchanged')
-            with self.assertRaisesRegex(RuntimeError,'Runtime image mismatch'):
+            with self.assertRaisesRegex(RuntimeError,'content mismatch'):
                 prepare.verify_unpacked(root)
             cfg.write_bytes(original)
             header=root/'sdk/include/javaswitch/runtime.h';header.write_bytes(header.read_bytes()+b'\nchanged')
-            with self.assertRaisesRegex(RuntimeError,'SDK content mismatch'):
+            with self.assertRaisesRegex(RuntimeError,'content mismatch'):
                 prepare.verify_unpacked(root)

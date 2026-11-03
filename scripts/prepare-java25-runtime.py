@@ -6,18 +6,23 @@ JAVA=pathlib.Path(os.environ.get('JAVA_SWITCH_SOURCE',ROOT/'.deps/java-switch'))
 PIN=json.loads((ROOT/'dependencies.lock.json').read_text())['java_switch']['revision']
 def sha(path):
     with path.open('rb') as f:return hashlib.file_digest(f,'sha256').hexdigest()
-def verify_unpacked(base):
-    runtime=base/'runtime/openjdk25-horizon-runtime';sdk=base/'sdk'
-    with tarfile.open(JAVA/'dist/javaswitch-horizon-sdk.tar.gz') as source:
-        expected_sdk={}
+def verify_archive_tree(archive_path,destination,prefix=''):
+    with tarfile.open(archive_path) as source:
+        expected={}
         for member in source:
             if member.isfile():
+                if not member.name.startswith(prefix):raise RuntimeError('Unexpected archive member: '+member.name)
+                name=member.name[len(prefix):]
                 stream=source.extractfile(member)
-                expected_sdk[member.name]=hashlib.file_digest(stream,'sha256').hexdigest()
-        actual_sdk={p.relative_to(sdk).as_posix() for p in sdk.rglob('*') if p.is_file()}
-        if actual_sdk!=set(expected_sdk):raise RuntimeError('Unexpected SDK inventory')
-        for name,digest in expected_sdk.items():
-            if sha(sdk/name)!=digest:raise RuntimeError('SDK content mismatch: '+name)
+                expected[name]=hashlib.file_digest(stream,'sha256').hexdigest()
+        actual={p.relative_to(destination).as_posix() for p in destination.rglob('*') if p.is_file()}
+        if actual!=set(expected):raise RuntimeError('Unexpected extracted archive inventory')
+        for name,digest in expected.items():
+            if sha(destination/name)!=digest:raise RuntimeError('Extracted archive content mismatch: '+name)
+def verify_unpacked(base):
+    runtime=base/'runtime/openjdk25-horizon-runtime';sdk=base/'sdk'
+    verify_archive_tree(JAVA/'dist/javaswitch-horizon-sdk.tar.gz',sdk)
+    verify_archive_tree(JAVA/'dist/openjdk25-horizon-runtime.tar.gz',runtime,'openjdk25-horizon-runtime/')
     contract=json.loads((sdk/'runtime-contract.json').read_text())
     data=json.loads((runtime/'runtime-package.json').read_text())
     if contract['abi']!=1 or contract['built_backends']['openjdk25'] is not False:raise RuntimeError('Unexpected SDK baseline contract')
