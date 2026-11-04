@@ -1,0 +1,137 @@
+python3 scripts/build-info.py
+/workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE -O2 -g -Wall -Wextra -ffunction-sections -fdata-sections -D__SWITCH__ -isystem /workspace/switchcraft/.toolchain/opt/devkitpro/libnx/include -Isrc -Iinclude -Ibuild -c src/platform.c -o build/platform.o
+/workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/bin/aarch64-none-elf-g++ -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE -O2 -g -Wall -Wextra -ffunction-sections -fdata-sections -D__SWITCH__ -isystem /workspace/switchcraft/.toolchain/opt/devkitpro/libnx/include -Isrc -Iinclude -Ibuild -std=c++17 -Ivendor -I/workspace/switchcraft/.toolchain/opt/devkitpro/portlibs/switch/include -DCURL_STATICLIB -Ibuild/java25-integrated/sdk/include -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE -specs=/workspace/switchcraft/.toolchain/opt/devkitpro/libnx/switch.specs -L/workspace/switchcraft/.toolchain/opt/devkitpro/libnx/lib -L/workspace/switchcraft/.toolchain/opt/devkitpro/portlibs/switch/lib -Wl,--gc-sections src/launcher.cpp src/launcher_console.cpp src/instances.cpp src/prism_metadata.cpp src/launcher_ui.cpp src/ui_canvas.cpp src/launcher_controller.cpp src/launcher_jobs.cpp src/launcher_session.cpp src/install.cpp src/download.cpp build/metadata.o build/platform.o build/java25-integrated/sdk/lib/libjavaswitch.a -Wl,--start-group -lcurl -lz -lnx -lm -Wl,--end-group -o build/minecraft-launcher.elf -Wl,-Map,build/minecraft-launcher.elf.map
+/workspace/switchcraft/.toolchain/opt/devkitpro/tools/bin/nacptool --create "minecraft-launcher" Switchcraft 0.1.0 build/minecraft-launcher.nacp
+/workspace/switchcraft/.toolchain/opt/devkitpro/tools/bin/elf2nro build/minecraft-launcher.elf dist/minecraft-launcher.nro --nacp=build/minecraft-launcher.nacp --icon=/workspace/switchcraft/.toolchain/opt/devkitpro/libnx/default_icon.jpg
+python3 scripts/package-launcher.py
+{
+  "source_revision": "13e9cffdd740f94c4882d124e7f8a995aabf5193",
+  "java_switch_revision": "b7c2ac7fd422bc2543e5c698db4e33a01cc0312d",
+  "prism_revision": "059e858e101edc9314ccb94aa48bd01b282539c5",
+  "sdk_abi": 1,
+  "sdk_library_sha256": "27e7594047fda800671ae9034bbaec7e8a2905391b883bc4398956318d764b94",
+  "cached_runtime_input": {
+    "revision": "b7c2ac7fd422bc2543e5c698db4e33a01cc0312d",
+    "sdk": "bdf8fe49fede2a11ba18ba1f37f99ccedb5a26529eaa8ec1fb0c5c70b47f423b",
+    "runtime": "c349e464cb6828bd83321d42d355b16fae33218bbe5ba70f038dd0f7fba36d12"
+  },
+  "launcher": {
+    "name": "minecraft-launcher.nro",
+    "bytes": 2808005,
+    "sha256": "fefa601c9205efc6b4f71fefe29890275dd016f98626680d925653f624f96fa7",
+    "architecture": "AArch64",
+    "format": "NRO0+ASET",
+    "nacp_title": "minecraft-launcher",
+    "build_id": "aab6b64ebbddd20f6c473c63e50e5221b47a6a45",
+    "build_verification": "PASS",
+    "hardware_verification": "NOT TESTED"
+  },
+  "horizon_execution": "NOT TESTED",
+  "vm_linked": false,
+  "minecraft_launch_enabled": false,
+  "online_installation_implemented": true,
+  "network_tls": "libcurl/libnx SSL, certificate verification enabled; device NOT TESTED",
+  "native_curl_library_sha256": "8c16ee80082d11ce7ccca4aa04d6f322140c8182bc4570c6a1d6380c15756b51",
+  "curl_source_provenance": {
+    "package": "switch-curl 7.69.1-5",
+    "recipe_revision": "9937f6ac3171c5dba7324de8edb4e6cc3af3c01f",
+    "source_url": "https://curl.se/download/curl-7.69.1.tar.xz",
+    "source_sha256": "03c7d5e6697f7b7e40ada1b2256e565a555657398e6c1fcfa4cb251ccd819d4f",
+    "patch_sha256": "723c7d884fc7c39ae1a3115ba245bb8c1415da47bbd60ab8f943ca98f92ebc9a",
+    "recipe_sha256": "4e649bcb1ffd8b15822144c9ea26680f668c425983732b779c98f8e48058ae65",
+    "license": "curl COPYING (MIT-style), including libnx TLS patch notices",
+    "recipe_url": "https://github.com/devkitPro/pacman-packages/blob/9937f6ac3171c5dba7324de8edb4e6cc3af3c01f/switch/curl/PKGBUILD"
+  },
+  "host_installation_evidence": {
+    "target": "26.4-snapshot-6",
+    "environment": "Linux x86_64 host execution of production installer; not Horizon",
+    "workflow": "Real Prism metadata -> indexed SHA256 verification -> target resource downloads -> complete SHA1 verification",
+    "files_total": 5459,
+    "bytes_total": 599338934,
+    "asset_bytes_declared": 482617023,
+    "verification": {
+      "bytes_verified": 599338934,
+      "corrupt_files": [],
+      "files_total": 5459,
+      "files_verified": 5459,
+      "installed": true,
+      "missing_files": [],
+      "truncated_issue_lists": false,
+      "version": "26.4-snapshot-6"
+    },
+    "report_sha256": "e1bbf0322f1a31b23d40cba4bf2998ba2b5b4ec944a8b67e1b0b3a23f18b58fd",
+    "device_execution": "NOT TESTED",
+    "game_assets_committed": false,
+    "cache_location": "private /tmp cache excluded from source/distribution",
+    "client_sha1": "8a97d5dafe80783525a2807b220527b65df724a5"
+  },
+  "host_minecraft_evidence": {
+    "target": "26.4-snapshot-6",
+    "date_utc": "2026-11-04",
+    "execution_environment": "Linux x86_64 host; Xvfb localhost:97 (1280x720), SDL3 X11",
+    "switchcraft_code_revision": "82f3bdc975d07e1ff18d39dc96805d967bf2d835",
+    "java_switch_pinned_revision": "b7c2ac7fd422bc2543e5c698db4e33a01cc0312d",
+    "executed_java": "Eclipse Temurin OpenJDK 25.0.5+8 Linux x86_64 (not the Horizon VM)",
+    "renderer": "Vulkan 1.4.305 llvmpipe Mesa 25.0.7-2+deb13u1, LLVM 19.1.7",
+    "client_sha1": "8a97d5dafe80783525a2807b220527b65df724a5",
+    "bridge_jar_sha256": "2a2ff3124d669649c35a9d6e0353f0e2444ccd6d41f1d9506a0df30e5afd30d4",
+    "official_asset_index_sha1": "6085c72e1c257db765043c1f31e56487a0eb1e51",
+    "resources": "Client/common libraries and asset objects reused from the production installer private cache; required Linux native classifier JARs and immutable official snapshot asset index verified separately.",
+    "launch_command": "python3 tools/snapshot6-reference.py --cache /tmp/switchcraft-mc-host --java /workspace/switchcraft/.deps/host-jdk25/jdk-25.0.5+8/bin/java --run-demo",
+    "launch_mode": "Official built-in Demo mode; empty access token; no credentials or authentication patches",
+    "visual_review": "PASS: first accessibility screen, Continue, then Minecraft 26.4 Snapshot 6 Demo title",
+    "vulkan_only": "PASS: VULKAN_ONLY_APPLIED and Using graphics backend Vulkan; render thread sampled in vkQueuePresentKHR through VulkanGpuSurface.present",
+    "normal_exit": "PASS: clicked Quit Game; Stopping! logged; process exit status 0",
+    "world_entry": "NOT TESTED",
+    "horizon_vm_startup_java_jni_ffm_instrumentation": "NOT TESTED",
+    "horizon_ui_networking_sdl_vulkan": "NOT TESTED",
+    "horizon_minecraft_title": "NOT ACHIEVED / NOT TESTED",
+    "known_host_limitations": [
+      "No host audio device; sound disabled",
+      "Minecraft services and Realms unavailable; title still rendered"
+    ],
+    "game_payloads_committed_or_distributed": false,
+    "evidence": [
+      {
+        "path": "26.4-snapshot-6-HOST-ONLY-title-2026-11-04.png",
+        "sha256": "bfad8029098a24c7ff0449c912ed0c65133b05e651ccf7554ee34a3e20874d9f"
+      },
+      {
+        "path": "26.4-snapshot-6-HOST-ONLY-vulkan-2026-11-04.log",
+        "sha256": "7df73fcc9875b38b97c8fd3090a3439bc322995fe615e924e50e9efe80eaa0c4"
+      },
+      {
+        "path": "26.4-snapshot-6-HOST-ONLY-threads-2026-11-04.log",
+        "sha256": "a3cd1c9dfea950d0ad578243514e94b57d75d94da7fa493b575ab24a51a82bae"
+      },
+      {
+        "path": "26.4-snapshot-6-HOST-ONLY-environment-2026-11-04.txt",
+        "sha256": "65b46c84e5bc76eb1bcb5a1f59f88969209ad7385f40c9e860f1e3f6a7137a7f"
+      }
+    ]
+  },
+  "host_ui_preview": "rendered from original display fixtures",
+  "unchanged_runtime_source": "https://github.com/a1c7e0/switchcraft/tree/artifacts/java25-e08f36a",
+  "artifacts": [
+    {
+      "name": "minecraft-launcher.nro",
+      "sha256": "fefa601c9205efc6b4f71fefe29890275dd016f98626680d925653f624f96fa7",
+      "bytes": 2808005
+    },
+    {
+      "name": "switchcraft-launcher-foundation.zip",
+      "sha256": "d053fe19028f57fdc4c85e72af76ad41ddd8bfd772161f5a982d5bc7c49380b7",
+      "bytes": 6498878
+    },
+    {
+      "name": "launcher-corresponding-source.tar.gz",
+      "sha256": "f81bddc0c3c78c0069254d76b67fb16ef4acb1e3215113c070fe6ec7ce7a0e60",
+      "bytes": 4892871
+    },
+    {
+      "name": "launcher-debug-symbols.zip",
+      "sha256": "61953bed857e371429cac02011c98b17144bba2691d2c92ffeeae5a2fe5995a0",
+      "bytes": 9566255
+    }
+  ]
+}
