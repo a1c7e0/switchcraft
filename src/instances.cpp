@@ -6,7 +6,10 @@
 #include <dirent.h>
 #include <fcntl.h>
 #include <fstream>
+#include <filesystem>
+#include <limits>
 #include <map>
+#include <set>
 #include <stdexcept>
 #include <sys/stat.h>
 #include <unistd.h>
@@ -131,15 +134,26 @@ Json pack(const std::string &shared_root,const std::string &version) {
     Json components=file_exists(cached)?prism_components_for_version(shared_root,version):Json::array({Json{{"uid","net.minecraft"},{"version",version},{"important",true}}});
     return Json{{"formatVersion",1},{"components",std::move(components)}};
 }
-Instance decode(const std::string &dir,const std::string &expected) {
+Instance decode(const std::string &dir,const std::string &expected,bool importing=false) {
     auto cfg=read_ini(join(dir,"instance.cfg"));
     struct stat st{}; std::string pack_path=join(dir,"mmc-pack.json");
     if(lstat(pack_path.c_str(),&st)!=0||!S_ISREG(st.st_mode)||st.st_size<0||(size_t)st.st_size>kMetadataLimit) throw std::runtime_error("Invalid or oversized mmc-pack.json");
     std::ifstream in(pack_path); Json j; in>>j;
-    if(j.value("formatVersion",0)!=1||!j.contains("components")||!j["components"].is_array()) throw std::runtime_error("Unsupported Prism component profile");
-    std::string version; for(const auto &c:j["components"]) if(c.value("uid",std::string())=="net.minecraft") version=c.at("version").get<std::string>();
+    if(j.value("formatVersion",0)!=1||!j.contains("components")||!j["components"].is_array()||j["components"].size()>128) throw std::runtime_error("Unsupported Prism component profile");
+    std::string version; std::set<std::string> seen;
+    for(const auto &c:j["components"]) {
+        if(!c.is_object()||!c.contains("uid")||!c["uid"].is_string()||!c.contains("version")||!c["version"].is_string()) throw std::runtime_error("Malformed Prism component entry");
+        std::string uid=c["uid"].get<std::string>(),component_version=c["version"].get<std::string>();
+        if(!safe_id(uid)||!safe_id(component_version)||!seen.insert(uid).second) throw std::runtime_error("Unsafe or duplicate Prism component");
+        bool disabled=false; if(c.contains("disabled")) { if(!c["disabled"].is_boolean()) throw std::runtime_error("Malformed Prism component disabled flag"); disabled=c["disabled"].get<bool>(); }
+        if(uid=="net.minecraft"&&!disabled) version=component_version;
+    }
     Instance i{expected,cfg.count("name")?cfg["name"]:"Unnamed Instance",version,512};
-    if(cfg.count("MaxMemAlloc")){try{i.heap_mib=(unsigned)std::stoul(cfg["MaxMemAlloc"]);}catch(...){throw std::runtime_error("Invalid Prism MaxMemAlloc");}}
+    if(cfg.count("MaxMemAlloc")){try{
+        unsigned long heap=std::stoul(cfg["MaxMemAlloc"]);
+        if(importing) { if(heap>65536) throw std::runtime_error("Desktop heap exceeds import limit"); i.heap_mib=(unsigned)std::max<unsigned long>(kHeapMin,std::min<unsigned long>(heap,kHeapMax)); }
+        else i.heap_mib=(unsigned)heap;
+    }catch(const std::runtime_error &){throw;}catch(...){throw std::runtime_error("Invalid Prism MaxMemAlloc");}}
     validate_instance(i); return i;
 }
 std::string slug(const std::string &name) {
@@ -209,7 +223,69 @@ Instance create_with_id(const std::string &root,const std::string &shared,const 
     } catch(...) { unlink(join(dir,"instance.cfg").c_str()); unlink(join(dir,"mmc-pack.json").c_str()); rmdir(join(dir,".minecraft").c_str()); rmdir(dir.c_str()); throw; }
     return i;
 }
-
+std::string archive_root(const std::string &root) { return join(root,"instance-archives"); }
+void ensure_archive_dir(const std::string &root) {
+    require_directory(root); const std::string path=archive_root(root);
+    if(mkdir(path.c_str(),0755)!=0&&errno!=EEXIST) throw std::runtime_error("Cannot create archive directory");
+    require_directory(path);
+}
+Json archive_marker(const std::string &path) {
+    struct stat st{}; if(lstat(path.c_str(),&st)!=0||!S_ISREG(st.st_mode)||st.st_size<0||(size_t)st.st_size>4096) throw std::runtime_error("Invalid archive marker");
+    std::ifstream in(path); Json j; in>>j; if(!j.is_object()||j.value("schema",0)!=1) throw std::runtime_error("Unsupported archive marker");
+    if(!safe_id(j.at("archive_id").get<std::string>())||!safe_id(j.at("original_id").get<std::string>())) throw std::runtime_error("Unsafe archive marker ID");
+    return j;
+}
+std::string available_id(const std::string &root,const std::string &name) {
+    std::string base=slug(name),id=base;
+    for(unsigned n=2;n<10000;++n) { struct stat st{}; if(lstat(dir_for(root,id).c_str(),&st)!=0&&errno==ENOENT) return id; id=base+"-"+std::to_string(n); }
+    throw std::runtime_error("No free instance ID");
+}
+struct ImportEntry { std::string relative; bool directory; size_t size; };
+void collect_import_tree(const std::string &source,const std::string &relative,const ImportOptions &opts,
+                         std::vector<ImportEntry> &entries,size_t &files,size_t &bytes,unsigned depth=0) {
+    if(depth>64) throw std::runtime_error("Import directory depth limit exceeded");
+    const std::string path=relative.empty()?source:join(source,relative); DIR *d=opendir(path.c_str());
+    if(!d) throw std::runtime_error("Cannot inspect import folder");
+    try {
+        while(auto *e=readdir(d)) {
+            if(opts.should_cancel&&opts.should_cancel(files,bytes)) throw std::runtime_error("Import cancelled");
+            std::string name=e->d_name; if(name=="."||name=="..") continue;
+            if(name.empty()||name.find_first_of("/\\:\r\n\t")!=name.npos) throw std::runtime_error("Unsafe path in import folder");
+            std::string rel=relative.empty()?name:join(relative,name),child=join(source,rel); struct stat st{};
+            if(lstat(child.c_str(),&st)!=0) throw std::runtime_error("Cannot inspect imported file");
+            if(S_ISLNK(st.st_mode)) throw std::runtime_error("Import contains a symbolic link");
+            if(S_ISDIR(st.st_mode)) { if(entries.size()>=40000) throw std::runtime_error("Import entry limit exceeded"); entries.push_back({rel,true,0}); collect_import_tree(source,rel,opts,entries,files,bytes,depth+1); }
+            else if(S_ISREG(st.st_mode)) {
+                if(st.st_size<0) throw std::runtime_error("Invalid imported file size");
+                if(++files>opts.max_files||(size_t)st.st_size>opts.max_bytes-bytes) throw std::runtime_error("Import size/file limit exceeded");
+                bytes+=(size_t)st.st_size; if(entries.size()>=40000) throw std::runtime_error("Import entry limit exceeded"); entries.push_back({rel,false,(size_t)st.st_size});
+            } else throw std::runtime_error("Import contains a special file");
+        }
+    } catch(...) { closedir(d); throw; }
+    closedir(d);
+}
+void remove_tree(const std::string &path) {
+    struct stat st{}; if(lstat(path.c_str(),&st)!=0) return;
+    if(!S_ISDIR(st.st_mode)) { unlink(path.c_str()); return; }
+    DIR *d=opendir(path.c_str()); if(d) { while(auto *e=readdir(d)) { std::string n=e->d_name; if(n!="."&&n!="..") remove_tree(join(path,n)); } closedir(d); }
+    rmdir(path.c_str());
+}
+void copy_import_file(const std::string &source,const std::string &dest,size_t expected) {
+    std::ifstream in(source,std::ios::binary); if(!in) throw std::runtime_error("Cannot open import source file");
+    int fd=open(dest.c_str(),O_WRONLY|O_CREAT|O_EXCL,0644); if(fd<0) throw std::runtime_error("Cannot create imported file");
+    char buffer[65536]; size_t copied=0; bool failed=false;
+    while(in) {
+        in.read(buffer,sizeof(buffer)); std::streamsize n=in.gcount(); if(n<=0) break;
+        size_t off=0; while(off<(size_t)n) { ssize_t w=write(fd,buffer+off,(size_t)n-off); if(w<=0){failed=true;break;} off+=(size_t)w; }
+        if(failed) break;
+        copied+=(size_t)n;
+    }
+    int sync_result=failed?-1:fsync(fd); int close_result=close(fd);
+    if(failed||sync_result!=0||(!in.eof()&&in.fail())||copied!=expected||close_result!=0) { unlink(dest.c_str()); throw std::runtime_error("Imported file changed or could not be copied"); }
+}
+bool path_within(const std::filesystem::path &path,const std::filesystem::path &base) {
+    auto p=path.begin(),b=base.begin(); for(;b!=base.end();++b,++p) if(p==path.end()||*p!=*b) return false; return true;
+}
 }
 std::vector<Instance> scan_instances(const std::string &runtime_root,std::vector<std::string> *errors) {
     ensure_instances_dir(runtime_root); std::vector<Instance> out;
@@ -229,9 +305,116 @@ std::vector<Instance> scan_instances(const std::string &runtime_root,std::vector
 }
 Instance load_instance(const std::string &root,const std::string &id) {
     if(!safe_id(id)) throw std::runtime_error("Unsafe instance ID");
-    require_directory(join(root,"instances"));
-    std::string dir=dir_for(root,id); require_directory(dir); require_directory(join(dir,".minecraft"));
+    require_directory(root); require_directory(join(root,"instances"));
+    std::string dir=dir_for(root,id); require_directory(dir);
+    struct stat dot{},plain{}; bool has_dot=lstat(join(dir,".minecraft").c_str(),&dot)==0&&S_ISDIR(dot.st_mode);
+    bool has_plain=lstat(join(dir,"minecraft").c_str(),&plain)==0&&S_ISDIR(plain.st_mode);
+    if(!has_dot&&!has_plain) throw std::runtime_error("Instance game directory is missing");
     return decode(dir,id);
+}
+std::string archive_instance(const std::string &root,const std::string &id) {
+    Instance i=load_instance(root,id); ensure_archive_dir(root);
+    std::string base=slug(id),archive_id=base,archive_dir=join(archive_root(root),archive_id); bool found=false;
+    for(unsigned n=1;n<=10000;++n) { if(n>1) { archive_id=base+"-"+std::to_string(n); archive_dir=join(archive_root(root),archive_id); } struct stat st{}; if(lstat(archive_dir.c_str(),&st)!=0&&errno==ENOENT) { found=true; break; } }
+    if(!found||!safe_id(archive_id)) throw std::runtime_error("Cannot allocate archive ID");
+    const std::string active=dir_for(root,id),marker=join(active,"archive.json");
+    write_atomic(marker,Json{{"schema",1},{"archive_id",archive_id},{"original_id",id}}.dump(2)+"\n",true);
+    if(rename(active.c_str(),archive_dir.c_str())!=0) { unlink(marker.c_str()); throw std::runtime_error("Cannot archive instance"); }
+    (void)i; return archive_id;
+}
+std::vector<ArchivedInstance> list_archived_instances(const std::string &root) {
+    std::vector<ArchivedInstance> out; const std::string dir=archive_root(root); struct stat st{};
+    if(lstat(dir.c_str(),&st)!=0) { if(errno==ENOENT) return out; throw std::runtime_error("Cannot inspect archive directory"); }
+    require_directory(dir); DIR *d=opendir(dir.c_str()); if(!d) throw std::runtime_error("Cannot scan archive directory");
+    while(auto *e=readdir(d)) {
+        std::string token=e->d_name; if(token=="."||token==".."||!safe_id(token)) continue;
+        const std::string profile=join(dir,token); struct stat item{};
+        if(lstat(profile.c_str(),&item)!=0||!S_ISDIR(item.st_mode)) continue;
+        try {
+            Json marker=archive_marker(join(profile,"archive.json"));
+            if(marker.at("archive_id").get<std::string>()!=token) throw std::runtime_error("Archive token mismatch");
+            auto i=decode(profile,marker.at("original_id").get<std::string>());
+            out.push_back({token,i.id,i.name,i.version,i.heap_mib}); if(out.size()>=256) break;
+        } catch(...) { /* ignore incomplete or malformed archive entries */ }
+    }
+    closedir(d); std::sort(out.begin(),out.end(),[](const auto&a,const auto&b){return a.name==b.name?a.archive_id<b.archive_id:a.name<b.name;}); return out;
+}
+Instance restore_instance(const std::string &root,const std::string &archive_id) {
+    if(!safe_id(archive_id)) throw std::runtime_error("Unsafe archive ID");
+    ensure_archive_dir(root); ensure_instances_dir(root);
+    const std::string archive_dir=join(archive_root(root),archive_id);
+    require_directory(archive_dir); Json marker=archive_marker(join(archive_dir,"archive.json"));
+    if(marker.at("archive_id").get<std::string>()!=archive_id) throw std::runtime_error("Archive token mismatch");
+    Instance archived=decode(archive_dir,marker.at("original_id").get<std::string>());
+    std::string id=archived.id; const std::string preferred=dir_for(root,id); struct stat st{};
+    if(lstat(preferred.c_str(),&st)==0||errno!=ENOENT) id=available_id(root,archived.name);
+    const std::string destination=dir_for(root,id);
+    if(lstat(destination.c_str(),&st)==0||errno!=ENOENT) throw std::runtime_error("Restore destination already exists");
+    if(rename(archive_dir.c_str(),destination.c_str())!=0) throw std::runtime_error("Cannot restore archived instance");
+    unlink(join(destination,"archive.json").c_str());
+    archived.id=id; return archived;
+}
+Instance import_instance(const std::string &root,const std::string &shared,const std::string &source_directory,const ImportOptions &opts) {
+    (void)shared;
+    if(opts.max_files==0||opts.max_bytes==0) throw std::runtime_error("Import limits must be positive");
+    require_directory(root); require_directory(source_directory); ensure_instances_dir(root);
+    const auto source=std::filesystem::canonical(source_directory),runtime=std::filesystem::canonical(root);
+    if(path_within(source,runtime)||path_within(runtime,source)) throw std::runtime_error("Import source overlaps the runtime destination tree");
+    auto source_profile=decode(source.string(),"import-check",true);
+    // Imported profiles may reference metadata that has not been cached yet. Keep their full
+    // component pack and defer readiness checks to the planner once local metadata is available.
+    (void)read_local_patches(source.string());
+    std::vector<ImportEntry> entries; size_t files=0,bytes=0;
+    collect_import_tree(source.string(),"",opts,entries,files,bytes);
+    if(opts.should_cancel&&opts.should_cancel(0,0)) throw std::runtime_error("Import cancelled");
+    ensure_instances_dir(root); const std::string id=available_id(root,source_profile.name);
+    std::string staging=dir_for(root,id)+"-importing";
+    for(unsigned n=2;;++n) {
+        struct stat st{}; if(lstat(staging.c_str(),&st)!=0&&errno==ENOENT) break;
+        staging=dir_for(root,id)+"-importing-"+std::to_string(n);
+        if(n>10000) throw std::runtime_error("Cannot allocate import staging directory");
+    }
+    if(mkdir(staging.c_str(),0755)!=0) throw std::runtime_error("Cannot create import staging directory");
+    size_t copied_files=0,copied_bytes=0;
+    try {
+        for(const auto &entry:entries) {
+            if(opts.should_cancel&&opts.should_cancel(copied_files,copied_bytes)) throw std::runtime_error("Import cancelled");
+            const std::string dest=join(staging,entry.relative);
+            if(entry.directory) { if(mkdir(dest.c_str(),0755)!=0) throw std::runtime_error("Cannot create imported directory"); }
+            else { copy_import_file(join(source.string(),entry.relative),dest,entry.size); ++copied_files; copied_bytes+=entry.size; }
+        }
+        // Revalidate the copied profile and local metadata before it becomes visible.
+        source_profile=decode(staging,"import-check",true);
+        auto imported_cfg=read_ini(join(staging,"instance.cfg"));
+        imported_cfg["MaxMemAlloc"]=std::to_string(source_profile.heap_mib);
+        imported_cfg["MinMemAlloc"]="64"; imported_cfg["OverrideMemory"]="true";
+        std::string cfg_path=join(staging,"instance.cfg"),cfg_tmp=stage_atomic(cfg_path,ini_encode(imported_cfg));
+        commit_staged(cfg_tmp,cfg_path);
+        struct stat game{};
+        if(lstat(join(staging,".minecraft").c_str(),&game)!=0&&lstat(join(staging,"minecraft").c_str(),&game)!=0) {
+            if(mkdir(join(staging,".minecraft").c_str(),0755)!=0) throw std::runtime_error("Cannot create imported game directory");
+        }
+        std::string final=dir_for(root,id);
+        struct stat occupied{}; if(lstat(final.c_str(),&occupied)==0||errno!=ENOENT) throw std::runtime_error("Import destination already exists");
+        if(rename(staging.c_str(),final.c_str())!=0) throw std::runtime_error("Cannot finish instance import");
+    } catch(...) { remove_tree(staging); throw; }
+    source_profile.id=id; return source_profile;
+}
+void update_instance_version(const std::string &root,const std::string &shared,const std::string &id,const std::string &version) {
+    if(!safe_id(version)) throw std::runtime_error("Invalid version ID");
+    Instance current=load_instance(root,id); require_version(shared,root,version);
+    const std::string dir=dir_for(root,id),path=join(dir,"mmc-pack.json");
+    std::ifstream in(path); Json profile; in>>profile;
+    if(!profile.is_object()||!profile.contains("components")||!profile["components"].is_array()) throw std::runtime_error("Invalid Prism component profile");
+    for(const auto &component:profile["components"]) {
+        std::string uid=component.value("uid",std::string());
+        if(uid!="net.minecraft"&&uid!="org.lwjgl3") throw std::runtime_error("Cannot update version while preserving unsupported Prism component: "+uid);
+    }
+    const std::string cached=join(join(join(shared,"meta"),"net.minecraft"),version+".json");
+    Json components=file_exists(cached)?prism_components_for_version(shared,version):Json::array({Json{{"uid","net.minecraft"},{"version",version},{"important",true}}});
+    profile["formatVersion"]=1; profile["components"]=std::move(components);
+    std::string temp=stage_atomic(path,profile.dump(2)+"\n"); commit_staged(temp,path);
+    (void)current;
 }
 Instance create_instance(const std::string &root,const std::string &shared,const std::string &name,const std::string &version,unsigned heap) {
     validate_name(name); ensure_instances_dir(root); std::string base=slug(name),id=base;
@@ -251,9 +434,13 @@ void save_instance(const std::string &root,const Instance &i) {
     commit_staged(cfg_tmp,cfg_path); commit_staged(pack_tmp,pack_path);
 }
 void rename_instance(const std::string &root,const std::string &id,const std::string &new_name) { Instance i=load_instance(root,id); i.name=new_name; save_instance(root,i); }
-std::string instance_game_directory(const std::string &root,const std::string &id) { load_instance(root,id); return join(dir_for(root,id),".minecraft"); }
+std::string instance_game_directory(const std::string &root,const std::string &id) {
+    load_instance(root,id); const std::string dir=dir_for(root,id); struct stat plain{};
+    if(lstat(join(dir,"minecraft").c_str(),&plain)==0&&S_ISDIR(plain.st_mode)) return join(dir,"minecraft");
+    return join(dir,".minecraft");
+}
 Instance duplicate_instance(const std::string &root,const std::string &shared,const std::string &id,const std::string &new_name) {
-    Instance src=load_instance(root,id); validate_name(new_name);
+    (void)shared; Instance src=load_instance(root,id); validate_name(new_name);
     const std::string source_dir=dir_for(root,id);
     auto cfg=read_ini(join(source_dir,"instance.cfg")); cfg["name"]=new_name;
     std::ifstream pack_in(join(source_dir,"mmc-pack.json"),std::ios::binary);
@@ -261,8 +448,11 @@ Instance duplicate_instance(const std::string &root,const std::string &shared,co
     if(!pack_in.eof()&&!pack_in) throw std::runtime_error("Cannot read Prism component profile");
     Json parsed_pack=Json::parse(pack_data); if(!parsed_pack.is_object()) throw std::runtime_error("Invalid Prism component profile");
     auto patches=read_local_patches(source_dir);
-    Instance dst=create_instance(root,shared,new_name,src.version,src.heap_mib);
-    const std::string target_dir=dir_for(root,dst.id), cfg_path=join(target_dir,"instance.cfg"), pack_path=join(target_dir,"mmc-pack.json");
+    ensure_instances_dir(root); Instance dst{available_id(root,new_name),new_name,src.version,src.heap_mib};
+    const std::string target_dir=dir_for(root,dst.id);
+    if(mkdir(target_dir.c_str(),0755)!=0) throw std::runtime_error("Cannot create duplicate instance directory");
+    if(mkdir(join(target_dir,".minecraft").c_str(),0755)!=0) { rmdir(target_dir.c_str()); throw std::runtime_error("Cannot create duplicate game directory"); }
+    const std::string cfg_path=join(target_dir,"instance.cfg"), pack_path=join(target_dir,"mmc-pack.json");
     try {
         std::string cfg_tmp=stage_atomic(cfg_path,ini_encode(cfg)), pack_tmp;
         try { pack_tmp=stage_atomic(pack_path,pack_data); }

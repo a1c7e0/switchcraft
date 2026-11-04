@@ -1,6 +1,9 @@
 #include "metadata.hpp"
 #include <algorithm>
 #include <cctype>
+#include <cerrno>
+#include <fcntl.h>
+#include <unistd.h>
 #include <cstdio>
 #include <dirent.h>
 #include <fstream>
@@ -48,11 +51,21 @@ Config load_config(const std::string &path) {
 }
 void save_config(const std::string &path,const Config &c) {
     validate_config(c);
-    Json j={{"minecraft_root",c.root},{"version",c.version},{"runtime",c.runtime},{"graphics",c.graphics},{"heap_mib",c.heap_mib}};
-    std::string tmp=path+".tmp";std::ofstream out(tmp,std::ios::trunc);
-    if(!out)throw std::runtime_error("Cannot write config temporary file");
-    out<<j.dump(2)<<'\n';out.close();
-    if(!out||std::rename(tmp.c_str(),path.c_str())!=0){std::remove(tmp.c_str());throw std::runtime_error("Cannot commit configuration");}
+    Json j=file_exists(path)?read_json(path):Json::object();
+    j["minecraft_root"]=c.root;j["version"]=c.version;j["runtime"]=c.runtime;j["graphics"]=c.graphics;j["heap_mib"]=c.heap_mib;
+    save_json_atomic(path,j);
+}
+void save_json_atomic(const std::string &path,const Json &value) {
+    struct stat st{};
+    if(lstat(path.c_str(),&st)==0&&!S_ISREG(st.st_mode))throw std::runtime_error("Refusing non-regular JSON destination");
+    std::string data=value.dump(2)+"\n";
+    if(data.size()>4*1024*1024)throw std::runtime_error("JSON write size limit");
+    std::string pattern=path+".tmp.XXXXXX";std::vector<char> name(pattern.begin(),pattern.end());name.push_back(0);
+    int fd=mkstemp(name.data());if(fd<0)throw std::runtime_error("Cannot create JSON temporary file");
+    bool ok=true;size_t done=0;
+    while(done<data.size()){ssize_t n=write(fd,data.data()+done,data.size()-done);if(n<0&&errno==EINTR)continue;if(n<=0){ok=false;break;}done+=size_t(n);}
+    bool flushed=fsync(fd)==0;bool closed=close(fd)==0;
+    if(!ok||!flushed||!closed||std::rename(name.data(),path.c_str())!=0){unlink(name.data());throw std::runtime_error("Cannot commit JSON file");}
 }
 std::vector<std::string> scan_versions(const std::string &root) {
     std::vector<std::string> result;DIR *dir=opendir((root+"/versions").c_str());

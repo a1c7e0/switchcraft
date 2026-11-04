@@ -13,6 +13,7 @@ struct Config {
     unsigned heap_mib=256;
 };
 Json read_json(const std::string &path);
+void save_json_atomic(const std::string &path,const Json &value);
 bool file_exists(const std::string &path);
 bool safe_id(const std::string &id);
 Config load_config(const std::string &path);

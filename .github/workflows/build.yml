@@ -15,6 +15,13 @@ jobs:
           token: ${{ secrets.JAVA_SWITCH_READ_TOKEN }}
           fetch-depth: 0
       - run: git config --global --add safe.directory "$GITHUB_WORKSPACE/.deps/java-switch"
+      - name: Install host network-test dependencies
+        run: |
+          if command -v apt-get >/dev/null; then
+            apt-get update && apt-get install -y --no-install-recommends pkg-config libcurl4-openssl-dev libssl-dev openssl
+          else
+            pacman -S --needed --noconfirm pkgconf curl openssl
+          fi
       - run: bash scripts/build-all.sh
       - uses: actions/upload-artifact@v4
         with:

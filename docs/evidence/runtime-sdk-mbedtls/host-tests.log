@@ -1,0 +1,10 @@
+test_private_definitions_and_references_are_namespaced (tests.test_private_crypto_isolation.PrivateCryptoIsolationTest.test_private_definitions_and_references_are_namespaced) ... ok
+test_interpreter_jar_io_thread_reflection_and_native_bridge (tests.test_java.JavaTests.test_interpreter_jar_io_thread_reflection_and_native_bridge) ... ok
+test_loader_rejects_newer_or_invalid_classfile_headers (tests.test_java.JavaTests.test_loader_rejects_newer_or_invalid_classfile_headers) ... ok
+test_jni_creation_native_registration_and_ffm (tests.test_java25.Java25InvocationTests.test_jni_creation_native_registration_and_ffm) ... ok
+test_unavailable_vm_and_wrong_java_are_blocked_before_execution (tests.test_java25.Java25InvocationTests.test_unavailable_vm_and_wrong_java_are_blocked_before_execution) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 1.795s
+
+OK

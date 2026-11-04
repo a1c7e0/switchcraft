@@ -1,6 +1,8 @@
 import json
 import pathlib
 import subprocess
+import shutil
+import hashlib
 import tempfile
 import unittest
 
@@ -94,6 +96,7 @@ class InstanceTests(unittest.TestCase):
         pack_path.write_text(json.dumps(pack))
         (source/'patches').mkdir()
         (source/'patches'/'net.minecraft.json').write_text(json.dumps({'uid':'net.minecraft','mainClass':'custom.Main'}))
+        shutil.rmtree(self.shared/'versions')
         before={p.relative_to(self.shared):p.read_bytes() for p in self.shared.rglob('*') if p.is_file()}
         dup=json.loads(self.call('duplicate',info['id'],'Copy').stdout)
         target_root=self.runtime/'instances'/dup['id']
@@ -123,6 +126,83 @@ class InstanceTests(unittest.TestCase):
         self.call('rename','broken','Do not clobber',ok=False)
         self.assertEqual((broken/'instance.cfg').read_bytes(),before)
 
+    def test_archive_restore_collision_preserves_world_bytes(self):
+        info=json.loads(self.call('create','Archivable','26.4-snapshot-6','512').stdout)
+        game=self.runtime/'instances'/info['id']/'.minecraft'
+        (game/'saves'/'World').mkdir(parents=True)
+        save=game/'saves'/'World'/'level.dat'; save.write_bytes(b'unchanged-world-data')
+        token=self.call('archive',info['id']).stdout.strip()
+        self.assertFalse((self.runtime/'instances'/info['id']).exists())
+        archived=json.loads(self.call('archives').stdout)
+        self.assertEqual(archived[0]['archive_id'],token)
+        collision=json.loads(self.call('create','Archivable','26.4-snapshot-6','512').stdout)
+        self.assertEqual(collision['id'],info['id'])
+        restored=json.loads(self.call('restore',token).stdout)
+        self.assertNotEqual(restored['id'],collision['id'])
+        restored_save=self.runtime/'instances'/restored['id']/'.minecraft'/'saves'/'World'/'level.dat'
+        self.assertEqual(restored_save.read_bytes(),b'unchanged-world-data')
+        self.assertEqual(json.loads(self.call('archives').stdout),[])
+
+    def write_import_profile(self, name='Imported', version='26.4-snapshot-6'):
+        source=self.root/'selected-prism-folder'; game=source/'minecraft'/'saves'/'world'
+        game.mkdir(parents=True)
+        (source/'instance.cfg').write_text('ConfigVersion=1.3\nInstanceType=OneSix\nname='+name+'\nMaxMemAlloc=4096\n')
+        (source/'mmc-pack.json').write_text(json.dumps({'formatVersion':1,'custom':'preserve','components':[{'uid':'net.minecraft','version':version,'important':True},{'uid':'org.example.unknown','version':'1'}]}))
+        (game/'level.dat').write_bytes(b'imported save bytes')
+        return source
+
+    def test_import_preserves_profile_and_world_without_changing_source(self):
+        source=self.write_import_profile('Imported World')
+        shutil.rmtree(self.shared/'versions')
+        before={p.relative_to(source):hashlib.sha256(p.read_bytes()).hexdigest() for p in source.rglob('*') if p.is_file()}
+        imported=json.loads(self.call('import',str(source),'100','1048576').stdout)
+        target=self.runtime/'instances'/imported['id']
+        self.assertEqual(imported['name'],'Imported World')
+        self.assertEqual(imported['heap_mib'],1024)
+        self.assertIn('MaxMemAlloc=1024',(self.runtime/'instances'/imported['id']/'instance.cfg').read_text())
+        copied_pack=json.loads((self.runtime/'instances'/imported['id']/'mmc-pack.json').read_text())
+        self.assertEqual(copied_pack['custom'],'preserve')
+        self.assertEqual(copied_pack['components'][1]['uid'],'org.example.unknown')
+        self.assertEqual((target/'minecraft'/'saves'/'world'/'level.dat').read_bytes(),b'imported save bytes')
+        self.assertEqual(json.loads((target/'mmc-pack.json').read_text())['components'][0]['version'],'26.4-snapshot-6')
+        after={p.relative_to(source):hashlib.sha256(p.read_bytes()).hexdigest() for p in source.rglob('*') if p.is_file()}
+        self.assertEqual(before,after)
+        self.call('plan',imported['id'],ok=False)
+
+    def test_import_limits_cancellation_symlinks_and_bad_profiles_leave_no_partial_instance(self):
+        source=self.write_import_profile()
+        (source/'large.bin').write_bytes(b'x'*100)
+        before=(source/'large.bin').read_bytes()
+        self.call('import',str(source),'100','10',ok=False)
+        self.call('import',str(source),'100','1000','cancel',ok=False)
+        self.assertEqual(json.loads(self.call('list').stdout),[])
+        self.assertEqual((source/'large.bin').read_bytes(),before)
+        (source/'linked').symlink_to(source/'instance.cfg')
+        self.call('import',str(source),'100','1000',ok=False)
+        (source/'linked').unlink()
+        (source/'mmc-pack.json').write_text('{"formatVersion":1,"components":[]}')
+        self.call('import',str(source),'100','1000',ok=False)
+        self.assertEqual(json.loads(self.call('list').stdout),[])
+
+    def test_update_version_resolves_cached_dependencies_and_refuses_unknown_components(self):
+        info=json.loads(self.call('create','Updater','26.4-snapshot-6','512').stdout)
+        profile=self.runtime/'instances'/info['id']/'mmc-pack.json'
+        p=json.loads(profile.read_text()); p['customTopLevel']={'kept':True}; profile.write_text(json.dumps(p))
+        game=self.runtime/'instances'/info['id']/'.minecraft'; (game/'saves').mkdir(); save=game/'saves'/'untouched'; save.write_bytes(b'keep')
+        meta=self.shared/'meta'/'net.minecraft'; meta.mkdir(parents=True)
+        (meta/'snapshot-x.json').write_text(json.dumps({'uid':'net.minecraft','version':'snapshot-x','mainClass':'example.Snapshot','libraries':[], 'arguments':{}, 'javaVersion':{'majorVersion':25}, 'requires':[{'uid':'org.lwjgl3','suggests':'3.4.3'}]}))
+        lwjgl=self.shared/'meta'/'org.lwjgl3'; lwjgl.mkdir(parents=True)
+        (lwjgl/'3.4.3.json').write_text(json.dumps({'uid':'org.lwjgl3','version':'3.4.3','libraries':[]}))
+        self.call('update',info['id'],'snapshot-x')
+        updated=json.loads(profile.read_text())
+        self.assertEqual(updated['customTopLevel'],{'kept':True})
+        self.assertEqual([c['uid'] for c in updated['components']],['net.minecraft','org.lwjgl3'])
+        self.assertEqual(save.read_bytes(),b'keep')
+        updated['components'].append({'uid':'org.example.unsupported','version':'1'})
+        profile.write_text(json.dumps(updated)); before=profile.read_bytes()
+        self.call('update',info['id'],'26.4-snapshot-6',ok=False)
+        self.assertEqual(profile.read_bytes(),before)
+
     def test_prism_cached_version_is_resolved_without_download(self):
         meta=self.shared/'meta'/'net.minecraft'
         meta.mkdir(parents=True)
@@ -138,6 +218,11 @@ class InstanceTests(unittest.TestCase):
         self.assertEqual(plan['main_class'],'example.Snapshot')
         self.assertEqual(plan['version'],'snapshot-x')
         self.assertFalse(plan['launchable'])
+        source=self.write_import_profile('With Unsupported Component','snapshot-x')
+        imported=json.loads(self.call('import',str(source),'100','1048576').stdout)
+        stored=json.loads((self.runtime/'instances'/imported['id']/'mmc-pack.json').read_text())
+        self.assertEqual(stored['components'][-1]['uid'],'org.example.unknown')
+        self.assertIn('Unsupported Prism component UID',self.call('plan',imported['id'],ok=False).stderr)
 
     def test_symlink_instance_and_metadata_are_rejected(self):
         out=self.root/'outside'; out.mkdir()

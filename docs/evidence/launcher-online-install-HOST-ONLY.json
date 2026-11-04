@@ -1,0 +1,23 @@
+{
+  "target": "26.4-snapshot-6",
+  "environment": "Linux x86_64 host execution of production installer; not Horizon",
+  "workflow": "Real Prism metadata -> indexed SHA256 verification -> target resource downloads -> complete SHA1 verification",
+  "files_total": 5459,
+  "bytes_total": 599338934,
+  "asset_bytes_declared": 482617023,
+  "verification": {
+    "bytes_verified": 599338934,
+    "corrupt_files": [],
+    "files_total": 5459,
+    "files_verified": 5459,
+    "installed": true,
+    "missing_files": [],
+    "truncated_issue_lists": false,
+    "version": "26.4-snapshot-6"
+  },
+  "report_sha256": "e1bbf0322f1a31b23d40cba4bf2998ba2b5b4ec944a8b67e1b0b3a23f18b58fd",
+  "device_execution": "NOT TESTED",
+  "game_assets_committed": false,
+  "cache_location": "private /tmp cache excluded from source/distribution",
+  "client_sha1": "8a97d5dafe80783525a2807b220527b65df724a5"
+}
