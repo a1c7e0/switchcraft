@@ -1,0 +1,69 @@
+test_actual_binaries (tests.test_artifacts.ArtifactTests.test_actual_binaries) ... ok
+test_renamed_elf_and_truncation_rejected (tests.test_artifacts.ArtifactTests.test_renamed_elf_and_truncation_rejected) ... ok
+test_real_sdk_publication_and_composed_lookups (tests.test_composite_resolver.CompositeResolverTests.test_real_sdk_publication_and_composed_lookups) ... src/composite_resolver.c:4:10: fatal error: javaswitch/native_resolver.h: No such file or directory
+    4 | #include <javaswitch/native_resolver.h>
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+cc1: fatal error: /workspace/switchcraft/.deps/java-switch/src/native_resolver.c: No such file or directory
+compilation terminated.
+tests/composite_resolver_host.c:3:10: fatal error: javaswitch/native_resolver.h: No such file or directory
+    3 | #include <javaswitch/native_resolver.h>
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+ERROR
+test_mutated_runtime_or_sdk_are_rejected (tests.test_java25_package.Java25PackageTests.test_mutated_runtime_or_sdk_are_rejected) ... ERROR
+test_real_lwjgl_platform_and_fail_closed_library_loading (tests.test_lwjgl_horizon.LwjglHorizonTests.test_real_lwjgl_platform_and_fail_closed_library_loading) ... ok
+test_allowlisted_function_lookup_and_call (tests.test_native_lookup.NativeLookupTests.test_allowlisted_function_lookup_and_call) ... ok
+test_real_jni_registration_and_ffm_downcall_through_sdk (tests.test_native_symbols_jni.NativeSymbolsJniTests.test_real_jni_registration_and_ffm_downcall_through_sdk) ... ERROR
+test_matching_base_features_never_claim_game_title (tests.test_snapshot_profile.SnapshotProfileTests.test_matching_base_features_never_claim_game_title) ... ok
+test_nonconformance_is_not_silently_hidden (tests.test_snapshot_profile.SnapshotProfileTests.test_nonconformance_is_not_silently_hidden) ... ok
+test_wrong_snapshot_is_rejected (tests.test_snapshot_profile.SnapshotProfileTests.test_wrong_snapshot_is_rejected) ... ok
+test_renderer_is_single_vulkan_and_wrong_hash_is_rejected (tests.test_vulkan_transform.VulkanTransformTests.test_renderer_is_single_vulkan_and_wrong_hash_is_rejected) ... ok
+test_verified_official_snapshot_class (tests.test_vulkan_transform.VulkanTransformTests.test_verified_official_snapshot_class) ... ok
+
+======================================================================
+ERROR: test_real_sdk_publication_and_composed_lookups (tests.test_composite_resolver.CompositeResolverTests.test_real_sdk_publication_and_composed_lookups)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/switchcraft/tests/test_composite_resolver.py", line 12, in test_real_sdk_publication_and_composed_lookups
+    subprocess.run(['gcc','-std=c11','-Wall','-Wextra','-Werror','-Iinclude',
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['gcc', '-std=c11', '-Wall', '-Wextra', '-Werror', '-Iinclude', '-I/workspace/switchcraft/.deps/java-switch/include', 'src/composite_resolver.c', '/workspace/switchcraft/.deps/java-switch/src/native_resolver.c', 'tests/composite_resolver_host.c', '-o', '/tmp/tmpooxutrmp/resolver']' returned non-zero exit status 1.
+
+======================================================================
+ERROR: test_mutated_runtime_or_sdk_are_rejected (tests.test_java25_package.Java25PackageTests.test_mutated_runtime_or_sdk_are_rejected)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/switchcraft/tests/test_java25_package.py", line 14, in test_mutated_runtime_or_sdk_are_rejected
+    prepare.verify_unpacked(root)
+  File "/workspace/switchcraft/scripts/prepare-java25-runtime.py", line 24, in verify_unpacked
+    verify_archive_tree(JAVA/'dist/javaswitch-horizon-sdk.tar.gz',sdk)
+  File "/workspace/switchcraft/scripts/prepare-java25-runtime.py", line 10, in verify_archive_tree
+    with tarfile.open(archive_path) as source:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/tarfile.py", line 1884, in open
+    return func(name, "r", fileobj, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/tarfile.py", line 1952, in gzopen
+    fileobj = GzipFile(name, mode + "b", compresslevel, fileobj)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/gzip.py", line 201, in __init__
+    fileobj = self.myfileobj = builtins.open(filename, mode or 'rb')
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/workspace/switchcraft/.deps/java-switch/dist/javaswitch-horizon-sdk.tar.gz'
+
+======================================================================
+ERROR: test_real_jni_registration_and_ffm_downcall_through_sdk (tests.test_native_symbols_jni.NativeSymbolsJniTests.test_real_jni_registration_and_ffm_downcall_through_sdk)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/switchcraft/tests/test_native_symbols_jni.py", line 13, in test_real_jni_registration_and_ffm_downcall_through_sdk
+    subprocess.run(['gcc','-shared','-fPIC','-std=c11','-Wall','-Wextra','-Werror',
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['gcc', '-shared', '-fPIC', '-std=c11', '-Wall', '-Wextra', '-Werror', '-Iinclude', '-I/workspace/switchcraft/.deps/java-switch/include', '-I/workspace/switchcraft/.deps/host-jdk25/jdk-25.0.5+8/include', '-I/workspace/switchcraft/.deps/host-jdk25/jdk-25.0.5+8/include/linux', 'src/native_symbols_jni.c', '/workspace/switchcraft/.deps/java-switch/src/native_resolver.c', 'tests/native_symbols_host.c', '-o', '/tmp/tmpw84ddx0l/libnative_fixture.so']' returned non-zero exit status 1.
+
+----------------------------------------------------------------------
+Ran 12 tests in 3.148s
+
+FAILED (errors=3)

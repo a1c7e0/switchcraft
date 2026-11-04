@@ -1,0 +1,17 @@
+Environment: Debian GNU/Linux 13 (trixie), amd64
+Packages.xz: https://deb.debian.org/debian/dists/trixie/main/binary-amd64/Packages.xz
+Packages.xz SHA256 (matches signed InRelease): 7778d3e3f303b7ddb8ce0fe7c8d57473a076c6bf2e8f241f75421d2396352498
+InRelease: https://deb.debian.org/debian/dists/trixie/InRelease
+InRelease signature verified with /usr/share/keyrings/debian-archive-keyring.gpg; trixie key fingerprint 04B54C3C DCA79751 B16BC6B5 225629DF 75B188BD
+
+Extracted packages (Package stanza SHA256 verified):
+xvfb 2:21.1.16-1.3+deb13u3 365da2b6c93339f34337c434a9489bb6411a240fa47b9f49693d3091745f28c2
+xserver-common 2:21.1.16-1.3+deb13u3 dc1d37303c103b23c40cd1ea694c5c6561e0e8dc1734a73c7a0ae0ef080e7fcc
+mesa-vulkan-drivers 25.0.7-2+deb13u1 caf2f7d296b7522efe74e40a74bce762a3ce84c33b53b5e54e1248ac2e0a13a5
+xdotool 1:3.20160805.1-5.1 98ac8681533b01020c7288fb2e9de403d586747dab48cfd58e04cb00d0c44fb1
+libxdo3 1:3.20160805.1-5.1 d634e25d2b50af140ee9f44bab507fcfb665f3556fd483faefdb56e85598cc12
+vulkan-tools 1.4.304.0+dfsg1-1 742d1cd78c333a94b8214e21ba455d47884dc32f110016ffe6998cf88f2a2f94
+
+Preinstalled host libraries used by the extracted Mesa driver:
+libvulkan1 1.4.309.0-1
+libllvm19 1:19.1.7-3+b1

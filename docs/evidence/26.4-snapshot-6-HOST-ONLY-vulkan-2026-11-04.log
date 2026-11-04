@@ -1,0 +1,295 @@
+[Switchcraft] VULKAN_ONLY_APPLIED target=26.4-snapshot-6 original_sha256=b42d53d78fba06b0fbdb90395dfdc065f319dce9dc037fa4184f9399078ed7ee
+[LWJGL] Version: 3.4.3+4
+	 OS: Linux v6.18.57
+	JRE: Linux amd64 25.0.5
+	JVM: OpenJDK 64-Bit Server VM v25.0.5+8-LTS by Eclipse Adoptium
+[LWJGL] Loading JNI library: lwjgl
+	Module: org.lwjgl
+	Using SharedLibraryLoader...
+	Extracting: file:/tmp/switchcraft-mc-host/libraries/org/lwjgl/lwjgl/3.4.3/lwjgl-3.4.3-natives-linux.jar!/linux/x64/org/lwjgl/liblwjgl.so
+	        to: /tmp/lwjgl_agent/3.4.3+4/x64/liblwjgl.so
+	Found at: /tmp/lwjgl_agent/3.4.3+4/x64/liblwjgl.so
+	Loaded from org.lwjgl.librarypath: /tmp/lwjgl_agent/3.4.3+4/x64/liblwjgl.so
+[LWJGL] Loading library: libvulkan.so.1
+	Module: org.lwjgl.vulkan
+	libvulkan.so.1 not found in org.lwjgl.librarypath=/tmp/lwjgl_agent/3.4.3+4/x64
+[LWJGL] MemoryUtil backend: jdk.internal.misc.Unsafe
+	org.lwjgl.system.MemoryBackendUnsafe
+[LWJGL] Warning: Failed to instantiate memory allocator: org.lwjgl.system.mimalloc.mimalloc$Allocator
+[LWJGL] Warning: Failed to instantiate memory allocator: org.lwjgl.system.rpmalloc.RPmalloc$Allocator
+[LWJGL] MemoryUtil allocator: org.lwjgl.system.jemalloc.JEmalloc$Allocator
+[LWJGL] Loading library: jemalloc
+	Module: org.lwjgl.jemalloc
+	Using SharedLibraryLoader...
+	Extracting: file:/tmp/switchcraft-mc-host/libraries/org/lwjgl/lwjgl-jemalloc/3.4.3/lwjgl-jemalloc-3.4.3-natives-linux.jar!/linux/x64/org/lwjgl/jemalloc/libjemalloc.so
+	Loaded from org.lwjgl.librarypath: /tmp/lwjgl_agent/3.4.3+4/x64/libjemalloc.so
+[LWJGL] Java 11 check intrinsics enabled
+[LWJGL] Default nullable annotation: interface org.jspecify.annotations.Nullable
+[LWJGL] FFM downcalls enabled
+	Loaded from system paths: /usr/lib/x86_64-linux-gnu/libvulkan.so.1
+[LWJGL] Loading JNI library: lwjgl_stb
+	Module: org.lwjgl.stb
+	Using SharedLibraryLoader...
+	Extracting: file:/tmp/switchcraft-mc-host/libraries/org/lwjgl/lwjgl-stb/3.4.3/lwjgl-stb-3.4.3-natives-linux.jar!/linux/x64/org/lwjgl/stb/liblwjgl_stb.so
+	Loaded from org.lwjgl.librarypath: /tmp/lwjgl_agent/3.4.3+4/x64/liblwjgl_stb.so
+[LWJGL] Loading library: openal
+	Module: org.lwjgl.openal
+	Using SharedLibraryLoader...
+	Extracting: file:/tmp/switchcraft-mc-host/libraries/org/lwjgl/lwjgl-openal/3.4.3/lwjgl-openal-3.4.3-natives-linux.jar!/linux/x64/org/lwjgl/openal/libopenal.so
+	Loaded from org.lwjgl.librarypath: /tmp/lwjgl_agent/3.4.3+4/x64/libopenal.so
+[LWJGL] Loading JNI library: lwjgl_vma
+	Module: org.lwjgl.vma
+	Using SharedLibraryLoader...
+	Extracting: file:/tmp/switchcraft-mc-host/libraries/org/lwjgl/lwjgl-vma/3.4.3/lwjgl-vma-3.4.3-natives-linux.jar!/linux/x64/org/lwjgl/vma/liblwjgl_vma.so
+	Loaded from org.lwjgl.librarypath: /tmp/lwjgl_agent/3.4.3+4/x64/liblwjgl_vma.so
+[LWJGL] Loading library: shaderc
+	Module: org.lwjgl.shaderc
+	Using SharedLibraryLoader...
+	Extracting: file:/tmp/switchcraft-mc-host/libraries/org/lwjgl/lwjgl-shaderc/3.4.3/lwjgl-shaderc-3.4.3-natives-linux.jar!/linux/x64/org/lwjgl/shaderc/libshaderc.so
+	Loaded from org.lwjgl.librarypath: /tmp/lwjgl_agent/3.4.3+4/x64/libshaderc.so
+[LWJGL] Loading JNI library: lwjgl_opengl
+	Module: org.lwjgl.opengl
+	Using SharedLibraryLoader...
+	Extracting: file:/tmp/switchcraft-mc-host/libraries/org/lwjgl/lwjgl-opengl/3.4.3/lwjgl-opengl-3.4.3-natives-linux.jar!/linux/x64/org/lwjgl/opengl/liblwjgl_opengl.so
+	Loaded from org.lwjgl.librarypath: /tmp/lwjgl_agent/3.4.3+4/x64/liblwjgl_opengl.so
+[LWJGL] Loading library: libGLX.so.0
+	Module: org.lwjgl.opengl
+	libGLX.so.0 not found in org.lwjgl.librarypath=/tmp/lwjgl_agent/3.4.3+4/x64
+	Loaded from system paths: /usr/lib/x86_64-linux-gnu/libGLX.so.0
+[LWJGL] Loading library: spirv-cross
+	Module: org.lwjgl.spvc
+	Using SharedLibraryLoader...
+	Extracting: file:/tmp/switchcraft-mc-host/libraries/org/lwjgl/lwjgl-spvc/3.4.3/lwjgl-spvc-3.4.3-natives-linux.jar!/linux/x64/org/lwjgl/spvc/libspirv-cross.so
+	Loaded from org.lwjgl.librarypath: /tmp/lwjgl_agent/3.4.3+4/x64/libspirv-cross.so
+[LWJGL] Loading library: SDL3
+	Module: org.lwjgl.sdl
+	Using SharedLibraryLoader...
+	Extracting: file:/tmp/switchcraft-mc-host/libraries/org/lwjgl/lwjgl-sdl/3.4.3/lwjgl-sdl-3.4.3-natives-linux.jar!/linux/x64/org/lwjgl/sdl/libSDL3.so
+	Loaded from org.lwjgl.librarypath: /tmp/lwjgl_agent/3.4.3+4/x64/libSDL3.so
+[LWJGL] Loading library: freetype
+	Module: org.lwjgl.freetype
+	Using SharedLibraryLoader...
+	Extracting: file:/tmp/switchcraft-mc-host/libraries/org/lwjgl/lwjgl-freetype/3.4.3/lwjgl-freetype-3.4.3-natives-linux.jar!/linux/x64/org/lwjgl/freetype/libfreetype.so
+	Loaded from org.lwjgl.librarypath: /tmp/lwjgl_agent/3.4.3+4/x64/libfreetype.so
+[10:43:14] [Datafixer Bootstrap #0/INFO]: 312 Datafixer optimizations took 1143 milliseconds
+[10:43:22] [Render thread/INFO]: Environment: Environment[discoveryUrl=https://discovery.minecraftservices.com/minecraft/client, name=PROD]
+[10:43:22] [Render thread/INFO]: Setting user: Player761
+[10:43:22] [Render thread/INFO]: Backend library: LWJGL version 3.4.3+4
+[LWJGL] FFM upcalls enabled
+	Arena: auto
+	Registry: ConcurrentHashMap
+[10:43:22] [Render thread/INFO]: SDL [SYSTEM]: App name: Minecraft
+[10:43:22] [Render thread/INFO]: SDL [SYSTEM]: App version: 26.4 Snapshot 6
+[10:43:22] [Render thread/INFO]: SDL [SYSTEM]: App ID: com.mojang.minecraft
+[10:43:22] [Render thread/INFO]: SDL [SYSTEM]: SDL revision: SDL-3.4.14--128-NOTFOUND
+[10:43:22] [Render thread/WARN]: Graphics backend forced to vulkan by launch argument, in-game preferred graphics backend setting is ignored
+[10:43:22] [Render thread/INFO]: Enabling optional FeatureSet [Wireframe]
+[10:43:22] [Render thread/INFO]: Optional FeatureSet [AMD Buffer Marker] not supported
+[10:43:22] [Render thread/INFO]: Enabling optional FeatureSet [Calibrated Timestamps]
+[10:43:22] [Render thread/INFO]: Enabling optional FeatureSet [EXT MultiDraw]
+[10:43:22] [Render thread/INFO]: Optional FeatureSet [NV Diagnostic Checkpoint] not supported
+[10:43:22] [Render thread/INFO]: Optional FeatureSet [DXGI Surface] not supported
+[10:43:22] [Render thread/INFO]: Using graphics backend Vulkan, using drivers: 1.4.305 llvmpipe Mesa 25.0.7-2+deb13u1 (LLVM 19.1.7)
+[10:43:22] [Render thread/INFO]: Using graphics device: llvmpipe (LLVM 19.1.7, 256 bits) (0x10005)
+[10:43:22] [Render thread/INFO]: Using graphics device extensions: VK_EXT_calibrated_timestamps (D), VK_KHR_synchronization2 (D), VK_EXT_multi_draw (D), VK_EXT_vertex_attribute_divisor (D), VK_KHR_swapchain (D), VK_KHR_surface (I), VK_KHR_xlib_surface (I), VK_EXT_debug_utils (I)
+[10:43:22] [Render thread/INFO]: Created window using SDL video driver: x11
+[10:43:27] [Minecraft Services Discovery/WARN]: Failed to connect
+com.mojang.authlib.exceptions.MinecraftClientException: Failed to read from https://discovery.minecraftservices.com/minecraft/client due to Connection refused (connect failed)
+	at com.mojang.authlib.minecraft.client.MinecraftClient.readServiceResponse(MinecraftClient.java:148)
+	at com.mojang.authlib.minecraft.client.MinecraftClient.getWithEtag(MinecraftClient.java:82)
+	at com.mojang.authlib.minecraft.client.MinecraftClient.get(MinecraftClient.java:66)
+	at com.mojang.authlib.services.MinecraftServicesDiscoveryService.lambda$createDiscoverySupplier$1(MinecraftServicesDiscoveryService.java:83)
+	at com.mojang.authlib.services.RetryableFetch$1.run(RetryableFetch.java:42)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:545)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:328)
+	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:309)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1090)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:614)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+Caused by: java.net.ConnectException: Connection refused (connect failed)
+	at java.base/sun.nio.ch.Net.pollConnect(Native Method)
+	at java.base/sun.nio.ch.Net.pollConnectNow(Net.java:639)
+	at java.base/sun.nio.ch.NioSocketImpl.timedFinishConnect(NioSocketImpl.java:550)
+	at java.base/sun.nio.ch.NioSocketImpl.connect(NioSocketImpl.java:594)
+	at java.base/java.net.SocksSocketImpl.connect(SocksSocketImpl.java:307)
+	at java.base/java.net.Socket.connect(Socket.java:659)
+	at java.base/sun.security.ssl.SSLSocketImpl.connect(SSLSocketImpl.java:304)
+	at java.base/sun.net.NetworkClient.doConnect(NetworkClient.java:161)
+	at java.base/sun.net.www.http.HttpClient.openServer(HttpClient.java:524)
+	at java.base/sun.net.www.http.HttpClient.openServer(HttpClient.java:612)
+	at java.base/sun.net.www.protocol.https.HttpsClient.<init>(HttpsClient.java:207)
+	at java.base/sun.net.www.protocol.https.HttpsClient.New(HttpsClient.java:289)
+	at java.base/sun.net.www.protocol.https.AbstractDelegateHttpsURLConnection.getNewHttpClient(AbstractDelegateHttpsURLConnection.java:196)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.plainConnect0(HttpURLConnection.java:1012)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.plainConnect(HttpURLConnection.java:903)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.connect(HttpURLConnection.java:876)
+	at java.base/sun.net.www.protocol.https.AbstractDelegateHttpsURLConnection.connect(AbstractDelegateHttpsURLConnection.java:181)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.getInputStream0(HttpURLConnection.java:1380)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.getInputStream(HttpURLConnection.java:1306)
+	at java.base/java.net.HttpURLConnection.getResponseCode(HttpURLConnection.java:493)
+	at java.base/sun.net.www.protocol.https.HttpsURLConnectionImpl.getResponseCode(HttpsURLConnectionImpl.java:307)
+	at com.mojang.authlib.minecraft.client.MinecraftClient.readServiceResponse(MinecraftClient.java:127)
+	... 10 more
+[10:43:27] [Minecraft Services Discovery/WARN]: Services are unavailable, unable to fetch uri for AUTHENTICATION/getPublicKeys
+[10:43:27] [Download-1/WARN]: Services are unavailable, unable to fetch uri for SESSION/getProfileById
+[10:43:27] [Download-2/WARN]: Services are unavailable, unable to fetch uri for PLAYER/getAttributes
+[10:43:27] [Download-2/ERROR]: Failed to fetch user properties
+com.mojang.authlib.exceptions.AuthenticationUnavailableException
+	at com.mojang.authlib.exceptions.MinecraftClientException.toAuthenticationException(MinecraftClientException.java:29)
+	at com.mojang.authlib.services.MinecraftServicesUserApiService.fetchProperties(MinecraftServicesUserApiService.java:169)
+	at net.minecraft.client.Minecraft.lambda$new$1(Minecraft.java:453)
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1789)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1090)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:614)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+[10:43:27] [Download-1/WARN]: Couldn't look up profile properties for cfe80848-3f92-3fe5-b0c6-0240c95b9208
+com.mojang.authlib.exceptions.MinecraftClientException: Services are unavailable
+	at com.mojang.authlib.services.MinecraftServicesDiscoveryService.getEndpoint(MinecraftServicesDiscoveryService.java:150)
+	at com.mojang.authlib.services.MinecraftServicesDiscoveryService.getUrl(MinecraftServicesDiscoveryService.java:136)
+	at com.mojang.authlib.services.MinecraftServicesSessionService.fetchProfileUncached(MinecraftServicesSessionService.java:185)
+	at com.mojang.authlib.services.MinecraftServicesSessionService.fetchProfile(MinecraftServicesSessionService.java:159)
+	at net.minecraft.client.Minecraft.lambda$new$0(Minecraft.java:449)
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1789)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1090)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:614)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+[10:43:27] [Minecraft Services Discovery/WARN]: Failed to connect
+com.mojang.authlib.exceptions.MinecraftClientException: Services are unavailable
+	at com.mojang.authlib.services.MinecraftServicesDiscoveryService.getEndpoint(MinecraftServicesDiscoveryService.java:150)
+	at com.mojang.authlib.services.MinecraftServicesDiscoveryService.getUrl(MinecraftServicesDiscoveryService.java:136)
+	at com.mojang.authlib.services.MinecraftServicesDiscoveryService.lambda$getServicesKeySet$0(MinecraftServicesDiscoveryService.java:128)
+	at com.mojang.authlib.services.RetryableFetch$1.run(RetryableFetch.java:40)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:545)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:328)
+	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:309)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1090)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:614)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+[10:43:27] [Minecraft Services Discovery/WARN]: Services are unavailable, unable to fetch uri for AUTHENTICATION/getPublicKeys
+[10:43:27] [Minecraft Services Discovery/WARN]: Failed to connect
+com.mojang.authlib.exceptions.MinecraftClientException: Services are unavailable
+	at com.mojang.authlib.services.MinecraftServicesDiscoveryService.getEndpoint(MinecraftServicesDiscoveryService.java:150)
+	at com.mojang.authlib.services.MinecraftServicesDiscoveryService.getUrl(MinecraftServicesDiscoveryService.java:136)
+	at com.mojang.authlib.services.MinecraftServicesDiscoveryService.lambda$getServicesKeySet$0(MinecraftServicesDiscoveryService.java:128)
+	at com.mojang.authlib.services.RetryableFetch$1.run(RetryableFetch.java:40)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:545)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:328)
+	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:309)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1090)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:614)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+[10:43:27] [Render thread/INFO]: Reloading ResourceManager: vanilla, vanilla
+[10:43:29] [Worker-Main-1/INFO]: Found unifont_all_no_pua-17.0.01.hex, loading
+[10:43:30] [Worker-Main-1/INFO]: Found unifont_jp_patch-17.0.01.hex, loading
+[10:43:30] [Worker-Main-1/INFO]: Found unifont_pua-17.0.01.hex, loading
+[10:43:32] [Download-2/ERROR]: Failed to fetch Realms feature flags
+com.mojang.realmsclient.exception.RealmsServiceException: Realms service error (500) with message 'Could not connect to Realms: Connection refused (connect failed)'
+	at com.mojang.realmsclient.client.RealmsClient.execute(RealmsClient.java:638)
+	at com.mojang.realmsclient.client.RealmsClient.fetchFeatureFlags(RealmsClient.java:204)
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1789)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1090)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:614)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+ALSA lib confmisc.c:855:(parse_card) cannot find card '0'
+ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_card_inum returned error: No such file or directory
+ALSA lib confmisc.c:422:(snd_func_concat) error evaluating strings
+ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_concat returned error: No such file or directory
+ALSA lib confmisc.c:1342:(snd_func_refer) error evaluating name
+ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_refer returned error: No such file or directory
+ALSA lib conf.c:5728:(snd_config_expand) Evaluate error: No such file or directory
+ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM default
+ALSA lib confmisc.c:855:(parse_card) cannot find card '0'
+ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_card_inum returned error: No such file or directory
+ALSA lib confmisc.c:422:(snd_func_concat) error evaluating strings
+ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_concat returned error: No such file or directory
+ALSA lib confmisc.c:1342:(snd_func_refer) error evaluating name
+ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_refer returned error: No such file or directory
+ALSA lib conf.c:5728:(snd_config_expand) Evaluate error: No such file or directory
+ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM default
+[10:43:35] [Render thread/ERROR]: Error starting SoundSystem. Turning off sounds & music
+java.lang.IllegalStateException: Failed to open OpenAL device
+	at com.mojang.blaze3d.audio.Library.openDeviceOrFallback(Library.java:274)
+	at com.mojang.blaze3d.audio.Library.init(Library.java:149)
+	at net.minecraft.client.sounds.SoundEngine.loadLibrary(SoundEngine.java:120)
+	at net.minecraft.client.sounds.SoundEngine.reload(SoundEngine.java:109)
+	at net.minecraft.client.sounds.SoundManager.apply(SoundManager.java:113)
+	at net.minecraft.client.sounds.SoundManager.apply(SoundManager.java:40)
+	at net.minecraft.server.packs.resources.SimplePreparableReloadListener.lambda$reload$1(SimplePreparableReloadListener.java:15)
+	at java.base/java.util.concurrent.CompletableFuture$UniAccept.tryFire(CompletableFuture.java:739)
+	at java.base/java.util.concurrent.CompletableFuture$Completion.run(CompletableFuture.java:503)
+	at net.minecraft.server.packs.resources.SimpleReloadInstance.lambda$prepareTasks$3(SimpleReloadInstance.java:59)
+	at net.minecraft.util.thread.BlockableEventLoop.doRunTask(BlockableEventLoop.java:174)
+	at net.minecraft.util.thread.ReentrantBlockableEventLoop.doRunTask(ReentrantBlockableEventLoop.java:23)
+	at net.minecraft.util.thread.BlockableEventLoop.pollTask(BlockableEventLoop.java:148)
+	at net.minecraft.util.thread.BlockableEventLoop.runAllTasks(BlockableEventLoop.java:128)
+	at net.minecraft.client.Minecraft.runTick(Minecraft.java:1247)
+	at net.minecraft.client.Minecraft.run(Minecraft.java:974)
+	at net.minecraft.client.main.Main.main(Main.java:292)
+[10:43:35] [Render thread/INFO]: Created: 512x256x0 minecraft:textures/atlas/particles.png-atlas
+[10:43:35] [Render thread/INFO]: Created: 256x128x0 minecraft:textures/atlas/celestials.png-atlas
+[10:43:35] [Render thread/INFO]: Created: 128x128x0 minecraft:textures/atlas/decorated_pot.png-atlas
+[10:43:35] [Render thread/INFO]: Created: 512x256x0 minecraft:textures/atlas/paintings.png-atlas
+[10:43:35] [Render thread/INFO]: Created: 1024x512x0 minecraft:textures/atlas/shield_patterns.png-atlas
+[10:43:35] [Render thread/INFO]: Created: 1024x512x0 minecraft:textures/atlas/banner_patterns.png-atlas
+[10:43:35] [Render thread/INFO]: Created: 2048x2048x4 minecraft:textures/atlas/blocks.png-atlas
+[10:43:35] [Render thread/INFO]: Created: 1024x512x0 minecraft:textures/atlas/items.png-atlas
+[10:43:35] [Render thread/INFO]: Created: 1024x1024x0 minecraft:textures/atlas/gui.png-atlas
+[10:43:35] [Render thread/INFO]: Created: 128x64x0 minecraft:textures/atlas/map_decorations.png-atlas
+[10:43:35] [Render thread/INFO]: Created: 512x512x0 minecraft:textures/atlas/chest.png-atlas
+[10:43:35] [Render thread/INFO]: Created: 512x512x0 minecraft:textures/atlas/shulker_boxes.png-atlas
+ALSA lib confmisc.c:855:(parse_card) cannot find card '0'
+ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_card_inum returned error: No such file or directory
+ALSA lib confmisc.c:422:(snd_func_concat) error evaluating strings
+ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_concat returned error: No such file or directory
+ALSA lib confmisc.c:1342:(snd_func_refer) error evaluating name
+ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_refer returned error: No such file or directory
+ALSA lib conf.c:5728:(snd_config_expand) Evaluate error: No such file or directory
+ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM default
+audio_open_alsa: failed to open audio device default. No such file or directory
+[10:44:27] [Minecraft Services Discovery/WARN]: Failed to connect
+com.mojang.authlib.exceptions.MinecraftClientException: Failed to read from https://discovery.minecraftservices.com/minecraft/client due to Connection refused (connect failed)
+	at com.mojang.authlib.minecraft.client.MinecraftClient.readServiceResponse(MinecraftClient.java:148)
+	at com.mojang.authlib.minecraft.client.MinecraftClient.getWithEtag(MinecraftClient.java:82)
+	at com.mojang.authlib.minecraft.client.MinecraftClient.get(MinecraftClient.java:66)
+	at com.mojang.authlib.services.MinecraftServicesDiscoveryService.lambda$createDiscoverySupplier$1(MinecraftServicesDiscoveryService.java:83)
+	at com.mojang.authlib.services.RetryableFetch$1.run(RetryableFetch.java:42)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:545)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:328)
+	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:309)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1090)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:614)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+Caused by: java.net.ConnectException: Connection refused (connect failed)
+	at java.base/sun.nio.ch.Net.pollConnect(Native Method)
+	at java.base/sun.nio.ch.Net.pollConnectNow(Net.java:639)
+	at java.base/sun.nio.ch.NioSocketImpl.timedFinishConnect(NioSocketImpl.java:550)
+	at java.base/sun.nio.ch.NioSocketImpl.connect(NioSocketImpl.java:594)
+	at java.base/java.net.SocksSocketImpl.connect(SocksSocketImpl.java:307)
+	at java.base/java.net.Socket.connect(Socket.java:659)
+	at java.base/sun.security.ssl.SSLSocketImpl.connect(SSLSocketImpl.java:304)
+	at java.base/sun.net.NetworkClient.doConnect(NetworkClient.java:161)
+	at java.base/sun.net.www.http.HttpClient.openServer(HttpClient.java:524)
+	at java.base/sun.net.www.http.HttpClient.openServer(HttpClient.java:612)
+	at java.base/sun.net.www.protocol.https.HttpsClient.<init>(HttpsClient.java:207)
+	at java.base/sun.net.www.protocol.https.HttpsClient.New(HttpsClient.java:289)
+	at java.base/sun.net.www.protocol.https.AbstractDelegateHttpsURLConnection.getNewHttpClient(AbstractDelegateHttpsURLConnection.java:196)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.plainConnect0(HttpURLConnection.java:1012)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.plainConnect(HttpURLConnection.java:903)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.connect(HttpURLConnection.java:876)
+	at java.base/sun.net.www.protocol.https.AbstractDelegateHttpsURLConnection.connect(AbstractDelegateHttpsURLConnection.java:181)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.getInputStream0(HttpURLConnection.java:1380)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.getInputStream(HttpURLConnection.java:1306)
+	at java.base/java.net.HttpURLConnection.getResponseCode(HttpURLConnection.java:493)
+	at java.base/sun.net.www.protocol.https.HttpsURLConnectionImpl.getResponseCode(HttpsURLConnectionImpl.java:307)
+	at com.mojang.authlib.minecraft.client.MinecraftClient.readServiceResponse(MinecraftClient.java:127)
+	... 10 more
+[10:44:39] [Download-3/ERROR]: Couldn't connect to realms
+com.mojang.realmsclient.exception.RealmsServiceException: Realms service error (500) with message 'Could not connect to Realms: Connection refused (connect failed)'
+	at com.mojang.realmsclient.client.RealmsClient.execute(RealmsClient.java:638)
+	at com.mojang.realmsclient.client.RealmsClient.clientCompatible(RealmsClient.java:354)
+	at com.mojang.realmsclient.RealmsAvailability.lambda$check$0(RealmsAvailability.java:48)
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1789)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1090)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:614)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+[10:45:18] [Render thread/INFO]: Stopping!

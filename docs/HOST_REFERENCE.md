@@ -3,6 +3,33 @@
 **This is Linux reference evidence, not Switch execution or a remote execution
 solution. The Horizon title-screen objective remains NOT ACHIEVED.**
 
+## Launcher acceptance retest — 2026-11-04
+
+The production installer downloaded and verified 5,459 Horizon-target artifacts
+(599,338,934 bytes); a second read-only verification found no missing/corrupt
+files. This host title retest reused its verified client, common libraries and
+asset objects, with the required Linux native classifier JARs verified separately.
+The immutable official snapshot asset index is kept in a separate host directory:
+Prism's current index can reuse the same numeric ID with different contents.
+Do not alias the complete host assets directory onto the managed Prism cache.
+
+The actual Java25 client again reached **Minecraft 26.4 Snapshot 6 Demo** after
+Continue on the accessibility screen. The strict agent logged
+`VULKAN_ONLY_APPLIED`; the renderer logged `Using graphics backend Vulkan`.
+A sampled render thread was presenting through `vkQueuePresentKHR`. Selecting
+Quit Game logged `Stopping!` and returned process exit status 0. No world was
+entered. Audio and service/Realms limitations below still apply.
+
+Exact revisions, command, hashes and package provenance are retained in
+[the retest result](evidence/snapshot6-host-result-2026-11-04.json), with
+[the reviewed title screenshot](evidence/26.4-snapshot-6-HOST-ONLY-title-2026-11-04.png),
+[complete log](evidence/26.4-snapshot-6-HOST-ONLY-vulkan-2026-11-04.log) and
+[thread sample](evidence/26.4-snapshot-6-HOST-ONLY-threads-2026-11-04.log).
+The executed VM is Linux Temurin, not the Horizon runtime. Genuine Horizon VM
+startup, Java, JNI/FFM, instrumentation, graphics and Minecraft remain NOT TESTED.
+
+## Original reference evidence
+
 Target/client: 26.4-snapshot-6, SHA-1
 `8a97d5dafe80783525a2807b220527b65df724a5`. Exact official metadata is retained
 under docs/evidence/official-metadata/. Its Java requirement is 25; the client

@@ -1,0 +1,16 @@
+test_actual_binaries (tests.test_artifacts.ArtifactTests.test_actual_binaries) ... ok
+test_renamed_elf_and_truncation_rejected (tests.test_artifacts.ArtifactTests.test_renamed_elf_and_truncation_rejected) ... ok
+test_real_sdk_publication_and_composed_lookups (tests.test_composite_resolver.CompositeResolverTests.test_real_sdk_publication_and_composed_lookups) ... ok
+test_real_lwjgl_platform_and_fail_closed_library_loading (tests.test_lwjgl_horizon.LwjglHorizonTests.test_real_lwjgl_platform_and_fail_closed_library_loading) ... ok
+test_allowlisted_function_lookup_and_call (tests.test_native_lookup.NativeLookupTests.test_allowlisted_function_lookup_and_call) ... ok
+test_real_jni_registration_and_ffm_downcall_through_sdk (tests.test_native_symbols_jni.NativeSymbolsJniTests.test_real_jni_registration_and_ffm_downcall_through_sdk) ... ok
+test_matching_base_features_never_claim_game_title (tests.test_snapshot_profile.SnapshotProfileTests.test_matching_base_features_never_claim_game_title) ... ok
+test_nonconformance_is_not_silently_hidden (tests.test_snapshot_profile.SnapshotProfileTests.test_nonconformance_is_not_silently_hidden) ... ok
+test_wrong_snapshot_is_rejected (tests.test_snapshot_profile.SnapshotProfileTests.test_wrong_snapshot_is_rejected) ... ok
+test_renderer_is_single_vulkan_and_wrong_hash_is_rejected (tests.test_vulkan_transform.VulkanTransformTests.test_renderer_is_single_vulkan_and_wrong_hash_is_rejected) ... ok
+test_verified_official_snapshot_class (tests.test_vulkan_transform.VulkanTransformTests.test_verified_official_snapshot_class) ... ok
+
+----------------------------------------------------------------------
+Ran 11 tests in 3.595s
+
+OK

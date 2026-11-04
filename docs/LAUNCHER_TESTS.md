@@ -64,6 +64,10 @@ Only a matching `.part.owner` journal permits explicit repair to restart an
 interrupted managed download. Completed files are cached; partial bytes are
 clean-restarted rather than claimed as range-resumed.
 
+The transfer/import worker uses a 512 KiB native stack. This manager is VM-free;
+it does not alter the Java diagnostic stack/heap policies or the one-VM-per-process
+rule. Long network calls remain subject to the transport's configured timeouts.
+
 Folder import accepts `.minecraft/` or Prism's `minecraft/` directory and rejects
 symlinks/special files. Defaults are 20,000 files and 2 GiB, with bounded depth.
 Imported desktop memory settings are clamped to the supported 128..1024 MiB
@@ -88,6 +92,23 @@ bundle. The normal default uses the configured system trust store.
 
 ## Host reproduction
 
+The 2026-11-04 acceptance run passed all **55 launcher tests** above and **11
+additional artifact, resolver, host JNI/FFM, LWJGL identity and renderer tests**.
+Logs are retained under docs/evidence as launcher-final-55-tests-HOST-ONLY.log
+and launcher-integration-11-tests-HOST-ONLY.log. The real online installation
+report is launcher-online-install-HOST-ONLY.json; this is not a fixture download.
+
+The expanded run initially used a stale shared Java checkout. The two affected
+resolver/JNI tests then passed using the clean isolated runtime pin b7c2ac7.
+One additional archive-mutation test could not be rerun: the original pinned
+SDK/runtime `.tar.gz` inputs are absent from this restored workspace. The
+previously integrated SDK/image remain cached and unchanged; no new VM/image
+build is claimed. The initial complete errors are retained in
+launcher-expanded-initial-environment-errors.log. Recreate those original
+artifacts through the full pinned runtime build before rerunning
+tests.test_java25_package. This is a host cache prerequisite, not a measured
+Horizon runtime defect.
+
 Install a C++17 compiler, Python 3, pkg-config, libcurl development files and
 OpenSSL development files/CLI. From the repository root:
 
@@ -102,3 +123,8 @@ Use a private cache outside Git/dist. The installer targets Horizon library rule
 Linux title-reference native libraries are a separate workload. No game payloads
 from a host run are included in source or release artifacts. Microsoft login,
 modloader installation and the complete Qt task framework are not implemented.
+
+The real client was also launched on 2026-11-04 and visually reached its Demo
+title using the strict Vulkan bridge, then exited normally. Follow
+[HOST_REFERENCE.md](HOST_REFERENCE.md) for that independent host test and retained
+evidence. A resource-install PASS alone does not establish game startup.

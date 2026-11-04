@@ -73,7 +73,9 @@ def main():
         'network_tls':'libcurl/libnx SSL, certificate verification enabled; device NOT TESTED',
         'native_curl_library_sha256':digest(dk/'portlibs/switch/lib/libcurl.a'),
         'curl_source_provenance':json.loads((ROOT/'vendor/curl/UPSTREAM.json').read_text()),
-        'host_installation_evidence':json.loads((ROOT/'docs/evidence/launcher-online-install-HOST-ONLY.json').read_text()),'host_ui_preview':'rendered from original display fixtures',
+        'host_installation_evidence':json.loads((ROOT/'docs/evidence/launcher-online-install-HOST-ONLY.json').read_text()),
+        'host_minecraft_evidence':json.loads((ROOT/'docs/evidence/snapshot6-host-result-2026-11-04.json').read_text()),
+        'host_ui_preview':'rendered from original display fixtures',
         'unchanged_runtime_source':'https://github.com/a1c7e0/switchcraft/tree/artifacts/java25-e08f36a',
         'artifacts':[{ 'name':p.name,'sha256':digest(p),'bytes':p.stat().st_size} for p in [dest/'minecraft-launcher.nro',overlay,source,debug]]}
     (dest/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')

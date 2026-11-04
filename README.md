@@ -17,7 +17,7 @@ Java execution and the Minecraft title on Switch remain NOT TESTED.**
 The reference uses the official Demo mode, no account credentials, and Mesa
 llvmpipe Vulkan. The image below is **HOST ONLY**, not a Switch screenshot:
 
-![HOST ONLY: snapshot 6 strict Vulkan demo title](docs/evidence/26.4-snapshot-6-HOST-ONLY-vulkan-strict-title.png)
+![HOST ONLY: snapshot 6 strict Vulkan demo title, retested 2026-11-04](docs/evidence/26.4-snapshot-6-HOST-ONLY-title-2026-11-04.png)
 
 ## Implemented and built
 

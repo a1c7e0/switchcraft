@@ -1,0 +1,45 @@
+{
+  "target": "26.4-snapshot-6",
+  "date_utc": "2026-11-04",
+  "execution_environment": "Linux x86_64 host; Xvfb localhost:97 (1280x720), SDL3 X11",
+  "switchcraft_code_revision": "82f3bdc975d07e1ff18d39dc96805d967bf2d835",
+  "java_switch_pinned_revision": "b7c2ac7fd422bc2543e5c698db4e33a01cc0312d",
+  "executed_java": "Eclipse Temurin OpenJDK 25.0.5+8 Linux x86_64 (not the Horizon VM)",
+  "renderer": "Vulkan 1.4.305 llvmpipe Mesa 25.0.7-2+deb13u1, LLVM 19.1.7",
+  "client_sha1": "8a97d5dafe80783525a2807b220527b65df724a5",
+  "bridge_jar_sha256": "2a2ff3124d669649c35a9d6e0353f0e2444ccd6d41f1d9506a0df30e5afd30d4",
+  "official_asset_index_sha1": "6085c72e1c257db765043c1f31e56487a0eb1e51",
+  "resources": "Client/common libraries and asset objects reused from the production installer private cache; required Linux native classifier JARs and immutable official snapshot asset index verified separately.",
+  "launch_command": "python3 tools/snapshot6-reference.py --cache /tmp/switchcraft-mc-host --java /workspace/switchcraft/.deps/host-jdk25/jdk-25.0.5+8/bin/java --run-demo",
+  "launch_mode": "Official built-in Demo mode; empty access token; no credentials or authentication patches",
+  "visual_review": "PASS: first accessibility screen, Continue, then Minecraft 26.4 Snapshot 6 Demo title",
+  "vulkan_only": "PASS: VULKAN_ONLY_APPLIED and Using graphics backend Vulkan; render thread sampled in vkQueuePresentKHR through VulkanGpuSurface.present",
+  "normal_exit": "PASS: clicked Quit Game; Stopping! logged; process exit status 0",
+  "world_entry": "NOT TESTED",
+  "horizon_vm_startup_java_jni_ffm_instrumentation": "NOT TESTED",
+  "horizon_ui_networking_sdl_vulkan": "NOT TESTED",
+  "horizon_minecraft_title": "NOT ACHIEVED / NOT TESTED",
+  "known_host_limitations": [
+    "No host audio device; sound disabled",
+    "Minecraft services and Realms unavailable; title still rendered"
+  ],
+  "game_payloads_committed_or_distributed": false,
+  "evidence": [
+    {
+      "path": "26.4-snapshot-6-HOST-ONLY-title-2026-11-04.png",
+      "sha256": "bfad8029098a24c7ff0449c912ed0c65133b05e651ccf7554ee34a3e20874d9f"
+    },
+    {
+      "path": "26.4-snapshot-6-HOST-ONLY-vulkan-2026-11-04.log",
+      "sha256": "7df73fcc9875b38b97c8fd3090a3439bc322995fe615e924e50e9efe80eaa0c4"
+    },
+    {
+      "path": "26.4-snapshot-6-HOST-ONLY-threads-2026-11-04.log",
+      "sha256": "a3cd1c9dfea950d0ad578243514e94b57d75d94da7fa493b575ab24a51a82bae"
+    },
+    {
+      "path": "26.4-snapshot-6-HOST-ONLY-environment-2026-11-04.txt",
+      "sha256": "65b46c84e5bc76eb1bcb5a1f59f88969209ad7385f40c9e860f1e3f6a7137a7f"
+    }
+  ]
+}
