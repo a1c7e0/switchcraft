@@ -1,0 +1,50 @@
+{
+  "source_revision": "2041fe3b50c5de1b7189ce48443f45365c2acb12",
+  "java_switch_revision": "b7c2ac7fd422bc2543e5c698db4e33a01cc0312d",
+  "prism_revision": "059e858e101edc9314ccb94aa48bd01b282539c5",
+  "sdk_abi": 1,
+  "sdk_library_sha256": "27e7594047fda800671ae9034bbaec7e8a2905391b883bc4398956318d764b94",
+  "cached_runtime_input": {
+    "revision": "b7c2ac7fd422bc2543e5c698db4e33a01cc0312d",
+    "sdk": "bdf8fe49fede2a11ba18ba1f37f99ccedb5a26529eaa8ec1fb0c5c70b47f423b",
+    "runtime": "c349e464cb6828bd83321d42d355b16fae33218bbe5ba70f038dd0f7fba36d12"
+  },
+  "launcher": {
+    "name": "minecraft-launcher.nro",
+    "bytes": 2123973,
+    "sha256": "1cf03a0fd777d76e055f0a32b0cbf7212957ee403ab4d7427bbc076df404453a",
+    "architecture": "AArch64",
+    "format": "NRO0+ASET",
+    "nacp_title": "minecraft-launcher",
+    "build_id": "4c61f9ae31563c889eb0004e5c834d029687a588",
+    "build_verification": "PASS",
+    "hardware_verification": "NOT TESTED"
+  },
+  "horizon_execution": "NOT TESTED",
+  "vm_linked": false,
+  "minecraft_launch_enabled": false,
+  "host_ui_preview": "rendered from original display fixtures",
+  "unchanged_runtime_source": "https://github.com/a1c7e0/switchcraft/tree/artifacts/java25-e08f36a",
+  "artifacts": [
+    {
+      "name": "minecraft-launcher.nro",
+      "sha256": "1cf03a0fd777d76e055f0a32b0cbf7212957ee403ab4d7427bbc076df404453a",
+      "bytes": 2123973
+    },
+    {
+      "name": "switchcraft-launcher-foundation.zip",
+      "sha256": "d33c0db721534d7bd4a76762f4f3c15f2c143810f63e37b8de100a225e1d6a0a",
+      "bytes": 3067943
+    },
+    {
+      "name": "launcher-corresponding-source.tar.gz",
+      "sha256": "761003ba01b3df931560f44bcd7097c7759a311a32f90df4f0effc18c9a9a2de",
+      "bytes": 1896453
+    },
+    {
+      "name": "launcher-debug-symbols.zip",
+      "sha256": "01ae949e2fc3d6b6284a82dd8caf40127dafcfd39db1362e3fe5af505798d567",
+      "bytes": 7130144
+    }
+  ]
+}
