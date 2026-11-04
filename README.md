@@ -33,7 +33,7 @@ Horizon UI execution remains NOT TESTED.
 | `switch-diagnostics.nro` | Input, SD roundtrip, process/malloc memory, native threads and next-load navigation |
 | `vulkan-test.nro` | NVK enumeration, transfer/readback, offscreen triangle |
 | `vulkan-present.nro` | Exact snapshot-6 base-feature capture; SDL3 window/gamepad, VI surface, swapchain and presentation loop |
-| `minecraft-launcher.nro` | Read-only version/inheritance/dependency planning, strict Vulkan JVM/game arguments, saved configuration and honest Java-25 launch gate |
+| `minecraft-launcher.nro` | Prism-format instance management, controller/touch UI, read-only shared installation checks and honest Java-25 launch status |
 | `java-test.nro` | Independent java-switch Java-8 interpreter diagnostic; this is not a Java-25 VM |
 | `ffi-test.nro` | AAPCS64 downcalls, libnx RW/RX upcall closures and whole-region virtual-memory probe |
 | `zero-services-test.nro` | Independent native VM service probes; no VM |

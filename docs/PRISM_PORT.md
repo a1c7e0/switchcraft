@@ -1,5 +1,10 @@
 # Prism backend port and Switch launcher foundation
 
+The first built milestone is available in the
+[launcher artifact branch](https://github.com/a1c7e0/switchcraft/tree/artifacts/launcher-2041fe3).
+Its ZIP can be merged onto the SD card after the existing Java25 diagnostic
+package; diagnostic binaries, runtime images and user profiles are preserved.
+
 Switchcraft adapts Prism Launcher's instance/component model and metadata
 algorithms from immutable upstream commit
 `059e858e101edc9314ccb94aa48bd01b282539c5`. The first portable backend is in

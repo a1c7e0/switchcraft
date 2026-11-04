@@ -5,6 +5,8 @@ The legacy branch is legacy/1.12.2; Java ownership is the independent java-switc
 
 | Milestone | Implemented | Built | Host verification | Horizon hardware |
 | --- | --- | --- | --- | --- |
+| Switch-style launcher UI and Prism-format instances | First foundation; create/edit/duplicate/check | NRO; console fallback retained | Shared-canvas preview, controller hit targets, instance isolation tests | NOT TESTED |
+| Prism component metadata/cache backend | Portable vanilla/LWJGL subset | NRO and host tools | Real snapshot metadata, SHA256 cache, dependency/UTC sorting tests | NOT TESTED |
 | Native input/SD/memory/threads | Yes | NRO | Format/link | NOT TESTED |
 | NVK transfer/offscreen triangle | Yes | NRO | Format/link | NOT TESTED |
 | Exact snapshot feature profile | Yes | NRO/tool | Gate fixtures | NOT TESTED |

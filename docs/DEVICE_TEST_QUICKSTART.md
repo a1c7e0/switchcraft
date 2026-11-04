@@ -116,6 +116,11 @@ is a measured compatibility blocker; do not change feature reports to force PASS
 
 ## Optional planner and host reference
 
+The paragraph below describes the original base-package console inspector.
+If you install the [new launcher overlay](https://github.com/a1c7e0/switchcraft/tree/artifacts/launcher-2041fe3),
+use its [UI controls and hardware checklist](PRISM_PORT.md) instead. Java/native
+diagnostic controls above are unchanged.
+
 `minecraft-launcher` is currently an inspector with a VM-free SDK. With an owned
 installation, A exports its plan, X explicitly saves configuration, and L checks
 the gate. **`JS_UNAVAILABLE` / `runtime-not-linked` is expected for L.** It cannot

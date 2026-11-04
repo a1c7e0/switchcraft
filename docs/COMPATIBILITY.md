@@ -2,7 +2,7 @@
 
 | Target | Required runtime | Renderer/input | Actual state |
 | --- | --- | --- | --- |
-| 26.4-snapshot-6 | Java 25 / classfile 69 | Vulkan 1.2 base, SDL3/gamepad | Strict Vulkan Demo title on host; Horizon VM missing |
+| 26.4-snapshot-6 | Java 25 / classfile 69 | Vulkan 1.2 base, SDL3/gamepad | Strict Vulkan Demo title on host; Horizon startup/native bindings unverified |
 | Java 25 JNI/FFM workload | Java 25 | Native downcalls/upcalls | Genuine Zero VM cross-linked; host adapter passes; Horizon execution NOT TESTED |
 | miniJVM diagnostic | Java 8 | Console | Host passed; Horizon NRO untested |
 | Legacy Minecraft experiments | Java 8/17/21 metadata targets | Historical OpenGL/LWJGL | Preserved on branch legacy/1.12.2 |
