@@ -25,7 +25,10 @@ inspector is retained as a fallback. Instance management uses Prism instance.cfg
 and mmc-pack.json with separate game directories. The portable Prism metadata
 subset and original pinned sources/provenance are in src/prism_metadata.cpp and
 vendor/prism/; the combined launcher carries GPL-3.0-only/Apache-2.0 obligations.
-Do not describe it as the complete Qt backend or imply on-console installation.
+Online catalog/install/verify tasks now use shared Prism metadata, verified
+downloads and a cancellable worker. These paths are host-tested and cross-built,
+but on-console networking/UI execution is NOT TESTED. Do not describe this as
+the complete Qt backend or imply authentication/modloader support.
 See docs/PRISM_PORT.md. Host UI previews are never device evidence.
 
 The official client was downloaded only to /tmp for research, never committed

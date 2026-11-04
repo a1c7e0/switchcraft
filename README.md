@@ -21,19 +21,21 @@ llvmpipe Vulkan. The image below is **HOST ONLY**, not a Switch screenshot:
 
 ## Implemented and built
 
-The new [launcher foundation](docs/PRISM_PORT.md) adds a controller/touch UI,
-Prism-format instances and a first portable Prism component-metadata backend.
-It supports instance creation/editing/settings-only duplication and local
-installation checks. Full Qt networking, account flows, online installation and
-mod management are not yet ported. The new UI is cross-built and host-previewed;
-Horizon UI execution remains NOT TESTED.
+The [launcher](docs/PRISM_PORT.md) provides a controller/touch UI and a portable
+Prism instance/component backend. It supports creation/editing, settings-only
+duplication, online version catalogs, verified installation/repair, integrity
+checks, folder import and archive/restore. Download the
+[launcher-manager overlay](https://github.com/a1c7e0/switchcraft/tree/artifacts/launcher-manager)
+and follow [the launcher tests](docs/LAUNCHER_TESTS.md). Account flows, mod
+management and the full Qt framework are not ported. The UI is cross-built and
+host-tested; Horizon UI/network execution remains NOT TESTED.
 
 | Artifact | Actual behavior |
 | --- | --- |
 | `switch-diagnostics.nro` | Input, SD roundtrip, process/malloc memory, native threads and next-load navigation |
 | `vulkan-test.nro` | NVK enumeration, transfer/readback, offscreen triangle |
 | `vulkan-present.nro` | Exact snapshot-6 base-feature capture; SDL3 window/gamepad, VI surface, swapchain and presentation loop |
-| `minecraft-launcher.nro` | Prism-format instance management, controller/touch UI, read-only shared installation checks and honest Java-25 launch status |
+| `minecraft-launcher.nro` | Prism instances, controller/touch UI, verified online installation/repair, import/archive and honest Java-25 launch status |
 | `java-test.nro` | Independent java-switch Java-8 interpreter diagnostic; this is not a Java-25 VM |
 | `ffi-test.nro` | AAPCS64 downcalls, libnx RW/RX upcall closures and whole-region virtual-memory probe |
 | `zero-services-test.nro` | Independent native VM service probes; no VM |
@@ -81,12 +83,14 @@ and per-attempt log collection.
 No kernel patches, overclocking, Linux/Android installation or remote game
 execution are required by the NROs.
 
-Copy a legitimately obtained installation's `versions/`, `libraries/` and
-`assets/` to `sdmc:/minecraft/.minecraft`, or configure another root. Runtime
-settings/logs remain under `sdmc:/switch/mc-runtime`; the installation is read
-only. Copy `launcher.example.json` to `launcher.json` to configure a root, or
-save in the launcher. Legacy graphics choices are migrated in memory to Vulkan;
-existing configuration is written only on explicit X/save.
+Use the launcher's Versions > Install / repair action, or copy a legitimately
+obtained installation's `versions/`, `libraries/` and `assets/` to
+`sdmc:/minecraft/.minecraft`. Settings selects the shared installation root.
+Runtime settings/logs remain under `sdmc:/switch/mc-runtime`. Integrity checks and
+plan generation are read-only; explicit install/repair manages downloaded cache
+resources. Existing configuration is preserved until Save preferences. The
+base-package console inspector uses its original controls documented in the
+device checklist.
 
 ## Validation and remaining work
 

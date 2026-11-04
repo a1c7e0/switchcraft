@@ -1,0 +1,10 @@
+{
+  "package": "switch-curl 7.69.1-5",
+  "recipe_revision": "9937f6ac3171c5dba7324de8edb4e6cc3af3c01f",
+  "source_url": "https://curl.se/download/curl-7.69.1.tar.xz",
+  "source_sha256": "03c7d5e6697f7b7e40ada1b2256e565a555657398e6c1fcfa4cb251ccd819d4f",
+  "patch_sha256": "723c7d884fc7c39ae1a3115ba245bb8c1415da47bbd60ab8f943ca98f92ebc9a",
+  "recipe_sha256": "4e649bcb1ffd8b15822144c9ea26680f668c425983732b779c98f8e48058ae65",
+  "license": "curl COPYING (MIT-style), including libnx TLS patch notices",
+  "recipe_url": "https://github.com/devkitPro/pacman-packages/blob/9937f6ac3171c5dba7324de8edb4e6cc3af3c01f/switch/curl/PKGBUILD"
+}

@@ -117,8 +117,8 @@ is a measured compatibility blocker; do not change feature reports to force PASS
 ## Optional planner and host reference
 
 The paragraph below describes the original base-package console inspector.
-If you install the [new launcher overlay](https://github.com/a1c7e0/switchcraft/tree/artifacts/launcher-2041fe3),
-use its [UI controls and hardware checklist](PRISM_PORT.md) instead. Java/native
+If you install the [new launcher overlay](https://github.com/a1c7e0/switchcraft/tree/artifacts/launcher-manager),
+use its [UI controls](PRISM_PORT.md) and [launcher checklist](LAUNCHER_TESTS.md) instead. Java/native
 diagnostic controls above are unchanged.
 
 `minecraft-launcher` is currently an inspector with a VM-free SDK. With an owned

@@ -30,9 +30,12 @@ build/vulkan-test.elf: build/vulkan.o build/platform.o
 	$(DK)g++ $(LDFLAGS) $^ .deps/nvk/lib/libvulkan.a -Wl,--start-group -ldrm_nouveau -lzstd -lz -lnx -lm -Wl,--end-group -o $@ -Wl,-Map,$@.map
 build/metadata.o: src/metadata.cpp src/metadata.hpp vendor/json.hpp | build
 	$(DK)g++ $(CXXFLAGS) -c $< -o $@
-LAUNCHER_SOURCES := src/launcher.cpp src/launcher_console.cpp src/instances.cpp src/prism_metadata.cpp src/launcher_ui.cpp src/ui_canvas.cpp
-build/minecraft-launcher.elf: $(LAUNCHER_SOURCES) src/instances.hpp src/prism_metadata.hpp src/launcher_ui.hpp src/ui_canvas.hpp vendor/stb_truetype.h build/metadata.o build/platform.o build/java-runtime.stamp
-	$(DK)g++ $(CXXFLAGS) -I$(JAVASDK)/include $(LDFLAGS) $(LAUNCHER_SOURCES) build/metadata.o build/platform.o $(JAVASDK)/lib/libjavaswitch.a -lnx -lm -o $@ -Wl,-Map,$@.map
+LAUNCHER_SOURCES := src/launcher.cpp src/launcher_console.cpp src/instances.cpp src/prism_metadata.cpp src/launcher_ui.cpp src/ui_canvas.cpp src/launcher_controller.cpp src/launcher_jobs.cpp src/launcher_session.cpp src/install.cpp src/download.cpp
+LAUNCHER_HEADERS := src/instances.hpp src/prism_metadata.hpp src/launcher_ui.hpp src/ui_canvas.hpp src/launcher_controller.hpp src/launcher_jobs.hpp src/launcher_session.hpp src/install.hpp src/download.hpp
+build/minecraft-launcher.elf: $(LAUNCHER_SOURCES) $(LAUNCHER_HEADERS) vendor/stb_truetype.h build/metadata.o build/platform.o build/java-runtime.stamp
+	$(DK)g++ $(CXXFLAGS) -I$(PORT)/include -DCURL_STATICLIB -I$(JAVASDK)/include $(LDFLAGS) $(LAUNCHER_SOURCES) build/metadata.o build/platform.o $(JAVASDK)/lib/libjavaswitch.a -Wl,--start-group -lcurl -lz -lnx -lm -Wl,--end-group -o $@ -Wl,-Map,$@.map
+build/switchcraft-install: tools/install.cpp src/install.cpp src/download.cpp src/prism_metadata.cpp src/metadata.cpp src/install.hpp src/download.hpp src/prism_metadata.hpp src/metadata.hpp | build
+	g++ -std=c++17 -O2 -Wall -Wextra -Ivendor -Isrc tools/install.cpp src/install.cpp src/download.cpp src/prism_metadata.cpp src/metadata.cpp -lcurl -lcrypto -pthread -o $@
 build/launcher-preview: tools/launcher-preview.cpp src/launcher_ui.cpp src/ui_canvas.cpp src/launcher_ui.hpp src/ui_canvas.hpp src/instances.hpp vendor/stb_truetype.h | build
 	g++ -std=c++17 -O2 -Wall -Wextra -Ivendor -Isrc tools/launcher-preview.cpp src/launcher_ui.cpp src/ui_canvas.cpp -o $@
 build/java-runtime.stamp: dependencies.lock.json scripts/build-java-runtime.sh scripts/prepare-java25-runtime.py | build dist

@@ -4,9 +4,10 @@ Every physical case begins as **NOT TESTED**. The Linux Demo title is separate
 reference evidence; the Horizon game title remains **BLOCKED / NOT ACHIEVED**.
 L-01 through L-03 below describe the console inspector in the immutable
 `artifacts/java25-e08f36a` base package. The newer
-[launcher overlay](https://github.com/a1c7e0/switchcraft/tree/artifacts/launcher-2041fe3)
+[launcher overlay](https://github.com/a1c7e0/switchcraft/tree/artifacts/launcher-manager)
 changes launcher controls to a graphical UI; use [PRISM_PORT.md](PRISM_PORT.md)
-for its controls and hardware checks. It does not replace the Java diagnostic NROs.
+for controls and [LAUNCHER_TESTS.md](LAUNCHER_TESTS.md) for installation and
+management checks. It does not replace the Java diagnostic NROs.
 Use Switch 1, Atmosphere, application-mode hbmenu, normal clocks and supported
 libnx APIs. No patches or Linux/Android boot. Keep SD backups and preserve saves
 and real configuration when merging the package.

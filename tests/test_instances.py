@@ -75,13 +75,22 @@ class InstanceTests(unittest.TestCase):
         raw=(inst/'instance.cfg').read_text()
         self.assertIn('"World, 1; +\\# \\"雪\\""', raw)
         self.assertEqual(json.loads(self.call('list').stdout)[0]['name'],label)
+        quoted='World \"A\"'
+        qinfo=json.loads(self.call('create',quoted,'26.4-snapshot-6','512').stdout)
+        self.assertIn('name=\"World \\\"A\\\"\"',(self.runtime/'instances'/qinfo['id']/'instance.cfg').read_text())
+        self.assertEqual(json.loads(self.call('list').stdout)[0]['name'],quoted)
+        for at_name in ['@World, one', '@Variant(literal)', '@"quoted"', ' leading name ']:
+            at_info=json.loads(self.call('create',at_name,'26.4-snapshot-6','512').stdout)
+            names={item['id']:item['name'] for item in json.loads(self.call('list').stdout)}
+            self.assertEqual(names[at_info['id']],at_name)
         # Saving another setting must preserve other valid Prism scalar settings.
         with (inst/'instance.cfg').open('a') as f:
-            f.write('[General]\nCustom=one\\#two\n')
+            f.write('[LauncherExtra]\nCustom=one\\#two\n')
         self.call('rename',info['id'],label)
         after=(inst/'instance.cfg').read_text()
-        self.assertIn('[General]\nCustom=one\\#two',after)
-        self.assertEqual(json.loads(self.call('list').stdout)[0]['name'],label)
+        self.assertIn('[LauncherExtra]\nCustom=one\\#two',after)
+        listed={item['id']:item['name'] for item in json.loads(self.call('list').stdout)}
+        self.assertEqual(listed[info['id']],label)
 
     def test_duplicate_has_empty_game_directory_and_no_install_writes(self):
         info=json.loads(self.call('create','Original','26.4-snapshot-6','512').stdout)
@@ -168,6 +177,27 @@ class InstanceTests(unittest.TestCase):
         after={p.relative_to(source):hashlib.sha256(p.read_bytes()).hexdigest() for p in source.rglob('*') if p.is_file()}
         self.assertEqual(before,after)
         self.call('plan',imported['id'],ok=False)
+
+    def test_import_modern_qsettings_general_unicode_opaque_and_unknown_groups(self):
+        source=self.write_import_profile()
+        cfg='[General]\nConfigVersion=1.3\nInstanceType=OneSix\nname=Snow \\x96ea\nMaxMemAlloc=4096\nOpaque=@ByteArray(\\x00\\xff)\nAtString=@@literal\n[LauncherExtra]\nKeep=Value\n[%General]\nLiteral=kept\nTyped=@Variant(\\x00\\x01)\n'.replace('\n','\r\n')
+        (source/'instance.cfg').write_bytes(cfg.encode())
+        before=(source/'instance.cfg').read_bytes()
+        imported=json.loads(self.call('import',str(source),'100','1048576').stdout)
+        self.assertEqual(imported['name'],'Snow 雪')
+        self.assertEqual(imported['heap_mib'],1024)
+        target=self.runtime/'instances'/imported['id']
+        after=(target/'instance.cfg').read_text()
+        self.assertIn('Opaque=@ByteArray(\\x00\\xff)',after)
+        self.assertIn('AtString=@@literal',after)
+        self.assertIn('[LauncherExtra]\nKeep=Value',after)
+        self.assertIn('[%General]\nLiteral=kept',after)
+        self.assertIn('Typed=@Variant(\\x00\\x01)',after)
+        self.call('rename',imported['id'],'Snow "Profile"')
+        renamed=(target/'instance.cfg').read_text()
+        self.assertIn('name="Snow \\"Profile\\""',renamed)
+        self.assertIn('Opaque=@ByteArray(\\x00\\xff)',renamed)
+        self.assertEqual((source/'instance.cfg').read_bytes(),before)
 
     def test_import_limits_cancellation_symlinks_and_bad_profiles_leave_no_partial_instance(self):
         source=self.write_import_profile()

@@ -51,56 +51,111 @@ void validate_instance(const Instance &i) {
     if (!safe_id(i.version)) throw std::runtime_error("Invalid installed version ID");
     validate_heap(i.heap_mib);
 }
-std::string ini_unescape(const std::string &s) {
-    std::string out; bool escaped=false;
-    for(char c:s) {
-        if(escaped) {
-            if(c=='n') out+='\n'; else if(c=='t') out+='\t'; else out+=c;
-            escaped=false;
-        } else if(c=='\\') escaped=true; else out+=c;
+struct IniDocument {
+    std::map<std::string,std::string> values;
+    std::map<std::string,std::string> opaque_values;
+};
+void append_utf8(std::string &out,unsigned cp) {
+    if(cp<=0x7f) out+=(char)cp;
+    else if(cp<=0x7ff) { out+=(char)(0xc0|(cp>>6)); out+=(char)(0x80|(cp&0x3f)); }
+    else if(cp<=0xffff) { out+=(char)(0xe0|(cp>>12)); out+=(char)(0x80|((cp>>6)&0x3f)); out+=(char)(0x80|(cp&0x3f)); }
+    else { out+=(char)(0xf0|(cp>>18)); out+=(char)(0x80|((cp>>12)&0x3f)); out+=(char)(0x80|((cp>>6)&0x3f)); out+=(char)(0x80|(cp&0x3f)); }
+}
+unsigned hex4(const std::string &s,size_t p) {
+    if(p+4>s.size()) throw std::runtime_error("Truncated Qt INI Unicode escape");
+    unsigned value=0;
+    for(size_t i=0;i<4;++i) { unsigned char c=s[p+i]; unsigned digit;
+        if(c>='0'&&c<='9') digit=c-'0'; else if(c>='a'&&c<='f') digit=c-'a'+10; else if(c>='A'&&c<='F') digit=c-'A'+10; else throw std::runtime_error("Invalid Qt INI Unicode escape");
+        value=(value<<4)|digit;
     }
-    if(escaped) throw std::runtime_error("Trailing Prism INI escape");
+    return value;
+}
+std::string ini_unescape(const std::string &s) {
+    std::string out;
+    for(size_t i=0;i<s.size();++i) {
+        char c=s[i]; if(c!='\\') { out+=c; continue; }
+        if(++i>=s.size()) throw std::runtime_error("Trailing Qt INI escape");
+        c=s[i];
+        if(c=='x') {
+            unsigned cp=hex4(s,i+1); i+=4;
+            if(cp>=0xd800&&cp<=0xdbff) {
+                if(i+6>=s.size()||s[i+1]!='\\'||s[i+2]!='x') throw std::runtime_error("Invalid Qt INI surrogate pair");
+                unsigned low=hex4(s,i+3); if(low<0xdc00||low>0xdfff) throw std::runtime_error("Invalid Qt INI surrogate pair");
+                cp=0x10000+((cp-0xd800)<<10)+(low-0xdc00); i+=6;
+            } else if(cp>=0xdc00&&cp<=0xdfff) throw std::runtime_error("Unpaired Qt INI low surrogate");
+            append_utf8(out,cp);
+        } else if(c=='n') out+='\n'; else if(c=='r') out+='\r'; else if(c=='t') out+='\t';
+        else if(c=='b') out+='\b'; else if(c=='f') out+='\f'; else if(c=='v') out+='\v';
+        else out+=c;
+    }
     return out;
 }
-std::map<std::string,std::string> read_ini(const std::string &path) {
+std::string trim_ascii(const std::string &s) {
+    size_t first=s.find_first_not_of(" \t\r"),last=s.find_last_not_of(" \t\r");
+    return first==s.npos?std::string():s.substr(first,last-first+1);
+}
+bool opaque_qsettings_value(const std::string &s) {
+    return s.size()>1&&s[0]=='@'&&s[1]!='@'&&s.find('(')!=s.npos;
+}
+IniDocument read_ini(const std::string &path) {
     struct stat st{}; if(lstat(path.c_str(),&st)!=0||!S_ISREG(st.st_mode)||st.st_size<0||(size_t)st.st_size>kMetadataLimit) throw std::runtime_error("Invalid or oversized instance.cfg");
     std::ifstream in(path); if(!in) throw std::runtime_error("Cannot read instance.cfg");
-    std::map<std::string,std::string> values; std::string line,section;
+    IniDocument doc; std::string line,section;
     while(std::getline(in,line)) {
-        if(line.empty()||line[0]=='#'||line[0]==';') continue;
-        if(line.front()=='[') {
-            if(line.size()<3||line.back()!=']'||line.find('\\')!=line.npos) throw std::runtime_error("Unsupported Prism INI section syntax");
-            section=line.substr(1,line.size()-2); if(section.find_first_of("[]\r\n")!=section.npos) throw std::runtime_error("Invalid Prism INI section"); continue;
+        if(!line.empty()&&line.back()=='\r') line.pop_back();
+        std::string trimmed=trim_ascii(line); if(trimmed.empty()||trimmed[0]=='#'||trimmed[0]==';') continue;
+        if(trimmed.front()=='[') {
+            if(trimmed.size()<3||trimmed.back()!=']'||trimmed.find('\\')!=trimmed.npos) throw std::runtime_error("Unsupported Qt INI section syntax");
+            section=trimmed.substr(1,trimmed.size()-2);
+            if(section=="General") section="";
+            if(section.find_first_of("[]\r\n")!=section.npos) throw std::runtime_error("Invalid Qt INI section");
+            continue;
         }
-        auto eq=line.find('='); if(eq==std::string::npos||eq==0) throw std::runtime_error("Unsupported Prism INI line");
-        std::string key=line.substr(0,eq),value=line.substr(eq+1);
-        if(key.find('\\')!=key.npos) throw std::runtime_error("Unsupported Prism INI key escape");
-        if(value.size()>=2&&value.front()=='"'&&value.back()=='"') value=value.substr(1,value.size()-2);
-        else if(value.find('"')!=value.npos) throw std::runtime_error("Unsupported quoted Prism INI value");
+        auto eq=trimmed.find('='); if(eq==std::string::npos||eq==0) throw std::runtime_error("Unsupported Qt INI line");
+        std::string key=trim_ascii(trimmed.substr(0,eq)),value=trim_ascii(trimmed.substr(eq+1));
+        if(key.find('\\')!=key.npos) throw std::runtime_error("Unsupported Qt INI key escape");
         if(!section.empty()) key=section+"/"+key;
-        values[key]=ini_unescape(value);
+        std::string raw_value=value;
+        if(value.size()>=2&&value.front()=='"'&&value.back()=='"') value=value.substr(1,value.size()-2);
+        else if(value.find('"')!=value.npos) throw std::runtime_error("Unsupported quoted Qt INI value");
+        if(value.rfind("@@",0)==0) value.erase(0,1);
+        else if(opaque_qsettings_value(value)) { doc.values.erase(key);doc.opaque_values[key]=raw_value;continue; }
+        doc.opaque_values.erase(key);
+        doc.values[key]=ini_unescape(value);
     }
-    return values;
+    return doc;
+}
+void set_ini(IniDocument &doc,const std::string &key,const std::string &value) {
+    doc.opaque_values.erase(key); doc.values[key]=value;
 }
 std::string ini_escape(const std::string &s) {
-    const bool quote=s.find_first_of(";=,")!=s.npos;
-    std::string out; if(quote) out+='"';
+    const bool quote=s.find_first_of(";=,")!=s.npos || s.find('"')!=s.npos || (!s.empty()&&(s.front()==' '||s.back()==' '));
+    std::string out; if(quote) out+='"'; if(!s.empty()&&s.front()=='@') out+='@';
     for(char c:s) {
-        if(c=='\\') out+="\\\\"; else if(c=='\n') out+="\\n"; else if(c=='\t') out+="\\t";
+        if(c=='\\') out+="\\\\"; else if(c=='\n') out+="\\n"; else if(c=='\r') out+="\\r"; else if(c=='\t') out+="\\t";
         else if(c=='#') out+="\\#"; else if(c=='"'&&quote) out+="\\\""; else out+=c;
     }
     if(quote) out+='"';
     return out;
 }
-std::string ini_encode(const std::map<std::string,std::string> &values) {
+std::string ini_encode(const IniDocument &doc) {
     std::string out="ConfigVersion=1.3\n";
-    for(const auto &p:values) if(p.first!="ConfigVersion"&&p.first.find('/')==p.first.npos) out+=p.first+"="+ini_escape(p.second)+"\n";
+    auto write=[&](const std::string &full_key,const std::string &output_key,const std::string &value) { auto opaque=doc.opaque_values.find(full_key); out+=output_key+"="+(opaque==doc.opaque_values.end()?ini_escape(value):opaque->second)+"\n"; };
+    for(const auto &p:doc.values) if(p.first!="ConfigVersion"&&p.first.find('/')==p.first.npos) write(p.first,p.first,p.second);
+    for(const auto &p:doc.opaque_values) if(p.first!="ConfigVersion"&&p.first.find('/')==p.first.npos) write(p.first,p.first,"");
     std::string section;
-    for(const auto &p:values) {
+    auto group_name=[](const std::string &group){return group;};
+    for(const auto &p:doc.values) {
         auto slash=p.first.find('/'); if(slash==p.first.npos) continue;
         std::string group=p.first.substr(0,slash),key=p.first.substr(slash+1);
-        if(group!=section) { section=group; out+="["+section+"]\n"; }
-        out+=key+"="+ini_escape(p.second)+"\n";
+        if(group!=section) { section=group; out+="["+group_name(section)+"]\n"; }
+        write(p.first,key,p.second);
+    }
+    for(const auto &p:doc.opaque_values) {
+        auto slash=p.first.find('/'); if(slash==p.first.npos) continue;
+        std::string group=p.first.substr(0,slash),key=p.first.substr(slash+1);
+        if(group!=section) { section=group; out+="["+group_name(section)+"]\n"; }
+        write(p.first,key,"");
     }
     return out;
 }
@@ -148,9 +203,10 @@ Instance decode(const std::string &dir,const std::string &expected,bool importin
         bool disabled=false; if(c.contains("disabled")) { if(!c["disabled"].is_boolean()) throw std::runtime_error("Malformed Prism component disabled flag"); disabled=c["disabled"].get<bool>(); }
         if(uid=="net.minecraft"&&!disabled) version=component_version;
     }
-    Instance i{expected,cfg.count("name")?cfg["name"]:"Unnamed Instance",version,512};
-    if(cfg.count("MaxMemAlloc")){try{
-        unsigned long heap=std::stoul(cfg["MaxMemAlloc"]);
+    if(cfg.opaque_values.count("name")||cfg.opaque_values.count("MaxMemAlloc")) throw std::runtime_error("Prism name/heap setting has a non-scalar Qt type");
+    Instance i{expected,cfg.values.count("name")?cfg.values["name"]:"Unnamed Instance",version,512};
+    if(cfg.values.count("MaxMemAlloc")){try{
+        unsigned long heap=std::stoul(cfg.values["MaxMemAlloc"]);
         if(importing) { if(heap>65536) throw std::runtime_error("Desktop heap exceeds import limit"); i.heap_mib=(unsigned)std::max<unsigned long>(kHeapMin,std::min<unsigned long>(heap,kHeapMax)); }
         else i.heap_mib=(unsigned)heap;
     }catch(const std::runtime_error &){throw;}catch(...){throw std::runtime_error("Invalid Prism MaxMemAlloc");}}
@@ -218,7 +274,7 @@ Instance create_with_id(const std::string &root,const std::string &shared,const 
     if(mkdir(join(dir,".minecraft").c_str(),0755)!=0) { rmdir(dir.c_str()); throw std::runtime_error("Cannot create game directory"); }
     try {
         std::map<std::string,std::string> cfg{{"InstanceType","OneSix"},{"name",name},{"OverrideMemory","true"},{"MinMemAlloc","64"},{"MaxMemAlloc",std::to_string(heap)}};
-        write_atomic(join(dir,"instance.cfg"),ini_encode(cfg),true);
+        write_atomic(join(dir,"instance.cfg"),ini_encode(IniDocument{cfg,{}}),true);
         write_atomic(join(dir,"mmc-pack.json"),pack(shared,version).dump(2)+"\n",true);
     } catch(...) { unlink(join(dir,"instance.cfg").c_str()); unlink(join(dir,"mmc-pack.json").c_str()); rmdir(join(dir,".minecraft").c_str()); rmdir(dir.c_str()); throw; }
     return i;
@@ -386,8 +442,8 @@ Instance import_instance(const std::string &root,const std::string &shared,const
         // Revalidate the copied profile and local metadata before it becomes visible.
         source_profile=decode(staging,"import-check",true);
         auto imported_cfg=read_ini(join(staging,"instance.cfg"));
-        imported_cfg["MaxMemAlloc"]=std::to_string(source_profile.heap_mib);
-        imported_cfg["MinMemAlloc"]="64"; imported_cfg["OverrideMemory"]="true";
+        set_ini(imported_cfg,"MaxMemAlloc",std::to_string(source_profile.heap_mib));
+        set_ini(imported_cfg,"MinMemAlloc","64"); set_ini(imported_cfg,"OverrideMemory","true");
         std::string cfg_path=join(staging,"instance.cfg"),cfg_tmp=stage_atomic(cfg_path,ini_encode(imported_cfg));
         commit_staged(cfg_tmp,cfg_path);
         struct stat game{};
@@ -423,7 +479,7 @@ Instance create_instance(const std::string &root,const std::string &shared,const
 }
 void save_instance(const std::string &root,const Instance &i) {
     validate_instance(i); const std::string dir=dir_for(root,i.id); Instance old=load_instance(root,i.id); (void)old;
-    auto cfg=read_ini(join(dir,"instance.cfg")); cfg["name"]=i.name; cfg["InstanceType"]="OneSix"; cfg["OverrideMemory"]="true"; cfg["MinMemAlloc"]="64"; cfg["MaxMemAlloc"]=std::to_string(i.heap_mib);
+    auto cfg=read_ini(join(dir,"instance.cfg")); set_ini(cfg,"name",i.name); set_ini(cfg,"InstanceType","OneSix"); set_ini(cfg,"OverrideMemory","true"); set_ini(cfg,"MinMemAlloc","64"); set_ini(cfg,"MaxMemAlloc",std::to_string(i.heap_mib));
     std::ifstream pin(join(dir,"mmc-pack.json")); Json profile; pin>>profile;
     bool found=false; for(auto &component:profile["components"]) if(component.value("uid",std::string())=="net.minecraft") { component["version"]=i.version; found=true; }
     if(!found) profile["components"].push_back({{"uid","net.minecraft"},{"version",i.version},{"important",true}});
@@ -442,7 +498,7 @@ std::string instance_game_directory(const std::string &root,const std::string &i
 Instance duplicate_instance(const std::string &root,const std::string &shared,const std::string &id,const std::string &new_name) {
     (void)shared; Instance src=load_instance(root,id); validate_name(new_name);
     const std::string source_dir=dir_for(root,id);
-    auto cfg=read_ini(join(source_dir,"instance.cfg")); cfg["name"]=new_name;
+    auto cfg=read_ini(join(source_dir,"instance.cfg")); set_ini(cfg,"name",new_name);
     std::ifstream pack_in(join(source_dir,"mmc-pack.json"),std::ios::binary);
     std::string pack_data((std::istreambuf_iterator<char>(pack_in)),{});
     if(!pack_in.eof()&&!pack_in) throw std::runtime_error("Cannot read Prism component profile");

@@ -96,3 +96,16 @@ families. Check actual incidentally loaded lwjgl_opengl initialization without
 adding an OpenGL renderer. The host title result does not establish Horizon
 behavior. On Horizon, attempt the exact snapshot title with owned game files
 after real Java/agent/native smoke succeeds.
+
+## Private SDK crypto composition
+
+The online launcher exposed a link collision between the pinned SDK's private
+Mbed TLS exports and portlibs libmbedcrypto.
+[Issue #3](https://github.com/a1c7e0/java-switch/issues/3) includes the complete
+minimal reproduction and link output. The private symbols were isolated in
+java-switch `d8ca281fce2b0f21424623bdbdfa77e72ceea08f`; actual SDK builds,
+external-crypto target linking and five host regressions passed. That static-link
+defect is closed; no Horizon execution result follows. Switchcraft still consumes
+`b7c2ac7` and uses libnx SHA APIs independently, so this runtime pin was not
+silently updated or relabeled. Full instrument VM/image packaging was not rebuilt
+for the SDK-only fix.

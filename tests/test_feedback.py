@@ -17,12 +17,14 @@ class FeedbackTests(unittest.TestCase):
             log.mkdir(parents=True)
             (sd / 'manifest.json').write_text('{"target":"test"}')
             (log / 'vulkan-present.log').write_text('stage: surface')
+            (log / 'launcher-task-report.json').write_text('{"result":{"ok":false,"status":"cancelled"}}')
             (log / 'secret.txt').write_text('not included')
             out = base / 'feedback.zip'
             result = feedback.collect(sd, out)
-            self.assertEqual(len(result['files']), 2)
+            self.assertEqual(len(result['files']), 3)
             with zipfile.ZipFile(out) as archive:
                 self.assertNotIn('switch/mc-runtime/logs/secret.txt', archive.namelist())
+                self.assertIn('switch/mc-runtime/logs/launcher-task-report.json', archive.namelist())
                 self.assertEqual(json.loads(archive.read('collection.json'))['hardware_status'], 'NOT VERIFIED by collection')
             with self.assertRaises(FileExistsError): feedback.collect(sd, out)
             with self.assertRaises(ValueError): feedback.collect(sd, sd / 'bad.zip')

@@ -407,7 +407,7 @@ std::string fetch_text(const std::string &url, uint64_t max_bytes, const Downloa
     if (result != CURLE_OK)
         throw std::runtime_error(std::string("HTTPS request failed: ") + curl_easy_strerror(result));
     if (status < 200 || status >= 300)
-        throw std::runtime_error("Metadata server returned HTTP error");
+        throw std::runtime_error("Metadata server returned HTTP " + std::to_string(status));
     return transfer.text;
 }
 
@@ -511,7 +511,7 @@ DownloadStats download_verified(const DownloadRequest &r, const DownloadCallback
         } else if (transfer.error.empty()) {
             transfer.error = result != CURLE_OK
                                  ? std::string("HTTPS transfer failed: ") + curl_easy_strerror(result)
-                                 : "Metadata server returned HTTP error";
+                                 : "Metadata server returned HTTP " + std::to_string(status);
         }
         if (transfer.error.empty()) {
             if (r.repair_corrupt && lstat(r.target.c_str(), &existing) == 0) {
