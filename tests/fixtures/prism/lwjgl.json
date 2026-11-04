@@ -1,0 +1,1 @@
+{"formatVersion":1,"uid":"org.lwjgl3","version":"3.3.2","requires":[{"uid":"net.minecraft","equals":"1.20.1"}],"libraries":[{"name":"example:replace:2","downloads":{"artifact":{"path":"example/replace/2/replace-2.jar"}}},{"name":"example:lwjgl:3","rules":[{"action":"allow"}]}],"+jvmArgs":["-Dprism=true"]}

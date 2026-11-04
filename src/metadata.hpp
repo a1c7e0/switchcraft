@@ -19,6 +19,7 @@ Config load_config(const std::string &path);
 void save_config(const std::string &path,const Config &config);
 std::vector<std::string> scan_versions(const std::string &root);
 Json resolve_version(const std::string &root,const std::string &id);
-Json make_plan(const Config &config,const std::string &runtime_root);
+Json make_plan(const Config &config,const std::string &runtime_root,
+               const std::string &game_directory = {},const Json &resolved_version = Json());
 std::vector<std::string> manifest_ids(const Json &manifest);
 }

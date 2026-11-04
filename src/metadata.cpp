@@ -145,8 +145,13 @@ static void append_arguments(const Json &args,std::vector<std::string> &out) {
         }
     }
 }
-Json make_plan(const Config &config,const std::string &runtime_root) {
-    validate_config(config);Json version=resolve_version(config.root,config.version);
+Json make_plan(const Config &config,const std::string &runtime_root,
+               const std::string &game_directory,const Json &resolved_version) {
+    validate_config(config);
+    if(!game_directory.empty() && (game_directory.size()>768 || game_directory.find_first_of("\r\n\t")!=game_directory.npos))
+        throw std::runtime_error("Invalid instance game directory");
+    Json version=resolved_version.is_null()?resolve_version(config.root,config.version):resolved_version;
+    if(!version.is_object())throw std::runtime_error("Invalid resolved version profile");
     Json plan={{"version",config.version},{"runtime",config.runtime},{"graphics",config.graphics},
         {"java_major",version.value("javaVersion",Json::object()).value("majorVersion",8)},
         {"hardware_status","NOT TESTED"},{"launchable",false},{"classpath",Json::array()},
@@ -154,8 +159,11 @@ Json make_plan(const Config &config,const std::string &runtime_root) {
         {"blockers",Json::array()},{"unresolved_placeholders",Json::array()},
         {"skipped_libraries",Json::array()}};
     plan["main_class"]=version.value("mainClass","");
+    if(version.contains("_prism_component_order"))plan["prism_components"]=version["_prism_component_order"];
+    if(version.contains("_prism_unsupported_traits"))for(const auto &trait:version["_prism_unsupported_traits"])
+        plan["blockers"].push_back("Unsupported Prism launch trait: "+trait.get<std::string>());
     if(plan["main_class"]=="")plan["blockers"].push_back("Version has no mainClass");
-    std::string instance=runtime_root+"/instances/test/"+config.version;
+    std::string instance=game_directory.empty()?runtime_root+"/instances/test/"+config.version:game_directory;
     plan["game_directory"]=instance;
     plan["native_directory"]=runtime_root+"/natives/"+config.graphics;
     std::string classpath;
@@ -173,13 +181,19 @@ Json make_plan(const Config &config,const std::string &runtime_root) {
         std::string path;
         if(lib.contains("downloads")) {
             if(!lib["downloads"].contains("artifact"))continue;
-            path=lib["downloads"]["artifact"].at("path").get<std::string>();
+            path=lib["downloads"]["artifact"].value("path",maven_path(name));
         } else path=maven_path(name);
         if(!relative_path(path))throw std::runtime_error("Unsafe library path");
         add(config.root+"/libraries/"+path);
     }
-    std::string jar=version.at("_jar").get<std::string>();if(!safe_id(jar))throw std::runtime_error("Unsafe JAR ID");
-    add(config.root+"/versions/"+jar+"/"+jar+".jar");
+    if(version.contains("_main_jar_path")) {
+        std::string path=version.at("_main_jar_path").get<std::string>();
+        if(!relative_path(path))throw std::runtime_error("Unsafe Prism main JAR path");
+        add(config.root+"/"+path);
+    } else {
+        std::string jar=version.value("_jar",config.version);if(!safe_id(jar))throw std::runtime_error("Unsafe JAR ID");
+        add(config.root+"/versions/"+jar+"/"+jar+".jar");
+    }
     if(config.version=="26.4-snapshot-6")add(runtime_root+"/launchers/switchcraft-launcher-bridge.jar");
     std::string assets=version.value("assets","");
     if(version.contains("assetIndex"))assets=version["assetIndex"].at("id").get<std::string>();
@@ -197,6 +211,7 @@ Json make_plan(const Config &config,const std::string &runtime_root) {
     append_arguments(version["arguments"].value("default-user-jvm",Json::array()),official_defaults);
     plan["official_default_user_jvm_arguments"]=official_defaults;
     plan["official_defaults_applied"]=false;
+    if(version.contains("minecraftArguments"))game=split_legacy(version["minecraftArguments"].get<std::string>());
     if(config.version=="26.4-snapshot-6"){
         game.push_back("--graphicsBackend");game.push_back("VULKAN");
         plan["target_profile"]="26.4-snapshot-6";
@@ -205,7 +220,6 @@ Json make_plan(const Config &config,const std::string &runtime_root) {
         jvm.push_back("--add-exports=java.base/jdk.internal.misc=ALL-UNNAMED");
         plan["required_runtime_modules"]={"java.base","java.instrument"};
     }
-    if(version.contains("minecraftArguments"))game=split_legacy(version["minecraftArguments"].get<std::string>());
     if(std::find(jvm.begin(),jvm.end(),"-cp")==jvm.end()&&std::find(jvm.begin(),jvm.end(),"-classpath")==jvm.end()){
         jvm.push_back("-cp");jvm.push_back("${classpath}");
     }
