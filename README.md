@@ -21,6 +21,13 @@ llvmpipe Vulkan. The image below is **HOST ONLY**, not a Switch screenshot:
 
 ## Implemented and built
 
+The new [launcher foundation](docs/PRISM_PORT.md) adds a controller/touch UI,
+Prism-format instances and a first portable Prism component-metadata backend.
+It supports instance creation/editing/settings-only duplication and local
+installation checks. Full Qt networking, account flows, online installation and
+mod management are not yet ported. The new UI is cross-built and host-previewed;
+Horizon UI execution remains NOT TESTED.
+
 | Artifact | Actual behavior |
 | --- | --- |
 | `switch-diagnostics.nro` | Input, SD roundtrip, process/malloc memory, native threads and next-load navigation |
@@ -112,6 +119,9 @@ not a proposed way to execute the Switch game on another computer. See
 * [Decisions](docs/DECISIONS.md) and [next steps](docs/NEXT_STEPS.md)
 * [Java SDK handoff](docs/JAVA_INTEGRATION_HANDOFF.md) and [native bindings](docs/NATIVE_BINDINGS.md)
 
-Original source is MIT. Third-party notices and the full miniJVM Java/C and
+Original source is MIT. The combined launcher now incorporates GPL-covered Prism
+code and is distributed under GPL-3.0-only with the applicable Apache-2.0 notices;
+see [the port/source notes](docs/PRISM_PORT.md#licensing-and-source). Third-party
+notices and the full miniJVM Java/C and
 libffi source accompany distributions. The Java class library retains GPL terms;
 binary-only redistribution does not remove source obligations.

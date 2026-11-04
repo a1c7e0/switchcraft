@@ -12,8 +12,10 @@ APPS := switch-diagnostics vulkan-test vulkan-present minecraft-launcher java-te
 JAVA25 := build/java25-integrated/runtime/openjdk25-horizon-runtime
 JAVASDK := build/java25-integrated/sdk
 
-.PHONY: all clean host-test FORCE
+.PHONY: all clean host-test launcher-package FORCE
 all: $(APPS:%=dist/%.nro) build/switchcraft-launcher-bridge.jar build/switchcraft-lwjgl-horizon.jar build/switchcraft-native-smoke.jar
+launcher-package: dist/minecraft-launcher.nro
+	python3 scripts/package-launcher.py
 build dist:
 	mkdir -p $@
 build/build-info.h: FORCE scripts/build-info.py | build
@@ -28,8 +30,11 @@ build/vulkan-test.elf: build/vulkan.o build/platform.o
 	$(DK)g++ $(LDFLAGS) $^ .deps/nvk/lib/libvulkan.a -Wl,--start-group -ldrm_nouveau -lzstd -lz -lnx -lm -Wl,--end-group -o $@ -Wl,-Map,$@.map
 build/metadata.o: src/metadata.cpp src/metadata.hpp vendor/json.hpp | build
 	$(DK)g++ $(CXXFLAGS) -c $< -o $@
-build/minecraft-launcher.elf: src/launcher.cpp build/metadata.o build/platform.o build/java-runtime.stamp
-	$(DK)g++ $(CXXFLAGS) -I$(JAVASDK)/include $(LDFLAGS) src/launcher.cpp build/metadata.o build/platform.o $(JAVASDK)/lib/libjavaswitch.a -lnx -lm -o $@ -Wl,-Map,$@.map
+LAUNCHER_SOURCES := src/launcher.cpp src/launcher_console.cpp src/instances.cpp src/prism_metadata.cpp src/launcher_ui.cpp src/ui_canvas.cpp
+build/minecraft-launcher.elf: $(LAUNCHER_SOURCES) src/instances.hpp src/prism_metadata.hpp src/launcher_ui.hpp src/ui_canvas.hpp vendor/stb_truetype.h build/metadata.o build/platform.o build/java-runtime.stamp
+	$(DK)g++ $(CXXFLAGS) -I$(JAVASDK)/include $(LDFLAGS) $(LAUNCHER_SOURCES) build/metadata.o build/platform.o $(JAVASDK)/lib/libjavaswitch.a -lnx -lm -o $@ -Wl,-Map,$@.map
+build/launcher-preview: tools/launcher-preview.cpp src/launcher_ui.cpp src/ui_canvas.cpp src/launcher_ui.hpp src/ui_canvas.hpp src/instances.hpp vendor/stb_truetype.h | build
+	g++ -std=c++17 -O2 -Wall -Wextra -Ivendor -Isrc tools/launcher-preview.cpp src/launcher_ui.cpp src/ui_canvas.cpp -o $@
 build/java-runtime.stamp: dependencies.lock.json scripts/build-java-runtime.sh scripts/prepare-java25-runtime.py | build dist
 	JAVA_SWITCH_SOURCE=$(JAVA_SWITCH_SOURCE) bash scripts/build-java-runtime.sh > build/java-runtime.log 2>&1
 build/switchcraft-launcher-bridge.jar: scripts/build-launcher-bridge.py java/org/switchcraft/launcher/VulkanOnlyAgent.java java/org/switchcraft/launcher/VulkanOnlyTransform.java build/java-runtime.stamp

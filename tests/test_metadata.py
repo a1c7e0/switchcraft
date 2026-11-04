@@ -101,3 +101,12 @@ class MetadataTests(unittest.TestCase):
         self.assertIn('--enable-native-access=ALL-UNNAMED',plan['jvm_arguments'])
         self.assertIn('--add-exports=java.base/jdk.internal.misc=ALL-UNNAMED',plan['jvm_arguments'])
         self.assertFalse(plan['launchable'])
+
+    def test_prism_legacy_arguments_keep_strict_vulkan_and_maven_artifact_paths(self):
+        self.version('26.4-snapshot-6',mainClass='net.minecraft.client.main.Main',
+                     javaVersion={'majorVersion':25},
+                     libraries=[{'name':'org.example:demo:1','downloads':{'artifact':{'url':'https://example.invalid/demo.jar'}}}],
+                     minecraftArguments='--gameDir ${game_directory}')
+        plan=self.inspect('26.4-snapshot-6')
+        self.assertEqual(plan['game_arguments'][-2:],['--graphicsBackend','VULKAN'])
+        self.assertIn('org/example/demo/1/demo-1.jar',plan['classpath'][1])

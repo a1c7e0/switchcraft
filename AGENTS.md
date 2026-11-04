@@ -19,6 +19,15 @@ baseline, vulkan_present.c owns SDL3/VI/base-profile tests. SDL3 source and the
 host CMake wheel are hash-pinned; patches/sdl3-vulkan-only.patch removes EGL
 requirements. Keep OpenGL out of main's targets and final linked APIs.
 
+The launcher foundation uses a libnx software framebuffer and pl:u shared fonts
+for its controller/touch UI; game rendering remains SDL3/Vulkan. Its console
+inspector is retained as a fallback. Instance management uses Prism instance.cfg
+and mmc-pack.json with separate game directories. The portable Prism metadata
+subset and original pinned sources/provenance are in src/prism_metadata.cpp and
+vendor/prism/; the combined launcher carries GPL-3.0-only/Apache-2.0 obligations.
+Do not describe it as the complete Qt backend or imply on-console installation.
+See docs/PRISM_PORT.md. Host UI previews are never device evidence.
+
 The official client was downloaded only to /tmp for research, never committed
 or packaged. Linux host Java 25 has reached the 26.4-snapshot-6 title with the
 strict Vulkan renderer; screenshot and logs are HOST ONLY. The pinned genuine

@@ -38,6 +38,7 @@ void sc_log(const char *format, ...) {
 }
 void sc_init(const char *name) {
     app_name=name;
+    console_enabled=true;
     consoleInit(NULL);
     padConfigureInput(1,HidNpadStyleSet_NpadStandard);
     padInitializeDefault(&pad);
@@ -54,7 +55,7 @@ void sc_init(const char *name) {
 bool sc_frame(u64 *down) {
     if (!appletMainLoop()) return false;
     padUpdate(&pad); *down=padGetButtonsDown(&pad);
-    consoleUpdate(NULL);
+    if(console_enabled)consoleUpdate(NULL);
     return !(*down&HidNpadButton_Plus);
 }
 void sc_exit(void) {
@@ -64,6 +65,7 @@ void sc_exit(void) {
     if(console_enabled)consoleExit(NULL);
     console_enabled=false;
 }
+u64 sc_buttons_held(void) { return padGetButtons(&pad); }
 bool sc_chain(const char *name) {
     char path[256]; snprintf(path,sizeof(path),"sdmc:/switch/%s/%s.nro",name,name);
     FILE *f=fopen(path,"rb");
