@@ -1,0 +1,105 @@
+[tick=18041731273] 
+SESSION start tick=18041725757 app=vulkan-present version=0.1.0 source=e08f36a9d19cf461312f87a866f9bb1f39d57d98 | hardware status: NOT TESTED
+[tick=18042130912] Applet type=0 (Application=0); firmware=21.2.0
+[tick=18042252731] Log: sdmc:/switch/mc-runtime/logs/vulkan-present.log (open)
+[tick=18042373332] 26.4-snapshot-6 Vulkan-only bring-up
+A: exact base feature profile | X: SDL3 VI swapchain / gamepad
+B: diagnostics | +: exit
+[tick=18050655483] STAGE vulkan-instance: create API 1.2 extensions=0
+[tick=18050919708] Snapshot 6 Vulkan base profile: GPU=NVIDIA Tegra X1 (NVK gm20b) API=1.3.305
+[tick=18051039303] Device vendor=0x10de device=0x0 type=1 driver=0x6400007
+[tick=18051238921] multiDrawIndirect=1
+[tick=18051355359] drawIndirectFirstInstance=1
+[tick=18051474652] samplerAnisotropy=1
+[tick=18051593975] shaderDrawParameters=1
+[tick=18051709794] timelineSemaphore=1
+[tick=18051826225] hostQueryReset=1
+[tick=18051942598] synchronization2=1
+[tick=18052060445] vertexAttributeInstanceRateDivisor=1
+[tick=18052766225] VK_KHR_synchronization2=YES
+[tick=18052883332] VK_EXT_vertex_attribute_divisor=YES
+[tick=18052999758] VK_KHR_swapchain=YES
+[tick=18053798019] Required base profile: PASS (rendering/title still separate)
+[tick=18053929186] Snapshot base profile result=PASS; presented frames=0 (not Minecraft title verification)
+[tick=18129695473] Entering SDL3 / Vulkan-only window / VI surface test
+[tick=18130386320] Static native lookup SDL_CreateWindow=present SDL_Vulkan_CreateSurface=present vkGetInstanceProcAddr=present
+[tick=18130676416] SDL version=3004016 driver=Switch
+[tick=18130795018] SDL gamepad: Switch Controller
+[tick=18130910005] STAGE vulkan-instance: create API 1.2 extensions=2
+[tick=18131026904] Instance extension[0]=VK_KHR_surface
+[tick=18131140859] Instance extension[1]=VK_NN_vi_surface
+[tick=18131267110] STAGE surface: SDL_Vulkan_CreateSurface
+[tick=18131422763] Snapshot 6 Vulkan base profile: GPU=NVIDIA Tegra X1 (NVK gm20b) API=1.3.305
+[tick=18131538710] Device vendor=0x10de device=0x0 type=1 driver=0x6400007
+[tick=18131869329] multiDrawIndirect=1
+[tick=18131931345] drawIndirectFirstInstance=1
+[tick=18132052458] samplerAnisotropy=1
+[tick=18132168607] shaderDrawParameters=1
+[tick=18132286470] timelineSemaphore=1
+[tick=18132403208] hostQueryReset=1
+[tick=18132518843] synchronization2=1
+[tick=18132634447] vertexAttributeInstanceRateDivisor=1
+[tick=18133687712] VK_KHR_synchronization2=YES
+[tick=18133803227] VK_EXT_vertex_attribute_divisor=YES
+[tick=18133920111] VK_KHR_swapchain=YES
+[tick=18134330454] Required base profile: PASS (rendering/title still separate)
+[tick=18134444257] Queue family=0 flags=0x7 count=1 surface_result=0 present=1
+[tick=18135195723] Surface min/max images=3/3 usage=0x8009f transforms=0x1 current=0x1 composite=0x1
+[tick=18135428368] STAGE swapchain: create FIFO extent=1280x720 requested_images=3
+[tick=18135629857] STAGE present: family=0 extent=1280x720 images=3 format=37 colorspace=0 FIFO alpha=0x1; SDL Start/East exits
+[tick=18135793630] STAGE present: first fence signaled; waiting for queue idle (driver may block)
+[tick=18231152852] STAGE cleanup: vkDeviceWaitIdle (driver may block)
+[tick=18232058523] SDL3 VI presentation result=PASS; presented frames=300 (not Minecraft title verification)
+[tick=18631484370] 
+SESSION start tick=18631479625 app=vulkan-present version=0.1.0 source=e08f36a9d19cf461312f87a866f9bb1f39d57d98 | hardware status: NOT TESTED
+[tick=18632319496] Applet type=0 (Application=0); firmware=21.2.0
+[tick=18632441263] Log: sdmc:/switch/mc-runtime/logs/vulkan-present.log (open)
+[tick=18632559877] 26.4-snapshot-6 Vulkan-only bring-up
+A: exact base feature profile | X: SDL3 VI swapchain / gamepad
+B: diagnostics | +: exit
+[tick=18660255503] Entering SDL3 / Vulkan-only window / VI surface test
+[tick=18660948569] Static native lookup SDL_CreateWindow=present SDL_Vulkan_CreateSurface=present vkGetInstanceProcAddr=present
+[tick=18661217241] SDL version=3004016 driver=Switch
+[tick=18661332634] SDL gamepad: Switch Controller
+[tick=18661443804] STAGE vulkan-instance: create API 1.2 extensions=2
+[tick=18661554039] Instance extension[0]=VK_KHR_surface
+[tick=18661679035] Instance extension[1]=VK_NN_vi_surface
+[tick=18661815895] STAGE surface: SDL_Vulkan_CreateSurface
+[tick=18662220925] Snapshot 6 Vulkan base profile: GPU=NVIDIA Tegra X1 (NVK gm20b) API=1.3.305
+[tick=18662340913] Device vendor=0x10de device=0x0 type=1 driver=0x6400007
+[tick=18662624642] multiDrawIndirect=1
+[tick=18662744830] drawIndirectFirstInstance=1
+[tick=18662869139] samplerAnisotropy=1
+[tick=18662989023] shaderDrawParameters=1
+[tick=18663107937] timelineSemaphore=1
+[tick=18663251039] hostQueryReset=1
+[tick=18663371390] synchronization2=1
+[tick=18663494870] vertexAttributeInstanceRateDivisor=1
+[tick=18664151231] VK_KHR_synchronization2=YES
+[tick=18664270995] VK_EXT_vertex_attribute_divisor=YES
+[tick=18664393547] VK_KHR_swapchain=YES
+[tick=18664809919] Required base profile: PASS (rendering/title still separate)
+[tick=18664930979] Queue family=0 flags=0x7 count=1 surface_result=0 present=1
+[tick=18665757140] Surface min/max images=3/3 usage=0x8009f transforms=0x1 current=0x1 composite=0x1
+[tick=18666001462] STAGE swapchain: create FIFO extent=1280x720 requested_images=3
+[tick=18667723432] STAGE present: family=0 extent=1280x720 images=3 format=37 colorspace=0 FIFO alpha=0x1; SDL Start/East exits
+[tick=18668870241] STAGE present: first fence signaled; waiting for queue idle (driver may block)
+[tick=18673711682] SDL gamepad instance=1 button=1 name=b
+[tick=18674539480] STAGE cleanup: vkDeviceWaitIdle (driver may block)
+[tick=18675155964] SDL3 VI presentation result=PASS; presented frames=14 (not Minecraft title verification)
+[tick=18675457138] STAGE vulkan-instance: create API 1.2 extensions=0
+[tick=18675600685] Snapshot 6 Vulkan base profile: GPU=NVIDIA Tegra X1 (NVK gm20b) API=1.3.305
+[tick=18675717903] Device vendor=0x10de device=0x0 type=1 driver=0x6400007
+[tick=18675965756] multiDrawIndirect=1
+[tick=18676078717] drawIndirectFirstInstance=1
+[tick=18676195750] samplerAnisotropy=1
+[tick=18676309097] shaderDrawParameters=1
+[tick=18676683178] timelineSemaphore=1
+[tick=18676797557] hostQueryReset=1
+[tick=18676914367] synchronization2=1
+[tick=18677028158] vertexAttributeInstanceRateDivisor=1
+[tick=18677687460] VK_KHR_synchronization2=YES
+[tick=18677800812] VK_EXT_vertex_attribute_divisor=YES
+[tick=18677915117] VK_KHR_swapchain=YES
+[tick=18678334463] Required base profile: PASS (rendering/title still separate)
+[tick=18678451772] Snapshot base profile result=PASS; presented frames=0 (not Minecraft title verification)

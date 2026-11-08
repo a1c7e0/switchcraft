@@ -36,3 +36,14 @@ class FeedbackTests(unittest.TestCase):
             (logs / 'ffi-test.log').symlink_to(outside)
             with self.assertRaises(ValueError): feedback.collect(sd, base / 'out.zip')
             self.assertFalse((base / 'out.zip').exists())
+
+    def test_unique_attempts_survive_one_export_and_other_files_are_excluded(self):
+        with tempfile.TemporaryDirectory() as directory:
+            base=Path(directory);sd=base/'sd';logs=sd/'switch/mc-runtime/logs';logs.mkdir(parents=True)
+            captures=['java25-vm-100-stdout.log','java25-vm-101-stderr.log',
+                      'switchcraft-java25-vm-200-stdout.log','vulkan-present-result-300.json']
+            for name in captures:(logs/name).write_text(name)
+            for name in ['java25-vm-secret-stdout.log','accounts.json','user.log']:(logs/name).write_text('private')
+            out=base/'out.zip';feedback.collect(sd,out)
+            with zipfile.ZipFile(out) as archive:
+                self.assertEqual(set(archive.namelist()),{'collection.json',*['switch/mc-runtime/logs/'+n for n in captures]})

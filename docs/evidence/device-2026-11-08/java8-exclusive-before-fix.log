@@ -1,0 +1,9 @@
+Initializing miniJVM interpreter, classic GC, Java 8 class library
+[INFO] object layout: ptr=64b MemoryBlock=24 Instance=24 JArrayHeader=32 field_off=24 arr_len_off=24 arr_body_off=32
+[INFO] gc backend : classic malloc
+jvm_init -> 0
+FIRST_CREATE=true
+SECOND_CREATE_THREW=java.io.IOException: file exists.
+call_main -> 0
+JVM teardown begins
+JVM teardown completed

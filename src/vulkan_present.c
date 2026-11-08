@@ -9,15 +9,39 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
+#include <errno.h>
 #include <switchcraft/native_lookup.h>
 
 extern PFN_vkVoidFunction vkGetInstanceProcAddr(VkInstance,const char *);
 #define INST(X) X(DestroyInstance) X(EnumeratePhysicalDevices) X(GetPhysicalDeviceProperties) X(GetPhysicalDeviceFeatures2) X(GetPhysicalDeviceQueueFamilyProperties) X(EnumerateDeviceExtensionProperties) X(GetDeviceProcAddr) X(CreateDevice)
 #define WSI(X) X(GetPhysicalDeviceSurfaceSupportKHR) X(GetPhysicalDeviceSurfaceFormatsKHR) X(GetPhysicalDeviceSurfaceCapabilitiesKHR) X(DestroySurfaceKHR)
-#define DEV(X) X(DestroyDevice) X(GetDeviceQueue) X(DeviceWaitIdle) X(CreateSwapchainKHR) X(DestroySwapchainKHR) X(GetSwapchainImagesKHR) X(AcquireNextImageKHR) X(QueuePresentKHR) X(CreateCommandPool) X(DestroyCommandPool) X(AllocateCommandBuffers) X(ResetCommandBuffer) X(BeginCommandBuffer) X(EndCommandBuffer) X(CmdPipelineBarrier) X(CmdClearColorImage) X(CreateSemaphore) X(DestroySemaphore) X(CreateFence) X(DestroyFence) X(WaitForFences) X(ResetFences) X(QueueSubmit) X(QueueWaitIdle)
+#define DEV(X) X(DestroyDevice) X(GetDeviceQueue) X(DeviceWaitIdle) X(CreateSwapchainKHR) X(DestroySwapchainKHR) X(GetSwapchainImagesKHR) X(AcquireNextImageKHR) X(QueuePresentKHR) X(CreateCommandPool) X(DestroyCommandPool) X(AllocateCommandBuffers) X(ResetCommandBuffer) X(BeginCommandBuffer) X(EndCommandBuffer) X(CmdPipelineBarrier) X(CmdClearColorImage) X(CreateSemaphore) X(DestroySemaphore) X(CreateFence) X(DestroyFence) X(WaitForFences) X(ResetFences) X(QueueSubmit)
 #define DECL(n) PFN_vk##n n;
 typedef struct {INST(DECL) WSI(DECL) DEV(DECL)} Dispatch;
-#define TRY(call) do{VkResult result=(call);if(result!=VK_SUCCESS){failed=true;sc_log("%s -> %d\n",#call,result);goto cleanup;}}while(0)
+#define TRY(call) do{VkResult result=(call);if(result!=VK_SUCCESS){failed=true;last_vk_result=result;failure_reason="vulkan_call_failed";sc_log("%s -> %d\n",#call,result);goto cleanup;}}while(0)
+
+static void write_attempt_result(bool present,const char *result,const char *reason,
+                                 unsigned frames,u64 attempt,u64 elapsed_ns,u64 frame_total_ns,
+                                 u64 frame_min_ns,u64 frame_max_ns,int last_vk_result) {
+    char body[1200],path[256];
+    double avg_ms=frames?(double)frame_total_ns/(double)frames/1000000.0:0.0;
+    double min_ms=frames?(double)frame_min_ns/1000000.0:0.0;
+    double max_ms=frames?(double)frame_max_ns/1000000.0:0.0;
+    int n=snprintf(body,sizeof(body),"{\"attempt\":%llu,\"mode\":\"%s\",\"result\":\"%s\",\"reason\":\"%s\",\"frames\":%u,\"elapsed_ms\":%.3f,\"frame_turnaround_avg_ms\":%.3f,\"frame_turnaround_min_ms\":%.3f,\"frame_turnaround_max_ms\":%.3f,\"last_vk_result\":%d,\"minecraft_title\":\"NOT TESTED on Horizon\"}\n",
+        (unsigned long long)attempt,present?"sdl3_vi_presentation":"snapshot_base_profile",result,reason,frames,
+        (double)elapsed_ns/1000000.0,avg_ms,min_ms,max_ms,last_vk_result);
+    if(n<0||(size_t)n>=sizeof(body))return;
+    for(unsigned i=0;i<2;i++) {
+        if(i)snprintf(path,sizeof(path),SC_LOGS "/vulkan-present-result-%llu.json",(unsigned long long)attempt);
+        else snprintf(path,sizeof(path),SC_LOGS "/vulkan-present-result.json");
+        FILE *f=fopen(path,"w");
+        if(!f){sc_log("Could not write presentation result errno=%d\n",errno);continue;}
+        bool ok=fwrite(body,1,(size_t)n,f)==(size_t)n;
+        if(fclose(f)!=0)ok=false;
+        if(!ok)sc_log("Presentation result write failed: %s\n",path);
+    }
+}
 
 static void json_string(FILE *f,const char *s){
     fputc('"',f);for(;*s;s++){unsigned char c=(unsigned char)*s;if(c=='"'||c=='\\'){fputc('\\',f);fputc(c,f);}else if(c<32)fprintf(f,"\\u%04x",c);else fputc(c,f);}fputc('"',f);
@@ -59,14 +83,20 @@ static bool profile(Dispatch *d,VkPhysicalDevice physical) {
     free(extensions);sc_log("Required base profile: %s (rendering/title still separate)\n",ok?"PASS":"INCOMPATIBLE");return ok;
 }
 
+static bool gpu_process_exit_required;
+
 static bool run(bool present) {
     Dispatch d={0};SDL_Window *window=NULL;SDL_Gamepad *gamepad=NULL;
-    bool sdl=false,screen=false,submitted=false,failed=false;unsigned frames=0;bool complete=false;
+    bool sdl=false,screen=false,failed=false,submitted=false;unsigned frames=0;bool complete=false;
+    const char *failure_reason="initialization_error",*exit_reason="frame_limit";
+    int last_vk_result=VK_SUCCESS;
+    u64 attempt_start=armGetSystemTick(),frame_total_ns=0,frame_min_ns=UINT64_MAX,frame_max_ns=0;
     VkInstance instance=VK_NULL_HANDLE;VkDevice device=VK_NULL_HANDLE;VkSurfaceKHR surface=VK_NULL_HANDLE;
     VkSwapchainKHR chain=VK_NULL_HANDLE;VkCommandPool pool=VK_NULL_HANDLE;VkSemaphore acquired=VK_NULL_HANDLE,*rendered=NULL;
     uint32_t chain_image_count=0;
     VkFence fence=VK_NULL_HANDLE;VkImage *images=NULL;
     const char *const *extensions=NULL;Uint32 extension_count=0;
+    write_attempt_result(present,"RUNNING","starting",0,attempt_start,0,0,0,0,VK_SUCCESS);
     if(present){
         sc_log("Entering SDL3 / Vulkan-only window / VI surface test\n");sc_console(false);screen=true;
         sc_log("Static native lookup SDL_CreateWindow=%s SDL_Vulkan_CreateSurface=%s vkGetInstanceProcAddr=%s\n",
@@ -102,7 +132,7 @@ static bool run(bool present) {
     VkPhysicalDevice physicals[16];TRY(d.EnumeratePhysicalDevices(instance,&nphysical,physicals));
     VkPhysicalDevice physical=physicals[0];
     /* Keep the presentation smoke test independent of full snapshot support. */
-    bool compatible=profile(&d,physical);if(!present){complete=compatible;goto cleanup;}
+    bool compatible=profile(&d,physical);if(!present){complete=compatible;failed=!compatible;failure_reason=compatible?"profile_supported":"profile_incompatible";goto cleanup;}
     uint32_t nqueues=0;d.GetPhysicalDeviceQueueFamilyProperties(physical,&nqueues,NULL);
     VkQueueFamilyProperties *queues=calloc(nqueues?nqueues:1,sizeof(*queues));if(!queues)goto cleanup;
     d.GetPhysicalDeviceQueueFamilyProperties(physical,&nqueues,queues);uint32_t family=UINT32_MAX;
@@ -153,19 +183,25 @@ static bool run(bool present) {
     bool quit=false;
     while(appletMainLoop()&&!quit&&frames<300){
         SDL_Event event;while(SDL_PollEvent(&event)){
-            if(event.type==SDL_EVENT_QUIT)quit=true;
-            if(event.type==SDL_EVENT_GAMEPAD_BUTTON_DOWN){const char *button=SDL_GetGamepadStringForButton((SDL_GamepadButton)event.gbutton.button);sc_log("SDL gamepad instance=%u button=%u name=%s\n",event.gbutton.which,event.gbutton.button,button?button:"unknown");if(event.gbutton.button==SDL_GAMEPAD_BUTTON_START||event.gbutton.button==SDL_GAMEPAD_BUTTON_EAST)quit=true;}
+            if(event.type==SDL_EVENT_QUIT){quit=true;exit_reason="window_close";}
+            if(event.type==SDL_EVENT_GAMEPAD_BUTTON_DOWN){const char *button=SDL_GetGamepadStringForButton((SDL_GamepadButton)event.gbutton.button);sc_log("SDL gamepad instance=%u button=%u name=%s\n",event.gbutton.which,event.gbutton.button,button?button:"unknown");if(event.gbutton.button==SDL_GAMEPAD_BUTTON_START||event.gbutton.button==SDL_GAMEPAD_BUTTON_EAST){quit=true;exit_reason="user_exit";}}
         }
         if(quit)break;
+        u64 frame_start=armGetSystemTick();
         uint32_t index=0;VkResult r=d.AcquireNextImageKHR(device,chain,5000000000ull,acquired,VK_NULL_HANDLE,&index);
-        if(r!=VK_SUCCESS&&r!=VK_SUBOPTIMAL_KHR){failed=true;sc_log("AcquireNextImageKHR frame=%u -> %d\n",frames,r);break;}
-        if(index>=count){failed=true;sc_log("Swapchain returned invalid image index=%u count=%u\n",index,count);break;}
+        if(r!=VK_SUCCESS&&r!=VK_SUBOPTIMAL_KHR){failed=true;last_vk_result=r;failure_reason="acquire_failed";sc_log("AcquireNextImageKHR frame=%u -> %d\n",frames,r);break;}
+        if(index>=count){failed=true;failure_reason="invalid_swapchain_image";sc_log("Swapchain returned invalid image index=%u count=%u\n",index,count);break;}
         TRY(d.ResetCommandBuffer(command,0));VkCommandBufferBeginInfo begin={.sType=VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO,.flags=VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT};TRY(d.BeginCommandBuffer(command,&begin));
         VkImageSubresourceRange range={VK_IMAGE_ASPECT_COLOR_BIT,0,1,0,1};
         VkImageMemoryBarrier barrier={.sType=VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER,.dstAccessMask=VK_ACCESS_TRANSFER_WRITE_BIT,.oldLayout=VK_IMAGE_LAYOUT_UNDEFINED,.newLayout=VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
             .srcQueueFamilyIndex=VK_QUEUE_FAMILY_IGNORED,.dstQueueFamilyIndex=VK_QUEUE_FAMILY_IGNORED,.image=images[index],.subresourceRange=range};
         d.CmdPipelineBarrier(command,VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,VK_PIPELINE_STAGE_TRANSFER_BIT,0,0,NULL,0,NULL,1,&barrier);
-        VkClearColorValue color={.float32={(frames%120)/120.0f,0.2f,0.8f,1}};
+        double seconds=(double)armTicksToNs(armGetSystemTick()-attempt_start)/1000000000.0;
+        float phase=(float)(seconds*0.8);
+        VkClearColorValue color={.float32={
+            0.5f+0.5f*sinf(phase),
+            0.5f+0.5f*sinf(phase-2.0943951f),
+            0.5f+0.5f*sinf(phase-4.1887902f),1.0f}};
         d.CmdClearColorImage(command,images[index],VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,&color,1,&range);
         barrier.srcAccessMask=VK_ACCESS_TRANSFER_WRITE_BIT;barrier.dstAccessMask=0;barrier.oldLayout=VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;barrier.newLayout=VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
         d.CmdPipelineBarrier(command,VK_PIPELINE_STAGE_TRANSFER_BIT,VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,0,0,NULL,0,NULL,1,&barrier);TRY(d.EndCommandBuffer(command));
@@ -175,17 +211,26 @@ static bool run(bool present) {
         VkPresentInfoKHR pi={.sType=VK_STRUCTURE_TYPE_PRESENT_INFO_KHR,.waitSemaphoreCount=1,.pWaitSemaphores=&rendered[index],.swapchainCount=1,.pSwapchains=&chain,.pImageIndices=&index};
         r=d.QueuePresentKHR(queue,&pi);
         VkResult wait=d.WaitForFences(device,1,&fence,VK_TRUE,5000000000ull);
-        if(wait!=VK_SUCCESS){sc_log("Present fence frame=%u -> %d; exiting without destroying pending objects\n",frames,wait);return false;}
-        if(r!=VK_SUCCESS&&r!=VK_SUBOPTIMAL_KHR){sc_log("QueuePresentKHR frame=%u -> %d; exiting without blocking teardown\n",frames,r);return false;}
-        /* Per-image present semaphore is reused only after reacquiring that image. */
-        if(frames==0)sc_log("STAGE present: first fence signaled; waiting for queue idle (driver may block)\n");
-        TRY(d.QueueWaitIdle(queue));submitted=false;TRY(d.ResetFences(device,1,&fence));
+        if(wait!=VK_SUCCESS){failed=true;last_vk_result=wait;failure_reason="frame_fence_failed";sc_log("Present fence frame=%u -> %d\n",frames,wait);break;}
+        submitted=false;
+        if(r!=VK_SUCCESS&&r!=VK_SUBOPTIMAL_KHR){failed=true;last_vk_result=r;failure_reason="present_failed";sc_log("QueuePresentKHR frame=%u -> %d\n",frames,r);break;}
+        /* The fence retires command-buffer use. The present semaphore belongs to
+         * this swapchain image and is reused only after that image is reacquired. */
+        u64 frame_ns=armTicksToNs(armGetSystemTick()-frame_start);
+        frame_total_ns+=frame_ns;if(frame_ns<frame_min_ns)frame_min_ns=frame_ns;if(frame_ns>frame_max_ns)frame_max_ns=frame_ns;
+        TRY(d.ResetFences(device,1,&fence));
         frames++;
     }
-    complete=frames>0&&!failed;
+    if(!appletMainLoop()&&!quit)exit_reason="applet_exit";
+    complete=frames==300&&!failed;
+    if(!complete&&!failed)failure_reason=exit_reason;
 cleanup:
-    if(submitted){sc_log("GPU work pending; application exits for process teardown\n");return false;}
-    if(device&&d.DeviceWaitIdle){sc_log("STAGE cleanup: vkDeviceWaitIdle (driver may block)\n");VkResult idle=d.DeviceWaitIdle(device);if(idle!=VK_SUCCESS)sc_log("vkDeviceWaitIdle -> %d\n",idle);}
+    if(submitted) {
+        write_attempt_result(present,"FAIL",failure_reason,frames,attempt_start,armTicksToNs(armGetSystemTick()-attempt_start),frame_total_ns,frame_min_ns,frame_max_ns,last_vk_result);
+        sc_log("Unretired GPU submission: retaining resources for application-process termination.\n");
+        gpu_process_exit_required=true;return false;
+    }
+    if(device&&d.DeviceWaitIdle){sc_log("STAGE cleanup: vkDeviceWaitIdle (once at teardown)\n");VkResult idle=d.DeviceWaitIdle(device);if(idle!=VK_SUCCESS){sc_log("vkDeviceWaitIdle -> %d; retaining GPU resources for process termination\n",idle);write_attempt_result(present,"FAIL","device_idle_failed",frames,attempt_start,armTicksToNs(armGetSystemTick()-attempt_start),frame_total_ns,frame_min_ns,frame_max_ns,idle);gpu_process_exit_required=true;return false;if(last_vk_result==VK_SUCCESS)last_vk_result=idle;failed=true;complete=false;if(!strcmp(failure_reason,"initialization_error"))failure_reason="device_idle_failed";}}
     if(fence&&d.DestroyFence)d.DestroyFence(device,fence,NULL);
     if(rendered&&d.DestroySemaphore)for(uint32_t i=0;i<chain_image_count;i++)if(rendered[i])d.DestroySemaphore(device,rendered[i],NULL);
     if(acquired&&d.DestroySemaphore)d.DestroySemaphore(device,acquired,NULL);
@@ -194,8 +239,29 @@ cleanup:
     if(device&&d.DestroyDevice)d.DestroyDevice(device,NULL);
     if(surface&&d.DestroySurfaceKHR)d.DestroySurfaceKHR(instance,surface,NULL);
     if(instance&&d.DestroyInstance)d.DestroyInstance(instance,NULL);
-    free(images);free(rendered);if(gamepad)SDL_CloseGamepad(gamepad);if(window)SDL_DestroyWindow(window);if(sdl)SDL_Quit();if(screen)sc_console(true);
-    sc_log("%s result=%s; presented frames=%u (not Minecraft title verification)\n",present?"SDL3 VI presentation":"Snapshot base profile",complete?"PASS":"NOT PASSED",frames);
+    free(images);free(rendered);
+    if(gamepad)SDL_CloseGamepad(gamepad);
+    if(window){sc_log("STAGE cleanup: SDL_DestroyWindow\n");SDL_DestroyWindow(window);}
+    if(sdl){sc_log("STAGE cleanup: SDL_Quit\n");SDL_Quit();}
+    if(screen){sc_log("STAGE cleanup: restore console\n");sc_console(true);}
+    sc_log("STAGE cleanup: graphics resources released; result follows\n");
+    if(present){
+        sc_log("SDL input returned; waiting for native buttons to release before menu polling\n");
+        while(appletMainLoop()&&sc_buttons_held()){
+            u64 ignored=0;if(!sc_frame(&ignored)){exit_reason="applet_exit";break;}
+            svcSleepThread(10000000ull);
+        }
+    }
+    u64 elapsed_ns=armTicksToNs(armGetSystemTick()-attempt_start);
+    bool orderly_exit=!strcmp(failure_reason,"user_exit")||!strcmp(failure_reason,"window_close")||!strcmp(failure_reason,"applet_exit");
+    const char *result=complete?"PASS":(orderly_exit?"INCOMPLETE":"FAIL");
+    const char *reason=complete?(present?"frame_limit":"profile_supported"):failure_reason;
+    if(frames==0&&frame_min_ns==UINT64_MAX)frame_min_ns=0;
+    write_attempt_result(present,result,reason,frames,attempt_start,elapsed_ns,frame_total_ns,frame_min_ns,frame_max_ns,last_vk_result);
+    sc_log("%s result=%s reason=%s; frames=%u elapsed=%.1fms frame_turnaround_avg=%.2fms min=%.2fms max=%.2fms last_vk_result=%d (not Minecraft title verification)\n",
+        present?"SDL3 VI presentation":"Snapshot base profile",result,reason,frames,
+        (double)elapsed_ns/1000000.0,frames?(double)frame_total_ns/frames/1000000.0:0.0,
+        frames?(double)frame_min_ns/1000000.0:0.0,frames?(double)frame_max_ns/1000000.0:0.0,last_vk_result);
     return true;
 }
 int main(void){
@@ -205,5 +271,5 @@ int main(void){
         if((keys&HidNpadButton_X)&&!run(true))break;
         if((keys&HidNpadButton_B)&&sc_chain("switch-diagnostics"))break;
     }
-    sc_exit();return 0;
+    sc_exit();if(gpu_process_exit_required)svcExitProcess();return 0;
 }

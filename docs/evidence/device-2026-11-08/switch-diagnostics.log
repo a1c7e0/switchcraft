@@ -1,0 +1,13 @@
+[tick=9443035613] 
+SESSION start tick=9443030779 app=switch-diagnostics version=0.1.0 source=e08f36a9d19cf461312f87a866f9bb1f39d57d98 | hardware status: NOT TESTED
+[tick=9443163398] Applet type=0 (Application=0); firmware=21.2.0
+[tick=9443287549] Log: sdmc:/switch/mc-runtime/logs/switch-diagnostics.log (open)
+[tick=9848144520] SD write/read/compare: PASS; remove=0 errno=17
+[tick=10148575793] Process memory: total=3444572160 used=3440488448 bytes rc=0x0/0x0
+[tick=10148820340] Process limit minus current use=4083712 bytes (not JVM heap)
+[tick=10148938306] Newlib malloc arena=14188544 allocated=14166768 free-in-arena=21776 bytes
+[tick=10149060277] Kernel-used memory includes reserved heap; arena free space is separate.
+[tick=10149531512] 4 MiB allocation/write/read/free: PASS
+[tick=10391774269] threadCreate=0x0
+[tick=10392017860] thread start/join=0x0 sum=500500 expected=500500: PASS
+[tick=10725534782] Clean exit: switch-diagnostics

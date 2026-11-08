@@ -4,6 +4,7 @@ import argparse
 import hashlib
 import json
 import os
+import re
 from pathlib import Path
 import zipfile
 
@@ -12,7 +13,9 @@ LOG_NAMES = ('switch-diagnostics.log', 'vulkan-test.log', 'vulkan-present.log',
              'snapshot-vulkan.json', 'zero-services-test.log', 'java25-test.log',
              'java25-vm-stdout.log', 'java25-vm-stderr.log', 'switchcraft-java25.log',
              'switchcraft-java25-vm-stdout.log', 'switchcraft-java25-vm-stderr.log',
-             'launcher-task-report.json')
+             'launcher-task-report.json', 'vulkan-present-result.json')
+ATTEMPT_LOG = re.compile(r'(?:java25-vm|switchcraft-java25-vm)-[0-9]+-(?:stdout|stderr)\.log\Z')
+ATTEMPT_PRESENT = re.compile(r'vulkan-present-result-[0-9]+\.json\Z')
 LIMIT = 8 * 1024 * 1024
 
 
@@ -42,6 +45,14 @@ def collect(sd_root, output):
     if not root.is_dir() or out == root or root in out.parents:
         raise ValueError('output must be outside the SD root')
     paths = [Path('manifest.json')] + [Path('switch/mc-runtime/logs') / n for n in LOG_NAMES]
+    logs = root / 'switch/mc-runtime/logs'
+    if logs.is_symlink():
+        raise ValueError('refusing symlink: switch/mc-runtime/logs')
+    attempts = sorted(p.name for p in logs.iterdir()
+                      if ATTEMPT_LOG.fullmatch(p.name) or ATTEMPT_PRESENT.fullmatch(p.name)) if logs.is_dir() else []
+    if len(attempts) > 128:
+        raise ValueError('more than 128 attempt captures; export them in separate reviewed batches')
+    paths += [Path('switch/mc-runtime/logs') / n for n in attempts]
     contents, missing = [], []
     for relative in paths:
         data = read_safe(root, relative)
