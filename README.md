@@ -54,6 +54,13 @@ in the pinned runtime image; Horizon startup/instrumentation are NOT TESTED.
 
 ## Build and install
 
+For physical testing, download the single
+[complete SD test-suite ZIP](https://github.com/a1c7e0/switchcraft/releases/tag/test-suite-2026-11-08).
+Extract it directly into the SD root; it includes all nine NROs, the current
+graphical launcher, Java runtime images, smoke workloads, notices and source.
+No separate overlays are needed. Follow [SD_TEST_PACKAGE.md](docs/SD_TEST_PACKAGE.md)
+and the included START_HERE.md; preserve personal configuration, saves and logs.
+
 ```sh
 bash scripts/build-all.sh
 ```

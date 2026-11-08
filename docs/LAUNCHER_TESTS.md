@@ -7,10 +7,11 @@ These paths are host-tested and cross-built. **Every Horizon UI/networking and
 runtime execution case remains NOT TESTED.** Minecraft launch on Switch is still
 blocked by runtime/native integration, independently of resource installation.
 
-Use the [launcher-manager overlay](https://github.com/a1c7e0/switchcraft/tree/artifacts/launcher-manager).
-Merge it onto the SD root, preserving profiles, saves, configuration and logs.
-The standalone Java diagnostics and full runtime images still come from the
-separate `artifacts/java25-e08f36a` base package. Use application-mode hbmenu.
+Use the [complete SD test-suite ZIP](https://github.com/a1c7e0/switchcraft/releases/tag/test-suite-2026-11-08).
+It already combines the launcher, all standalone Java/native diagnostics and
+complete runtime images. Extract onto the SD root, preserving profiles, saves,
+configuration and logs. No separate launcher overlay is needed. Use
+application-mode hbmenu; see [SD_TEST_PACKAGE.md](SD_TEST_PACKAGE.md).
 
 ## First-use path
 

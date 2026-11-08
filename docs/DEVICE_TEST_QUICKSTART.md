@@ -7,21 +7,15 @@ provided by the current Horizon package.
 
 ## Install the matching package
 
-Use the [published artifact set](https://github.com/a1c7e0/switchcraft/tree/artifacts/java25-e08f36a).
-Its source is `e08f36a9d19cf461312f87a866f9bb1f39d57d98` and java-switch is
-`b7c2ac7fd422bc2543e5c698db4e33a01cc0312d`. Later documentation commits do not
-change these binaries. The java-switch update at
-`8e6c732257937fb01108850b2e1e6838d4d33cfd` adds successful base/instrument
-build evidence and still recommends this same runtime pin; it changes no SDK ABI.
+Use [the complete SD test-suite release](https://github.com/a1c7e0/switchcraft/releases/tag/test-suite-2026-11-08).
+Download the single `switchcraft-complete-test-suite-2026-11-08.zip` and verify
+its SHA256SUMS. It includes the current graphical launcher and every Java/native
+diagnostic; no separate overlay, Java package or split-file assembly is needed.
+The native/VM binaries retain base source e08f36a, the launcher retains 13e9cff,
+and java-switch remains b7c2ac7fd422bc2543e5c698db4e33a01cc0312d (ABI1).
+The manifest preserves these distinct revisions. See [SD_TEST_PACKAGE.md](SD_TEST_PACKAGE.md).
 
-Download all files in that artifact branch and follow its README to reassemble
-the split archives and verify SHA-256. The SD ZIP checksum is:
-
-```text
-72e4e363a6c1414bca87f0501fe6d89a5e719fabaf0a776204ceceddf0876ddd  switch-minecraft-test-package.zip
-```
-
-1. Back up the SD card. Extract `switch-minecraft-test-package.zip` into its root,
+1. Back up the SD card. Extract the complete test-suite ZIP into its root,
    merging the directories while preserving existing saves and configuration.
    The result must be `SD:/switch/java25-test/java25-test.nro`, not an additional
    wrapper directory. Keep the complete runtime, test JARs, source and notices;
@@ -114,19 +108,16 @@ Presentation normally stops after 300 frames or its exit input. If the driver
 stalls, use HOME/close and report whether HOME responded. A missing base feature
 is a measured compatibility blocker; do not change feature reports to force PASS.
 
-## Optional planner and host reference
+## Graphical launcher and host reference
 
-The paragraph below describes the original base-package console inspector.
-If you install the [new launcher overlay](https://github.com/a1c7e0/switchcraft/tree/artifacts/launcher-manager),
-use its [UI controls](PRISM_PORT.md) and [launcher checklist](LAUNCHER_TESTS.md) instead. Java/native
-diagnostic controls above are unchanged.
-
-`minecraft-launcher` is currently an inspector with a VM-free SDK. With an owned
-installation, A exports its plan, X explicitly saves configuration, and L checks
-the gate. **`JS_UNAVAILABLE` / `runtime-not-linked` is expected for L.** It cannot
-launch Minecraft on Switch. Keep `minecraft-launcher.log`; review any exported
-`launch-plan.json` before sharing. Java8 `user.jar` and arbitrary Mods are not
-needed for this checklist.
+The complete ZIP already includes the graphical minecraft-launcher. Use its
+[UI controls](PRISM_PORT.md) and [launcher checklist](LAUNCHER_TESTS.md) for
+version downloads, integrity checks, profiles, import and archive/restore.
+L/R changes UI sections; these are not the old inspector's console shortcuts.
+The launcher is VM-free and cannot launch Minecraft on Switch. Keep
+minecraft-launcher.log and launcher-task-report.json; review an exported
+launch-plan.json separately before sharing. Java8 user.jar and arbitrary Mods
+are not needed for this checklist. Java/native diagnostic controls are unchanged.
 
 For the separate Linux host title reference, use a Java 25 JDK, X11 display and
 working Vulkan driver, plus the built `build/switchcraft-launcher-bridge.jar`:
@@ -144,7 +135,7 @@ selecting Quit Game. Keep its screenshot/log explicitly HOST ONLY. See
 
 ## Send results
 
-Most logs append across attempts; `snapshot-vulkan.json` and `launch-plan.json`
+Most logs append across attempts; `snapshot-vulkan.json`, `launcher-task-report.json` and `launch-plan.json`
 are overwritten. Before a repeated case, copy the current files to a uniquely
 named PC folder containing case ID, date and package revision. Do not rely on
 an appended log as the sole separator between attempts.
