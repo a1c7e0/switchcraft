@@ -1,0 +1,76 @@
+name: Publish complete SD test suite
+
+on:
+  workflow_dispatch:
+    inputs:
+      recipe_revision:
+        description: Immutable package recipe revision
+        required: true
+        default: 7182ebc1b6db3ef2e00fd9157cd1e3b122cc6ac9
+      release_tag:
+        description: Matching draft prerelease tag
+        required: true
+        default: test-suite-2026-11-08
+
+permissions:
+  contents: write
+
+concurrency:
+  group: complete-sd-test-suite-${{ inputs.release_tag }}
+  cancel-in-progress: false
+
+jobs:
+  package:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ inputs.recipe_revision }}
+          persist-credentials: false
+      - name: Fetch immutable public package inputs
+        run: |
+          python3 - <<'PY'
+          import json, pathlib, urllib.request
+          spec=json.loads(pathlib.Path('config/test-suite-inputs.json').read_text())
+          base=pathlib.Path('dist');base.mkdir()
+          launcher=base/'launcher-foundation';launcher.mkdir()
+          def download(revision,names,target):
+              with target.open('xb') as output:
+                  for name in names:
+                      url='https://raw.githubusercontent.com/a1c7e0/switchcraft/'+revision+'/'+name
+                      with urllib.request.urlopen(url,timeout=180) as response:
+                          while chunk:=response.read(1024*1024):output.write(chunk)
+          download(spec['base']['artifact_revision'],['switch-minecraft-test-package.zip.part-00'+str(n) for n in range(1,4)],base/'switch-minecraft-test-package.zip')
+          download(spec['base']['artifact_revision'],['manifest.json'],base/'manifest.json')
+          download(spec['launcher']['artifact_revision'],['switchcraft-launcher-foundation.zip'],launcher/'switchcraft-launcher-foundation.zip')
+          download(spec['launcher']['artifact_revision'],['manifest.json'],launcher/'manifest.json')
+          PY
+      - name: Assemble and verify the complete SD-root ZIP
+        run: python3 scripts/package-test-suite.py
+      - name: Publish the matching draft prerelease
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          TEST_SUITE_TAG: ${{ inputs.release_tag }}
+        run: |
+          python3 - <<'PY'
+          import json,os,pathlib
+          m=json.loads(pathlib.Path('dist/complete-test-suite/manifest.json').read_text())
+          if m['package_id']!=os.environ['TEST_SUITE_TAG']:raise SystemExit('Release tag differs from package ID')
+          a=m['archive']
+          notes=f'''Download **{a['name']}** below and extract its contents directly into the SD root. No separate launcher/Java package or split-file assembly is needed.
+
+          Expected: `SD:/switch/java25-test/java25-test.nro`. Read the included START_HERE.md and device/launcher checklists. Use application-mode hbmenu and preserve personal configuration, saves and logs.
+
+          Includes all nine NROs, the current graphical launcher, Java8 diagnostic runtime, complete Java25 java.base/java.instrument image, Hello/JNI/FFM/startup-agent and composed SDL workloads, renderer bridge, feedback helper, licenses and corresponding source.
+
+          Package recipe: `{m['packaging_revision']}`. Native/VM binaries retain e08f36a, launcher retains 13e9cff, java-switch is `{m['java_switch_revision']}` (ABI1). No new VM build is claimed. All physical Horizon VM/Java/JNI/FFM/instrumentation/UI/network/graphics/Minecraft execution remains NOT TESTED. The separate Linux Vulkan Demo title was verified on 2026-11-04; Minecraft cannot currently start on Switch.
+
+          ZIP: {a['bytes']:,} bytes. SHA256: `{a['sha256']}`. SHA256SUMS and manifest.json are optional verification downloads; the ZIP contains everything needed on the SD card.
+          '''
+          pathlib.Path('/tmp/test-suite-notes.md').write_text(notes)
+          PY
+          test "$(gh release view "$TEST_SUITE_TAG" --json isDraft --jq .isDraft)" = true
+          gh release upload "$TEST_SUITE_TAG" dist/complete-test-suite/* --clobber
+          gh release edit "$TEST_SUITE_TAG" --draft=false --prerelease --notes-file /tmp/test-suite-notes.md

@@ -99,3 +99,11 @@ The script verifies both complete input ZIP hashes/manifests, all nine NROs,
 runtime image inventory, test/bridge JARs and the final ZIP members. It produces
 dist/complete-test-suite/ with one ZIP, manifest.json and SHA256SUMS. It does not
 require the runtime repository's original build archives or recompile any NRO.
+
+The Publish complete SD test suite workflow can perform the same assembly from
+the public immutable artifact commits, then upload the single ZIP to a matching
+draft prerelease. Dispatch it with an immutable recipe revision and package tag.
+It needs no private Java checkout, runtime-build secret or new VM build. The
+workflow refuses a mismatched package tag and only replaces assets while the
+release is still a draft. It uses GitHub's job token for release uploads when
+the interactive environment's credentials do not cover uploads.github.com.
