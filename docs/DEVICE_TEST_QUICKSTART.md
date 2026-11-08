@@ -7,13 +7,12 @@ provided by the current Horizon package.
 
 ## Install the matching package
 
-Use [the complete SD test-suite release](https://github.com/a1c7e0/switchcraft/releases/tag/test-suite-2026-11-08).
-Download the single `switchcraft-complete-test-suite-2026-11-08.zip` and verify
-its SHA256SUMS. It includes the current graphical launcher and every Java/native
-diagnostic; no separate overlay, Java package or split-file assembly is needed.
-The native/VM binaries retain base source e08f36a, the launcher retains 13e9cff,
-and java-switch remains b7c2ac7fd422bc2543e5c698db4e33a01cc0312d (ABI1).
-The manifest preserves these distinct revisions. See [SD_TEST_PACKAGE.md](SD_TEST_PACKAGE.md).
+Use [the complete SD test-suite release](https://github.com/a1c7e0/switchcraft/releases/tag/test-suite-2026-11-08-r2).
+Download the single R2 ZIP and optionally verify its SHA-256 in SHA256SUMS.
+It is ready to extract; no split-file assembly is required. It includes the graphical
+launcher, all nine NROs and Java/native test resources; there is no overlay. Read
+the manifest for the exact new java-switch runtime revision. See
+[SD_TEST_PACKAGE.md](SD_TEST_PACKAGE.md).
 
 1. Back up the SD card. Extract the complete test-suite ZIP into its root,
    merging the directories while preserving existing saves and configuration.
@@ -42,8 +41,9 @@ functional PASS. Finish the ordinary probes before trying the genuine VM.
 | `java-test` | Fresh process, A once | `DIAGNOSTIC SUITE PASS`, native bridge PASS and `call_main -> 0`; Java 8 diagnostic only | `java-test.log` |
 | `ffi-test` | A | Integer downcall 42, mixed downcall 41.5 | `ffi-test.log` |
 | `ffi-test` | X, after A passed | Integer upcall 42, mixed upcall 41.5; both close Results 0 | Same |
-| `ffi-test` | Y | 64 KiB reserve, commit/readback, uncommit/recommit and release succeed | Same |
-| `ffi-test` | B | Partial middle-page mapping, R/NONE/RW transitions, uncommit/recommit and release succeed | Same |
+| `zero-services-test` | L, before public map probes | Private VM mapping reports raw status/Result, protection and canary outcome | `zero-services-test.log` |
+| `ffi-test` | Y | Record each step; public physical map may be unsupported (`0xfa01`), which is not a PASS | `ffi-test.log` |
+| `ffi-test` | B | Record partial mapping/protection results; unsupported public mapping is not a PASS | Same |
 | `zero-services-test` | A | Clock, semaphore, Atomics, monitor and event checks complete without errors | `zero-services-test.log` |
 | `zero-services-test` | X | Worker ID/stack/TLS, 64 permit exchanges, join and close succeed | Same |
 | `zero-services-test` | B | Deferred worker cleanup/reaper joins after exit and closes successfully | Same |
@@ -78,10 +78,14 @@ Y uses the instrument profile included in this artifact set. Keep both
 `switchcraft-native-smoke.jar`; it calls linked SDL_GetVersion through JNI and
 Java FFM, without creating a window.
 
-For **every** standalone attempt, retain `java25-test.log`,
-`java25-vm-stdout.log` and `java25-vm-stderr.log`. For every combined attempt,
-retain `switchcraft-java25.log`, `switchcraft-java25-vm-stdout.log` and
-`switchcraft-java25-vm-stderr.log`.
+On normal return, A leaves the stdout results screen, X leaves stderr, and Y
+leaves native status plus process exit result. Use a new application process for
+each action. Preserve `java25-test.log` and that attempt's
+`java25-vm-<ticks>-stdout.log` / `java25-vm-<ticks>-stderr.log`. Combined runs
+use `switchcraft-java25-vm-<ticks>-stdout.log` and
+`switchcraft-java25-vm-<ticks>-stderr.log` plus `switchcraft-java25.log`.
+Fatal aborts cannot hold a result screen. Preserve fresh relative-PC/register
+evidence in logs and any system crash report.
 
 The VM uses a 4 MiB worker stack and pauses UI updates while joining the worker.
 There is no established physical-device startup duration or internal VM timeout.
@@ -103,7 +107,10 @@ not a successful game launch.
 | `vulkan-test` | A, then X | Device enumeration; 4,096 words read back as `0xcafebabe` |
 | `vulkan-test` | Y | Offscreen triangle center/corner checks PASS and ASCII preview; this does not test screen presentation |
 
-Export `vulkan-present.log`, `snapshot-vulkan.json` and `vulkan-test.log`.
+Export `vulkan-present.log`, `vulkan-present-result.json`, `snapshot-vulkan.json`
+and `vulkan-test.log`. R2 reports PASS only after 300 completed frames; early
+user exit is incomplete. The result JSON records elapsed and frame-turnaround
+timings.
 Presentation normally stops after 300 frames or its exit input. If the driver
 stalls, use HOME/close and report whether HOME responded. A missing base feature
 is a measured compatibility blocker; do not change feature reports to force PASS.

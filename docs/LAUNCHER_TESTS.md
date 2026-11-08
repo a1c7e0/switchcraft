@@ -7,10 +7,11 @@ These paths are host-tested and cross-built. **Every Horizon UI/networking and
 runtime execution case remains NOT TESTED.** Minecraft launch on Switch is still
 blocked by runtime/native integration, independently of resource installation.
 
-Use the [complete SD test-suite ZIP](https://github.com/a1c7e0/switchcraft/releases/tag/test-suite-2026-11-08).
-It already combines the launcher, all standalone Java/native diagnostics and
-complete runtime images. Extract onto the SD root, preserving profiles, saves,
-configuration and logs. No separate launcher overlay is needed. Use
+Use the [complete R2 SD test package](https://github.com/a1c7e0/switchcraft/releases/tag/test-suite-2026-11-08-r2).
+Download the single ready-made ZIP and verify the full ZIP hash before
+extracting. It combines the launcher, all standalone Java/native diagnostics and
+complete runtime image. Preserve profiles, saves, configuration and logs. No
+separate launcher overlay is needed. Use
 application-mode hbmenu; see [SD_TEST_PACKAGE.md](SD_TEST_PACKAGE.md).
 
 ## First-use path
@@ -81,8 +82,9 @@ policy, not a measured Minecraft heap recommendation.
 errors. `launcher-task-report.json` contains the most recent structured task
 result; `launch-plan.json` contains the most recent explicit plan export. These
 JSON reports are overwritten, so save a per-attempt copy before repeating.
-The updated collect-feedback helper includes the task report but still excludes
-account data, game assets, launch-plan.json and crash reports.
+The R2 collect-feedback helper includes the task report and unique tick-named
+Java VM stdout/stderr logs, while excluding account data, game assets,
+launch-plan.json and crash reports.
 
 If a network or import worker stalls, record the action, actual wait, last
 message and HOME responsiveness. Use HOME/close if necessary. Device timing,
@@ -99,8 +101,9 @@ Logs are retained under docs/evidence as launcher-final-55-tests-HOST-ONLY.log
 and launcher-integration-11-tests-HOST-ONLY.log. The real online installation
 report is launcher-online-install-HOST-ONLY.json; this is not a fixture download.
 
-The expanded run initially used a stale shared Java checkout. The two affected
-resolver/JNI tests then passed using the clean isolated runtime pin b7c2ac7.
+The expanded host run initially used a stale shared Java checkout. The two affected
+resolver/JNI tests then passed using an isolated runtime pin. These are host
+results for that older integration, not the new R2 runtime revision.
 One additional archive-mutation test could not be rerun: the original pinned
 SDK/runtime `.tar.gz` inputs are absent from this restored workspace. The
 previously integrated SDK/image remain cached and unchanged; no new VM/image

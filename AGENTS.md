@@ -35,8 +35,11 @@ The official client was downloaded only to /tmp for research, never committed
 or packaged. Linux host Java 25 has reached the 26.4-snapshot-6 title with the
 strict Vulkan renderer; screenshot and logs are HOST ONLY. The pinned genuine
 Java 25 VM is cross-linked into the standalone and combined diagnostic NROs.
-Horizon startup and all Horizon execution remain NOT TESTED. Never turn a
-cross-link or host screenshot into a device pass.
+Original B7 device feedback now establishes native/FFI/SafeFetch and 300-frame
+SDL3/VI rendering results; Java8 file I/O and physical mappings failed and every
+Java25 attempt aborted before observed Java output. New R2 fixes remain device
+unverified. Preserve this distinction; see docs/evidence/device-2026-11-08/.
+Never turn a cross-link or host screenshot into a device pass.
 
 java-switch exports ABI 1 and a real cross-built OpenJDK 25/Zero runtime, image,
 instrumentation and resolver. The regular minecraft-launcher remains VM-free;
@@ -70,3 +73,14 @@ overclocking. Docker vfs previously exhausted the small disk; the tested pinned
 OCI toolchain extraction fallback is available. CI cross-private checkout needs
 JAVA_SWITCH_READ_TOKEN configured in GitHub; do not request or print tokens in
 agent conversations. Hardware tests and log export: docs/TEST_PLAN.md.
+
+The 2026-11-08 R2 runtime pin is bff51f38e218af147ca0c9f255fcf1b43be72daf.
+Runtime issues4/5/6 retain execution failures; do not close them on cross-build or
+host tests. Private HotSpot data memory may eagerly use protected C-heap backing
+when checked SystemResourceSizeTotal is zero; public SDK reservations remain
+unmapped and raw0xfa01 is Unsupported. Result panes hold until + and never run
+another VM. Fatal exceptions keep the stock termination path and capture bounded
+relative-PC/register evidence; the exact B7 Java25 crash cause is unresolved.
+Unique tick-named Java output and presentation JSON history are allowlisted for
+feedback export. The full R2 SD ZIP is built by scripts/package.py; public release
+parts are internal transport and the Actions publisher emits a single user ZIP.

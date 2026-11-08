@@ -11,8 +11,9 @@ GitHub's default branch is `main`. Use `legacy/1.12.2` for the preserved older
 implementation.
 
 **The snapshot reaches its title screen in the Linux Java-25/Vulkan reference.
-A genuine Horizon Java 25 VM is cross-linked in diagnostic NROs; its startup,
-Java execution and the Minecraft title on Switch remain NOT TESTED.**
+Original B7 device tests passed native/FFI and graphics probes but Java25
+startup attempts crashed before observed Java output. R2 fixes remain device
+unverified; Java25 execution and the Minecraft title on Switch are not established.**
 
 The reference uses the official Demo mode, no account credentials, and Mesa
 llvmpipe Vulkan. The image below is **HOST ONLY**, not a Switch screenshot:
@@ -24,9 +25,9 @@ llvmpipe Vulkan. The image below is **HOST ONLY**, not a Switch screenshot:
 The [launcher](docs/PRISM_PORT.md) provides a controller/touch UI and a portable
 Prism instance/component backend. It supports creation/editing, settings-only
 duplication, online version catalogs, verified installation/repair, integrity
-checks, folder import and archive/restore. Download the
-[launcher-manager overlay](https://github.com/a1c7e0/switchcraft/tree/artifacts/launcher-manager)
-and follow [the launcher tests](docs/LAUNCHER_TESTS.md). Account flows, mod
+checks, folder import and archive/restore. It is included in the complete R2
+device test package; no separate overlay is needed. Follow
+[the launcher tests](docs/LAUNCHER_TESTS.md). Account flows, mod
 management and the full Qt framework are not ported. The UI is cross-built and
 host-tested; Horizon UI/network execution remains NOT TESTED.
 
@@ -54,12 +55,12 @@ in the pinned runtime image; Horizon startup/instrumentation are NOT TESTED.
 
 ## Build and install
 
-For physical testing, download the single
-[complete SD test-suite ZIP](https://github.com/a1c7e0/switchcraft/releases/tag/test-suite-2026-11-08).
-Extract it directly into the SD root; it includes all nine NROs, the current
-graphical launcher, Java runtime images, smoke workloads, notices and source.
-No separate overlays are needed. Follow [SD_TEST_PACKAGE.md](docs/SD_TEST_PACKAGE.md)
-and the included START_HERE.md; preserve personal configuration, saves and logs.
+For physical testing, download and reassemble the ordered parts of
+[the complete R2 SD test-suite](https://github.com/a1c7e0/switchcraft/releases/tag/test-suite-2026-11-08-r2).
+Verify the complete ZIP hash before extracting it to the SD root. It includes
+all nine NROs, the current graphical launcher, Java runtime image, smoke
+workloads, notices and source. Follow [SD_TEST_PACKAGE.md](docs/SD_TEST_PACKAGE.md)
+and START_HERE.md; preserve personal configuration, saves and logs.
 
 ```sh
 bash scripts/build-all.sh
@@ -107,8 +108,13 @@ Java 25 JNI creation/native registration/FFM downcalls/upcalls/teardown.
 The baseline SDK and minecraft-launcher remain VM-free and report
 `runtime-not-linked`. Separate experimental NROs link the genuine VM; their
 availability query proves symbol presence, not startup. The game launch remains
-blocked on tested VM execution and LWJGL/FFM/native bindings. All Switch
-Vulkan/SDL/FFI/runtime execution awaits physical testing.
+blocked on tested VM execution and LWJGL/FFM/native bindings. Earlier physical
+results came from the B7 package and are historical, not R2 verification. R2
+fixes the Java 8 file-path diagnostic, adds a real private-memory fallback and
+retained Java fatal diagnostics; these changes still need new device runs. See
+the [device evidence summary](docs/evidence/device-2026-11-08/summary.json) and
+[test plan](docs/TEST_PLAN.md). Horizon VM startup and Minecraft title remain
+unestablished.
 
 To reproduce the host reference, prepare a Linux X11/Vulkan environment and run:
 

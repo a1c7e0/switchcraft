@@ -3,6 +3,35 @@
 Target fixed by the user: **26.4-snapshot-6 / Java 25 / Vulkan only**.
 The legacy branch is legacy/1.12.2; Java ownership is the independent java-switch repo.
 
+## Physical evidence status
+
+User-supplied Switch 1 / firmware 21.2.0 logs dated 2026-11-08 came from the
+older B7 package, whose package SHA-256 is recorded in
+[the device evidence summary](evidence/device-2026-11-08/summary.json). They are
+historical hardware results, not validation of R2. That run recorded native SD,
+4 MiB allocation and thread checks; AAPCS64/libffi calls; service accounting,
+TLS/thread/reaper and SafeFetch probes; NVK readback/triangle; snapshot feature
+profile; and SDL3/VI presentation of 300 frames with cleanup. The later 14-frame
+presentation ended after a B-button event and the following profile action; no
+Vulkan error is logged. These facts do not prove the same binaries in R2.
+
+The older Java 8 diagnostic failed on device URI filesystem paths and exclusive
+file creation. The R2 source addresses that failure, but the fix needs a fresh
+device run. Public physical-map probes returned `0xfa01`; this is an unsupported
+result, not PASS. R2 adds a legitimate private-memory fallback, while its device
+protection and budget behavior remains unverified. Standalone and composed Java
+25 attempts aborted before VM output with FAR `0x468`; R2 adds retained failure
+diagnostics, but startup is still unresolved and requires fresh relative-PC and
+register evidence. See runtime issues
+[#4](https://github.com/a1c7e0/java-switch/issues/4),
+[#5](https://github.com/a1c7e0/java-switch/issues/5) and
+[#6](https://github.com/a1c7e0/java-switch/issues/6).
+
+R2 is the complete package `switchcraft-complete-test-suite-2026-11-08-r2.zip`.
+Its manifest, not an old short SHA in documentation, is authoritative for each
+NRO source and the new java-switch revision. R2 compilation and host tests do
+not close any physical case below.
+
 | Milestone | Implemented | Built | Host verification | Horizon hardware |
 | --- | --- | --- | --- | --- |
 | Switch-style launcher UI and Prism-format instances | First foundation; create/edit/duplicate/check | NRO; console fallback retained | Shared-canvas preview, controller hit targets, instance isolation tests | NOT TESTED |

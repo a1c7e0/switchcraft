@@ -12,7 +12,7 @@ for item in manifest['artifacts']:
 for line in (root/'SHA256SUMS').read_text().splitlines():
     digest,name=line.split('  ',1)
     assert hashlib.sha256((root/name).read_bytes()).hexdigest()==digest,name
-with zipfile.ZipFile(root/'switch-minecraft-test-package.zip') as archive:
+with zipfile.ZipFile(root/os.environ.get('SWITCHCRAFT_SD_ZIP','switch-minecraft-test-package.zip')) as archive:
     assert archive.testzip() is None
     names=archive.namelist()
     assert not any('/saves/' in name and not name.endswith('/') for name in names)
@@ -28,6 +28,7 @@ with zipfile.ZipFile(root/'switch-minecraft-test-package.zip') as archive:
     assert not any('/opengl-test/' in name for name in names)
     assert not any(name.lower().endswith(('.so','.dll','.dylib')) for name in names)
     assert 'switchcraft-docs/collect-feedback.py' in names
+    assert 'START_HERE.md' in names and 'switchcraft-docs/DEVICE_TEST_QUICKSTART.md' in names
     assert len([name for name in names if name.endswith('.jar')])==10
 with zipfile.ZipFile(root/'switchcraft-debug-symbols.zip') as debug:
     assert debug.testzip() is None

@@ -2,16 +2,29 @@
 
 Every physical case begins as **NOT TESTED**. The Linux Demo title is separate
 reference evidence; the Horizon game title remains **BLOCKED / NOT ACHIEVED**.
-Use the single [complete SD test-suite ZIP](https://github.com/a1c7e0/switchcraft/releases/tag/test-suite-2026-11-08),
-which includes all nine NROs, runtime images, workloads and the graphical launcher.
-No separate overlay is required. See [SD_TEST_PACKAGE.md](SD_TEST_PACKAGE.md).
+Use the complete [R2 SD test package](https://github.com/a1c7e0/switchcraft/releases/tag/test-suite-2026-11-08-r2).
+Download the single ready-made ZIP and verify the whole
+ZIP SHA-256 before extraction. It contains all nine NROs, runtime image,
+workloads and the graphical launcher. No overlay is required. See
+[SD_TEST_PACKAGE.md](SD_TEST_PACKAGE.md).
 L-01 through L-03 below describe the historical console inspector in the immutable
 artifacts/java25-e08f36a base package; for the included graphical launcher use
 [PRISM_PORT.md](PRISM_PORT.md) and [LAUNCHER_TESTS.md](LAUNCHER_TESTS.md) instead.
-Native/Java test controls and their immutable build revisions are unchanged.
+Selection keys remain familiar; the manifest identifies the rebuilt R2 revisions.
+After a completed Java25 attempt, A/X/Y review captured logs and + closes the
+process; these result-pane actions never start another VM.
 Use Switch 1, Atmosphere, application-mode hbmenu, normal clocks and supported
 libnx APIs. No patches or Linux/Android boot. Keep SD backups and preserve saves
 and real configuration when merging the package.
+
+The supplied 2026-11-08 physical logs are from the older B7 package, not R2.
+They establish prior native/FFI/SafeFetch/Vulkan successes but also Java 8 file
+diagnostic failures, public physical memory `0xfa01`, and Java 25 aborts before
+VM output. Treat every case below as NOT TESTED with R2 until it is repeated.
+See [evidence summary](evidence/device-2026-11-08/summary.json) and runtime
+issues [#4](https://github.com/a1c7e0/java-switch/issues/4),
+[#5](https://github.com/a1c7e0/java-switch/issues/5),
+[#6](https://github.com/a1c7e0/java-switch/issues/6).
 
 Common installation/launch for each NRO: extract the complete test ZIP to the SD
 root and start `sdmc:/switch/<name>/<name>.nro` in application-mode hbmenu, or use
@@ -19,8 +32,9 @@ the explicitly named diagnostic next-load action. Logs named below are relative
 to `sdmc:/switch/mc-runtime/logs/`. The common prerequisites apply to every case.
 
 For a first session, follow [DEVICE_TEST_QUICKSTART.md](DEVICE_TEST_QUICKSTART.md).
-Run N-01 through N-04, J-01, F-01 through F-04 and Z-01 through Z-04 before
-the genuine Java25 sessions. Z-05 is an advanced deliberate-fault probe; export
+Run N-01 through N-04, J-01, Z-01 through Z-04, then F-01 through F-04 before
+the genuine Java25 sessions. Run private memory case Z-04 before public physical
+map probes. Z-05 is an advanced deliberate-fault probe; export
 ordinary logs before attempting it. Graphics V-01 through V-04 are an independent
 branch. Proceed to optional launcher checks afterward. A feature-profile PASS is not a
 Minecraft title PASS. Standard JNI/FFM host tests are not Horizon runtime tests.
@@ -32,9 +46,13 @@ Minecraft title PASS. Standard JNI/FFM host tests are not Horizon runtime tests.
 * **Launch/action:** Start via application-mode hbmenu in a fresh process and
   press A once. The 4 MiB worker join pauses UI updates.
 * **Pass:** SDK stage `completed` and `Hello from Horizon Java 25` in VM stdout.
+  On normal return A keeps stdout visible; X shows stderr and Y shows native
+  status plus process exit result. A fatal abort ends the process and relies on
+  relative-PC/register evidence in the log, not a held result screen.
 * **Failure/report:** Capture status/stage, raw Results, firmware, Atmosphere,
   application mode, package hash, last action, approximate wait and crash report.
-* **Logs:** `java25-test.log`, `java25-vm-stdout.log`, `java25-vm-stderr.log`.
+* **Logs:** `java25-test.log` and the matching tick-named
+  `java25-vm-<ticks>-stdout.log` / `java25-vm-<ticks>-stderr.log`.
 * **Risk/recovery:** Moderate; HOME and close the application if stalled. After
   a completed VM session use + and reopen application-mode hbmenu in a new process.
 
@@ -49,7 +67,7 @@ Minecraft title PASS. Standard JNI/FFM host tests are not Horizon runtime tests.
   `JAVA25_AGENT_SMOKE_PASS`, with stage `completed`. Host markers do not count.
 * **Failure/report:** Preserve every line and actual native Result/exception,
   last action, approximate wait, firmware, mode, package hash and crash report.
-* **Logs:** All three files named in J25-01.
+* **Logs:** `java25-test.log` and matching tick-named stdout/stderr files.
 * **Risk/recovery:** Moderate; HOME/close on stall. Do not reuse a VM process or
   apply privileges/patches to force a pass.
 
@@ -64,8 +82,8 @@ Minecraft title PASS. Standard JNI/FFM host tests are not Horizon runtime tests.
   process; reopen hbmenu before further tests.
 * **Failure/report:** All status/Result lines, process memory/heap override,
   artifact hash, firmware, application mode, action, wait and crash report.
-* **Logs:** `switchcraft-java25.log`, `switchcraft-java25-vm-stdout.log`,
-  `switchcraft-java25-vm-stderr.log` under the common log root.
+* **Logs:** `switchcraft-java25.log` and matching
+  `switchcraft-java25-vm-<ticks>-stdout.log` / `-stderr.log`.
 * **Risk/recovery:** Moderate; HOME/close on a stall. These results do not prove
   LWJGL FFM, Minecraft initialization, rendering or a title screen.
 
@@ -80,7 +98,7 @@ Minecraft title PASS. Standard JNI/FFM host tests are not Horizon runtime tests.
   SDL_GetVersion via the JDK FFM fallback. It does not create a window.
 * **Failure/report:** Complete three combined VM logs, first Java exception,
   raw Result, package hash, firmware, mode, last action, wait and crash report.
-* **Logs:** The three `switchcraft-java25` logs from J25-03.
+* **Logs:** The primary combined log and matching tick-named stdout/stderr logs.
 * **Risk/recovery:** Moderate; HOME/close if stalled; reopen hbmenu for each
   attempt. Do not infer Minecraft, SDL rendering or title compatibility.
 
@@ -155,10 +173,10 @@ Minecraft title PASS. Standard JNI/FFM host tests are not Horizon runtime tests.
 * **Installation requirements:** Common setup; Native basics passed; display and controller connected.
 * **How to launch:** Common hbmenu launch for the named NRO; the explicitly marked host/future cases are exceptions.
 * **Controller operations / actions:** Press X; observe color-changing window; Plus/Start ends test, or wait up to 300 frames.
-* **Expected screen/output and successful result:** SDL Switch video, VI surface/swapchain, visible color frames, nonzero presented count; returns to console.
+* **Expected screen/output and successful result:** SDL Switch video, VI surface/swapchain, visibly continuous color change and 300 completed frames; structured `vulkan-present-result.json` must report PASS. Early user exit is incomplete, not PASS; returns to console.
 * **Failure symptoms:** SDL/window/surface errors, black output, swapchain/fence errors or freeze.
-* **Log location:** `vulkan-present.log` under the common log root unless explicitly host/manifest.
-* **Information to report:** Driver/window dimensions/format, frames, visible output and HOME responsiveness.
+* **Log location:** `vulkan-present.log`, `vulkan-present-result.json` and `snapshot-vulkan.json` under the common log root unless explicitly host/manifest.
+* **Information to report:** Driver/window dimensions/format, frames, visible output, elapsed/frame-turnaround timings and HOME responsiveness.
 * **Risk level:** Moderate.
 * **Recovery steps:** Use Plus/Start if responsive; HOME/relaunch otherwise; no GPU reset is promised.
 
@@ -217,11 +235,11 @@ Minecraft title PASS. Standard JNI/FFM host tests are not Horizon runtime tests.
 ## F-03 — ffi-test.nro virtual memory
 
 * **File:** `ffi-test.nro`.
-* **Installation requirements:** Common setup; application-mode hbmenu and the latest test package.
+* **Installation requirements:** Common setup; application-mode hbmenu and the latest test package. Run private memory case Z-04/L first.
 * **How to launch:** Start `ffi-test` from application-mode hbmenu.
 * **Controller operations / actions:** Press Y once, wait for all results, then + to exit.
-* **Expected screen/output and successful result:** 64 KiB reserved, commit/readback PASS, uncommit, recommit and release status=0 and Result=0.
-* **Failure symptoms:** Reservation failure, nonzero status/Result, failed readback, hang or crash.
+* **Expected screen/output and successful result:** Record reserve, public physical commit/readback, uncommit/recommit and release independently. `svcMapPhysicalMemory` may be unsupported with Result `0xfa01`; report that directly, never relabel it PASS.
+* **Failure symptoms:** Reservation failure, unexpected status/Result, failed readback, hang or crash. A documented unsupported mapping is not itself a test-suite PASS.
 * **Log location:** `sdmc:/switch/mc-runtime/logs/ffi-test.log`.
 * **Information to report:** Each status and Result, last stage, package hash and launch mode.
 * **Risk level:** Moderate: supported native address-space and mapping syscalls.
@@ -229,7 +247,7 @@ Minecraft title PASS. Standard JNI/FFM host tests are not Horizon runtime tests.
 
 ## F-04 — ffi-test.nro partial virtual memory
 
-* **File/action:** `ffi-test.nro`, B, after ordinary downcalls and the Y memory probe.
+* **File/action:** `ffi-test.nro`, B, after ordinary downcalls and private Z-04/L.
 * **Pass:** 64 KiB-aligned reservation; middle two-page mapping/readback;
   R/NONE/RW protection changes; partial uncommit/recommit and release succeed.
 * **Report:** Every status and raw Result from `ffi-test.log`. The probe never

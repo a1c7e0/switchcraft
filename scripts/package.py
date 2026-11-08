@@ -10,6 +10,7 @@ revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()
 java_revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=JAVA,text=True).strip()
 assert java_revision==LOCK['java_switch']['revision']
 dirty=bool(subprocess.check_output(['git','status','--porcelain'],text=True).strip())
+assert not dirty, 'Commit the complete source before packaging'
 dk=pathlib.Path(os.environ.get('DEVKITPRO',str(ROOT/'.toolchain/opt/devkitpro')))
 toolchain={'image':LOCK['toolchain_image'],'compiler':subprocess.check_output([str(dk/'devkitA64/bin/aarch64-none-elf-gcc'),'--version'],text=True).splitlines()[0],
     'packages':sorted(p.name for p in (dk/'pacman/var/lib/pacman/local').glob('*') if p.is_dir())}
@@ -28,7 +29,9 @@ purposes={'switch-diagnostics.nro':'Native memory, SD, input, threads and next-l
  'java25-test.nro':'Independent genuine Java 25 VM A/X/Y diagnostic; Horizon startup untested',
  'switchcraft-java25.nro':'Genuine Java 25 Hello and JNI/FFM SDL version diagnostics with composed provider; Horizon startup untested'}
 for item in records:
-    item.update(purpose=purposes[item['name']],source_revision=revision,java_switch_revision=java_revision,source_dirty=dirty,build_date=now,toolchain=toolchain,
+    external=item['name'] in ['java-test.nro','ffi-test.nro','zero-services-test.nro','java25-test.nro']
+    item.update(source_repository='a1c7e0/java-switch' if external else 'a1c7e0/switchcraft', switchcraft_integration_revision=revision)
+    item.update(purpose=purposes[item['name']],source_revision=java_revision if external else revision,java_switch_revision=java_revision,source_dirty=dirty,build_date=now,toolchain=toolchain,
         bundled_dependencies=['libnx/newlib', 'Pinned NVK/SDL3 or java-switch component as applicable'],tested_environment='Linux cross-build and host checks; NRO not executed',known_limitations=limitations)
 sd=DIST/'COPY_TO_SD'
 if sd.exists():shutil.rmtree(sd)
@@ -58,11 +61,19 @@ shutil.copyfile(ROOT/'LICENSE',runtime/'licenses/SWITCHCRAFT-MIT.txt')
 shutil.copyfile(ROOT/'vendor/JSON-LICENSE.MIT',runtime/'licenses/NLOHMANN-JSON-MIT.txt')
 shutil.copyfile(ROOT/'.deps/sdl3/share/licenses/SDL3/LICENSE.txt',runtime/'licenses/SDL3-ZLIB.txt')
 for sub in ['versions','libraries','assets','mods','config','saves','resourcepacks','shaderpacks']:(sd/'minecraft/.minecraft'/sub).mkdir(parents=True,exist_ok=True)
-for name in ['README.md','docs/TEST_PLAN.md','docs/KNOWN_ISSUES.md','docs/HOST_REFERENCE.md']:
+for name in ['README.md','docs/TEST_PLAN.md','docs/KNOWN_ISSUES.md','docs/HOST_REFERENCE.md',
+             'docs/DEVICE_TEST_QUICKSTART.md','docs/LAUNCHER_TESTS.md','docs/PRISM_PORT.md','docs/SD_TEST_PACKAGE.md']:
     dest=sd/'switchcraft-docs'/pathlib.Path(name).name;dest.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(ROOT/name,dest)
 shutil.copyfile(ROOT/'tools/collect-feedback.py',sd/'switchcraft-docs/collect-feedback.py')
+guide=(ROOT/'docs/SD_TEST_PACKAGE.md').read_text()
+for name in ['DEVICE_TEST_QUICKSTART.md','LAUNCHER_TESTS.md','TEST_PLAN.md']:
+    guide=guide.replace(']('+name+')','](switchcraft-docs/'+name+')')
+(sd/'START_HERE.md').write_text(guide)
 (sd/'INSTALL.txt').write_text('Merge switch/ and minecraft/ onto the SD root. Preserve saves and real configuration.\nUse application-mode hbmenu. Run java25-test A, X and Y in separate fresh processes.\nHardware execution NOT TESTED. Java 25 VM is cross-linked; Minecraft does not yet run on Horizon.\nSee switchcraft-docs/TEST_PLAN.md. No game files or credentials are included.\n')
 source=DIST/'switchcraft-corresponding-source.tar.gz'
+curl_spec=importlib.util.spec_from_file_location('curl_source',ROOT/'scripts/prepare-curl-source.py')
+curl_source=importlib.util.module_from_spec(curl_spec);curl_spec.loader.exec_module(curl_source)
+curl_archive=curl_source.prepare()
 with tarfile.open(source,'w:gz',dereference=True) as archive:
     for repository,prefix in [(ROOT,'switchcraft'),(JAVA,'java-switch')]:
         for name in subprocess.check_output(['git','ls-files','-z'],cwd=repository).split(b'\0'):
@@ -70,17 +81,22 @@ with tarfile.open(source,'w:gz',dereference=True) as archive:
     for directory in ['minijvm-source','minijvm','libffi-source']:
         archive.add(JAVA/'.deps'/directory,arcname='third-party/'+directory)
     archive.add(JAVA/'.deps/openjdk25.archive',arcname='third-party/openjdk25-upstream.tar.gz')
+    archive.add(curl_archive,arcname='third-party/curl-7.69.1.tar.xz')
 shutil.copyfile(source,sd/source.name)
-host_result=json.loads((ROOT/'docs/evidence/snapshot6-host-result.json').read_text())
+host_result=json.loads((ROOT/'docs/evidence/snapshot6-host-result-2026-11-04.json').read_text())
 manifest={'project':'Switchcraft','target':'26.4-snapshot-6','source_revision':revision,'java_switch_revision':java_revision,'source_dirty':dirty,
  'build_date':now,'toolchain':toolchain,'dependency_lock':LOCK,'hardware_verification':'NOT TESTED','java25_horizon_runtime':'CROSS-LINKED; STARTUP NOT TESTED',
  'minecraft_title_on_horizon':'NOT ACHIEVED','host_reference':host_result,'host_reference_note':'Historical host capture; its VM status describes the capture date, not the later cross-linked runtime', 'artifacts':records,'sd_resources':[],
  'known_limitations':limitations,'not_produced':{'opengl-test.nro':'Legacy branch legacy/1.12.2 only','minecraft-aot-test.nro':'No viable self-contained AOT runtime'},
+ 'release_tag':os.environ.get('SWITCHCRAFT_RELEASE_TAG','test-suite-2026-11-08-r2'),
+ 'historical_device_evidence':json.loads((ROOT/'docs/evidence/device-2026-11-08/summary.json').read_text()),
  'package_manifest_note':'Internal ZIP manifest records NRO/resources; external manifest additionally hashes the final archives.'}
 for file in sorted(runtime.rglob('*.jar')):manifest['sd_resources'].append({'path':file.relative_to(sd).as_posix(),'bytes':file.stat().st_size,'sha256':hashlib.sha256(file.read_bytes()).hexdigest()})
 manifest['runtime_image_files']=[{'path':file.relative_to(sd).as_posix(),'sha256':hashlib.sha256(file.read_bytes()).hexdigest()} for file in sorted((runtime/'runtimes/openjdk25').rglob('*')) if file.is_file()]
 (DIST/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n');shutil.copyfile(DIST/'manifest.json',sd/'manifest.json')
-zip_path=DIST/'switch-minecraft-test-package.zip'
+zip_path=DIST/os.environ.get('SWITCHCRAFT_SD_ZIP','switch-minecraft-test-package.zip')
+assert zip_path.parent==DIST and zip_path.suffix=='.zip', 'SD ZIP must be a basename in dist'
+(sd/'switchcraft-docs/SD_FILES_SHA256SUMS').write_text(''.join(hashlib.sha256(p.read_bytes()).hexdigest()+'  '+p.relative_to(sd).as_posix()+'\n' for p in sorted(sd.rglob('*')) if p.is_file()))
 with zipfile.ZipFile(zip_path,'w',zipfile.ZIP_DEFLATED,compresslevel=6) as archive:
     for p in sorted(sd.rglob('*')):
         if p.is_file():archive.write(p,p.relative_to(sd))
