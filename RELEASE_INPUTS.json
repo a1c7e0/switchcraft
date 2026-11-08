@@ -1,0 +1,33 @@
+{
+  "release_tag": "test-suite-2026-11-08-r2",
+  "filename": "switchcraft-complete-test-suite-2026-11-08-r2.zip",
+  "parts": [
+    {
+      "name": "switchcraft-complete-test-suite-2026-11-08-r2.zip.part-001",
+      "bytes": 73400320,
+      "sha256": "1be6589ee2c7c59f3b508c775357fb44744e14d93c380defb691bc0e75605b6c"
+    },
+    {
+      "name": "switchcraft-complete-test-suite-2026-11-08-r2.zip.part-002",
+      "bytes": 73400320,
+      "sha256": "6ee946b1fb416b5876de2bd3dc2a437391f03771bd870042e3134d4e993c1a9e"
+    },
+    {
+      "name": "switchcraft-complete-test-suite-2026-11-08-r2.zip.part-003",
+      "bytes": 7084225,
+      "sha256": "f6d4d16ec8b21c026a032e298d6b561a45168d5b58ec4bacd28d494f072c689e"
+    }
+  ],
+  "sha256": "668895961701c407d1cc294f167478e66304dcc9d37a9ab744fecce82c50e626",
+  "bytes": 153884865,
+  "source_revision": "0dc4c1377f81b849e4366c167f0a20177e1fce98",
+  "java_switch_revision": "bff51f38e218af147ca0c9f255fcf1b43be72daf",
+  "manifest": {
+    "name": "manifest.json",
+    "sha256": "54704032efd16fcff45f91b7d8291bab576b39e1772f547ec387c503372450d9"
+  },
+  "sha256sums": {
+    "name": "SHA256SUMS",
+    "sha256": "9bb3766d15692a66a6712a9c678ac2b82e7af4876ec1a25e8f8f10dc1a76bc26"
+  }
+}
