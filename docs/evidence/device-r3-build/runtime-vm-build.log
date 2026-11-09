@@ -1,0 +1,68 @@
+$ make CONF_CHECK=auto JOBS=2 ENABLE_JAVAC_SERVER=false hotspot-zero-static-libs
+Note: Command line contains non-control variables:
+* ENABLE_JAVAC_SERVER=false
+Make sure it is not mistyped, and that you intend to override this variable.
+'make help' will list known control variables.
+
+Note: Command line contains non-control variables:
+* ENABLE_JAVAC_SERVER=false
+Make sure it is not mistyped, and that you intend to override this variable.
+'make help' will list known control variables.
+
+Building target 'hotspot-zero-static-libs' in configuration '/tmp/java-switch-r3/build/openjdk25-horizon'
+Compiling up to 1 files for BUILD_TOOLS_HOTSPOT
+Compiling up to 2 files for BUILD_JVMTI_TOOLS
+Creating hotspot/variant-zero/libjvm/objs/static/libjvm.a from 577 file(s)
+cc1: warning: command-line option '-Woverloaded-virtual=2' is valid for C++/ObjC++ but not for C
+cc1: warning: command-line option '-Wreorder' is valid for C++/ObjC++ but not for C
+cc1: warning: command-line option '-Wno-delete-non-virtual-dtor' is valid for C++/ObjC++ but not for C
+cc1: warning: command-line option '-std=c++14' is valid for C++/ObjC++ but not for C
+cc1: warning: command-line option '-fno-rtti' is valid for C++/D/ObjC++ but not for C
+In file included from /workspace/switchcraft/.toolchain/opt/devkitpro/libnx/include/switch/arm/counter.h:8,
+                 from /tmp/java-switch-r3/.deps/openjdk25-horizon/src/hotspot/os/horizon/horizon_bridge.c:3:
+/workspace/switchcraft/.toolchain/opt/devkitpro/libnx/include/switch/arm/../types.h:89:5: warning: '__cplusplus' is not defined, evaluates to '0' [-Wundef]
+   89 | #if __cplusplus >= 201402L
+      |     ^~~~~~~~~~~
+cc1: warning: command-line option '-Woverloaded-virtual=2' is valid for C++/ObjC++ but not for C
+cc1: warning: command-line option '-Wreorder' is valid for C++/ObjC++ but not for C
+cc1: warning: command-line option '-Wno-delete-non-virtual-dtor' is valid for C++/ObjC++ but not for C
+cc1: warning: command-line option '-std=c++14' is valid for C++/ObjC++ but not for C
+cc1: warning: command-line option '-fno-rtti' is valid for C++/D/ObjC++ but not for C
+In file included from /workspace/switchcraft/.toolchain/opt/devkitpro/libnx/include/switch/arm/thread_context.h:9,
+                 from /tmp/java-switch-r3/.deps/openjdk25-horizon/src/hotspot/os/horizon/horizon_fault_abi.c:6:
+/workspace/switchcraft/.toolchain/opt/devkitpro/libnx/include/switch/arm/../types.h:89:5: warning: '__cplusplus' is not defined, evaluates to '0' [-Wundef]
+   89 | #if __cplusplus >= 201402L
+      |     ^~~~~~~~~~~
+cc1: warning: command-line option '-Woverloaded-virtual=2' is valid for C++/ObjC++ but not for C
+cc1: warning: command-line option '-Wreorder' is valid for C++/ObjC++ but not for C
+cc1: warning: command-line option '-Wno-delete-non-virtual-dtor' is valid for C++/ObjC++ but not for C
+cc1: warning: command-line option '-std=c++14' is valid for C++/ObjC++ but not for C
+cc1: warning: command-line option '-fno-rtti' is valid for C++/D/ObjC++ but not for C
+In file included from /workspace/switchcraft/.toolchain/opt/devkitpro/libnx/include/switch.h:12,
+                 from /tmp/java-switch-r3/.deps/openjdk25-horizon/src/hotspot/os/horizon/horizon_memory_bridge.c:5:
+/workspace/switchcraft/.toolchain/opt/devkitpro/libnx/include/switch/types.h:89:5: warning: '__cplusplus' is not defined, evaluates to '0' [-Wundef]
+   89 | #if __cplusplus >= 201402L
+      |     ^~~~~~~~~~~
+cc1: warning: command-line option '-Woverloaded-virtual=2' is valid for C++/ObjC++ but not for C
+cc1: warning: command-line option '-Wreorder' is valid for C++/ObjC++ but not for C
+cc1: warning: command-line option '-Wno-delete-non-virtual-dtor' is valid for C++/ObjC++ but not for C
+cc1: warning: command-line option '-std=c++14' is valid for C++/ObjC++ but not for C
+cc1: warning: command-line option '-fno-rtti' is valid for C++/D/ObjC++ but not for C
+In file included from /workspace/switchcraft/.toolchain/opt/devkitpro/libnx/include/switch/kernel/svc.h:7,
+                 from /tmp/java-switch-r3/.deps/openjdk25-horizon/src/hotspot/os/horizon/horizon_system_bridge.c:4:
+/workspace/switchcraft/.toolchain/opt/devkitpro/libnx/include/switch/kernel/../types.h:89:5: warning: '__cplusplus' is not defined, evaluates to '0' [-Wundef]
+   89 | #if __cplusplus >= 201402L
+      |     ^~~~~~~~~~~
+cc1: warning: command-line option '-Woverloaded-virtual=2' is valid for C++/ObjC++ but not for C
+cc1: warning: command-line option '-Wreorder' is valid for C++/ObjC++ but not for C
+cc1: warning: command-line option '-Wno-delete-non-virtual-dtor' is valid for C++/ObjC++ but not for C
+cc1: warning: command-line option '-std=c++14' is valid for C++/ObjC++ but not for C
+cc1: warning: command-line option '-fno-rtti' is valid for C++/D/ObjC++ but not for C
+In file included from /workspace/switchcraft/.toolchain/opt/devkitpro/libnx/include/switch/kernel/svc.h:7,
+                 from /tmp/java-switch-r3/.deps/openjdk25-horizon/src/hotspot/os/horizon/horizon_thread_bridge.c:4:
+/workspace/switchcraft/.toolchain/opt/devkitpro/libnx/include/switch/kernel/../types.h:89:5: warning: '__cplusplus' is not defined, evaluates to '0' [-Wundef]
+   89 | #if __cplusplus >= 201402L
+      |     ^~~~~~~~~~~
+Finished building target 'hotspot-zero-static-libs' in configuration '/tmp/java-switch-r3/build/openjdk25-horizon'
+
+Exit status: 0

@@ -165,7 +165,11 @@ def main():
         "minecraft_title_on_horizon": "NOT ACHIEVED / NOT TESTED",
         "runtime_image_files": manifest["runtime_image_files"],
         "applications": [{"name": app, "path": f"switch/{app}/{app}.nro",
-                           "sha256": digest(selected[f"switch/{app}/{app}.nro"])} for app in APPS],
+                           "sha256": digest(selected[f"switch/{app}/{app}.nro"]),
+                           "build_id": artifact_records[app + ".nro"]["build_id"],
+                           "source_repository": artifact_records[app + ".nro"]["source_repository"],
+                           "source_revision": artifact_records[app + ".nro"]["source_revision"]}
+                          for app in APPS],
         "runtime_and_test_jar_count": EXPECTED_JARS,
         "source_archive": SOURCE_NAME,
         "source_archive_notice": "Optional separate release asset for licensing and reproducibility.",

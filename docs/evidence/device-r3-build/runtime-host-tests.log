@@ -1,0 +1,38 @@
+# Host FFM controls require the pinned OpenJDK source even before VM configure.
+python3 scripts/openjdk25.py prepare
+OpenJDK 275848b087112429235f4f235822e294a1a288ef, patches SHA256 927460921d05d57d23643f341f0a175c82d69f552bb5a6cffe4f23166d4722a8
+python3 -m unittest discover -s tests -v
+test_lifecycle_with_simulated_jit_failures (test_ffi_horizon.HorizonClosureTests.test_lifecycle_with_simulated_jit_failures) ... ok
+test_interpreter_jar_io_thread_reflection_and_native_bridge (test_java.JavaTests.test_interpreter_jar_io_thread_reflection_and_native_bridge) ... ok
+test_loader_rejects_newer_or_invalid_classfile_headers (test_java.JavaTests.test_loader_rejects_newer_or_invalid_classfile_headers) ... ok
+test_jni_creation_native_registration_and_ffm (test_java25.Java25InvocationTests.test_jni_creation_native_registration_and_ffm) ... ok
+test_unavailable_vm_and_wrong_java_are_blocked_before_execution (test_java25.Java25InvocationTests.test_unavailable_vm_and_wrong_java_are_blocked_before_execution) ... ok
+test_device_uri_and_exclusive_create_on_actual_minijvm (test_java8_filesystem.Java8FilesystemTests.test_device_uri_and_exclusive_create_on_actual_minijvm) ... ok
+test_real_function_lookup_and_lifetime_gates (test_native_resolver.NativeResolverTests.test_real_function_lookup_and_lifetime_gates) ... native resolver host test passed
+ok
+test_clean_base_and_instrument_configuration_creates_parent_directories (test_openjdk25_configure.OpenJDK25ConfigureTests.test_clean_base_and_instrument_configuration_creates_parent_directories) ... ok
+test_patch_applies_cleanly_and_limits_behavior_change_to_horizon (test_openjdk25_fatal_heap_report_patch.FatalHeapReportPatchTests.test_patch_applies_cleanly_and_limits_behavior_change_to_horizon) ... ok
+test_actual_pinned_jdk_direct_and_symlinked_roots (test_openjdk25_ffm_host.OpenJDK25FfmHostTests.test_actual_pinned_jdk_direct_and_symlinked_roots) ... ok
+test_missing_and_empty_jdk_roots_fail_with_clear_error (test_openjdk25_ffm_host.OpenJDK25FfmHostTests.test_missing_and_empty_jdk_roots_fail_with_clear_error) ... ok
+test_ambiguous_or_conflicting_archive_definitions_are_rejected (test_openjdk25_native_resolver_generator.OpenJDK25NativeResolverGeneratorTests.test_ambiguous_or_conflicting_archive_definitions_are_rejected) ... ok
+test_missing_archive_duplicate_module_and_missing_nm_fail_closed (test_openjdk25_native_resolver_generator.OpenJDK25NativeResolverGeneratorTests.test_missing_archive_duplicate_module_and_missing_nm_fail_closed) ... ok
+test_per_module_symbol_filters_keep_only_requested_real_exports (test_openjdk25_native_resolver_generator.OpenJDK25NativeResolverGeneratorTests.test_per_module_symbol_filters_keep_only_requested_real_exports) ... ok
+test_real_archive_symbols_are_module_and_global_resolvable (test_openjdk25_native_resolver_generator.OpenJDK25NativeResolverGeneratorTests.test_real_archive_symbols_are_module_and_global_resolvable) ... ok
+test_symbol_filter_requires_each_safe_export_and_known_module (test_openjdk25_native_resolver_generator.OpenJDK25NativeResolverGeneratorTests.test_symbol_filter_requires_each_safe_export_and_known_module) ... ok
+test_failed_patch_preserves_published_tree_and_corrected_retry_succeeds (test_openjdk25_prepare.OpenJDK25PrepareTests.test_failed_patch_preserves_published_tree_and_corrected_retry_succeeds) ... patching file sample.txt
+OpenJDK fixture-revision, patches SHA256 6adc4494d02b32f449e2781bd1e61d155d4bf121290287a5fa377ae8d14ca163
+patching file sample.txt
+Hunk #1 FAILED at 1.
+1 out of 1 hunk FAILED -- saving rejects to file sample.txt.rej
+patching file sample.txt
+OpenJDK fixture-revision, patches SHA256 1f4893d8485ee765c880b12a191e1a18126735bbdbbfbe98e20ee6951e03c7ba
+ok
+test_private_definitions_and_references_are_namespaced (test_private_crypto_isolation.PrivateCryptoIsolationTest.test_private_definitions_and_references_are_namespaced) ... ok
+test_hotspot_os_protect_none_uncommitted_reaches_bridge (test_vmem_horizon.HorizonMemoryTests.test_hotspot_os_protect_none_uncommitted_reaches_bridge) ... ok
+test_openjdk_bridge_uses_alias_region (test_vmem_horizon.HorizonMemoryTests.test_openjdk_bridge_uses_alias_region) ... ok
+test_state_and_injected_system_failures (test_vmem_horizon.HorizonMemoryTests.test_state_and_injected_system_failures) ... ok
+
+----------------------------------------------------------------------
+Ran 21 tests in 8.902s
+
+OK

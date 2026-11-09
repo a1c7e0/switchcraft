@@ -1,0 +1,7 @@
+jimage: /tmp/java-switch-r3/build/openjdk25-runtime/lib/modules
+SDK ABI v1 header/library and notices; no Java 25 VM: PASS
+libjavaswitch.a SHA256 f6e7b048c6dfbfdad491da489da6d601261d7f06bb75a45bfc21abf7c401f5c3
+OpenJDK 25 runtime image, classfile 69, VM/archive/provider and JNI package bytes: PASS
+SD ZIP binaries, verified Java 25 image and accompanying source: PASS
+Full pinned OpenJDK archive, tracked zero-fuzz patches and every native overlay reconstructed: PASS
+All artifact SHA256 checks: PASS; Horizon hardware NOT TESTED

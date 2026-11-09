@@ -1,0 +1,337 @@
+{
+  "archive_port_digest": "927460921d05d57d23643f341f0a175c82d69f552bb5a6cffe4f23166d4722a8",
+  "archive_sha256": "3f1327530d8028acb295fea497c4ed726c807f04a4dafb86c9b549486eb8cfdf",
+  "jvm_features": [
+    "jni-check",
+    "jvmti",
+    "serialgc",
+    "services",
+    "zero"
+  ],
+  "java_instrument": true,
+  "sdk_sha256": "f6e7b048c6dfbfdad491da489da6d601261d7f06bb75a45bfc21abf7c401f5c3",
+  "link_exit_status": 0,
+  "missing_symbols": [],
+  "java_execution": "NOT TESTED",
+  "horizon_execution": "NOT TESTED",
+  "elf_sha256": "cd7c3ace8092c256adf66cfbad1801ff61a2527e457122e00d0b017eedd00a36",
+  "class_library_provider": {
+    "address_model": "symbol addresses use final static-link selection; a strong definition that overrides a weak same-name definition is visible in each module table",
+    "archives": [
+      {
+        "defined_symbol_count": 264,
+        "ignored_type_counts": {},
+        "module": "java",
+        "path": "/tmp/java-switch-r3/build/openjdk25-horizon/support/native/java.base/libjava/static/libjava.a",
+        "resolver_symbol_count": 264,
+        "sha256": "a55a8b3ad97b4911ff406b4c01c8170a174e32a6cd906833b47b93f84e33ea9a",
+        "unsafe_identifier_count": 0
+      },
+      {
+        "defined_symbol_count": 161,
+        "ignored_type_counts": {},
+        "module": "zip",
+        "path": "/tmp/java-switch-r3/build/openjdk25-horizon/support/native/java.base/libzip/static/libzip.a",
+        "resolver_symbol_count": 153,
+        "sha256": "227186b74475c6f3edbf44bd184a8f13a6e82cdd245471aa0040c08c4da1bef6",
+        "unsafe_identifier_count": 8
+      },
+      {
+        "defined_symbol_count": 116,
+        "ignored_type_counts": {},
+        "module": "jimage",
+        "path": "/tmp/java-switch-r3/build/openjdk25-horizon/support/native/java.base/libjimage/static/libjimage.a",
+        "resolver_symbol_count": 8,
+        "sha256": "a828d9c24fe7ed294641b11122ef7f937801d39886d88de45490a03735071899",
+        "unsafe_identifier_count": 108
+      },
+      {
+        "defined_symbol_count": 4,
+        "ignored_type_counts": {},
+        "module": "verify",
+        "path": "/tmp/java-switch-r3/build/openjdk25-horizon/support/native/java.base/libverify/static/libverify.a",
+        "resolver_symbol_count": 4,
+        "sha256": "d2756941d75225f427c61f8b5f665d0d20efcb420d27ac7fea401bbcf9ac4bb8",
+        "unsafe_identifier_count": 0
+      },
+      {
+        "defined_symbol_count": 108,
+        "ignored_type_counts": {},
+        "module": "net",
+        "path": "/tmp/java-switch-r3/build/openjdk25-horizon/support/native/java.base/libnet/static/libnet.a",
+        "resolver_symbol_count": 108,
+        "sha256": "ea386784f1cc021836fa1e64ec268871c299430a573d8a1ec0e9a94c1c2a7227",
+        "unsafe_identifier_count": 0
+      },
+      {
+        "defined_symbol_count": 183,
+        "ignored_type_counts": {},
+        "module": "nio",
+        "path": "/tmp/java-switch-r3/build/openjdk25-horizon/support/native/java.base/libnio/static/libnio.a",
+        "resolver_symbol_count": 183,
+        "sha256": "cb97449bcf65854d97be778ba058d2b7d7f8167349ae44a7902c6275486b7b1c",
+        "unsafe_identifier_count": 0
+      },
+      {
+        "defined_symbol_count": 28,
+        "ignored_type_counts": {},
+        "module": "fallbackLinker",
+        "path": "/tmp/java-switch-r3/build/openjdk25-horizon/support/native/java.base/libfallbackLinker/static/libfallbackLinker.a",
+        "resolver_symbol_count": 28,
+        "sha256": "b9ec80049cacecb380f839baba4709c9608065fc177be40e7e37e335e985c9f8",
+        "unsafe_identifier_count": 0
+      },
+      {
+        "defined_symbol_count": 2,
+        "ignored_type_counts": {},
+        "module": "syslookup",
+        "path": "/tmp/java-switch-r3/build/openjdk25-horizon/support/native/java.base/libsyslookup/static/libsyslookup.a",
+        "resolver_symbol_count": 2,
+        "sha256": "62e762cbedf499e86ac0061a0b853610fa517c658e0bb3a5dd0bd3179a0d1816",
+        "unsafe_identifier_count": 0
+      },
+      {
+        "defined_symbol_count": 4,
+        "ignored_type_counts": {},
+        "module": "jli_manifest",
+        "path": "/tmp/java-switch-r3/build/openjdk25-horizon/support/native/java.base/libjli_manifest/static/libjli_manifest.a",
+        "resolver_symbol_count": 4,
+        "sha256": "052a02e8353cb855ac6189011927976ab1c416d11f6b8800d3adc211f878dd4a",
+        "unsafe_identifier_count": 0
+      },
+      {
+        "defined_symbol_count": 102,
+        "ignored_type_counts": {},
+        "module": "instrument",
+        "path": "/tmp/java-switch-r3/build/openjdk25-horizon/support/native/java.instrument/libinstrument/static/libinstrument.a",
+        "resolver_symbol_count": 102,
+        "sha256": "1883d128ee520979ad7f68e10e9ba9f6b63411a8d685c964b200a2f07a26d8d0",
+        "unsafe_identifier_count": 0
+      },
+      {
+        "defined_symbol_count": 1069,
+        "ignored_type_counts": {},
+        "module": "syslookup",
+        "path": "/workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/aarch64-none-elf/lib/pic/libc.a",
+        "resolver_symbol_count": 591,
+        "sha256": "9bf41282aadf7957fe18b8c1fc71394bf255fca6175c8b449fd3f23ff387a362",
+        "unsafe_identifier_count": 478
+      },
+      {
+        "defined_symbol_count": 402,
+        "ignored_type_counts": {},
+        "module": "syslookup",
+        "path": "/workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/aarch64-none-elf/lib/pic/libm.a",
+        "resolver_symbol_count": 282,
+        "sha256": "e9d2e4ae3376222d8cac21f6f5143481e4ef5b58f51ba48c6d4b24b9e2c7bad7",
+        "unsafe_identifier_count": 120
+      }
+    ],
+    "descriptor": "js_openjdk25_native_resolver",
+    "generator": "/tmp/java-switch-r3/scripts/generate-openjdk25-native-resolver.py",
+    "generator_sha256": "ba337369aeb244dc9a952c7900386706ca6dc51d250f094987dc82cb701f08b8",
+    "global_duplicate_choices": [],
+    "global_symbol_count": 903,
+    "modules": [
+      "fallbackLinker",
+      "instrument",
+      "java",
+      "jimage",
+      "jli_manifest",
+      "net",
+      "nio",
+      "syslookup",
+      "verify",
+      "zip"
+    ],
+    "nm": {
+      "flags": [
+        "-g",
+        "--defined-only",
+        "--format=posix"
+      ],
+      "invocations": [
+        {
+          "argv": [
+            "/workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/bin/aarch64-none-elf-nm",
+            "-g",
+            "--defined-only",
+            "--format=posix",
+            "/tmp/java-switch-r3/build/openjdk25-horizon/support/native/java.base/libjava/static/libjava.a"
+          ],
+          "exit_status": 0
+        },
+        {
+          "argv": [
+            "/workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/bin/aarch64-none-elf-nm",
+            "-g",
+            "--defined-only",
+            "--format=posix",
+            "/tmp/java-switch-r3/build/openjdk25-horizon/support/native/java.base/libzip/static/libzip.a"
+          ],
+          "exit_status": 0
+        },
+        {
+          "argv": [
+            "/workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/bin/aarch64-none-elf-nm",
+            "-g",
+            "--defined-only",
+            "--format=posix",
+            "/tmp/java-switch-r3/build/openjdk25-horizon/support/native/java.base/libjimage/static/libjimage.a"
+          ],
+          "exit_status": 0
+        },
+        {
+          "argv": [
+            "/workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/bin/aarch64-none-elf-nm",
+            "-g",
+            "--defined-only",
+            "--format=posix",
+            "/tmp/java-switch-r3/build/openjdk25-horizon/support/native/java.base/libverify/static/libverify.a"
+          ],
+          "exit_status": 0
+        },
+        {
+          "argv": [
+            "/workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/bin/aarch64-none-elf-nm",
+            "-g",
+            "--defined-only",
+            "--format=posix",
+            "/tmp/java-switch-r3/build/openjdk25-horizon/support/native/java.base/libnet/static/libnet.a"
+          ],
+          "exit_status": 0
+        },
+        {
+          "argv": [
+            "/workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/bin/aarch64-none-elf-nm",
+            "-g",
+            "--defined-only",
+            "--format=posix",
+            "/tmp/java-switch-r3/build/openjdk25-horizon/support/native/java.base/libnio/static/libnio.a"
+          ],
+          "exit_status": 0
+        },
+        {
+          "argv": [
+            "/workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/bin/aarch64-none-elf-nm",
+            "-g",
+            "--defined-only",
+            "--format=posix",
+            "/tmp/java-switch-r3/build/openjdk25-horizon/support/native/java.base/libfallbackLinker/static/libfallbackLinker.a"
+          ],
+          "exit_status": 0
+        },
+        {
+          "argv": [
+            "/workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/bin/aarch64-none-elf-nm",
+            "-g",
+            "--defined-only",
+            "--format=posix",
+            "/tmp/java-switch-r3/build/openjdk25-horizon/support/native/java.base/libsyslookup/static/libsyslookup.a"
+          ],
+          "exit_status": 0
+        },
+        {
+          "argv": [
+            "/workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/bin/aarch64-none-elf-nm",
+            "-g",
+            "--defined-only",
+            "--format=posix",
+            "/tmp/java-switch-r3/build/openjdk25-horizon/support/native/java.base/libjli_manifest/static/libjli_manifest.a"
+          ],
+          "exit_status": 0
+        },
+        {
+          "argv": [
+            "/workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/bin/aarch64-none-elf-nm",
+            "-g",
+            "--defined-only",
+            "--format=posix",
+            "/tmp/java-switch-r3/build/openjdk25-horizon/support/native/java.instrument/libinstrument/static/libinstrument.a"
+          ],
+          "exit_status": 0
+        },
+        {
+          "argv": [
+            "/workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/bin/aarch64-none-elf-nm",
+            "-g",
+            "--defined-only",
+            "--format=posix",
+            "/workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/aarch64-none-elf/lib/pic/libc.a"
+          ],
+          "exit_status": 0
+        },
+        {
+          "argv": [
+            "/workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/bin/aarch64-none-elf-nm",
+            "-g",
+            "--defined-only",
+            "--format=posix",
+            "/workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/aarch64-none-elf/lib/pic/libm.a"
+          ],
+          "exit_status": 0
+        }
+      ],
+      "path": "/workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/bin/aarch64-none-elf-nm",
+      "version": "GNU nm (GNU Binutils) 2.45.1"
+    },
+    "resolver_symbol_count": 903,
+    "schema_version": 2,
+    "source_sha256": "033bb9e9740deba5d8ed9a0615984f4d9d25b1fdbf64ca2fa9acdbba93e1e6ab",
+    "symbol_filters": {
+      "syslookup": [
+        "JNI_OnLoad_syslookup",
+        "abort",
+        "atan2",
+        "calloc",
+        "ceil",
+        "cos",
+        "exp",
+        "fabs",
+        "fclose",
+        "fflush",
+        "floor",
+        "fmod",
+        "fopen",
+        "fread",
+        "free",
+        "fseek",
+        "ftell",
+        "fwrite",
+        "log",
+        "malloc",
+        "memchr",
+        "memcmp",
+        "memcpy",
+        "memmove",
+        "memset",
+        "pow",
+        "printf",
+        "putchar",
+        "puts",
+        "realloc",
+        "sin",
+        "snprintf",
+        "sprintf",
+        "sqrt",
+        "strcat",
+        "strchr",
+        "strcmp",
+        "strcpy",
+        "strcspn",
+        "strlen",
+        "strncat",
+        "strncmp",
+        "strncpy",
+        "strpbrk",
+        "strrchr",
+        "strspn",
+        "strstr",
+        "syslookup",
+        "tan"
+      ]
+    }
+  },
+  "launcher_sha256": "173b14db180d14718ec67b72c83d01386d08b1b764581198b2b7b047b4f06af7",
+  "nro_sha256": "a919ac99f18128315a569e40f63d89594b13343791d44349f7adfcdc11c84f02"
+}

@@ -1,0 +1,2 @@
+AArch64 linked static symbol proof; GL/EGL API definitions absent: PASS
+Genuine VM, instrumentation, composed resolver and SDL/Vulkan link; zero undefined symbols: PASS

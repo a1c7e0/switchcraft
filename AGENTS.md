@@ -103,3 +103,6 @@ The user-facing SD ZIP is built by `scripts/package-device-slim.py` and contains
 only switch/, necessary instructions, notices and hashes. Publish corresponding
 source and matching debug symbols separately; do not copy them onto the SD card.
 The collector includes bounded hs_err_pid*.log from the two Java25 app folders.
+
+The R3 runtime pin is `4d362d4830cfa4e88313dadfcd3a865e826609a5`. Build it with instrument support, package and verify its actual SDK/image first, then use
+`JAVA_SWITCH_SOURCE` for downstream builds. Do not reuse R2 generated SDK caches.

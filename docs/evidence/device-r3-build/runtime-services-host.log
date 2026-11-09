@@ -1,0 +1,4 @@
+OpenJDK 275848b087112429235f4f235822e294a1a288ef, patches SHA256 927460921d05d57d23643f341f0a175c82d69f552bb5a6cffe4f23166d4722a8
+Horizon time conversion/error handling: HOST-PASSED, mocked clocks
+Horizon monitor contention/timeouts/failures: HOST-PASSED, libnx mocks
+Horizon ThreadLocalStorage/compiler TLS: HOST-PASSED, libnx TLS mocked

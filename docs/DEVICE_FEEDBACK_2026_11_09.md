@@ -83,3 +83,21 @@ fresh processes with standalone X, then Y after X passes, followed by combined
 fails before Hello, stop the Java 25 sequence and do not repeat the VM attempt.
 Record the R3 package manifest revision and environment versions with the new
 logs. These steps are a retest plan, not a report of R3 results.
+
+
+## R3 build acceptance
+
+The integrated runtime revision is `4d362d4830cfa4e88313dadfcd3a865e826609a5`. The genuine instrument
+profile has 577 ARM64 VM members, ten class-library provider archives and a
+39-file java.base/java.instrument image. Full source reconstruction and SDK ABI 1
+verification pass. The cold-source host suite passes 21 tests. Switchcraft's
+host suite passes 70 cases, with one optional owned-client transform test skipped;
+no new Minecraft host execution is claimed. Native linking has zero undefined
+symbols and excludes GL/EGL APIs. [Build evidence](evidence/device-r3-build/summary.json)
+records exact hashes and validation boundaries. The clean release rebuild and
+final installed-file inventory are recorded in the R3 release manifest.
+
+The SD ZIP contains only switch/, compact instructions, notices and checksums.
+Corresponding source and debug symbols are separate downloads from the same
+release. Fresh physical R3 Java25 startup, Java execution, JNI/FFM, instrumentation
+and Minecraft title remain NOT TESTED.

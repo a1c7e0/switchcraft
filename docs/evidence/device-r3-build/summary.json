@@ -1,0 +1,38 @@
+{
+  "runtime_revision": "4d362d4830cfa4e88313dadfcd3a865e826609a5",
+  "runtime_source_clean": true,
+  "sdk_abi": 1,
+  "runtime_host_tests": {
+    "passed": 21,
+    "source_cache_initially_absent": true
+  },
+  "switchcraft_host_tests": {
+    "total": 71,
+    "passed": 70,
+    "skipped": 1,
+    "skip_reason": "Optional owned snapshot client JAR absent; no fresh Minecraft host run performed"
+  },
+  "host_test_switchcraft_source": "0ec4034 plus the runtime integration changes committed with this report",
+  "vm_archive_sha256": "3f1327530d8028acb295fea497c4ed726c807f04a4dafb86c9b549486eb8cfdf",
+  "vm_members": 577,
+  "jvm_features": [
+    "jni-check",
+    "jvmti",
+    "serialgc",
+    "services",
+    "zero"
+  ],
+  "port_digest": "927460921d05d57d23643f341f0a175c82d69f552bb5a6cffe4f23166d4722a8",
+  "runtime_image_modules": [
+    "java.base",
+    "java.instrument"
+  ],
+  "runtime_image_files": 39,
+  "cross_link_missing_symbols": [],
+  "runtime_package_source_reconstruction": "PASS; all pinned patches apply with zero fuzz",
+  "physical_R2_results": "Java8/private L/Vulkan presentation PASS; Java25 heap initialization FAIL",
+  "physical_R3_vm_startup": "NOT TESTED",
+  "physical_R3_java_jni_ffm_agent": "NOT TESTED",
+  "minecraft_title_on_horizon": "NOT ACHIEVED / NOT TESTED",
+  "source_identity": "Final clean downstream NRO identities are recorded in the release manifest after rebuild."
+}

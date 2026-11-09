@@ -1,7 +1,7 @@
 # Java SDK integration handoff
 
 Switchcraft pins `a1c7e0/java-switch` at
-`bff51f38e218af147ca0c9f255fcf1b43be72daf` for the R2 package. The main assistant is authorized
+`4d362d4830cfa4e88313dadfcd3a865e826609a5` for the R3 package. The main assistant is authorized
 to edit, commit and push java-switch directly. Use an isolated worktree, focused
 clean commits and immutable full-SHA references; update this pin only as an
 intentional integration change. Actively delegate bounded tasks to `gpt-6-luna`

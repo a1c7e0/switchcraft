@@ -33,7 +33,8 @@ it does not print Hello, stop and do not repeat the VM attempt. See runtime issu
 [#5](https://github.com/a1c7e0/java-switch/issues/5) and
 [#6](https://github.com/a1c7e0/java-switch/issues/6).
 
-The R3 device package is `switchcraft-test-suite-2026-11-09-r3.zip`. Its
+The R3 device package is `switchcraft-test-suite-2026-11-09-r3.zip`, consuming
+runtime `4d362d4830cfa4e88313dadfcd3a865e826609a5`. Its
 manifest is authoritative for each NRO source and the java-switch revision;
 do not carry forward a revision from the older R2 package. Host build and test
 results establish only the host-verified cases below.
