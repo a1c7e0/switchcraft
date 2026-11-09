@@ -11,9 +11,11 @@ GitHub's default branch is `main`. Use `legacy/1.12.2` for the preserved older
 implementation.
 
 **The snapshot reaches its title screen in the Linux Java-25/Vulkan reference.
-Original B7 device tests passed native/FFI and graphics probes but Java25
-startup attempts crashed before observed Java output. R2 fixes remain device
-unverified; Java25 execution and the Minecraft title on Switch are not established.**
+R2 physical logs confirm the Java 8 diagnostic, private memory probe and
+300-frame Vulkan presentation pass. Java 25 fails during heap initialization;
+R3 fixes the rejected guard-page operation and protects early crash reporting.
+The R3 changes still require physical testing. Java 25 execution and the
+Minecraft title on Switch are not established.**
 
 The reference uses the official Demo mode, no account credentials, and Mesa
 llvmpipe Vulkan. The image below is **HOST ONLY**, not a Switch screenshot:
@@ -25,7 +27,7 @@ llvmpipe Vulkan. The image below is **HOST ONLY**, not a Switch screenshot:
 The [launcher](docs/PRISM_PORT.md) provides a controller/touch UI and a portable
 Prism instance/component backend. It supports creation/editing, settings-only
 duplication, online version catalogs, verified installation/repair, integrity
-checks, folder import and archive/restore. It is included in the complete R2
+checks, folder import and archive/restore. It is included in the R3
 device test package; no separate overlay is needed. Follow
 [the launcher tests](docs/LAUNCHER_TESTS.md). Account flows, mod
 management and the full Qt framework are not ported. The UI is cross-built and
@@ -55,12 +57,14 @@ in the pinned runtime image; Horizon startup/instrumentation are NOT TESTED.
 
 ## Build and install
 
-For physical testing, download and reassemble the ordered parts of
-[the complete R2 SD test-suite](https://github.com/a1c7e0/switchcraft/releases/tag/test-suite-2026-11-08-r2).
-Verify the complete ZIP hash before extracting it to the SD root. It includes
-all nine NROs, the current graphical launcher, Java runtime image, smoke
-workloads, notices and source. Follow [SD_TEST_PACKAGE.md](docs/SD_TEST_PACKAGE.md)
-and START_HERE.md; preserve personal configuration, saves and logs.
+For physical testing, download the single
+[R3 SD test ZIP](https://github.com/a1c7e0/switchcraft/releases/download/test-suite-2026-11-09-r3/switchcraft-test-suite-2026-11-09-r3.zip).
+Extract it directly into the SD root. It contains only `switch/`, compact
+instructions and a manifest; matching source and debug symbols are separate
+optional release downloads. No part assembly or overlay is required. Follow
+[SD_TEST_PACKAGE.md](docs/SD_TEST_PACKAGE.md) and START_HERE.md; preserve personal
+configuration, saves and logs. See [the R2 physical feedback](docs/DEVICE_FEEDBACK_2026_11_09.md)
+for the failure reproduced by this update.
 
 ```sh
 bash scripts/build-all.sh
@@ -68,7 +72,7 @@ bash scripts/build-all.sh
 
 Linux x86_64, Python 3.12+, GCC/G++, Make, patch, Git and HTTPS access are required.
 The toolchain image, NVK archive, SDL3 source, host CMake wheel and Java repository
-revision are pinned. Access to the private `java-switch` repository is required.
+revision are pinned. Access to the pinned `java-switch` repository is required.
 The toolchain and hash-verified caches can be reused; no root installation is
 needed. See [BUILD.md](docs/BUILD.md).
 
@@ -79,6 +83,9 @@ verifies AArch64/NRO/ASET/NACP/build IDs and creates:
 * `dist/switchcraft-corresponding-source.tar.gz`
 * `dist/manifest.json`, `dist/SHA256SUMS` and `dist/DELIVERY_REPORT.md`
 * `dist/switchcraft-debug-symbols.zip` and `dist/switchcraft-native-sdk.tar.gz`
+
+`python3 scripts/package-device-slim.py` creates the smaller user-facing SD ZIP
+from the verified build. Source and debug archives remain separate release assets.
 
 Merge the package onto the SD root and preserve existing saves/configuration.
 Use **application-mode hbmenu** under Atmosphère on Switch 1. Start native

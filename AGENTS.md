@@ -89,3 +89,17 @@ relative-PC/register evidence; the exact B7 Java25 crash cause is unresolved.
 Unique tick-named Java output and presentation JSON history are allowlisted for
 feedback export. The full R2 SD ZIP is built by scripts/package.py; public release
 parts are internal transport and the Actions publisher emits a single user ZIP.
+
+
+2026-11-09 R2 physical evidence is preserved in
+`docs/DEVICE_FEEDBACK_2026_11_09.md`. Java8 diagnostic, private memory L and
+300-frame Vulkan presentation passed for R2. Java25 A/X/Y abort at
+`memoryReserver.cpp:521`: `protect_memory(..., MEM_PROT_NONE, false)` was rejected.
+The later relative-PC `0x3f8be0` is `DefNewGeneration::print_on` during fatal heap
+reporting, not evidence of Java execution. R3 consumes a new immutable runtime
+pin to fix both paths; new binaries remain device-unverified. Run the extended
+L guard probe, then one fresh Java25 A; continue X/Y/combined only after Hello.
+The user-facing SD ZIP is built by `scripts/package-device-slim.py` and contains
+only switch/, necessary instructions, notices and hashes. Publish corresponding
+source and matching debug symbols separately; do not copy them onto the SD card.
+The collector includes bounded hs_err_pid*.log from the two Java25 app folders.

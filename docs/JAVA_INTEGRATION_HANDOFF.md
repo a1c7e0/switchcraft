@@ -14,16 +14,21 @@ requested; issue creation or updates are not a prerequisite. Keep complete
 reproduction steps, logs and validation limits in commits/documentation and
 validate at immutable SHAs. Existing issue links below are historical references.
 
-R2 includes Java8 filesystem fixes, private protected heap-backed data memory
-and retained VM/crash diagnostics. Its new fixes remain device-unverified; the
-original B7 Java25 abort is unresolved. See docs/DEVICE_FEEDBACK_2026_11_08.md
-in java-switch and Switchcraft's docs/evidence/device-2026-11-08/.
+R2 physical feedback establishes Java8 diagnostic, private HotSpot memory L and
+300-frame Vulkan presentation passes at runtime
+`bff51f38e218af147ca0c9f255fcf1b43be72daf`, Switchcraft
+`0dc4c1377f81b849e4366c167f0a20177e1fce98`. Java25 A/X/Y all fail during heap
+initialization with `memoryReserver.cpp:521`, followed by a secondary heap-report
+fault. See [the immutable text evidence and analysis](DEVICE_FEEDBACK_2026_11_09.md).
+R3 addresses the real uncommitted guard protection path and guards heap-dependent
+fatal reporting until Universe initialization completes. Host tests and genuine
+cross-builds do not establish that Java executes on Horizon.
 
 ## Historical B7 verified evidence
 
 Linux host Java 25 has reached the 26.4-snapshot-6 title with strict Vulkan;
-the screenshot and logs are HOST ONLY. Horizon startup and all Horizon execution
-remain NOT TESTED.
+the screenshot and logs are HOST ONLY. That host result establishes no Horizon Java execution; the physical R2
+results above apply only to their identified native/Java8 workloads.
 
 The pinned instrument-enabled OpenJDK 25/Zero archive, ten real provider archives,
 `java.base`/`java.instrument` image (7,336 classfile-69 classes), and standalone

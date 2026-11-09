@@ -67,6 +67,26 @@ jobs:
           if len(assembled) != record['bytes'] or digest(assembled) != record['sha256']:
               raise SystemExit('assembled package size or SHA-256 mismatch')
           package = bytes(assembled)
+          optional_assets = record.get('optional_assets', [])
+          optional_data = []
+          optional_names = {filename, record['manifest']['name'], record['sha256sums']['name']}
+          for asset in optional_assets:
+              asset_name = asset.get('name', '')
+              asset_parts = asset.get('parts', [])
+              if (pathlib.PurePosixPath(asset_name).name != asset_name or not asset_parts
+                      or asset_name in optional_names
+                      or any(pathlib.PurePosixPath(p.get('name', '')).name != p.get('name') for p in asset_parts)):
+                  raise SystemExit('invalid optional release asset record')
+              body = bytearray()
+              for part in asset_parts:
+                  data = fetch(base + '/' + part['name'])
+                  if digest(data) != part['sha256']:
+                      raise SystemExit(f"optional asset part hash mismatch: {part['name']}")
+                  body.extend(data)
+              if len(body) != asset['bytes'] or digest(body) != asset['sha256']:
+                  raise SystemExit(f"optional asset size or SHA-256 mismatch: {asset_name}")
+              optional_names.add(asset_name)
+              optional_data.append((asset_name, bytes(body)))
           with zipfile.ZipFile(__import__('io').BytesIO(package)) as z:
               names = set(z.namelist())
               required = {
@@ -90,6 +110,11 @@ jobs:
                   'switch/mc-runtime/launchers/switchcraft-lwjgl-horizon.jar',
                   'switch/mc-runtime/runtimes/minijvm/minijvm_rt.jar',
                   'switch/mc-runtime/runtimes/openjdk25/lib/modules',
+                  'switch/mc-runtime/runtimes/openjdk25/lib/security/cacerts',
+                  'switch/mc-runtime/tools/collect-feedback.py',
+                  'switch/mc-runtime/SD_FILES_SHA256SUMS',
+                  'README.md',
+                  'manifest.json',
                   'START_HERE.md',
               }
               missing = sorted(required - names)
@@ -116,12 +141,25 @@ jobs:
               if not any(n.startswith('switch/mc-runtime/runtimes/openjdk25/') and n.endswith('/modules') for n in names):
                   raise SystemExit('package lacks the genuine Java 25 runtime image')
               runtime_files = manifest_obj.get('runtime_image_files', [])
+              if len(runtime_files) != 39:
+                  raise SystemExit(f'expected exactly 39 Java 25 runtime image files, found {len(runtime_files)}')
               missing_runtime = [item.get('path') for item in runtime_files if item.get('path') not in names]
               if missing_runtime:
                   raise SystemExit('manifest runtime image members missing from ZIP: ' + ', '.join(missing_runtime[:10]))
+              runtime_paths = {item['path'] for item in runtime_files}
+              actual_runtime = {n for n in names if n.startswith('switch/mc-runtime/runtimes/openjdk25/')}
+              if actual_runtime != runtime_paths:
+                  raise SystemExit('ZIP runtime image inventory differs from manifest')
               for item in runtime_files:
                   if digest(z.read(item['path'])) != item['sha256']:
                       raise SystemExit('runtime image member hash mismatch: ' + item['path'])
+              installed = manifest_obj.get('sd_files', [])
+              for item in installed:
+                  if item.get('path') not in names or digest(z.read(item['path'])) != item.get('sha256'):
+                      raise SystemExit('installed-file hash mismatch: ' + str(item.get('path')))
+              if names != {item['path'] for item in installed} | {
+                      'manifest.json', 'switch/mc-runtime/SD_FILES_SHA256SUMS'}:
+                  raise SystemExit('ZIP contains files outside the minimal installed payload')
           out = pathlib.Path('verified-release')
           out.mkdir()
           for name, data in ((filename, package), (record['manifest']['name'], manifest),
@@ -129,11 +167,16 @@ jobs:
               if pathlib.PurePosixPath(name).name != name:
                   raise SystemExit('release asset filename must be a basename')
               (out / name).write_bytes(data)
-          note_lines = [f"Verified complete Switchcraft device test package `{filename}`.",
+          for name, data in optional_data:
+              if pathlib.PurePosixPath(name).name != name:
+                  raise SystemExit('optional release asset filename must be a basename')
+              (out / name).write_bytes(data)
+          note_lines = [f"Verified minimal Switchcraft device test package `{filename}`.",
                         f"SHA-256: `{record['sha256']}` ({record['bytes']} bytes).",
                         'This ZIP is ready to extract directly onto the SD root. Use application-mode hbmenu and the included START_HERE.md. Java25 attempts require a fresh process.',
-                        'R2 fixes are cross-built and host-tested; physical execution of the new fixes remains NOT TESTED. The historical B7 native/graphics successes do not establish Java25, JNI/FFM, instrumentation or Minecraft execution.',
-                        'Runtime feedback: https://github.com/a1c7e0/java-switch/issues/4 , https://github.com/a1c7e0/java-switch/issues/5 , https://github.com/a1c7e0/java-switch/issues/6 .']
+                        'Physical execution is NOT TESTED until fresh Switch logs establish results. Cross-builds and host tests do not establish Java, JNI/FFM, instrumentation, graphics or Minecraft execution.']
+          for asset in optional_assets:
+              note_lines.append(f"Optional licensing/reproducibility asset: `{asset['name']}` ({asset['bytes']} bytes, SHA-256 `{asset['sha256']}`).")
           for key, label in (('source_revision', 'Switchcraft source revision'),
                              ('java_switch_revision', 'java-switch runtime revision')):
               if record.get(key):

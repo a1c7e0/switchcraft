@@ -1,24 +1,26 @@
 # Switchcraft first-device checklist
 
-All Horizon execution below is **NOT TESTED** until physical Switch logs establish
-the result. The Linux Java 25 strict-Vulkan Demo title has already been verified;
-that host result does not validate these NROs. No Minecraft game launch is
-provided by the current Horizon package.
+Physical evidence from the R2 package establishes Java 8 diagnostic, private
+memory-probe and 300-frame Vulkan presentation passes. Java 25 execution,
+JNI/FFM, instrumentation and Minecraft launch remain unachieved on Horizon.
+The Linux Java 25 strict-Vulkan Demo title is host-only evidence. The current
+Horizon package does not launch Minecraft.
 
 ## Install the matching package
 
-Use [the complete SD test-suite release](https://github.com/a1c7e0/switchcraft/releases/tag/test-suite-2026-11-08-r2).
-Download the single R2 ZIP and optionally verify its SHA-256 in SHA256SUMS.
-It is ready to extract; no split-file assembly is required. It includes the graphical
-launcher, all nine NROs and Java/native test resources; there is no overlay. Read
-the manifest for the exact new java-switch runtime revision. See
+Use [the R3 device test-suite release](https://github.com/a1c7e0/switchcraft/releases/tag/test-suite-2026-11-09-r3).
+Download `switchcraft-test-suite-2026-11-09-r3.zip` and optionally verify its
+SHA-256 in SHA256SUMS. The SD package contains `switch/`, `START_HERE.md` and
+`manifest.json`; source and debug materials are separate optional release assets.
+Read the manifest for the exact java-switch runtime revision. See
 [SD_TEST_PACKAGE.md](SD_TEST_PACKAGE.md).
 
-1. Back up the SD card. Extract the complete test-suite ZIP into its root,
+1. Back up the SD card. Extract the test-suite ZIP into its root,
    merging the directories while preserving existing saves and configuration.
    The result must be `SD:/switch/java25-test/java25-test.nro`, not an additional
-   wrapper directory. Keep the complete runtime, test JARs, source and notices;
-   copying the NRO files alone is insufficient.
+   wrapper directory. Keep the complete runtime, test JARs and notices; copying
+   the NRO files alone is insufficient. Source archives are separate optional
+   release assets, not part of the SD ZIP.
 2. Use Switch 1, Atmosphere and **application-mode hbmenu**. Use your existing
    title-override setup, commonly holding R while starting an installed game.
    Album/applet mode has a different memory budget and is unsuitable for the VM
@@ -29,9 +31,13 @@ the manifest for the exact new java-switch runtime revision. See
 
 ## First pass: native prerequisites
 
-All log names below are under `SD:/switch/mc-runtime/logs/`. Record every raw
-Result/status and failed stage. A permission error is useful evidence, not a
-functional PASS. Finish the ordinary probes before trying the genuine VM.
+Diagnostic log names below are under `SD:/switch/mc-runtime/logs/`; Java crash
+reports, when present, are in the app folders. Record every raw Result/status
+and failed stage. A permission error is useful evidence, not a functional PASS.
+For the focused R3 retest, run `zero-services-test` **L first**, export its logs,
+then make one fresh `java25-test` A attempt. The remaining native rows are
+available for a fuller baseline; they are not prerequisites for that focused
+retest.
 
 | Application | Action | Expected observation | Log |
 | --- | --- | --- | --- |
@@ -49,7 +55,9 @@ functional PASS. Finish the ordinary probes before trying the genuine VM.
 | `zero-services-test` | B | Deferred worker cleanup/reaper joins after exit and closes successfully | Same |
 | `zero-services-test` | L | Private VM memory mapping, permissions, split release and canaries succeed | Same |
 
-`zero-services-test` contains no Java VM. Its **Y** action is an advanced,
+R2 device evidence already records Java 8 `DIAGNOSTIC SUITE PASS` and a
+successful private-memory L probe, including protection, canaries, split
+release and cleanup. `zero-services-test` contains no Java VM. Its **Y** action is an advanced,
 deliberate SafeFetch fault test, so run it last, after exporting ordinary probe
 logs. Expected fallback values are -12345 and -67890; the process may abort or
 stall if recovery fails. If it returns, run X again and retain the result. Keep
@@ -65,11 +73,11 @@ exit alone does not establish success.
 
 | Application | Action | Pass requires |
 | --- | --- | --- |
-| `java25-test` | A | SDK status 0 / stage `completed`, actual stdout `Hello from Horizon Java 25`, Java major 25 |
-| Fresh `java25-test` | X, after Hello passed | Stage `completed` and `JAVA25 JNI FFM SUITE PASS` |
-| Fresh `java25-test` | Y, after X passed | Stage `completed` and `JAVA25_AGENT_SMOKE_PASS` |
-| Fresh `switchcraft-java25` | A, after standalone tests passed | Resolver preflight statuses 0, stage `completed`, actual Hello output |
-| Fresh `switchcraft-java25` | X, after combined Hello passed | Preflight passes, stage `completed`, `SWITCHCRAFT_SDL_FFM_PASS SDL_version=` reporting SDL major 3 |
+| `java25-test` | A, fresh process after the private L probe | SDK status 0 / stage `completed`, actual stdout `Hello from Horizon Java 25`, Java major 25 |
+| Fresh `java25-test` | X, only if A prints Hello | Stage `completed` and `JAVA25 JNI FFM SUITE PASS` |
+| Fresh `java25-test` | Y, only if A prints Hello and X passes | Stage `completed` and `JAVA25_AGENT_SMOKE_PASS` |
+| Fresh `switchcraft-java25` | A, only if standalone Java 25 succeeds | Resolver preflight statuses 0, stage `completed`, actual Hello output |
+| Fresh `switchcraft-java25` | X, only if combined A succeeds | Preflight passes, stage `completed`, `SWITCHCRAFT_SDL_FFM_PASS SDL_version=` reporting SDL major 3 |
 
 Y uses the instrument profile included in this artifact set. Keep both
 `java25-agent-smoke-agent.jar` and `java25-agent-smoke-app.jar` under
@@ -77,6 +85,14 @@ Y uses the instrument profile included in this artifact set. Keep both
 `switch/mc-runtime/runtimes/openjdk25/`. The combined X test also needs
 `switchcraft-native-smoke.jar`; it calls linked SDL_GetVersion through JNI and
 Java FFM, without creating a window.
+
+R2's Java 25 A attempts reached heap reservation and then terminated with
+`memoryReserver.cpp:521` because the reservation could not protect its
+protection page. Java 25 execution, JNI/FFM, the agent and combined launcher
+remain unachieved on hardware. Make one fresh A attempt with R3 and preserve
+the generated Java crash report. If A does not print Hello, stop the Java 25
+sequence; do not repeat the VM attempt. If A succeeds, continue with fresh
+processes in the order above.
 
 On normal return, A leaves the stdout results screen, X leaves stderr, and Y
 leaves native status plus process exit result. Use a new application process for
@@ -108,9 +124,9 @@ not a successful game launch.
 | `vulkan-test` | Y | Offscreen triangle center/corner checks PASS and ASCII preview; this does not test screen presentation |
 
 Export `vulkan-present.log`, `vulkan-present-result.json`, `snapshot-vulkan.json`
-and `vulkan-test.log`. R2 reports PASS only after 300 completed frames; early
-user exit is incomplete. The result JSON records elapsed and frame-turnaround
-timings.
+and `vulkan-test.log`. R2 completed 300 frames in 5.23 seconds (16.525 ms
+average frame turnaround) with clean teardown. Early user exit is incomplete.
+The result JSON records elapsed and frame-turnaround timings.
 Presentation normally stops after 300 frames or its exit input. If the driver
 stalls, use HOME/close and report whether HOME responded. A missing base feature
 is a measured compatibility blocker; do not change feature reports to force PASS.
@@ -157,10 +173,11 @@ With Python 3, collect the allowed diagnostic files into a **new** ZIP outside
 the SD root (substitute your mounted SD path):
 
 ```sh
-python3 /media/switch-sd/switchcraft-docs/collect-feedback.py --sd-root /media/switch-sd --output switchcraft-feedback-session1.zip
+python3 /media/switch-sd/switch/mc-runtime/tools/collect-feedback.py --sd-root /media/switch-sd --output switchcraft-feedback-session1.zip
 ```
 
-The collector includes the manifest, diagnostic/VM logs and profile JSON. It
-does not include crash reports or `launch-plan.json`; review and attach relevant
-crash reports manually. Do not send game assets, keys or account files. A
-collected archive does not certify a test PASS.
+The collector includes the manifest, diagnostic/VM logs, profile JSON, unique
+VM captures and Java `hs_err_pid*.log` reports from the standalone and combined
+Java 25 app folders. It excludes Atmosphere/system crash dumps and
+`launch-plan.json`. Do not send game assets, keys or account files. A collected
+archive does not certify a test PASS.

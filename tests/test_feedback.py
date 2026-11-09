@@ -47,3 +47,52 @@ class FeedbackTests(unittest.TestCase):
             out=base/'out.zip';feedback.collect(sd,out)
             with zipfile.ZipFile(out) as archive:
                 self.assertEqual(set(archive.namelist()),{'collection.json',*['switch/mc-runtime/logs/'+n for n in captures]})
+
+    def test_only_bounded_java_crash_reports_are_included(self):
+        with tempfile.TemporaryDirectory() as directory:
+            base = Path(directory); sd = base / 'sd'; logs = sd / 'switch/mc-runtime/logs'
+            logs.mkdir(parents=True)
+            (sd / 'manifest.json').write_text('{"target":"test"}')
+            standalone = sd / 'switch/java25-test'; standalone.mkdir(parents=True)
+            combined = sd / 'switch/switchcraft-java25'; combined.mkdir(parents=True)
+            (standalone / 'hs_err_pid143.log').write_text('JVM crash details')
+            (combined / 'hs_err_pid145.log').write_text('combined JVM crash details')
+            (standalone / 'hs_err_pid143.txt').write_text('wrong extension')
+            (sd / 'switch/atmosphere-crash.log').write_text('system crash details')
+            out = base / 'feedback.zip'; result = feedback.collect(sd, out)
+            expected = {'switch/java25-test/hs_err_pid143.log',
+                        'switch/switchcraft-java25/hs_err_pid145.log'}
+            with zipfile.ZipFile(out) as archive:
+                names = set(archive.namelist())
+                self.assertTrue(expected <= names)
+                self.assertNotIn('switch/java25-test/hs_err_pid143.txt', names)
+                self.assertNotIn('switch/atmosphere-crash.log', names)
+                metadata = json.loads(archive.read('collection.json'))
+                self.assertIn('Atmosphere/system crash dumps are not collected', metadata['crash_reports'])
+            self.assertEqual(len(result['files']), 3)  # manifest plus two reports
+
+    def test_crash_report_file_limit_is_enforced(self):
+        with tempfile.TemporaryDirectory() as directory:
+            base = Path(directory); sd = base / 'sd'; logs = sd / 'switch/mc-runtime/logs'
+            logs.mkdir(parents=True)
+            crash_dir = sd / 'switch/java25-test'; crash_dir.mkdir(parents=True)
+            for pid in range(feedback.MAX_CRASH_REPORTS + 1):
+                (crash_dir / f'hs_err_pid{pid}.log').write_text('x')
+            with self.assertRaisesRegex(ValueError, 'more than 32'):
+                feedback.collect(sd, base / 'out.zip')
+            self.assertFalse((base / 'out.zip').exists())
+
+    def test_total_export_size_is_bounded(self):
+        with tempfile.TemporaryDirectory() as directory:
+            base = Path(directory); sd = base / 'sd'; logs = sd / 'switch/mc-runtime/logs'
+            logs.mkdir(parents=True)
+            (sd / 'manifest.json').write_text('{"target":"test"}')
+            out = base / 'out.zip'
+            saved_limit = feedback.MAX_TOTAL_BYTES
+            try:
+                feedback.MAX_TOTAL_BYTES = 1
+                with self.assertRaisesRegex(ValueError, '64 MiB total'):
+                    feedback.collect(sd, out)
+            finally:
+                feedback.MAX_TOTAL_BYTES = saved_limit
+            self.assertFalse(out.exists())
