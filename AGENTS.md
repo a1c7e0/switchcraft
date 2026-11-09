@@ -46,6 +46,11 @@ instrumentation and resolver. The regular minecraft-launcher remains VM-free;
 its gate must return JS_UNAVAILABLE. The separate switchcraft-java25 NRO links
 the VM and composed provider; availability indicates symbols, not startup.
 The main assistant may directly edit, commit and push java-switch when needed.
+Owner workflow update (2026-11-09): implement runtime fixes, validate them,
+commit and push directly. Do not create new java-switch issues unless the owner
+explicitly requests one. Issue creation or updates are not a prerequisite for
+fixes. Preserve reproduction steps, logs, immutable revisions and validation
+limits in commits and repository documentation. Existing issues remain history.
 Use an isolated worktree, clean focused commits and immutable full-SHA pins;
 keep Switchcraft's pin unchanged unless the integration requires an intentional
 pin update. Actively delegate bounded tasks to `gpt-6-luna` with

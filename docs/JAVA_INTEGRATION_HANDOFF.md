@@ -1,18 +1,25 @@
 # Java SDK integration handoff
 
 Switchcraft pins `a1c7e0/java-switch` at
-`b7c2ac7fd422bc2543e5c698db4e33a01cc0312d`. The main assistant is authorized
+`bff51f38e218af147ca0c9f255fcf1b43be72daf` for the R2 package. The main assistant is authorized
 to edit, commit and push java-switch directly. Use an isolated worktree, focused
 clean commits and immutable full-SHA references; update this pin only as an
 intentional integration change. Actively delegate bounded tasks to `gpt-6-luna`
 with `reasoning_effort` set to `high` and disjoint file ownership. The main
 assistant reviews changes and runs relevant checks, protecting other agents' work. Switchcraft
 owns launcher, LWJGL, SDL/Vulkan and application-native provider integration.
-Report reproducible runtime defects at
-https://github.com/a1c7e0/java-switch/issues; search first, preserve complete
-logs, and validate fixes at immutable SHAs.
+Owner workflow update (2026-11-09): fix runtime defects, validate, commit and
+push directly to java-switch. Do not create new issues unless explicitly
+requested; issue creation or updates are not a prerequisite. Keep complete
+reproduction steps, logs and validation limits in commits/documentation and
+validate at immutable SHAs. Existing issue links below are historical references.
 
-## Verified evidence
+R2 includes Java8 filesystem fixes, private protected heap-backed data memory
+and retained VM/crash diagnostics. Its new fixes remain device-unverified; the
+original B7 Java25 abort is unresolved. See docs/DEVICE_FEEDBACK_2026_11_08.md
+in java-switch and Switchcraft's docs/evidence/device-2026-11-08/.
+
+## Historical B7 verified evidence
 
 Linux host Java 25 has reached the 26.4-snapshot-6 title with strict Vulkan;
 the screenshot and logs are HOST ONLY. Horizon startup and all Horizon execution
@@ -105,7 +112,7 @@ Mbed TLS exports and portlibs libmbedcrypto.
 minimal reproduction and link output. The private symbols were isolated in
 java-switch `d8ca281fce2b0f21424623bdbdfa77e72ceea08f`; actual SDK builds,
 external-crypto target linking and five host regressions passed. That static-link
-defect is closed; no Horizon execution result follows. Switchcraft still consumes
-`b7c2ac7` and uses libnx SHA APIs independently, so this runtime pin was not
-silently updated or relabeled. Full instrument VM/image packaging was not rebuilt
-for the SDK-only fix.
+defect is closed; no Horizon execution result follows. At that checkpoint,
+Switchcraft consumed `b7c2ac7` and used libnx SHA APIs independently; the pin
+was not silently updated or relabeled. The later R2 integration intentionally
+consumes bff51f3 and rebuilt the complete instrument VM/image package.
