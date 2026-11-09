@@ -1,0 +1,12 @@
+{
+  "archive": {
+    "name": "switchcraft-test-suite-2026-11-09-r3.zip",
+    "bytes": 26053941,
+    "sha256": "1b10414234a754cb12291cdbd1d1aa62207fd87136a147e416873e70a904d13f"
+  },
+  "sd_files": 81,
+  "nros": 9,
+  "jars": 10,
+  "runtime_image_files": 39,
+  "hardware_verification": "NOT TESTED"
+}

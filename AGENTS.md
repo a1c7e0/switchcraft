@@ -106,3 +106,12 @@ The collector includes bounded hs_err_pid*.log from the two Java25 app folders.
 
 The R3 runtime pin is `4d362d4830cfa4e88313dadfcd3a865e826609a5`. Build it with instrument support, package and verify its actual SDK/image first, then use
 `JAVA_SWITCH_SOURCE` for downstream builds. Do not reuse R2 generated SDK caches.
+
+
+Published R3 device package: test-suite-2026-11-09-r3. Its executable/source
+checkpoint is f715f05ac90080a795f78382ba68e5bb03318e0d; later docs-only commits
+need not change that artifact identity. ZIP SHA256:
+1b10414234a754cb12291cdbd1d1aa62207fd87136a147e416873e70a904d13f.
+Public downloads and server digests are verified in docs/evidence/device-r3-package/.
+Final clean Switchcraft suite: 70 passed, one optional owned-client test skipped;
+runtime: 21 passed. Physical R3 Java25 startup/execution remains NOT TESTED.

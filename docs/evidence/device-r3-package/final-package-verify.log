@@ -1,0 +1,102 @@
+[
+  {
+    "name": "switch-diagnostics.nro",
+    "bytes": 248005,
+    "sha256": "52a233c4abbdbc0a6c53d9895834fcdf961526b04af518d1dd35a0cd01ccb12a",
+    "architecture": "AArch64",
+    "format": "NRO0+ASET",
+    "nacp_title": "switch-diagnostics",
+    "build_id": "dd7d19cf1cd32834df9af809e05cbbcd764bca1c",
+    "build_verification": "PASS",
+    "hardware_verification": "NOT TESTED"
+  },
+  {
+    "name": "vulkan-test.nro",
+    "bytes": 11999429,
+    "sha256": "2daee083d1a19c67a20bda22b49158834dcb60e9ad95c4bdf7240784c0239349",
+    "architecture": "AArch64",
+    "format": "NRO0+ASET",
+    "nacp_title": "vulkan-test",
+    "build_id": "d4b7af6cce5d164755c30f46c5023819cc9c25a2",
+    "build_verification": "PASS",
+    "hardware_verification": "NOT TESTED"
+  },
+  {
+    "name": "vulkan-present.nro",
+    "bytes": 12683461,
+    "sha256": "59d5b63e5576881240bc3df147a5ce5432b6800a775d4f8dd31ce8ba82acd8e2",
+    "architecture": "AArch64",
+    "format": "NRO0+ASET",
+    "nacp_title": "vulkan-present",
+    "build_id": "0ea004c433c8d03c9ef44a45c8e561ddec83e31d",
+    "build_verification": "PASS",
+    "hardware_verification": "NOT TESTED"
+  },
+  {
+    "name": "minecraft-launcher.nro",
+    "bytes": 2808005,
+    "sha256": "1b6769209356f72da35b4014d7f6b69ed5a7aa7d86128cea0a3e8f7df3a1ceaa",
+    "architecture": "AArch64",
+    "format": "NRO0+ASET",
+    "nacp_title": "minecraft-launcher",
+    "build_id": "4c71ff305c9c0636d3f07149051326b0868d373f",
+    "build_verification": "PASS",
+    "hardware_verification": "NOT TESTED"
+  },
+  {
+    "name": "java-test.nro",
+    "bytes": 1165509,
+    "sha256": "51c0e71e061cf3ea6ba02d495fe07e57819389f61b20d29f23360d5404959087",
+    "architecture": "AArch64",
+    "format": "NRO0+ASET",
+    "nacp_title": "java-test",
+    "build_id": "718c5f24c6caee1bd8a658cdd9e9743565d19250",
+    "build_verification": "PASS",
+    "hardware_verification": "NOT TESTED"
+  },
+  {
+    "name": "ffi-test.nro",
+    "bytes": 260293,
+    "sha256": "6b69c6b6a38b84aeba6e833d5fd3839acf1f32c1c3a852988fb6a6c668106743",
+    "architecture": "AArch64",
+    "format": "NRO0+ASET",
+    "nacp_title": "ffi-test",
+    "build_id": "61e7f6a068a97864f4a2c4b8b7ebe5de13d413e1",
+    "build_verification": "PASS",
+    "hardware_verification": "NOT TESTED"
+  },
+  {
+    "name": "zero-services-test.nro",
+    "bytes": 325829,
+    "sha256": "2ad15b701c4ab69f6d6be33a19cfee2830fccaca9339cce3c2212e8e99246cd1",
+    "architecture": "AArch64",
+    "format": "NRO0+ASET",
+    "nacp_title": "zero-services-test",
+    "build_id": "832e289a0194b0fcfe43e11598ddaa44e13ba73b",
+    "build_verification": "PASS",
+    "hardware_verification": "NOT TESTED"
+  },
+  {
+    "name": "java25-test.nro",
+    "bytes": 6957253,
+    "sha256": "a919ac99f18128315a569e40f63d89594b13343791d44349f7adfcdc11c84f02",
+    "architecture": "AArch64",
+    "format": "NRO0+ASET",
+    "nacp_title": "java25-test",
+    "build_id": "aad306df4e91db03bcbbff64be540489a8aef3df",
+    "build_verification": "PASS",
+    "hardware_verification": "NOT TESTED"
+  },
+  {
+    "name": "switchcraft-java25.nro",
+    "bytes": 19249349,
+    "sha256": "89131eb831b0dfd73346576ace457eb1bd6942cfee2246eea2bbc250bcc808e3",
+    "architecture": "AArch64",
+    "format": "NRO0+ASET",
+    "nacp_title": "switchcraft-java25",
+    "build_id": "25644b8ff807bb3fef06f077c2863ce4484d2dd3",
+    "build_verification": "PASS",
+    "hardware_verification": "NOT TESTED"
+  }
+]
+Manifest, SHA256SUMS, ZIP layout and all packaged NROs: PASS

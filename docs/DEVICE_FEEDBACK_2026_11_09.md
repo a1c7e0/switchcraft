@@ -69,9 +69,9 @@ the heap: relative PC
 path. That print fault is not the initiating protection failure.
 
 The R3 uncommitted guard-page and early fatal-heap reporting fixes are
-implemented, and 21 runtime host tests pass. The genuine target build is still
-running. These fixes have not been validated on this hardware; no R3 device pass
-is claimed here.
+implemented. All 21 runtime host tests, the genuine target build and the full
+runtime package verifier pass. These fixes have not been validated on this
+hardware; no R3 device pass is claimed here.
 
 ## Focused retest
 
@@ -101,3 +101,23 @@ The SD ZIP contains only switch/, compact instructions, notices and checksums.
 Corresponding source and debug symbols are separate downloads from the same
 release. Fresh physical R3 Java25 startup, Java execution, JNI/FFM, instrumentation
 and Minecraft title remain NOT TESTED.
+
+
+## Published R3 package
+
+[Download the SD ZIP](https://github.com/a1c7e0/switchcraft/releases/download/test-suite-2026-11-09-r3/switchcraft-test-suite-2026-11-09-r3.zip)
+(26,053,941 bytes, about 24.85 MiB). Its SHA-256 is
+`1b10414234a754cb12291cdbd1d1aa62207fd87136a147e416873e70a904d13f`.
+The artifact source is `f715f05ac90080a795f78382ba68e5bb03318e0d`; runtime
+source is `4d362d4830cfa4e88313dadfcd3a865e826609a5`. This later documentation
+record changes no packaged executable.
+
+The final clean build again passed 70 Switchcraft tests with one optional
+owned-client test skipped. Full package verification, the minimal inventory,
+installed checksums, all five GitHub asset digests and complete public downloads
+of the SD ZIP/manifest/checksums passed. A fresh extraction of the actual ZIP
+collected all three supplied hs_err reports and six unique VM captures with
+its packaged helper. [Published-file evidence](evidence/device-r3-package/published-assets.json)
+and the adjacent logs record those checks. Source/debug downloads remain
+separate; extract only the SD ZIP for testing. This does not add a physical
+R3 Java or Minecraft result.

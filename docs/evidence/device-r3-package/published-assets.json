@@ -1,0 +1,62 @@
+{
+  "release_url": "https://github.com/a1c7e0/switchcraft/releases/tag/test-suite-2026-11-09-r3",
+  "tag": "test-suite-2026-11-09-r3",
+  "source_revision": "f715f05ac90080a795f78382ba68e5bb03318e0d",
+  "runtime_revision": "4d362d4830cfa4e88313dadfcd3a865e826609a5",
+  "artifact_revision": "48d26bf686071f7b43e4555f67578e739fc5c335",
+  "publisher_run": "https://github.com/a1c7e0/switchcraft/actions/runs/42651896241",
+  "verified_at_utc": "2026-11-09T16:10:33.828140+00:00",
+  "assets": [
+    {
+      "sha256": "90b1b64014961f2688e8232fb7e8d1d811138f444cfe84addc1b74990e520ec0",
+      "bytes": 187,
+      "name": "SHA256SUMS",
+      "url": "https://github.com/a1c7e0/switchcraft/releases/download/test-suite-2026-11-09-r3/SHA256SUMS",
+      "server_digest": "sha256:90b1b64014961f2688e8232fb7e8d1d811138f444cfe84addc1b74990e520ec0"
+    },
+    {
+      "sha256": "f79631e69b9e1371b344d854668d8b3878e52fb2de5b830bcef329486203da0e",
+      "bytes": 26456,
+      "name": "manifest.json",
+      "url": "https://github.com/a1c7e0/switchcraft/releases/download/test-suite-2026-11-09-r3/manifest.json",
+      "server_digest": "sha256:f79631e69b9e1371b344d854668d8b3878e52fb2de5b830bcef329486203da0e"
+    },
+    {
+      "sha256": "ef7488d194f90065d65ac30b9ccf3cab1c333df691d0026140bd428349ad8630",
+      "bytes": 44626945,
+      "name": "switchcraft-debug-symbols-2026-11-09-r3.zip",
+      "url": "https://github.com/a1c7e0/switchcraft/releases/download/test-suite-2026-11-09-r3/switchcraft-debug-symbols-2026-11-09-r3.zip",
+      "server_digest": "sha256:ef7488d194f90065d65ac30b9ccf3cab1c333df691d0026140bd428349ad8630"
+    },
+    {
+      "sha256": "7e4e969d71e8ab39aed077c80ea7b889d326abb7ff813163841401a2f0bb9089",
+      "bytes": 127823265,
+      "name": "switchcraft-source-2026-11-09-r3.tar.gz",
+      "url": "https://github.com/a1c7e0/switchcraft/releases/download/test-suite-2026-11-09-r3/switchcraft-source-2026-11-09-r3.tar.gz",
+      "server_digest": "sha256:7e4e969d71e8ab39aed077c80ea7b889d326abb7ff813163841401a2f0bb9089"
+    },
+    {
+      "sha256": "1b10414234a754cb12291cdbd1d1aa62207fd87136a147e416873e70a904d13f",
+      "bytes": 26053941,
+      "name": "switchcraft-test-suite-2026-11-09-r3.zip",
+      "url": "https://github.com/a1c7e0/switchcraft/releases/download/test-suite-2026-11-09-r3/switchcraft-test-suite-2026-11-09-r3.zip",
+      "server_digest": "sha256:1b10414234a754cb12291cdbd1d1aa62207fd87136a147e416873e70a904d13f"
+    }
+  ],
+  "public_zip_manifest_sums_download": "PASS; complete public bytes match local SHA256",
+  "sd_zip_inventory": {
+    "top_level": [
+      "switch/",
+      "START_HERE.md",
+      "README.md",
+      "manifest.json"
+    ],
+    "nros": 9,
+    "jars": 10,
+    "runtime_image_files": 39,
+    "project_source_and_debug_in_sd_zip": false
+  },
+  "packaged_feedback_end_to_end": "PASS; all 3 uploaded hs_err reports and 6 unique VM captures collected",
+  "physical_r3_java_execution": "NOT TESTED",
+  "physical_minecraft_title": "NOT ACHIEVED / NOT TESTED"
+}
