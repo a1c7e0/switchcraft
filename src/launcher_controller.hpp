@@ -35,6 +35,7 @@ enum class EffectKind {
     InstallVersion,
     VerifyVersion,
     CheckInstance,
+    PlayDemo,
     OpenDiagnostic,
     OpenLog,
     ExportPlan,

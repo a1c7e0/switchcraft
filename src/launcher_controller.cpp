@@ -126,12 +126,14 @@ void confirm(LauncherView &v, ControllerState &s, std::vector<Effect> &out) {
     case Page::Details:
         if (!selected(v))
             break;
-        if (v.cursor == 0 || v.cursor == 3)
+        if (v.cursor == 0)
             emit(out, EffectKind::CheckInstance, v, v.cursor);
         else if (v.cursor == 1)
             begin_edit(v, out);
         else if (v.cursor == 2)
             emit(out, EffectKind::DuplicateInstance, v, v.cursor);
+        else if (v.cursor == 3)
+            emit(out, EffectKind::PlayDemo, v, v.cursor);
         else if (v.cursor == 4) {
             s.modal = Modal::ArchiveConfirm;
             v.page = Page::ArchiveConfirm;

@@ -77,6 +77,11 @@ int main() {
     transition(v,state,Input::Back);
     assert(v.page==Page::Versions && v.cursor==0);
 
+    // Instance details expose a direct, explicit Demo launch effect.
+    v.page=Page::Details; v.selected_instance=0; v.cursor=3;
+    effects=transition(v,state,Input::Confirm);
+    assert(has(effects,EffectKind::PlayDemo) && effects[0].instance_id=="a");
+
     // Settings expose effects for preferences, catalog refresh, import and
     // archive browsing; the reducer itself never performs those operations.
     v.page=Page::Settings; v.cursor=3;

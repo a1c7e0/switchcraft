@@ -5,6 +5,7 @@
 #include "launcher_ui.hpp"
 #include "platform.h"
 #include "prism_metadata.hpp"
+#include "switchcraft/minecraft_launch.h"
 #include <algorithm>
 #include <cstdio>
 #include <cstring>
@@ -194,8 +195,11 @@ int main() {
             dirty = true;
         }
         if (!app.chain.empty()) {
+            const bool demo_launch = app.chain == "switchcraft-java25";
             if (sc_chain(app.chain.c_str()))
                 break;
+            if (demo_launch)
+                sc_minecraft_launch_discard(SC_ROOT);
             app.chain.clear();
             view.notice = "Diagnostic could not be opened. See the log.";
             dirty = true;

@@ -100,8 +100,8 @@ void draw_launcher(Canvas &c,const LauncherView &v) {
         c.text(48,328,i.name,30,t.ink,380,true);c.text(48,376,i.version,22,t.muted,380,true);
         c.text(48,414,std::to_string(i.heap_mib)+" MiB Java memory",22,t.muted);
         c.text(48,475,"Separate saves and configuration",19,t.muted,380,true);
-        const char *names[]={"Check installation","Edit instance","Duplicate settings","Launch status","Archive instance","Back to instances"};
-        const char *values[]={"Files and components","Name, version, memory","Empty game folder","Runtime not ready","Keeps saves intact",""};
+        const char *names[]={"Check installation","Edit instance","Duplicate settings","Play Demo","Archive instance","Back to instances"};
+        const char *values[]={"Files and components","Name, version, memory","Empty game folder","26.4-snapshot-6 / Java 25 / Vulkan","Keeps saves intact",""};
         for(unsigned n=0;n<6;n++)row(c,178+int(n)*68,names[n],values[n],v.cursor==n,t,467,755);
     }else if(v.page==Page::Edit||v.page==Page::Create){
         row(c,192,"Name",v.draft.name,v.cursor==0,t,60,1160);

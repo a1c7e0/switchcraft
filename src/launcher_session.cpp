@@ -1,5 +1,6 @@
 #include "launcher_session.hpp"
 #include "prism_metadata.hpp"
+#include "switchcraft/minecraft_launch.h"
 #include <algorithm>
 #include <fstream>
 #include <set>
@@ -275,6 +276,36 @@ void LauncherSession::handle(const Effect &e) {
   case EffectKind::CheckInstance:
     check_instance(e.instance_id);
     break;
+  case EffectKind::PlayDemo: {
+    const std::string runtime = root_;
+    const std::string shared = view.shared_root;
+    const std::string id = e.instance_id;
+    start_task("Prepare 26.4-snapshot-6 Demo launch",
+               [runtime, shared, id](const DownloadCallbacks &callbacks) {
+                 auto progress = [](void *context, unsigned long long bytes,
+                                    unsigned long long total, const char *message) {
+                   const auto *task = static_cast<const DownloadCallbacks *>(context);
+                   if (task->cancelled && task->cancelled())
+                     return 0;
+                   if (!task->progress)
+                     return 1;
+                   return task->progress({static_cast<uint64_t>(bytes),
+                                          static_cast<uint64_t>(total),
+                                          message ? message : "Verifying snapshot"})
+                              ? 1 : 0;
+                 };
+                 char error[512]{};
+                 if (!sc_minecraft_launch_prepare(runtime.c_str(), shared.c_str(),
+                                                  id.c_str(), progress,
+                                                  const_cast<DownloadCallbacks *>(&callbacks),
+                                                  error, sizeof(error)))
+                   return Json{{"ok", false}, {"status", "launch_blocked"},
+                               {"details", {{"error", error}}}};
+                 return Json{{"ok", true}, {"status", "launch_queued"},
+                             {"instance_id", id}};
+               }, false);
+    break;
+  }
   case EffectKind::DuplicateInstance: {
     auto i = load_instance(root_, e.instance_id);
     auto c = duplicate_instance(root_, root, i.id, i.name + " copy");
@@ -402,6 +433,11 @@ bool LauncherSession::poll() {
     log("Task finished: " + s.title + " ok=" + std::to_string(ok) +
         " cancelled=" + std::to_string(s.cancelled) +
         " error=" + view.transfer.error);
+    if (ok && s.result.value("status", std::string{}) == "launch_queued") {
+      chain = "switchcraft-java25";
+      view.notice = "Demo request validated. Starting Java 25.";
+      log("Validated official Demo launch request; handing off to switchcraft-java25");
+    }
     refresh();
     if (s.result.contains("instance_id") && ok) {
       auto id = s.result["instance_id"].get<std::string>();

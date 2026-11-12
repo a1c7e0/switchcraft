@@ -1,11 +1,19 @@
 #include "launcher_session.hpp"
+#include "switchcraft/minecraft_launch.h"
 #include <cassert>
+#include <cstdio>
 #include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <thread>
 using namespace sc;
 using namespace sc::ui;
+extern "C" int sc_minecraft_launch_prepare(const char *, const char *, const char *,
+                                             ScMinecraftLaunchProgress, void *,
+                                             char *error, size_t capacity) {
+    if (error && capacity) std::snprintf(error, capacity, "snapshot target unavailable in this 1.20 fixture");
+    return 0;
+}
 static void write(const std::string &p, const std::string &s) {
     std::filesystem::create_directories(std::filesystem::path(p).parent_path());
     std::ofstream f(p);
@@ -55,6 +63,13 @@ int main(int argc, char **argv) {
     assert(s.view.instances.size() == 1);
     auto id = s.view.instances[0].id;
     s.view.selected_instance = 0;
+    s.view.page = Page::Details;
+    s.view.cursor = 3;
+    s.input(Input::Confirm);
+    wait(s);
+    assert(s.view.transfer.failed &&
+           s.view.transfer.error == "snapshot target unavailable in this 1.20 fixture");
+    assert(s.chain.empty());
     s.view.page = Page::Instances;
     s.input(Input::Confirm);
     s.input(Input::EditInstance);
