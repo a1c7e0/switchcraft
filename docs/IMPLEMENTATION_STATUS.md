@@ -34,10 +34,17 @@ it does not print Hello, stop and do not repeat the VM attempt. See runtime issu
 [#6](https://github.com/a1c7e0/java-switch/issues/6).
 
 The R3 device package is `switchcraft-test-suite-2026-11-09-r3.zip`, consuming
-runtime `4d362d4830cfa4e88313dadfcd3a865e826609a5`. Its
-manifest is authoritative for each NRO source and the java-switch revision;
-do not carry forward a revision from the older R2 package. Host build and test
-results establish only the host-verified cases below.
+runtime `4d362d4830cfa4e88313dadfcd3a865e826609a5`. The 2026-11-12 physical
+feedback establishes successful `JNI_CreateJavaVM`, the SDK `vm-ready` hook,
+and execution of Java 25 `java.base` class loading/error paths. The diagnostic
+Hello class and Java25Smoke suite did not run: the requested main classes were
+not found. The startup-agent attempt aborted on missing `AgentSmokeAgent`.
+JNI/FFM application smoke tests, renderer/game execution, and a full launcher
+flow remain unverified. See [the R3 device feedback](DEVICE_FEEDBACK_2026_11_12.md)
+and its preserved raw logs. Its manifest is authoritative for each NRO source
+and the java-switch revision; do not carry forward a revision from the older R2
+package. Host build and test results establish only the host-verified cases
+below.
 
 | Milestone | Implemented | Built | Host verification | Horizon hardware |
 | --- | --- | --- | --- | --- |
@@ -55,7 +62,7 @@ results establish only the host-verified cases below.
 | libffi AAPCS64/libnx W^X prerequisites | Yes | NRO/SDK | Native link | NOT TESTED |
 | Public SDK physical map/unmap | Yes | NRO/SDK | Mocked states/failures | B7 raw `0xfa01` Unsupported |
 | Private HotSpot reserve/commit/uncommit | Yes | Native L probe | Actual host protection and failure-path tests | R2 L probe PASS; new R3 guard check pending |
-| OpenJDK 25 Horizon VM / JVMTI / instrumentation | Genuine Zero archive and two-module image | Standalone + combined NRO | Cross-link, zero unresolved; host agent/JNI controls PASS | R2 startup FAIL during heap initialization; Java/JNI/FFM/agent execution NOT TESTED |
+| OpenJDK 25 Horizon VM / JVMTI / instrumentation | Genuine Zero archive and two-module image | Standalone + combined NRO | Cross-link, zero unresolved; host agent/JNI controls PASS | R3 `JNI_CreateJavaVM` and `vm-ready` PASS; Java 25 class loading ran and reported missing Hello/Smoke classes; agent aborted on missing `AgentSmokeAgent`; JNI/FFM application behavior and game execution NOT TESTED |
 | LWJGL 3.4.3 Horizon identity / JNI load | Upstream platform and Library overrides | Original override JAR | Real LWJGL classes + host fixture | NOT TESTED; FFM SharedLibrary missing |
 | Java -> JNI static lookup -> FFM SDL version | Actual JNI callback and real target SDL symbol | Combined NRO and classfile-69 JAR | Host JDK + SDK + native fixture | NOT TESTED |
 | Read-only launch planner/SDK gate | Yes | NRO/host inspector | Inheritance/rules/read-only/version/profile | NOT TESTED |
