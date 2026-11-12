@@ -1,0 +1,12 @@
+Command:
+/workspace/switchcraft/.deps/host-jdk25/jdk-25.0.5+8/bin/jdeps \
+  --multi-release 25 --ignore-missing-deps --print-module-deps \
+  /tmp/r4-mc-reference/client.jar
+
+Exact output (jdeps reduced module set):
+java.base,java.desktop,java.management,java.naming,java.net.http,jdk.jfr
+
+Note: --print-module-deps is a reduced module-root result. It does not list
+java.xml here; explicit bytecode refs to java.xml are shown in
+client-module-refs.txt. The client JAR alone is the input to this command;
+full manifest-classpath analysis is in jdeps-manifest-classpath-modules.txt.

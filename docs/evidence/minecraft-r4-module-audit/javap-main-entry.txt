@@ -1,0 +1,111 @@
+Command: /workspace/switchcraft/.deps/host-jdk25/jdk-25.0.5+8/bin/javap -classpath /tmp/r4-mc-reference/client.jar -c -p net.minecraft.client.main.Main
+
+[main entry]
+Compiled from "Main.java"
+public class net.minecraft.client.main.Main {
+  public net.minecraft.client.main.Main();
+    Code:
+         0: aload_0
+         1: invokespecial #1                  // Method java/lang/Object."<init>":()V
+         4: return
+
+  public static void main(java.lang.String[]);
+    Code:
+         0: invokestatic  #7                  // Method net/minecraft/SharedConstants.tryDetectVersion:()V
+         3: goto          17
+         6: astore_1
+         7: aload_1
+         8: invokestatic  #14                 // Method logEarlyException:(Ljava/lang/Throwable;)V
+        11: bipush        -7
+        13: invokestatic  #22                 // Method java/lang/System.exit:(I)V
+        16: return
+        17: new           #28                 // class joptsimple/OptionParser
+        20: dup
+        21: invokespecial #30                 // Method joptsimple/OptionParser."<init>":()V
+        24: astore_1
+        25: goto          39
+        28: astore_2
+        29: aload_2
+        30: invokestatic  #14                 // Method logEarlyException:(Ljava/lang/Throwable;)V
+        33: bipush        -4
+        35: invokestatic  #22                 // Method java/lang/System.exit:(I)V
+        38: return
+        39: aload_1
+        40: invokevirtual #31                 // Method joptsimple/OptionParser.allowsUnrecognizedOptions:()V
+        43: aload_1
+        44: ldc           #34                 // String demo
+        46: invokevirtual #36                 // Method joptsimple/OptionParser.accepts:(Ljava/lang/String;)Ljoptsimple/OptionSpecBuilder;
+
+[optional JFR profile and bootstrap]
+       640: aload         38
+       642: bipush        -3
+       644: invokestatic  #215                // Method net/minecraft/client/Minecraft.crash:(Lnet/minecraft/client/Minecraft;Ljava/io/File;Lnet/minecraft/CrashReport;I)V
+       647: return
+       648: ldc           #219                // String Pre-bootstrap
+       650: astore        38
+       652: aload         33
+       654: aload         5
+       656: invokevirtual #221                // Method joptsimple/OptionSet.has:(Ljoptsimple/OptionSpec;)Z
+       659: ifeq          674
+       662: getstatic     #227                // Field net/minecraft/util/profiling/jfr/JvmProfiler.INSTANCE:Lnet/minecraft/util/profiling/jfr/JvmProfiler;
+       665: getstatic     #233                // Field net/minecraft/util/profiling/jfr/Environment.CLIENT:Lnet/minecraft/util/profiling/jfr/Environment;
+       668: invokeinterface #239,  2          // InterfaceMethod net/minecraft/util/profiling/jfr/JvmProfiler.start:(Lnet/minecraft/util/profiling/jfr/Environment;)Z
+       673: pop
+       674: aload         33
+       676: aload         6
+       678: invokevirtual #221                // Method joptsimple/OptionSet.has:(Ljoptsimple/OptionSpec;)Z
+       681: ifeq          687
+       684: invokestatic  #243                // Method com/mojang/blaze3d/TracyBootstrap.setup:()V
+       687: invokestatic  #248                // Method com/google/common/base/Ticker.systemTicker:()Lcom/google/common/base/Ticker;
+       690: invokestatic  #254                // Method com/google/common/base/Stopwatch.createStarted:(Lcom/google/common/base/Ticker;)Lcom/google/common/base/Stopwatch;
+       693: astore        39
+       695: invokestatic  #248                // Method com/google/common/base/Ticker.systemTicker:()Lcom/google/common/base/Ticker;
+       698: invokestatic  #254                // Method com/google/common/base/Stopwatch.createStarted:(Lcom/google/common/base/Ticker;)Lcom/google/common/base/Stopwatch;
+       701: astore        40
+       703: getstatic     #260                // Field net/minecraft/client/telemetry/events/GameLoadTimesEvent.INSTANCE:Lnet/minecraft/client/telemetry/events/GameLoadTimesEvent;
+       706: getstatic     #265                // Field net/minecraft/client/telemetry/TelemetryProperty.LOAD_TIME_TOTAL_TIME_MS:Lnet/minecraft/client/telemetry/TelemetryProperty;
+       709: aload         39
+       711: invokevirtual #271                // Method net/minecraft/client/telemetry/events/GameLoadTimesEvent.beginStep:(Lnet/minecraft/client/telemetry/TelemetryProperty;Lcom/google/common/base/Stopwatch;)V
+       714: getstatic     #260                // Field net/minecraft/client/telemetry/events/GameLoadTimesEvent.INSTANCE:Lnet/minecraft/client/telemetry/events/GameLoadTimesEvent;
+       717: getstatic     #275                // Field net/minecraft/client/telemetry/TelemetryProperty.LOAD_TIME_PRE_WINDOW_MS:Lnet/minecraft/client/telemetry/TelemetryProperty;
+       720: aload         40
+       722: invokevirtual #271                // Method net/minecraft/client/telemetry/events/GameLoadTimesEvent.beginStep:(Lnet/minecraft/client/telemetry/TelemetryProperty;Lcom/google/common/base/Stopwatch;)V
+       725: invokestatic  #278                // Method net/minecraft/SharedConstants.getCurrentVersion:()Lnet/minecraft/WorldVersion;
+       728: invokeinterface #282,  1          // InterfaceMethod net/minecraft/WorldVersion.name:()Ljava/lang/String;
+       733: invokedynamic #288,  0            // InvokeDynamic #1:makeConcatWithConstants:(Ljava/lang/String;)Ljava/lang/String;
+       738: invokestatic  #291                // Method com/mojang/jtracy/TracyClient.reportAppInfo:(Ljava/lang/String;)V
+       741: getstatic     #296                // Field net/minecraft/util/datafix/DataFixTypes.TYPES_FOR_LEVEL_LIST:Ljava/util/Set;
+       744: invokestatic  #302                // Method net/minecraft/util/datafix/DataFixers.optimize:(Ljava/util/Set;)Ljava/util/concurrent/CompletableFuture;
+       747: astore        41
+       749: invokestatic  #308                // Method net/minecraft/CrashReport.preload:()V
+       752: invokestatic  #311                // Method com/mojang/logging/LogUtils.getLogger:()Lorg/slf4j/Logger;
+       755: astore        36
+       757: ldc_w         #317                // String Bootstrap
+       760: astore        38
+       762: invokestatic  #319                // Method net/minecraft/server/Bootstrap.bootStrap:()V
+       765: invokestatic  #324                // Method net/minecraft/client/ClientBootstrap.bootstrap:()V
+       768: getstatic     #260                // Field net/minecraft/client/telemetry/events/GameLoadTimesEvent.INSTANCE:Lnet/minecraft/client/telemetry/events/GameLoadTimesEvent;
+       771: getstatic     #329                // Field net/minecraft/server/Bootstrap.bootstrapDuration:Ljava/util/concurrent/atomic/AtomicLong;
+       774: invokevirtual #333                // Method java/util/concurrent/atomic/AtomicLong.get:()J
+       777: invokevirtual #338                // Method net/minecraft/client/telemetry/events/GameLoadTimesEvent.setBootstrapTime:(J)V
+       780: invokestatic  #342                // Method net/minecraft/server/Bootstrap.validate:()V
+       783: ldc_w         #345                // String Argument parsing
+       786: astore        38
+
+[window and Minecraft construction]
+      1519: invokestatic  #517                // Method java/lang/Runtime.getRuntime:()Ljava/lang/Runtime;
+      1522: aload         39
+      1524: invokevirtual #523                // Method java/lang/Runtime.addShutdownHook:(Ljava/lang/Thread;)V
+      1527: aconst_null
+      1528: astore        40
+      1530: invokestatic  #527                // Method java/lang/Thread.currentThread:()Ljava/lang/Thread;
+      1533: ldc_w         #531                // String Render thread
+      1536: invokevirtual #533                // Method java/lang/Thread.setName:(Ljava/lang/String;)V
+      1539: invokestatic  #536                // Method com/mojang/blaze3d/systems/RenderSystem.initRenderThread:()V
+      1542: new           #210                // class net/minecraft/client/Minecraft
+      1545: dup
+      1546: aload         37
+      1548: invokespecial #541                // Method net/minecraft/client/Minecraft."<init>":(Lnet/minecraft/client/main/GameConfig;)V
+      1551: astore        40
+      1553: goto          1634
+      1556: astore        41

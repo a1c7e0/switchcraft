@@ -1,0 +1,31 @@
+Command used to produce the selected module/class excerpt:
+JDK25=/workspace/switchcraft/.deps/host-jdk25/jdk-25.0.5+8
+CP="$(cat /tmp/r4-mc-reference/classpath.txt)"
+"$JDK25/bin/jdeps" --multi-release 25 --ignore-missing-deps \
+  -verbose:class --class-path "$CP" \
+  /tmp/r4-mc-reference/client.jar
+
+Direct module summary emitted for client.jar:
+client.jar -> java.base
+client.jar -> java.desktop
+client.jar -> java.management
+client.jar -> java.naming
+client.jar -> java.net.http
+client.jar -> java.xml
+client.jar -> jdk.jfr
+
+Selected direct class references:
+com.mojang.blaze3d.audio.Channel -> javax.sound.sampled.AudioFormat (java.desktop)
+com.mojang.blaze3d.audio.OpenAlUtil -> javax.sound.sampled.AudioFormat (java.desktop)
+com.mojang.blaze3d.audio.SoundBuffer -> javax.sound.sampled.AudioFormat (java.desktop)
+net.minecraft.client.sounds.AudioStream -> javax.sound.sampled.AudioFormat (java.desktop)
+net.minecraft.SystemReport -> java.lang.management.ManagementFactory, MemoryMXBean, MemoryUsage, RuntimeMXBean (java.management)
+net.minecraft.client.Minecraft -> java.lang.management.ManagementFactory, RuntimeMXBean (java.management)
+net.minecraft.util.Util -> java.lang.management.ManagementFactory, ThreadInfo, ThreadMXBean (java.management)
+net.minecraft.client.multiplayer.resolver.ServerRedirectHandler -> javax.naming.directory.Attribute, Attributes, DirContext, InitialDirContext (java.naming)
+com.mojang.realmsclient.client.FileDownload/FileUpload -> java.net.http.HttpClient, HttpRequest, HttpResponse (java.net.http)
+net.minecraft.gametest.framework.JUnitLikeTestReporter -> javax.xml.parsers.DocumentBuilderFactory; javax.xml.transform.TransformerFactory; org.w3c.dom types (java.xml)
+net.minecraft.util.profiling.jfr.JfrProfiler and its event classes -> jdk.jfr APIs (jdk.jfr)
+
+These rows prove bytecode-level references. They do not prove eager loading or
+that the class/method is on the normal demo path.

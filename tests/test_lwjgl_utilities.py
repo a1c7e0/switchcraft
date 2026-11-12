@@ -1,6 +1,7 @@
 """Genuine LWJGL 3.4.3 STB/VMA JNI references and module resolver checks."""
 import base64
 import hashlib
+import importlib.util
 import json
 import pathlib
 import re
@@ -11,21 +12,12 @@ import unittest
 import zlib
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
-JDK = ROOT / ".deps/host-jdk25/jdk-25.0.5+8/bin"
-MC = pathlib.Path("/tmp/r4-mc-reference")
-VERSION = json.loads((MC / "version.json").read_text())
+JDK = next((ROOT / ".deps/host-jdk25").glob("*/bin"))
+LOCK = json.loads((ROOT / "dependencies.lock.json").read_text())
 CORE_JAR = ROOT / ".deps/lwjgl_core.jar"
-STB_JAR = MC / "libraries/org/lwjgl/lwjgl-stb/3.4.3/lwjgl-stb-3.4.3.jar"
-VMA_JAR = MC / "libraries/org/lwjgl/lwjgl-vma/3.4.3/lwjgl-vma-3.4.3.jar"
-VULKAN_JAR = MC / "libraries/org/lwjgl/lwjgl-vulkan/3.4.3/lwjgl-vulkan-3.4.3.jar"
-
-
-def metadata_sha1(artifact: str) -> str:
-    for library in VERSION["libraries"]:
-        item = library.get("downloads", {}).get("artifact", {})
-        if item.get("path", "").endswith(artifact):
-            return item["sha1"]
-    raise AssertionError(f"Minecraft metadata has no artifact: {artifact}")
+STB_JAR = ROOT / ".deps/lwjgl_stb.jar"
+VMA_JAR = ROOT / ".deps/lwjgl_vma.jar"
+VULKAN_JAR = ROOT / ".deps/lwjgl_vulkan.jar"
 
 
 def png_1x1_rgba() -> bytes:
@@ -92,10 +84,12 @@ class TestLWJGLUtilities(unittest.TestCase):
         host = ROOT / "build/lwjgl-utilities/host"
         if not all((host / f"liblwjgl_{module}.so").is_file() for module in ("stb", "vma")):
             subprocess.run(["python3", str(ROOT / "scripts/build-lwjgl-utilities.py"), "--host"], cwd=ROOT, check=True)
-        for jar, artifact in ((STB_JAR, "lwjgl-stb-3.4.3.jar"),
-                              (VMA_JAR, "lwjgl-vma-3.4.3.jar"),
-                              (VULKAN_JAR, "lwjgl-vulkan-3.4.3.jar")):
-            self.assertEqual(hashlib.sha1(jar.read_bytes()).hexdigest(), metadata_sha1(artifact))
+        spec = importlib.util.spec_from_file_location("lwjgl_deps", ROOT / "scripts/build-lwjgl-horizon.py")
+        dependencies = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(dependencies)
+        for key in ("lwjgl_core", "lwjgl_stb", "lwjgl_vma", "lwjgl_vulkan"):
+            jar = dependencies.fetch(key)
+            self.assertEqual(hashlib.sha256(jar.read_bytes()).hexdigest(), LOCK[key]["sha256"])
         expected, declaration_count = java_native_exports()
         inventory = json.loads((host / "jni-exports.json").read_text())
         actual = {module: {name for name in names if name.startswith("Java_")} for module, names in inventory.items()}

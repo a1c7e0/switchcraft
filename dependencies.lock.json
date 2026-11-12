@@ -135,5 +135,23 @@
     "tag": "v3.8.0",
     "url": "https://github.com/libffi/libffi/releases/download/v3.8.0/libffi-3.8.0.tar.gz",
     "sha256": "7da3e2d9a171eb0a038f592ecad3ff2bb2550f3496d87b3b29ad0cf4430c0db4"
+  },
+  "lwjgl_core_host_linux": {
+    "version": "3.4.3",
+    "scope": "Host Linux tests only; never packaged for Horizon",
+    "url": "https://libraries.minecraft.net/org/lwjgl/lwjgl/3.4.3/lwjgl-3.4.3-natives-linux.jar",
+    "sha256": "d719e545a6db4ea87eb64d55630ba628755572bb5b56d51a1548347b5354cadb"
+  },
+  "lwjgl_sdl_host_linux": {
+    "version": "3.4.3",
+    "scope": "Host Linux tests only; never packaged for Horizon",
+    "url": "https://libraries.minecraft.net/org/lwjgl/lwjgl-sdl/3.4.3/lwjgl-sdl-3.4.3-natives-linux.jar",
+    "sha256": "e1880683a4af33299e9a1b8d7ec1799bed8fb709064ea08dcc2a15cd1101c0b3"
+  },
+  "lwjgl_vma_host_linux": {
+    "version": "3.4.3",
+    "scope": "Host Linux tests only; never packaged for Horizon",
+    "url": "https://libraries.minecraft.net/org/lwjgl/lwjgl-vma/3.4.3/lwjgl-vma-3.4.3-natives-linux.jar",
+    "sha256": "f8690711c842de5aa15759459b8294fd682e452441b063bd7f902710db801804"
   }
 }

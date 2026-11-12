@@ -1,0 +1,30 @@
+Command used (all selected manifest classpath JARs analyzed as inputs):
+CP="$(cat /tmp/r4-mc-reference/classpath.txt)"
+mapfile -t JARS < <(find /tmp/r4-mc-reference/libraries -type f -name '*.jar' -print)
+/workspace/switchcraft/.deps/host-jdk25/jdk-25.0.5+8/bin/jdeps \
+  --multi-release 25 -quiet --ignore-missing-deps --list-deps \
+  --class-path "$CP" /tmp/r4-mc-reference/client.jar "${JARS[@]}"
+
+Exact Java/JDK module output:
+java.base
+java.compiler
+java.datatransfer
+java.desktop
+java.logging
+java.management
+java.naming
+java.net.http
+java.rmi
+java.scripting
+java.sql
+java.xml
+jdk.compiler
+jdk.httpserver
+jdk.javadoc
+jdk.jfr
+jdk.unsupported
+
+jdeps additionally prints some non-JDK package/module groups when analyzing the
+full classpath. The module list is the complete static class-reference
+inventory for those manifest-selected JARs, not an assertion that every module
+is used on an ordinary title startup.

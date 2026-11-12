@@ -1,0 +1,49 @@
+Compiled from "JvmProfiler.java"
+public interface net.minecraft.util.profiling.jfr.JvmProfiler {
+  public static final net.minecraft.util.profiling.jfr.JvmProfiler INSTANCE;
+
+  public abstract boolean start(net.minecraft.util.profiling.jfr.Environment);
+
+  public abstract java.nio.file.Path stop();
+
+  public abstract boolean isRunning();
+
+  public abstract boolean isAvailable();
+
+  public abstract void onServerTick(float);
+
+  public abstract void onClientTick(int);
+
+  public abstract void onPacketReceived(net.minecraft.network.ConnectionProtocol, net.minecraft.network.protocol.PacketType<?>, java.net.SocketAddress, int);
+
+  public abstract void onPacketSent(net.minecraft.network.ConnectionProtocol, net.minecraft.network.protocol.PacketType<?>, java.net.SocketAddress, int);
+
+  public abstract void onRegionFileRead(net.minecraft.world.level.chunk.storage.RegionStorageInfo, net.minecraft.world.level.ChunkPos, net.minecraft.world.level.chunk.storage.RegionFileVersion, int);
+
+  public abstract void onRegionFileWrite(net.minecraft.world.level.chunk.storage.RegionStorageInfo, net.minecraft.world.level.ChunkPos, net.minecraft.world.level.chunk.storage.RegionFileVersion, int);
+
+  public abstract net.minecraft.util.profiling.jfr.callback.ProfiledDuration onWorldLoadedStarted();
+
+  public abstract net.minecraft.util.profiling.jfr.callback.ProfiledDuration onChunkGenerate(net.minecraft.world.level.ChunkPos, net.minecraft.resources.ResourceKey<net.minecraft.world.level.Level>, java.lang.String);
+
+  public abstract net.minecraft.util.profiling.jfr.callback.ProfiledDuration onStructureGenerate(net.minecraft.world.level.ChunkPos, net.minecraft.resources.ResourceKey<net.minecraft.world.level.Level>, net.minecraft.core.Holder<net.minecraft.world.level.levelgen.structure.Structure>);
+
+  static {};
+    Code:
+         0: ldc           #1                  // class java/lang/Runtime
+         2: invokevirtual #3                  // Method java/lang/Class.getModule:()Ljava/lang/Module;
+         5: invokevirtual #9                  // Method java/lang/Module.getLayer:()Ljava/lang/ModuleLayer;
+         8: ldc           #15                 // String jdk.jfr
+        10: invokevirtual #17                 // Method java/lang/ModuleLayer.findModule:(Ljava/lang/String;)Ljava/util/Optional;
+        13: invokevirtual #23                 // Method java/util/Optional.isPresent:()Z
+        16: ifeq          31
+        19: invokestatic  #29                 // Method jdk/jfr/FlightRecorder.isAvailable:()Z
+        22: ifeq          31
+        25: invokestatic  #34                 // Method net/minecraft/util/profiling/jfr/JfrProfiler.getInstance:()Lnet/minecraft/util/profiling/jfr/JfrProfiler;
+        28: goto          38
+        31: new           #40                 // class net/minecraft/util/profiling/jfr/JvmProfiler$NoOpProfiler
+        34: dup
+        35: invokespecial #42                 // Method net/minecraft/util/profiling/jfr/JvmProfiler$NoOpProfiler."<init>":()V
+        38: putstatic     #46                 // Field INSTANCE:Lnet/minecraft/util/profiling/jfr/JvmProfiler;
+        41: return
+}

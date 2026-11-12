@@ -1,0 +1,31 @@
+Official snapshot metadata: docs/evidence/official-metadata/26.4-snapshot-6.json
+Local metadata SHA-256: d6f3110b4bbf368cdcd6c02fded7eb80b0a84b4930d5b3f3538562b4295a2c95
+Official ID: 26.4-snapshot-6
+Main class: net.minecraft.client.main.Main
+Java major: 25
+Client URL: https://piston-data.mojang.com/v1/objects/8a97d5dafe80783525a2807b220527b65df724a5/client.jar
+Metadata client SHA-1: 8a97d5dafe80783525a2807b220527b65df724a5
+Metadata client size: 42156998 bytes
+Downloaded client SHA-1: 8a97d5dafe80783525a2807b220527b65df724a5
+Downloaded client SHA-256: 09d7e86508eb8b01c8e6ecc268ac1e4f8b9f0153c8fcff3201bf3f170199ca8b
+Downloaded client size: 42156998 bytes
+JDK used for analysis: OpenJDK 25.0.5+8 (Temurin)
+Cache: /tmp/r4-mc-reference
+
+Pinned java-switch revision from dependencies.lock.json:
+4d362d4830cfa4e88313dadfcd3a865e826609a5
+
+Generated-image verification marker:
+build/java25-integrated/verified-inputs.json
+SHA-256: 80f55ed229b21b759886c14f631d7df7396c74d761fef7d262e4cd1595f3388c
+The marker records the same pinned revision and runtime archive SHA-256
+9dfafee4f554b3a4736c6a4c7e35b430706b7037f3037e49653963e16da37259.
+
+The image package at build/java25-integrated/runtime/openjdk25-horizon-runtime/
+runtime-package.json reports runtime_image_modules=["java.base", "java.instrument"]
+and 39 hashed runtime image files. Its SHA-256 is
+273867d63bf876b88631cfbe8c1ef6f5f020ade322c743ef98c16bea7aad71f8.
+
+The official version metadata object fetched by `tools/snapshot6-reference.py`
+had SHA-1 `04be0f389fdac9f1c8b9b551c1e717104a08899d`, matching the tool's
+`METADATA_SHA1` constant.
