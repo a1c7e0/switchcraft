@@ -10,3 +10,4 @@ this directory contains no game binaries or assets.
 - `jdeps-manifest-classpath-modules.txt`: full static module inventory across
   the client and manifest-selected library JARs.
 - `javap-main-entry.txt`: bytecode excerpt for ordering and optional profiler paths.
+- `javap-jvmprofiler.txt`: module-presence check and the official no-op fallback when JFR is absent.
