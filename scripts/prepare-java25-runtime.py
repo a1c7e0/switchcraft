@@ -3,7 +3,29 @@
 import hashlib,json,os,pathlib,subprocess,tarfile,tempfile
 ROOT=pathlib.Path(__file__).resolve().parents[1]
 JAVA=pathlib.Path(os.environ.get('JAVA_SWITCH_SOURCE',ROOT/'.deps/java-switch')).resolve()
-PIN=json.loads((ROOT/'dependencies.lock.json').read_text())['java_switch']['revision']
+JAVA_LOCK=json.loads((ROOT/'dependencies.lock.json').read_text())['java_switch']
+PIN=JAVA_LOCK['revision']
+
+def verify_profile(data, lock=JAVA_LOCK):
+    """Require the selected genuine image, rather than accepting any larger JDK."""
+    profile=lock.get('build_profile','instrument')
+    required={'java.base','java.instrument'}
+    if profile=='minecraft':
+        modules=lock.get('runtime_image_modules')
+        if not isinstance(modules,list) or not modules or len(modules)!=len(set(modules)):
+            raise RuntimeError('Minecraft runtime lock needs its exact module inventory')
+        if not required.issubset(modules):raise RuntimeError('Minecraft runtime lock omits base/instrument')
+        required=set(modules)
+        if not data.get('minecraft_profile'):
+            raise RuntimeError('A genuine Minecraft runtime profile is required')
+    elif profile!='instrument':
+        raise RuntimeError('Unknown Java runtime build profile: '+str(profile))
+    if not data.get('java_instrument') or set(data.get('runtime_image_modules',[]))!=required:
+        raise RuntimeError('Runtime image does not match the selected instrument-enabled profile')
+    if not data.get('cross_built_genuine_vm') or data.get('link_exit_status')!=0:
+        raise RuntimeError('Runtime lacks a successful genuine VM cross-link proof')
+    if not {'jni-check','jvmti','serialgc','services','zero'}.issubset(data.get('jvm_features',[])):
+        raise RuntimeError('Runtime VM feature set does not supply the required instrument/services support')
 def sha(path):
     with path.open('rb') as f:return hashlib.file_digest(f,'sha256').hexdigest()
 def verify_archive_tree(archive_path,destination,prefix=''):
@@ -26,8 +48,7 @@ def verify_unpacked(base):
     contract=json.loads((sdk/'runtime-contract.json').read_text())
     data=json.loads((runtime/'runtime-package.json').read_text())
     if contract['abi']!=1 or contract['built_backends']['openjdk25'] is not False:raise RuntimeError('Unexpected SDK baseline contract')
-    if not data['java_instrument'] or set(data['runtime_image_modules'])!={'java.base','java.instrument'}:
-        raise RuntimeError('Instrument-enabled runtime image required')
+    verify_profile(data)
     if sha(sdk/'lib/libjavaswitch.a')!=data['sdk_libjavaswitch_sha256'] or sha(runtime/'native/libjvm.a')!=data['upstream_libjvm_archive_sha256']:
         raise RuntimeError('SDK or VM archive mismatch')
     if (sdk/'include/javaswitch/runtime.h').read_bytes()!=(runtime/'include/javaswitch/runtime.h').read_bytes():
