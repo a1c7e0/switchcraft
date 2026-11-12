@@ -18,11 +18,17 @@ import tempfile
 import urllib.request
 
 ROOT = Path(__file__).resolve().parents[1]
-REVISION = "c41d64c6a35f6174bf4a27010aeac52a8d3bb2c6"
-VERSION = "1.25.1"
-ARCHIVE_URL = f"https://github.com/kcat/openal-soft/archive/refs/tags/{VERSION}.tar.gz"
-ARCHIVE_SHA256 = "5f8efe8dfba5e9307a50251ba615ace857c7fa9dddfe34130b83e213d7f7cf24"
-SOURCE_ARCHIVE = ROOT / ".deps/openal-soft-1.25.1.tar.gz"
+LOCK = json.loads((ROOT / "dependencies.lock.json").read_text())
+OPENAL_PIN = LOCK["openal_soft"]
+VERSION = OPENAL_PIN["version"]
+REVISION = OPENAL_PIN["source_revision"]
+ARCHIVE_URL = OPENAL_PIN["source_url"]
+ARCHIVE_SHA256 = OPENAL_PIN["source_archive_sha256"]
+if (VERSION != "1.25.1" or VERSION not in ARCHIVE_URL
+        or not re.fullmatch(r"[0-9a-f]{40}", REVISION)
+        or not re.fullmatch(r"[0-9a-f]{64}", ARCHIVE_SHA256)):
+    raise RuntimeError("dependencies.lock.json has an incoherent OpenAL Soft source pin")
+SOURCE_ARCHIVE = ROOT / f".deps/openal-soft-{VERSION}.tar.gz"
 SOURCE_ROOT = ROOT / ".deps/openal-soft-source"
 SOURCE_DIR = SOURCE_ROOT / f"openal-soft-{VERSION}"
 PATCH_MARKER = SOURCE_ROOT / ".switchcraft-prepared.json"
