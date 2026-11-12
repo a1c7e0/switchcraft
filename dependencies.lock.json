@@ -20,7 +20,7 @@
   },
   "java_switch": {
     "url": "https://github.com/a1c7e0/java-switch.git",
-    "revision": "4d362d4830cfa4e88313dadfcd3a865e826609a5"
+    "revision": "2d53737168e4aa55601600db3f9d4bc89f9617e4"
   },
   "host_cmake": {
     "url": "https://files.pythonhosted.org/packages/7e/d5/664ea06d01864f25d6067f09fa218404e4d588edd5e495135ac91429fecb/cmake-4.4.4-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl",
@@ -30,6 +30,8 @@
   "lwjgl_core": {
     "version": "3.4.3",
     "source_revision": "30fac9b95f99cda97312232be25ba55297bf9951",
+    "source_url": "https://github.com/LWJGL/lwjgl3/archive/30fac9b95f99cda97312232be25ba55297bf9951.tar.gz",
+    "source_archive_sha256": "db97020d78fb6f6086121fba9c99ac07a50c4188a7658b06d488a2eae021de40",
     "url": "https://libraries.minecraft.net/org/lwjgl/lwjgl/3.4.3/lwjgl-3.4.3.jar",
     "sha256": "46eeca5471833c3cf5da3c1da015b41e3bb3eb16dd3da03f366886da10096751",
     "platform_source_sha256": "0b3093df7948997ba3ee9749e7f6d08143b480fccd4a710a59629cb79de4479a",
@@ -38,5 +40,88 @@
   "jspecify": {
     "url": "https://libraries.minecraft.net/org/jspecify/jspecify/1.0.0/jspecify-1.0.0.jar",
     "sha256": "1fad6e6be7557781e4d33729d49ae1cdc8fdda6fe477bb0cc68ce351eafdfbab"
+  },
+  "lwjgl_vulkan": {
+    "version": "3.4.3",
+    "url": "https://libraries.minecraft.net/org/lwjgl/lwjgl-vulkan/3.4.3/lwjgl-vulkan-3.4.3.jar",
+    "sha256": "acdb40767775ed1223dc3b2a8c9d3ce740c9e3c4af074444ce2dfe2ea9ba62e0",
+    "source_revision": "30fac9b95f99cda97312232be25ba55297bf9951"
+  },
+  "lwjgl_openal": {
+    "version": "3.4.3",
+    "url": "https://libraries.minecraft.net/org/lwjgl/lwjgl-openal/3.4.3/lwjgl-openal-3.4.3.jar",
+    "sha256": "4a0049c8554d6890718fee76507572f2f9f8f3f6144d25d7d2ea76bccc2d9605",
+    "source_revision": "30fac9b95f99cda97312232be25ba55297bf9951"
+  },
+  "shader_libraries": {
+    "shaderc": {
+      "source_revision": "82757e4f72af8518fb679604d352623450cb761f",
+      "source_url": "https://codeload.github.com/google/shaderc/tar.gz/82757e4f72af8518fb679604d352623450cb761f",
+      "source_archive_sha256": "a870d32b9c938dcea7d731a6c0b638044dfc2a0aca01da326e04d1cd63b81ab9",
+      "version": "2026.3"
+    },
+    "glslang": {
+      "source_revision": "168d452a4f460d24b588fed08477a81c44ee27a1",
+      "source_url": "https://codeload.github.com/KhronosGroup/glslang/tar.gz/168d452a4f460d24b588fed08477a81c44ee27a1",
+      "source_archive_sha256": "c167b2474af06cbab93abae8249efaf88fb79a09f30488e2a24d399e4258ce7a"
+    },
+    "spirv_headers": {
+      "source_revision": "29981f65241605e08b0ede4cfeb999fe3b723c6a",
+      "source_url": "https://codeload.github.com/KhronosGroup/SPIRV-Headers/tar.gz/29981f65241605e08b0ede4cfeb999fe3b723c6a",
+      "source_archive_sha256": "232899f1ad4104fb5bc377b94596c7621575eee62ad9a9e8f929b63a7dd8a7ad"
+    },
+    "spirv_tools": {
+      "source_revision": "b707790a898e44038547df54580022fc1cf89c3d",
+      "source_url": "https://codeload.github.com/KhronosGroup/SPIRV-Tools/tar.gz/b707790a898e44038547df54580022fc1cf89c3d",
+      "source_archive_sha256": "05d8af89737bde57571c48dbd36714c9f520a69623e14de72c3be6b600e277d6"
+    },
+    "spirv_cross": {
+      "source_revision": "1a6169566c73d3da552748fc372fe2bbb856e46e",
+      "source_url": "https://codeload.github.com/KhronosGroup/SPIRV-Cross/tar.gz/1a6169566c73d3da552748fc372fe2bbb856e46e",
+      "source_archive_sha256": "0f295b214b164e42a1d21537c8da7b44569806c16220dda9798558edfaacd11e",
+      "version": "0.68.0"
+    }
+  },
+  "lwjgl_sdl": {
+    "version": "3.4.3",
+    "url": "https://libraries.minecraft.net/org/lwjgl/lwjgl-sdl/3.4.3/lwjgl-sdl-3.4.3.jar",
+    "sha256": "dcb33abcbd946553176bb668be80d7adc60cb9d919ab5c71fb01fc51cacc4c8f",
+    "source_revision": "30fac9b95f99cda97312232be25ba55297bf9951"
+  },
+  "lwjgl_freetype": {
+    "version": "3.4.3",
+    "url": "https://libraries.minecraft.net/org/lwjgl/lwjgl-freetype/3.4.3/lwjgl-freetype-3.4.3.jar",
+    "sha256": "b331b9d2a29c1b330c3887d33c14dab9d7eed3f763bb8f5ca559eec02d73f075",
+    "source_revision": "30fac9b95f99cda97312232be25ba55297bf9951"
+  },
+  "lwjgl_stb": {
+    "version": "3.4.3",
+    "url": "https://libraries.minecraft.net/org/lwjgl/lwjgl-stb/3.4.3/lwjgl-stb-3.4.3.jar",
+    "sha256": "544753f5e49c53580949b9f1fc341f0e434991303c93d5a428fbaafaacc2cd69",
+    "source_revision": "30fac9b95f99cda97312232be25ba55297bf9951"
+  },
+  "lwjgl_vma": {
+    "version": "3.4.3",
+    "url": "https://libraries.minecraft.net/org/lwjgl/lwjgl-vma/3.4.3/lwjgl-vma-3.4.3.jar",
+    "sha256": "254162ef94bd213663a417368902ea916d51e0e0fa3054d07ea0ce9a8b7ac9e6",
+    "source_revision": "30fac9b95f99cda97312232be25ba55297bf9951"
+  },
+  "lwjgl_shaderc": {
+    "version": "3.4.3",
+    "url": "https://libraries.minecraft.net/org/lwjgl/lwjgl-shaderc/3.4.3/lwjgl-shaderc-3.4.3.jar",
+    "sha256": "82c7b5270d2c78458f5720c639459710c8f086ca050eea9ab0c44256fee7a626",
+    "source_revision": "30fac9b95f99cda97312232be25ba55297bf9951"
+  },
+  "lwjgl_spvc": {
+    "version": "3.4.3",
+    "url": "https://libraries.minecraft.net/org/lwjgl/lwjgl-spvc/3.4.3/lwjgl-spvc-3.4.3.jar",
+    "sha256": "d737eba8512caa2f53db7a8dbea4c08d9c3d94493bb0a244e6d64af95541f742",
+    "source_revision": "30fac9b95f99cda97312232be25ba55297bf9951"
+  },
+  "openal_soft": {
+    "version": "1.25.1",
+    "source_revision": "c41d64c6a35f6174bf4a27010aeac52a8d3bb2c6",
+    "source_url": "https://github.com/kcat/openal-soft/archive/refs/tags/1.25.1.tar.gz",
+    "source_archive_sha256": "5f8efe8dfba5e9307a50251ba615ace857c7fa9dddfe34130b83e213d7f7cf24"
   }
 }
