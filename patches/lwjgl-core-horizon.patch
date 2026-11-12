@@ -1,0 +1,79 @@
+--- a/modules/lwjgl/core/src/main/c/common_tools.c
++++ b/modules/lwjgl/core/src/main/c/common_tools.c
+@@ -128,6 +128,63 @@
+         }
+         return data;
+     }
++#elif defined(LWJGL_HORIZON)
++    #include <switch/kernel/thread.h>
++    static s32 envTLS = -1;
++
++    static void autoDetach(void* value) {
++        EnvData* data = (EnvData *)value;
++
++        if (data->async && getThreadEnv() != NULL) {
++            detachCurrentThread();
++        }
++
++        JNIEnv env = data->envCopy;
++        if (env != NULL) {
++            free((void *)env);
++        }
++        free(data);
++    }
++
++    static inline void tlsInit(void) {
++        envTLS = threadTlsAlloc(autoDetach);
++        if (envTLS < 0) {
++            fprintf(stderr, "[LWJGL] Failed to allocate libnx TLS for JNIEnv.");
++            fflush(stderr);
++        }
++    }
++
++    static inline void tlsDestroy(void) {
++        if (envTLS >= 0) {
++            threadTlsFree(envTLS);
++            envTLS = -1;
++        }
++    }
++
++    EnvData* tlsCreateEnvData(void) {
++        jboolean async = 0;
++        JNIEnv* env = getThreadEnv();
++        if (env == NULL) {
++            async = 1;
++            env = attachCurrentThreadAsDaemon();
++        }
++        EnvData* data = createEnvData(async, env);
++        threadTlsSet(envTLS, data);
++        return data;
++    }
++
++    EnvData* tlsCreateEnvDataWithCopy(JNIEnv* env) {
++        EnvData* data = createEnvData(0, env);
++        linkEnvData(data, env);
++        threadTlsSet(envTLS, data);
++        return data;
++    }
++
++    static inline EnvData* tlsGetEnvData(void) {
++        EnvData* data = (EnvData*)threadTlsGet(envTLS);
++        if (data == NULL) data = tlsCreateEnvData();
++        return data;
++    }
+ #else
+     #include <pthread.h>
+     pthread_key_t envTLS = 0;
+@@ -210,7 +267,11 @@
+ 
+     tlsInit();
+ 
+-    return JNI_VERSION_1_6;
++#ifdef LWJGL_HORIZON
++    if (envTLS < 0) return JNI_ERR;
++#endif
++
++    return JNI_VERSION_1_8;
+ }
+ 
+ JNIEXPORT void JNICALL JNI_OnUnload(JavaVM *vm, void *reserved) {

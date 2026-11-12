@@ -123,5 +123,17 @@
     "source_revision": "c41d64c6a35f6174bf4a27010aeac52a8d3bb2c6",
     "source_url": "https://github.com/kcat/openal-soft/archive/refs/tags/1.25.1.tar.gz",
     "source_archive_sha256": "5f8efe8dfba5e9307a50251ba615ace857c7fa9dddfe34130b83e213d7f7cf24"
+  },
+  "lwjgl_opengl": {
+    "version": "3.4.3",
+    "url": "https://libraries.minecraft.net/org/lwjgl/lwjgl-opengl/3.4.3/lwjgl-opengl-3.4.3.jar",
+    "sha256": "a92cf30f25b6fb6066f3508511f83c5c4fe2a0cff14fc2e7373bc1f6c726374f",
+    "source_revision": "30fac9b95f99cda97312232be25ba55297bf9951",
+    "gl_source_sha256": "fdb8d205fbeb5bea14a61a2058e0661220e8488dc08d30437ed46edc94447b22"
+  },
+  "libffi": {
+    "tag": "v3.8.0",
+    "url": "https://github.com/libffi/libffi/releases/download/v3.8.0/libffi-3.8.0.tar.gz",
+    "sha256": "7da3e2d9a171eb0a038f592ecad3ff2bb2550f3496d87b3b29ad0cf4430c0db4"
   }
 }
