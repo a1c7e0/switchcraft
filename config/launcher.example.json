@@ -3,5 +3,5 @@
   "version": "26.4-snapshot-6",
   "runtime": "openjdk25",
   "graphics": "nvk",
-  "heap_mib": 256
+  "heap_mib": 512
 }

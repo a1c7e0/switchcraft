@@ -1,6 +1,8 @@
 """Exercise LWJGL's genuine libffi upcall path through the cached SDL3 natives."""
 import importlib.util
 import os
+import platform
+import sys
 from pathlib import Path
 import subprocess
 import tempfile
@@ -8,7 +10,7 @@ import unittest
 
 
 ROOT=Path(__file__).resolve().parents[1]
-JDK=next((ROOT/'.deps/host-jdk25').glob('*/bin'))
+JDKS=sorted((ROOT/'.deps/host-jdk25').glob('*/bin'))
 
 _spec=importlib.util.spec_from_file_location('lwjgl_dependencies',ROOT/'scripts/build-lwjgl-horizon.py')
 _dependencies=importlib.util.module_from_spec(_spec)
@@ -17,6 +19,11 @@ _spec.loader.exec_module(_dependencies)
 
 class TestLWJGLCoreCallbacks(unittest.TestCase):
     def test_sdl_timer_thread_calls_java_through_real_lwjgl_upcalls(self):
+        if sys.platform != 'linux' or platform.machine().lower() not in ('x86_64','amd64'):
+            self.skipTest('pinned callback native artifacts target Linux x86_64')
+        if not JDKS:
+            self.skipTest('pinned host JDK 25 is not installed')
+        jdk=JDKS[0]
         core=_dependencies.fetch('lwjgl_core')
         sdl=_dependencies.fetch('lwjgl_sdl')
         sdl_natives=_dependencies.fetch('lwjgl_sdl_host_linux')
@@ -75,9 +82,9 @@ public final class LWJGLCoreCallbackProbe {
 }
 ''')
             classpath=os.pathsep.join(map(str,[core,sdl,jspecify]))
-            subprocess.run([str(JDK/'javac'),'--release','25','-cp',classpath,'-d',str(tmp),str(source)],check=True)
+            subprocess.run([str(jdk/'javac'),'--release','25','-cp',classpath,'-d',str(tmp),str(source)],check=True)
             native_path=ROOT/'build/lwjgl-core/host'
-            java=[str(JDK/'java'),'--enable-native-access=ALL-UNNAMED',
+            java=[str(jdk/'java'),'--enable-native-access=ALL-UNNAMED',
                   '-Dorg.lwjgl.util.NoHashChecks=true',
                   f'-Dorg.lwjgl.librarypath={native_path}',
                   f'-Djava.library.path={native_path}',

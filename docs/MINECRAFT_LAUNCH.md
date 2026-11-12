@@ -17,7 +17,10 @@ uses the official `--demo` flag and the official reference arguments for
 assets directory, and asset-index ID. Its empty `--accessToken` matches the
 existing official host Demo reference; this is not an authentication bypass
 or a Microsoft account login. The instance's Java heap remains bounded by the
-existing 128–1024 MiB profile policy, with a 64 MiB initial heap. Account
+existing 128–1024 MiB profile policy, with a 64 MiB initial heap. New launcher
+configurations default to 512 MiB, matching new Prism-format instances; saved
+configuration and instance values are preserved. This is a starting memory
+budget, not a measured title-screen requirement on Switch. Account
 credentials are not accepted or stored by this flow. The JVM also runs in
 headless AWT mode and selects LWJGL's upstream system allocator, which avoids
 desktop jemalloc initialization on Horizon.
@@ -30,7 +33,7 @@ instance game directory, and attempts at most one VM in that application
 lifetime. It consumes the pending request before starting the VM. A failed or
 crashed attempt is not retried in place; review the saved logs and reopen the
 application for another explicit attempt. Opening the Java 25 diagnostic with
-no validated pending request still shows its A/X/Y diagnostic controls.
+no validated pending request still shows its diagnostic controls.
 
 The launcher-to-VM handoff is implemented and host-tested, but Switch execution
 of the launcher UI, queue handoff, Java startup, SDL/Vulkan client, and title

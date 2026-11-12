@@ -10,7 +10,7 @@ struct Config {
     std::string version;
     std::string runtime="openjdk25";
     std::string graphics="nvk";
-    unsigned heap_mib=256;
+    unsigned heap_mib=512;
 };
 Json read_json(const std::string &path);
 void save_json_atomic(const std::string &path,const Json &value);
