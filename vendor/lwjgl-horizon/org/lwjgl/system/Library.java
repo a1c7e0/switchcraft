@@ -247,9 +247,10 @@ public final class Library {
 
     @SuppressWarnings("try")
     private static SharedLibrary loadNative(Class<?> context, String module, String name, boolean bundledWithLWJGL, boolean printError) {
-        // A real FFM SharedLibrary adapter has not yet been integrated.
+        // Horizon exposes a small, exact static-module allowlist. Do not fall
+        // through to desktop paths or fabricate a dynamic-library handle.
         if (Platform.get() == Platform.HORIZON) {
-            throw new UnsatisfiedLinkError("Horizon static FFM library adapter unavailable: " + name);
+            return HorizonSharedLibrary.load(module, name);
         }
         if (DEBUG) {
             DEBUG_STREAM.print(

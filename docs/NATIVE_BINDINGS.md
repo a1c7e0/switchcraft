@@ -30,9 +30,20 @@ The modified LWJGL 3.4.3 `Platform` and `Library` sources under
 override JAR precedes the original classpath entry for the exact snapshot.
 Horizon is an explicit enum with AArch64 recognition and no Linux identity.
 JNI load requests are passed by name to the JVM's real static loader; missing
-`lwjgl` core providers fail normally. Native `SharedLibrary`/FFM lookup remains
-explicitly unavailable. A host test using the real pinned LWJGL JAR and a
-host-only JNI fixture proves dispatch/failure handling, not Horizon execution.
+`lwjgl` core providers fail normally. The Horizon `SharedLibrary` adapter now
+maps only LWJGL 3.4.3's `org.lwjgl.sdl`/`SDL3` and
+`org.lwjgl.vulkan`/`libvulkan.so.1` requests to the real `SDL3` and `vulkan`
+static modules via `NativeSymbols`. Exact lookup returns zero for missing
+symbols; unsupported names or unavailable modules throw `UnsatisfiedLinkError`.
+It reports no filesystem path or dynamic-library handle, and `free()` does not
+unload process-owned code. The override JAR includes the `NativeSymbols` Java
+bridge required by this path. A host test using the real pinned LWJGL JAR and a
+host-only JNI/FFM fixture calls a native `SDL_GetVersion` symbol and checks
+missing-module, missing-symbol, UTF-8 buffer, and ownership behavior. This is
+host evidence only; it does not establish Horizon execution or full LWJGL
+coverage. `APIUtil.apiCreateLibrary` has no Horizon branch, so the override
+routes supported Horizon loads directly through the adapter and avoids that
+desktop-only factory.
 
 The combined Java25 diagnostic composes the generated JDK provider with the
 actual static SDL3/Vulkan lookup before the JVM seals the resolver. It links the
