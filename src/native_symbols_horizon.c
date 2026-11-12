@@ -1,18 +1,16 @@
-/* Limited static symbols already linked by the Vulkan presentation diagnostic.
- * No Java FFM/JNI loader integration or complete LWJGL bindings is implied. */
+/* Public SDL functions present in the pinned Switch archive are generated into
+ * the exact-name table. Vulkan global lookup exposes only gIPA; Vulkan device
+ * functions continue through real instance/device dispatch. */
 #define SDL_MAIN_HANDLED
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_vulkan.h>
 #include <vulkan/vulkan.h>
 #include <switchcraft/native_lookup.h>
+#include "sdl_symbols_generated.h"
 extern PFN_vkVoidFunction vkGetInstanceProcAddr(VkInstance, const char *);
-#define SDL_SYM(name) {"SDL3", #name, (ScNativeFunction)name}
+#define SDL_SYM(name) {"SDL3", #name, (ScNativeFunction)name},
 static const ScNativeSymbol symbols[] = {
-    SDL_SYM(SDL_Init), SDL_SYM(SDL_Quit), SDL_SYM(SDL_GetError), SDL_SYM(SDL_GetVersion),
-    SDL_SYM(SDL_CreateWindow), SDL_SYM(SDL_DestroyWindow),
-    SDL_SYM(SDL_PollEvent), SDL_SYM(SDL_GetGamepads),
-    SDL_SYM(SDL_OpenGamepad), SDL_SYM(SDL_CloseGamepad),
-    SDL_SYM(SDL_Vulkan_GetInstanceExtensions), SDL_SYM(SDL_Vulkan_CreateSurface),
+    SC_SDL_SYMBOLS(SDL_SYM)
     {"vulkan", "vkGetInstanceProcAddr", (ScNativeFunction)vkGetInstanceProcAddr}
 };
 ScNativeFunction sc_horizon_native_lookup(const char *module, const char *name) {

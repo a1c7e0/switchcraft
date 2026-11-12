@@ -33,6 +33,14 @@ final class HorizonSharedLibrary implements SharedLibrary {
             module = "SDL3";
         } else if ("org.lwjgl.vulkan".equals(lwjglModule) && "libvulkan.so.1".equals(libraryName)) {
             module = "vulkan";
+        } else if ("org.lwjgl.freetype".equals(lwjglModule) && "freetype".equals(libraryName)) {
+            module = "freetype";
+        } else if ("org.lwjgl.openal".equals(lwjglModule) && "openal".equals(libraryName)) {
+            module = "openal";
+        } else if ("org.lwjgl.shaderc".equals(lwjglModule) && "shaderc".equals(libraryName)) {
+            module = "shaderc";
+        } else if ("org.lwjgl.spvc".equals(lwjglModule) && "spirv-cross".equals(libraryName)) {
+            module = "spirv-cross-c";
         } else {
             throw new UnsatisfiedLinkError("Unsupported Horizon static FFM library: " + lwjglModule + "/" + libraryName);
         }
