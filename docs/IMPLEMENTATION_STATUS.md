@@ -8,12 +8,15 @@ belongs to the pinned `java-switch` repository. The legacy branch remains
 
 R4 was published from Switchcraft `e2b9a77` and runtime `aed2558`. Its new
 physical logs show a native L memory pass and continued application class-loading
-failures. See [the R4 report](DEVICE_FEEDBACK_2026_11_13.md). R5 is being prepared
+failures. See [the R4 report](DEVICE_FEEDBACK_2026_11_13.md). R5 is published
 with runtime `a0f0e168bb282e9585c0353c3d9b70a7ad043ce8`, file-URL conversion
 and menu/provenance fixes. The instrumented Minecraft-profile runtime build,
 23 runtime host tests, real loader/resource regressions and pinned-source
 package verification pass. Those fixes are not yet verified on physical
-hardware. Cross-link and host results remain separate.
+hardware. Its 92 Switchcraft tests and final source/SD/debug/native-SDK
+verification passed, as did GitHub assembly/publication and remote asset
+size/digest comparison. See [the R5 release record](DEVICE_R5_RELEASE.md).
+Cross-link and host results remain separate.
 
 | Area | Implemented and built | Host evidence | Horizon evidence |
 | --- | --- | --- | --- |

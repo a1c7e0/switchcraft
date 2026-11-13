@@ -1,0 +1,51 @@
+R5 candidate binary provenance audit (read-only)
+Audit UTC: 2026-11-13T09:03:42.686463+00:00
+SC HEAD: 1d716dbe17f9870e5c2cfbeb351d839ea91412fb
+Frozen java-switch HEAD: a0f0e168bb282e9585c0353c3d9b70a7ad043ce8
+
+External diagnostics: NRO and linked ELF embed exact frozen runtime SHA; NROs match frozen dist copies.
+name | NRO SHA256 | ELF SHA256 | frozen NRO match | both embed runtime SHA
+java-test | 1b574c8a2614aa0cf063e251e51ded50078411309bf4f76e3d7842b2ff72f19b | f6c39d5dfdb9e055c6666d7cf8015a8f58e662f8e4ad95e39bf6c791558ea3a4 | True | True
+ffi-test | 4bd2a5b0b7139a5a1a837d8aadd0bb018d71f9d701249748e1f553d24900092e | 9e23ac9700e4bd4b315ed8d1b814c71c39c23f47e1a0204c6efdbbf3071ba28c | True | True
+java25-test | 5b1d57f4961f6cbc1310ff35e89211608cab39c18d48508ebd394c02ce2b1c9d | fbe4cb3ffc5955e50689f7dc459e72b0b7a58aa83f5fe7dace0ca977adcc55de | True | True
+zero-services-test | e7fe09f4511e1a82775df4b892a9e0d7b185690dd07acb55d60c16ade72301d7 | d5be92ee788353e272660cf169a76b625b94ad9343a446426352d09ed62b0865 | True | True
+
+Switchcraft binaries: NRO and linked ELF embed current SC HEAD.
+name | NRO SHA256 | ELF SHA256 | both embed current SC HEAD
+minecraft-launcher | f6e862d3f6ee9c78e88c3b1d9dcf5a3795182c35e33593a5cef793e852571852 | 4d245b76c9d5acae2ebfa1ac093ed95b890264a37579aaa28208b5d64cc43b50 | True
+switch-diagnostics | 45bf49e86e8c30b5de25d94bed2c5f8f6b0ff9df1d5b3da0dec8bf1a3ce3f3ab | ab09149be47d890cd507fb90557cf7faf7339a5f764e26d4dfc96e9360a5dc50 | True
+switchcraft-java25 | 64402f9bf4fb5018a8c11fe5873d5bc78d4c1aee6be1f076113e2fa8fd9d3323 | f152c7f18fc6cef973dbd1eb42f03b2232fa7f3d7263a3bb9c6f40b59acd8ea4 | True
+vulkan-present | 48108b4bd390380e42127ef4775ea191b0e51498785847ced81603927701375b | ef2c6a42076cf7af1798da78d10f765c98941877e43ddd3c8352b126d5d4be75 | True
+vulkan-test | 015eed8283be72acd694dd9a5161dac6b40f2ce22523860193aa20f048e8807f | 69be8a01658e51ee57751e22510918d97c36b2c80057856b3e30d88c4c3fcc94 | True
+
+Combined menu checks:
+A / Hello: True
+X / JNI-FFM SDL: True
+Y / LWJGL JNI and SDL/Vulkan: True
+B / SDL-Vulkan VMA: True
+R / FreeType-OpenAL: True
+L / STB and shader tools: True
++ / exit: True
+one VM per choice: True
+close and reopen before another attempt: True
+
+SC manifest source revision is current and all nine NRO SHA/size/revisions match manifest: True.
+SHA256SUMS validates every listed artifact: True.
+switchcraft-native-sdk.tar.gz opens and lists: True.
+Frozen runtime manifest: source=a0f0e168bb282e9585c0353c3d9b70a7ad043ce8, source_tree_dirty=False, sdk_abi=1.
+SC integration declares JS_ABI_VERSION 1; frozen runtime package declares SDK ABI 1. No ABI mismatch found.
+
+Conclusion: embedded identities, external copy hashes, combined controls, and current package metadata pass. This is binary/provenance evidence only; it does not establish Horizon execution.
+
+
+Final package verification addendum (read-only, after package completion)
+
+The first package inspection at 09:02:51 UTC observed an in-progress write: the SC manifest still referenced e2b9a7759ec62e9a13667eca15568ea08e00e131, its SHA256SUMS contained pre-R5 NRO hashes, and switchcraft-native-sdk.tar.gz ended early with unexpected EOF. These were transient. After packaging completed (root reports full build exit 0, 92 tests PASS, verify-artifacts.sh PASS at 09:03 UTC), the final audit found:
+
+- dist/manifest.json source_revision=1d716dbe17f9870e5c2cfbeb351d839ea91412fb and java_switch_revision=a0f0e168bb282e9585c0353c3d9b70a7ad043ce8. All nine delivered NRO entries match their actual bytes, sizes, and expected source revisions: five SC NROs use 1d716dbe; four external Java diagnostics use a0f0e168.
+- dist/SHA256SUMS validates every listed artifact, including all nine NROs, the manifest, source/debug artifacts, and native SDK archive.
+- switchcraft-native-sdk.tar.gz SHA256 is deb2eed33122d84cd411dfed9e539f9386ac0ff6a0d0ec0d679f3fee98a53efb, matching the outer manifest; gzip/tar parsing succeeds with 63 members.
+- Slim archive dist/device-test-slim/switchcraft-test-suite-2026-11-13-r5.zip SHA256 is 008b93e3af2cbb26ed3069f4d5ad336f2721f30256a972ad517a8aa96c0a5a98. Its SHA256SUMS validates both the ZIP and slim manifest. ZIP inventory is 9 NROs and 20 JARs.
+- JDK 25 jimage inspection of the slim image found 10 modules, set-equal to the slim manifest inventory: java.base, java.logging, jdk.unsupported, java.management, java.desktop, java.datatransfer, java.xml, java.prefs, jdk.charsets, java.instrument. The embedded runtime/lib/modules SHA256 is 5205699c46a12cff1c742df9f6188e01e69f97e592e894484bdf9fe5b3332cf8, matching the slim manifest file hash.
+
+Final disposition: provenance identities, all NRO hashes, package checksums, SDK archive, slim ZIP inventory, and 10-module runtime image pass. The transient mid-write failures are resolved. ABI remains 1; Horizon execution remains unverified.

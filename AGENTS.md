@@ -9,6 +9,16 @@ branch intact and use explicit expected-head leases when rewriting refs.
 
 ## Current status checkpoint (2026-11-13)
 
+R5 is published at `test-suite-2026-11-13-r5`, executable/source checkpoint
+`1d716dbe17f9870e5c2cfbeb351d839ea91412fb`, runtime
+`a0f0e168bb282e9585c0353c3d9b70a7ad043ce8`. SD ZIP SHA-256:
+`008b93e3af2cbb26ed3069f4d5ad336f2721f30256a972ad517a8aa96c0a5a98`.
+All 92 Switchcraft tests, 23 runtime tests, complete cross-build/package checks
+and GitHub assembly/publication passed. Seven remote asset sizes/digests match
+the verified inputs. See `docs/DEVICE_R5_RELEASE.md` and its evidence directory.
+R5 hardware remains NOT TESTED; fresh standalone A is the first gate. Keep
+published R4/R5 immutable. Later documentation commits do not relabel binaries.
+
 R4 is published at `test-suite-2026-11-12-r4` (Switchcraft `e2b9a77`, runtime
 `aed255884b8f946a903a4c3d62b2745727f4ef2e`). Its SD ZIP SHA-256 is
 `f765f02277c3fa05fdc05b3d5f6dfde544d7fb6e5b45b719732d2f8fbb81aad0`.

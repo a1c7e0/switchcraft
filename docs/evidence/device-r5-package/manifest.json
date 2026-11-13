@@ -1,0 +1,3866 @@
+{
+  "project": "Switchcraft",
+  "target": "26.4-snapshot-6",
+  "release_tag": "test-suite-2026-11-13-r5",
+  "package_id": "test-suite-2026-11-13-r5",
+  "package_kind": "Minimal SD-root device test package",
+  "source_revision": "1d716dbe17f9870e5c2cfbeb351d839ea91412fb",
+  "java_switch_revision": "a0f0e168bb282e9585c0353c3d9b70a7ad043ce8",
+  "sdk_abi": 1,
+  "hardware_verification": "NOT TESTED",
+  "horizon_vm_java_jni_ffm_instrumentation": "NOT TESTED",
+  "minecraft_title_on_horizon": "NOT ACHIEVED / NOT TESTED",
+  "zero_services_launch_observation": "R4 zero-services-test opened and reached the main-entry marker; R4 L private-memory probe passed, including native results, permissions, canaries, split release, SDK ownership and cleanup. R3 launch-failure cause remains unproven.",
+  "combined_y_scope": "Cross-built LWJGL core JNI plus SDL/Vulkan FFM diagnostic; device execution NOT TESTED.",
+  "runtime_image_files": [
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/conf/net.properties",
+      "sha256": "fc290426482925693e5ad9ccd5501930fc9e5cfd414c46cfb6ee3bce681711ad"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/conf/security/java.security",
+      "sha256": "d8583f3389218221f85f4ef2fd440ccb17aa44f0b3f189d08bbba8bf31983cfd"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/conf/security/policy/README.txt",
+      "sha256": "6da0747334b0fea7592fd92614b2bbc8b126535e129b1fee483774d914e98eb5"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/conf/security/policy/limited/default_US_export.policy",
+      "sha256": "758b930a526fc670ab7537f8c26321527050a31f5f42149a2dda623c56a0a1a9"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/conf/security/policy/limited/default_local.policy",
+      "sha256": "2b2627548e61316150d47ffc3e6cad465ca05b3cccd4785eb7d21aa7baa0f441"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/conf/security/policy/limited/exempt_local.policy",
+      "sha256": "8c3d7648abcd95a272ce12db870082937f4d7f6878d730d83cb7fbb31eb8b2c9"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/conf/security/policy/unlimited/default_US_export.policy",
+      "sha256": "758b930a526fc670ab7537f8c26321527050a31f5f42149a2dda623c56a0a1a9"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/conf/security/policy/unlimited/default_local.policy",
+      "sha256": "8d8a318e6d90dfd7e26612d2b6385aa704f686ca6134c551f8928418d92b851a"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.base/ADDITIONAL_LICENSE_INFO",
+      "sha256": "a69bce275ba7a3570af6579cb0f55682cd75fedfcd49e0e8e9022270c447c916"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.base/ASSEMBLY_EXCEPTION",
+      "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.base/LICENSE",
+      "sha256": "4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.base/aes.md",
+      "sha256": "45c6d4da48325edfbff3dcf71c704e504c057904435ed23c6d57046d551eb69d"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.base/c-libutl.md",
+      "sha256": "bef40679922d6fdfb7e4ddb223ad6722300f6054ba737bbf6188d60fcec517f9"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.base/cldr.md",
+      "sha256": "472e341c36efc1136860ed7a6461a2af4a53ae95d55d1126726340f5ba62b06a"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.base/gcc.md",
+      "sha256": "589e34f142cdf7d1430daa573e61c2e3dd0330c9eb5a2c00d4a98b3a4450810b"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.base/icu.md",
+      "sha256": "be23ad20a8231d2241b37fcf401548febd8597de8373f89268882020cb7c8818"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.base/java.desktop/colorimaging.md",
+      "sha256": "04d61e3e8e71dd452ebe52008af5378d9f6640d14578aeb515dc5375973b0189"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.base/java.desktop/freetype.md",
+      "sha256": "e1f43089a3d7f846ac72709ba3f5e3dfe4a07955cbb1f5b580c3c41cf93792dd"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.base/java.desktop/giflib.md",
+      "sha256": "206aab89ec75968e48a6a1ed6df7d8b9bfb7aea12cbe4c9345d93e5d97460a25"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.base/java.desktop/harfbuzz.md",
+      "sha256": "5ec7cba7f8e7fc3a089213140aab6fa1b3bd5bf8a91bf8bddb3b8d315fc5f7d0"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.base/java.desktop/jpeg.md",
+      "sha256": "c1dfb9719a71ad9f861f8728550542d681e25c8ef40e6393606e6e2a0c1d653a"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.base/java.desktop/lcms.md",
+      "sha256": "6d409e73a4ce3c25479b4fb01d05fe79c0458bcd1dccc07f72d3e211d64ac8ce"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.base/java.desktop/libpng.md",
+      "sha256": "f73afb394792f3aeecd959e89487603677a430e56b44eba596d8b572accfd540"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.base/java.desktop/mesa3d.md",
+      "sha256": "63f4e6f75caebbccb95d903fb43e46ac7111b3624d0a34f146b276d7d9e7b152"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.base/java.xml/bcel.md",
+      "sha256": "cd578186ad93de46cca29ec8ace2b11f9da751987f3f140e6095c528596cc8c1"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.base/java.xml/dom.md",
+      "sha256": "6686e8877667584a3a7c07344baadca1a03e29f677162d87c3c0811e990d1148"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.base/java.xml/jcup.md",
+      "sha256": "8d5dcfdf50455a3c34c753a98f21e953248af200415a9084e3f102cb6c43b8bf"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.base/java.xml/schema10part1.md",
+      "sha256": "b220f891e5bfa3aa4b2a4b34dfab53a291553c2ae0fd0b15a4cb1116d4e97770"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.base/java.xml/schema10part2.md",
+      "sha256": "2350e35e91866d5ee5bd7ee7c303b3e424bbca335d36c71452588aac494eaa3e"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.base/java.xml/xalan.md",
+      "sha256": "02bd013fc3f438dbb8fa41fa57888177e015efa6431d37fce6e794c6f353a6a1"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.base/java.xml/xerces.md",
+      "sha256": "4a6bf6b367193ee68681cb2d9fed30ffc5d62dd2d477bd62e0271707d71b3244"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.base/java.xml/xhtml10.md",
+      "sha256": "9a5cde47073ca80cf59127891420f4aed603eb65070738ad027bb19e76fb9319"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.base/java.xml/xhtml10schema.md",
+      "sha256": "7bc51d884aaae6ef27551ee78d404ba3116356790da3d06b665679eb2e1cc002"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.base/java.xml/xhtml11.md",
+      "sha256": "4f99a390896f0f55a0b78376de89bfd2ac845713de85e67e37f884b77e0c3122"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.base/java.xml/xhtml11schema.md",
+      "sha256": "8cd69b1392e286538008f4cb003f85caea3a375c619e697813d820b69857cf74"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.base/java.xml/xmlspec.md",
+      "sha256": "afec263bf5dc67697ee33734ee243f86a878161335ef6298273e4041673b0544"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.base/java.xml/xmlxsd.md",
+      "sha256": "498a5fec63509a8f3949983bb6878ac5c95aaf1d5e3679272d93314371aa0211"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.base/public_suffix.md",
+      "sha256": "861de1e4992a7d28f1de25c73cd50d26a94779ebd749c0643fecfa56442c3429"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.base/siphash.md",
+      "sha256": "5a792b5a74ad2a5f3d6a7ad8b7a841116e58a772c18bc6e392320a365b222c76"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.base/unicode.md",
+      "sha256": "5194d6760f2e7eccc07804196cc619f84e730fa9d10c0529b71416186f4d12dc"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.base/zlib.md",
+      "sha256": "c9c70c36a1f0325e8788771906202d42ba6ab4205caca44ec0f665707e83226b"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.datatransfer/ADDITIONAL_LICENSE_INFO",
+      "sha256": "a69bce275ba7a3570af6579cb0f55682cd75fedfcd49e0e8e9022270c447c916"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.datatransfer/ASSEMBLY_EXCEPTION",
+      "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.datatransfer/LICENSE",
+      "sha256": "4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.datatransfer/aes.md",
+      "sha256": "45c6d4da48325edfbff3dcf71c704e504c057904435ed23c6d57046d551eb69d"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.datatransfer/c-libutl.md",
+      "sha256": "bef40679922d6fdfb7e4ddb223ad6722300f6054ba737bbf6188d60fcec517f9"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.datatransfer/cldr.md",
+      "sha256": "472e341c36efc1136860ed7a6461a2af4a53ae95d55d1126726340f5ba62b06a"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.datatransfer/gcc.md",
+      "sha256": "589e34f142cdf7d1430daa573e61c2e3dd0330c9eb5a2c00d4a98b3a4450810b"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.datatransfer/icu.md",
+      "sha256": "be23ad20a8231d2241b37fcf401548febd8597de8373f89268882020cb7c8818"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.datatransfer/java.desktop/colorimaging.md",
+      "sha256": "04d61e3e8e71dd452ebe52008af5378d9f6640d14578aeb515dc5375973b0189"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.datatransfer/java.desktop/freetype.md",
+      "sha256": "e1f43089a3d7f846ac72709ba3f5e3dfe4a07955cbb1f5b580c3c41cf93792dd"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.datatransfer/java.desktop/giflib.md",
+      "sha256": "206aab89ec75968e48a6a1ed6df7d8b9bfb7aea12cbe4c9345d93e5d97460a25"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.datatransfer/java.desktop/harfbuzz.md",
+      "sha256": "5ec7cba7f8e7fc3a089213140aab6fa1b3bd5bf8a91bf8bddb3b8d315fc5f7d0"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.datatransfer/java.desktop/jpeg.md",
+      "sha256": "c1dfb9719a71ad9f861f8728550542d681e25c8ef40e6393606e6e2a0c1d653a"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.datatransfer/java.desktop/lcms.md",
+      "sha256": "6d409e73a4ce3c25479b4fb01d05fe79c0458bcd1dccc07f72d3e211d64ac8ce"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.datatransfer/java.desktop/libpng.md",
+      "sha256": "f73afb394792f3aeecd959e89487603677a430e56b44eba596d8b572accfd540"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.datatransfer/java.desktop/mesa3d.md",
+      "sha256": "63f4e6f75caebbccb95d903fb43e46ac7111b3624d0a34f146b276d7d9e7b152"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.datatransfer/java.xml/bcel.md",
+      "sha256": "cd578186ad93de46cca29ec8ace2b11f9da751987f3f140e6095c528596cc8c1"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.datatransfer/java.xml/dom.md",
+      "sha256": "6686e8877667584a3a7c07344baadca1a03e29f677162d87c3c0811e990d1148"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.datatransfer/java.xml/jcup.md",
+      "sha256": "8d5dcfdf50455a3c34c753a98f21e953248af200415a9084e3f102cb6c43b8bf"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.datatransfer/java.xml/schema10part1.md",
+      "sha256": "b220f891e5bfa3aa4b2a4b34dfab53a291553c2ae0fd0b15a4cb1116d4e97770"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.datatransfer/java.xml/schema10part2.md",
+      "sha256": "2350e35e91866d5ee5bd7ee7c303b3e424bbca335d36c71452588aac494eaa3e"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.datatransfer/java.xml/xalan.md",
+      "sha256": "02bd013fc3f438dbb8fa41fa57888177e015efa6431d37fce6e794c6f353a6a1"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.datatransfer/java.xml/xerces.md",
+      "sha256": "4a6bf6b367193ee68681cb2d9fed30ffc5d62dd2d477bd62e0271707d71b3244"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.datatransfer/java.xml/xhtml10.md",
+      "sha256": "9a5cde47073ca80cf59127891420f4aed603eb65070738ad027bb19e76fb9319"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.datatransfer/java.xml/xhtml10schema.md",
+      "sha256": "7bc51d884aaae6ef27551ee78d404ba3116356790da3d06b665679eb2e1cc002"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.datatransfer/java.xml/xhtml11.md",
+      "sha256": "4f99a390896f0f55a0b78376de89bfd2ac845713de85e67e37f884b77e0c3122"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.datatransfer/java.xml/xhtml11schema.md",
+      "sha256": "8cd69b1392e286538008f4cb003f85caea3a375c619e697813d820b69857cf74"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.datatransfer/java.xml/xmlspec.md",
+      "sha256": "afec263bf5dc67697ee33734ee243f86a878161335ef6298273e4041673b0544"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.datatransfer/java.xml/xmlxsd.md",
+      "sha256": "498a5fec63509a8f3949983bb6878ac5c95aaf1d5e3679272d93314371aa0211"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.datatransfer/public_suffix.md",
+      "sha256": "861de1e4992a7d28f1de25c73cd50d26a94779ebd749c0643fecfa56442c3429"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.datatransfer/siphash.md",
+      "sha256": "5a792b5a74ad2a5f3d6a7ad8b7a841116e58a772c18bc6e392320a365b222c76"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.datatransfer/unicode.md",
+      "sha256": "5194d6760f2e7eccc07804196cc619f84e730fa9d10c0529b71416186f4d12dc"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.datatransfer/zlib.md",
+      "sha256": "c9c70c36a1f0325e8788771906202d42ba6ab4205caca44ec0f665707e83226b"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.desktop/ADDITIONAL_LICENSE_INFO",
+      "sha256": "a69bce275ba7a3570af6579cb0f55682cd75fedfcd49e0e8e9022270c447c916"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.desktop/ASSEMBLY_EXCEPTION",
+      "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.desktop/LICENSE",
+      "sha256": "4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.desktop/aes.md",
+      "sha256": "45c6d4da48325edfbff3dcf71c704e504c057904435ed23c6d57046d551eb69d"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.desktop/c-libutl.md",
+      "sha256": "bef40679922d6fdfb7e4ddb223ad6722300f6054ba737bbf6188d60fcec517f9"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.desktop/cldr.md",
+      "sha256": "472e341c36efc1136860ed7a6461a2af4a53ae95d55d1126726340f5ba62b06a"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.desktop/gcc.md",
+      "sha256": "589e34f142cdf7d1430daa573e61c2e3dd0330c9eb5a2c00d4a98b3a4450810b"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.desktop/icu.md",
+      "sha256": "be23ad20a8231d2241b37fcf401548febd8597de8373f89268882020cb7c8818"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.desktop/java.desktop/colorimaging.md",
+      "sha256": "04d61e3e8e71dd452ebe52008af5378d9f6640d14578aeb515dc5375973b0189"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.desktop/java.desktop/freetype.md",
+      "sha256": "e1f43089a3d7f846ac72709ba3f5e3dfe4a07955cbb1f5b580c3c41cf93792dd"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.desktop/java.desktop/giflib.md",
+      "sha256": "206aab89ec75968e48a6a1ed6df7d8b9bfb7aea12cbe4c9345d93e5d97460a25"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.desktop/java.desktop/harfbuzz.md",
+      "sha256": "5ec7cba7f8e7fc3a089213140aab6fa1b3bd5bf8a91bf8bddb3b8d315fc5f7d0"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.desktop/java.desktop/jpeg.md",
+      "sha256": "c1dfb9719a71ad9f861f8728550542d681e25c8ef40e6393606e6e2a0c1d653a"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.desktop/java.desktop/lcms.md",
+      "sha256": "6d409e73a4ce3c25479b4fb01d05fe79c0458bcd1dccc07f72d3e211d64ac8ce"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.desktop/java.desktop/libpng.md",
+      "sha256": "f73afb394792f3aeecd959e89487603677a430e56b44eba596d8b572accfd540"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.desktop/java.desktop/mesa3d.md",
+      "sha256": "63f4e6f75caebbccb95d903fb43e46ac7111b3624d0a34f146b276d7d9e7b152"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.desktop/java.xml/bcel.md",
+      "sha256": "cd578186ad93de46cca29ec8ace2b11f9da751987f3f140e6095c528596cc8c1"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.desktop/java.xml/dom.md",
+      "sha256": "6686e8877667584a3a7c07344baadca1a03e29f677162d87c3c0811e990d1148"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.desktop/java.xml/jcup.md",
+      "sha256": "8d5dcfdf50455a3c34c753a98f21e953248af200415a9084e3f102cb6c43b8bf"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.desktop/java.xml/schema10part1.md",
+      "sha256": "b220f891e5bfa3aa4b2a4b34dfab53a291553c2ae0fd0b15a4cb1116d4e97770"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.desktop/java.xml/schema10part2.md",
+      "sha256": "2350e35e91866d5ee5bd7ee7c303b3e424bbca335d36c71452588aac494eaa3e"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.desktop/java.xml/xalan.md",
+      "sha256": "02bd013fc3f438dbb8fa41fa57888177e015efa6431d37fce6e794c6f353a6a1"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.desktop/java.xml/xerces.md",
+      "sha256": "4a6bf6b367193ee68681cb2d9fed30ffc5d62dd2d477bd62e0271707d71b3244"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.desktop/java.xml/xhtml10.md",
+      "sha256": "9a5cde47073ca80cf59127891420f4aed603eb65070738ad027bb19e76fb9319"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.desktop/java.xml/xhtml10schema.md",
+      "sha256": "7bc51d884aaae6ef27551ee78d404ba3116356790da3d06b665679eb2e1cc002"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.desktop/java.xml/xhtml11.md",
+      "sha256": "4f99a390896f0f55a0b78376de89bfd2ac845713de85e67e37f884b77e0c3122"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.desktop/java.xml/xhtml11schema.md",
+      "sha256": "8cd69b1392e286538008f4cb003f85caea3a375c619e697813d820b69857cf74"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.desktop/java.xml/xmlspec.md",
+      "sha256": "afec263bf5dc67697ee33734ee243f86a878161335ef6298273e4041673b0544"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.desktop/java.xml/xmlxsd.md",
+      "sha256": "498a5fec63509a8f3949983bb6878ac5c95aaf1d5e3679272d93314371aa0211"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.desktop/public_suffix.md",
+      "sha256": "861de1e4992a7d28f1de25c73cd50d26a94779ebd749c0643fecfa56442c3429"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.desktop/siphash.md",
+      "sha256": "5a792b5a74ad2a5f3d6a7ad8b7a841116e58a772c18bc6e392320a365b222c76"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.desktop/unicode.md",
+      "sha256": "5194d6760f2e7eccc07804196cc619f84e730fa9d10c0529b71416186f4d12dc"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.desktop/zlib.md",
+      "sha256": "c9c70c36a1f0325e8788771906202d42ba6ab4205caca44ec0f665707e83226b"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.instrument/ADDITIONAL_LICENSE_INFO",
+      "sha256": "a69bce275ba7a3570af6579cb0f55682cd75fedfcd49e0e8e9022270c447c916"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.instrument/ASSEMBLY_EXCEPTION",
+      "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.instrument/LICENSE",
+      "sha256": "4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.instrument/aes.md",
+      "sha256": "45c6d4da48325edfbff3dcf71c704e504c057904435ed23c6d57046d551eb69d"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.instrument/c-libutl.md",
+      "sha256": "bef40679922d6fdfb7e4ddb223ad6722300f6054ba737bbf6188d60fcec517f9"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.instrument/cldr.md",
+      "sha256": "472e341c36efc1136860ed7a6461a2af4a53ae95d55d1126726340f5ba62b06a"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.instrument/gcc.md",
+      "sha256": "589e34f142cdf7d1430daa573e61c2e3dd0330c9eb5a2c00d4a98b3a4450810b"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.instrument/icu.md",
+      "sha256": "be23ad20a8231d2241b37fcf401548febd8597de8373f89268882020cb7c8818"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.instrument/java.desktop/colorimaging.md",
+      "sha256": "04d61e3e8e71dd452ebe52008af5378d9f6640d14578aeb515dc5375973b0189"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.instrument/java.desktop/freetype.md",
+      "sha256": "e1f43089a3d7f846ac72709ba3f5e3dfe4a07955cbb1f5b580c3c41cf93792dd"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.instrument/java.desktop/giflib.md",
+      "sha256": "206aab89ec75968e48a6a1ed6df7d8b9bfb7aea12cbe4c9345d93e5d97460a25"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.instrument/java.desktop/harfbuzz.md",
+      "sha256": "5ec7cba7f8e7fc3a089213140aab6fa1b3bd5bf8a91bf8bddb3b8d315fc5f7d0"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.instrument/java.desktop/jpeg.md",
+      "sha256": "c1dfb9719a71ad9f861f8728550542d681e25c8ef40e6393606e6e2a0c1d653a"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.instrument/java.desktop/lcms.md",
+      "sha256": "6d409e73a4ce3c25479b4fb01d05fe79c0458bcd1dccc07f72d3e211d64ac8ce"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.instrument/java.desktop/libpng.md",
+      "sha256": "f73afb394792f3aeecd959e89487603677a430e56b44eba596d8b572accfd540"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.instrument/java.desktop/mesa3d.md",
+      "sha256": "63f4e6f75caebbccb95d903fb43e46ac7111b3624d0a34f146b276d7d9e7b152"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.instrument/java.xml/bcel.md",
+      "sha256": "cd578186ad93de46cca29ec8ace2b11f9da751987f3f140e6095c528596cc8c1"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.instrument/java.xml/dom.md",
+      "sha256": "6686e8877667584a3a7c07344baadca1a03e29f677162d87c3c0811e990d1148"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.instrument/java.xml/jcup.md",
+      "sha256": "8d5dcfdf50455a3c34c753a98f21e953248af200415a9084e3f102cb6c43b8bf"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.instrument/java.xml/schema10part1.md",
+      "sha256": "b220f891e5bfa3aa4b2a4b34dfab53a291553c2ae0fd0b15a4cb1116d4e97770"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.instrument/java.xml/schema10part2.md",
+      "sha256": "2350e35e91866d5ee5bd7ee7c303b3e424bbca335d36c71452588aac494eaa3e"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.instrument/java.xml/xalan.md",
+      "sha256": "02bd013fc3f438dbb8fa41fa57888177e015efa6431d37fce6e794c6f353a6a1"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.instrument/java.xml/xerces.md",
+      "sha256": "4a6bf6b367193ee68681cb2d9fed30ffc5d62dd2d477bd62e0271707d71b3244"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.instrument/java.xml/xhtml10.md",
+      "sha256": "9a5cde47073ca80cf59127891420f4aed603eb65070738ad027bb19e76fb9319"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.instrument/java.xml/xhtml10schema.md",
+      "sha256": "7bc51d884aaae6ef27551ee78d404ba3116356790da3d06b665679eb2e1cc002"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.instrument/java.xml/xhtml11.md",
+      "sha256": "4f99a390896f0f55a0b78376de89bfd2ac845713de85e67e37f884b77e0c3122"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.instrument/java.xml/xhtml11schema.md",
+      "sha256": "8cd69b1392e286538008f4cb003f85caea3a375c619e697813d820b69857cf74"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.instrument/java.xml/xmlspec.md",
+      "sha256": "afec263bf5dc67697ee33734ee243f86a878161335ef6298273e4041673b0544"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.instrument/java.xml/xmlxsd.md",
+      "sha256": "498a5fec63509a8f3949983bb6878ac5c95aaf1d5e3679272d93314371aa0211"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.instrument/public_suffix.md",
+      "sha256": "861de1e4992a7d28f1de25c73cd50d26a94779ebd749c0643fecfa56442c3429"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.instrument/siphash.md",
+      "sha256": "5a792b5a74ad2a5f3d6a7ad8b7a841116e58a772c18bc6e392320a365b222c76"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.instrument/unicode.md",
+      "sha256": "5194d6760f2e7eccc07804196cc619f84e730fa9d10c0529b71416186f4d12dc"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.instrument/zlib.md",
+      "sha256": "c9c70c36a1f0325e8788771906202d42ba6ab4205caca44ec0f665707e83226b"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.logging/ADDITIONAL_LICENSE_INFO",
+      "sha256": "a69bce275ba7a3570af6579cb0f55682cd75fedfcd49e0e8e9022270c447c916"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.logging/ASSEMBLY_EXCEPTION",
+      "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.logging/LICENSE",
+      "sha256": "4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.logging/aes.md",
+      "sha256": "45c6d4da48325edfbff3dcf71c704e504c057904435ed23c6d57046d551eb69d"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.logging/c-libutl.md",
+      "sha256": "bef40679922d6fdfb7e4ddb223ad6722300f6054ba737bbf6188d60fcec517f9"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.logging/cldr.md",
+      "sha256": "472e341c36efc1136860ed7a6461a2af4a53ae95d55d1126726340f5ba62b06a"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.logging/gcc.md",
+      "sha256": "589e34f142cdf7d1430daa573e61c2e3dd0330c9eb5a2c00d4a98b3a4450810b"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.logging/icu.md",
+      "sha256": "be23ad20a8231d2241b37fcf401548febd8597de8373f89268882020cb7c8818"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.logging/java.desktop/colorimaging.md",
+      "sha256": "04d61e3e8e71dd452ebe52008af5378d9f6640d14578aeb515dc5375973b0189"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.logging/java.desktop/freetype.md",
+      "sha256": "e1f43089a3d7f846ac72709ba3f5e3dfe4a07955cbb1f5b580c3c41cf93792dd"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.logging/java.desktop/giflib.md",
+      "sha256": "206aab89ec75968e48a6a1ed6df7d8b9bfb7aea12cbe4c9345d93e5d97460a25"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.logging/java.desktop/harfbuzz.md",
+      "sha256": "5ec7cba7f8e7fc3a089213140aab6fa1b3bd5bf8a91bf8bddb3b8d315fc5f7d0"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.logging/java.desktop/jpeg.md",
+      "sha256": "c1dfb9719a71ad9f861f8728550542d681e25c8ef40e6393606e6e2a0c1d653a"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.logging/java.desktop/lcms.md",
+      "sha256": "6d409e73a4ce3c25479b4fb01d05fe79c0458bcd1dccc07f72d3e211d64ac8ce"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.logging/java.desktop/libpng.md",
+      "sha256": "f73afb394792f3aeecd959e89487603677a430e56b44eba596d8b572accfd540"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.logging/java.desktop/mesa3d.md",
+      "sha256": "63f4e6f75caebbccb95d903fb43e46ac7111b3624d0a34f146b276d7d9e7b152"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.logging/java.xml/bcel.md",
+      "sha256": "cd578186ad93de46cca29ec8ace2b11f9da751987f3f140e6095c528596cc8c1"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.logging/java.xml/dom.md",
+      "sha256": "6686e8877667584a3a7c07344baadca1a03e29f677162d87c3c0811e990d1148"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.logging/java.xml/jcup.md",
+      "sha256": "8d5dcfdf50455a3c34c753a98f21e953248af200415a9084e3f102cb6c43b8bf"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.logging/java.xml/schema10part1.md",
+      "sha256": "b220f891e5bfa3aa4b2a4b34dfab53a291553c2ae0fd0b15a4cb1116d4e97770"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.logging/java.xml/schema10part2.md",
+      "sha256": "2350e35e91866d5ee5bd7ee7c303b3e424bbca335d36c71452588aac494eaa3e"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.logging/java.xml/xalan.md",
+      "sha256": "02bd013fc3f438dbb8fa41fa57888177e015efa6431d37fce6e794c6f353a6a1"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.logging/java.xml/xerces.md",
+      "sha256": "4a6bf6b367193ee68681cb2d9fed30ffc5d62dd2d477bd62e0271707d71b3244"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.logging/java.xml/xhtml10.md",
+      "sha256": "9a5cde47073ca80cf59127891420f4aed603eb65070738ad027bb19e76fb9319"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.logging/java.xml/xhtml10schema.md",
+      "sha256": "7bc51d884aaae6ef27551ee78d404ba3116356790da3d06b665679eb2e1cc002"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.logging/java.xml/xhtml11.md",
+      "sha256": "4f99a390896f0f55a0b78376de89bfd2ac845713de85e67e37f884b77e0c3122"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.logging/java.xml/xhtml11schema.md",
+      "sha256": "8cd69b1392e286538008f4cb003f85caea3a375c619e697813d820b69857cf74"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.logging/java.xml/xmlspec.md",
+      "sha256": "afec263bf5dc67697ee33734ee243f86a878161335ef6298273e4041673b0544"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.logging/java.xml/xmlxsd.md",
+      "sha256": "498a5fec63509a8f3949983bb6878ac5c95aaf1d5e3679272d93314371aa0211"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.logging/public_suffix.md",
+      "sha256": "861de1e4992a7d28f1de25c73cd50d26a94779ebd749c0643fecfa56442c3429"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.logging/siphash.md",
+      "sha256": "5a792b5a74ad2a5f3d6a7ad8b7a841116e58a772c18bc6e392320a365b222c76"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.logging/unicode.md",
+      "sha256": "5194d6760f2e7eccc07804196cc619f84e730fa9d10c0529b71416186f4d12dc"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.logging/zlib.md",
+      "sha256": "c9c70c36a1f0325e8788771906202d42ba6ab4205caca44ec0f665707e83226b"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.management/ADDITIONAL_LICENSE_INFO",
+      "sha256": "a69bce275ba7a3570af6579cb0f55682cd75fedfcd49e0e8e9022270c447c916"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.management/ASSEMBLY_EXCEPTION",
+      "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.management/LICENSE",
+      "sha256": "4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.management/aes.md",
+      "sha256": "45c6d4da48325edfbff3dcf71c704e504c057904435ed23c6d57046d551eb69d"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.management/c-libutl.md",
+      "sha256": "bef40679922d6fdfb7e4ddb223ad6722300f6054ba737bbf6188d60fcec517f9"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.management/cldr.md",
+      "sha256": "472e341c36efc1136860ed7a6461a2af4a53ae95d55d1126726340f5ba62b06a"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.management/gcc.md",
+      "sha256": "589e34f142cdf7d1430daa573e61c2e3dd0330c9eb5a2c00d4a98b3a4450810b"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.management/icu.md",
+      "sha256": "be23ad20a8231d2241b37fcf401548febd8597de8373f89268882020cb7c8818"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.management/java.desktop/colorimaging.md",
+      "sha256": "04d61e3e8e71dd452ebe52008af5378d9f6640d14578aeb515dc5375973b0189"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.management/java.desktop/freetype.md",
+      "sha256": "e1f43089a3d7f846ac72709ba3f5e3dfe4a07955cbb1f5b580c3c41cf93792dd"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.management/java.desktop/giflib.md",
+      "sha256": "206aab89ec75968e48a6a1ed6df7d8b9bfb7aea12cbe4c9345d93e5d97460a25"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.management/java.desktop/harfbuzz.md",
+      "sha256": "5ec7cba7f8e7fc3a089213140aab6fa1b3bd5bf8a91bf8bddb3b8d315fc5f7d0"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.management/java.desktop/jpeg.md",
+      "sha256": "c1dfb9719a71ad9f861f8728550542d681e25c8ef40e6393606e6e2a0c1d653a"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.management/java.desktop/lcms.md",
+      "sha256": "6d409e73a4ce3c25479b4fb01d05fe79c0458bcd1dccc07f72d3e211d64ac8ce"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.management/java.desktop/libpng.md",
+      "sha256": "f73afb394792f3aeecd959e89487603677a430e56b44eba596d8b572accfd540"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.management/java.desktop/mesa3d.md",
+      "sha256": "63f4e6f75caebbccb95d903fb43e46ac7111b3624d0a34f146b276d7d9e7b152"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.management/java.xml/bcel.md",
+      "sha256": "cd578186ad93de46cca29ec8ace2b11f9da751987f3f140e6095c528596cc8c1"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.management/java.xml/dom.md",
+      "sha256": "6686e8877667584a3a7c07344baadca1a03e29f677162d87c3c0811e990d1148"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.management/java.xml/jcup.md",
+      "sha256": "8d5dcfdf50455a3c34c753a98f21e953248af200415a9084e3f102cb6c43b8bf"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.management/java.xml/schema10part1.md",
+      "sha256": "b220f891e5bfa3aa4b2a4b34dfab53a291553c2ae0fd0b15a4cb1116d4e97770"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.management/java.xml/schema10part2.md",
+      "sha256": "2350e35e91866d5ee5bd7ee7c303b3e424bbca335d36c71452588aac494eaa3e"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.management/java.xml/xalan.md",
+      "sha256": "02bd013fc3f438dbb8fa41fa57888177e015efa6431d37fce6e794c6f353a6a1"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.management/java.xml/xerces.md",
+      "sha256": "4a6bf6b367193ee68681cb2d9fed30ffc5d62dd2d477bd62e0271707d71b3244"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.management/java.xml/xhtml10.md",
+      "sha256": "9a5cde47073ca80cf59127891420f4aed603eb65070738ad027bb19e76fb9319"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.management/java.xml/xhtml10schema.md",
+      "sha256": "7bc51d884aaae6ef27551ee78d404ba3116356790da3d06b665679eb2e1cc002"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.management/java.xml/xhtml11.md",
+      "sha256": "4f99a390896f0f55a0b78376de89bfd2ac845713de85e67e37f884b77e0c3122"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.management/java.xml/xhtml11schema.md",
+      "sha256": "8cd69b1392e286538008f4cb003f85caea3a375c619e697813d820b69857cf74"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.management/java.xml/xmlspec.md",
+      "sha256": "afec263bf5dc67697ee33734ee243f86a878161335ef6298273e4041673b0544"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.management/java.xml/xmlxsd.md",
+      "sha256": "498a5fec63509a8f3949983bb6878ac5c95aaf1d5e3679272d93314371aa0211"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.management/public_suffix.md",
+      "sha256": "861de1e4992a7d28f1de25c73cd50d26a94779ebd749c0643fecfa56442c3429"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.management/siphash.md",
+      "sha256": "5a792b5a74ad2a5f3d6a7ad8b7a841116e58a772c18bc6e392320a365b222c76"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.management/unicode.md",
+      "sha256": "5194d6760f2e7eccc07804196cc619f84e730fa9d10c0529b71416186f4d12dc"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.management/zlib.md",
+      "sha256": "c9c70c36a1f0325e8788771906202d42ba6ab4205caca44ec0f665707e83226b"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.prefs/ADDITIONAL_LICENSE_INFO",
+      "sha256": "a69bce275ba7a3570af6579cb0f55682cd75fedfcd49e0e8e9022270c447c916"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.prefs/ASSEMBLY_EXCEPTION",
+      "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.prefs/LICENSE",
+      "sha256": "4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.prefs/aes.md",
+      "sha256": "45c6d4da48325edfbff3dcf71c704e504c057904435ed23c6d57046d551eb69d"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.prefs/c-libutl.md",
+      "sha256": "bef40679922d6fdfb7e4ddb223ad6722300f6054ba737bbf6188d60fcec517f9"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.prefs/cldr.md",
+      "sha256": "472e341c36efc1136860ed7a6461a2af4a53ae95d55d1126726340f5ba62b06a"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.prefs/gcc.md",
+      "sha256": "589e34f142cdf7d1430daa573e61c2e3dd0330c9eb5a2c00d4a98b3a4450810b"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.prefs/icu.md",
+      "sha256": "be23ad20a8231d2241b37fcf401548febd8597de8373f89268882020cb7c8818"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.prefs/java.desktop/colorimaging.md",
+      "sha256": "04d61e3e8e71dd452ebe52008af5378d9f6640d14578aeb515dc5375973b0189"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.prefs/java.desktop/freetype.md",
+      "sha256": "e1f43089a3d7f846ac72709ba3f5e3dfe4a07955cbb1f5b580c3c41cf93792dd"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.prefs/java.desktop/giflib.md",
+      "sha256": "206aab89ec75968e48a6a1ed6df7d8b9bfb7aea12cbe4c9345d93e5d97460a25"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.prefs/java.desktop/harfbuzz.md",
+      "sha256": "5ec7cba7f8e7fc3a089213140aab6fa1b3bd5bf8a91bf8bddb3b8d315fc5f7d0"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.prefs/java.desktop/jpeg.md",
+      "sha256": "c1dfb9719a71ad9f861f8728550542d681e25c8ef40e6393606e6e2a0c1d653a"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.prefs/java.desktop/lcms.md",
+      "sha256": "6d409e73a4ce3c25479b4fb01d05fe79c0458bcd1dccc07f72d3e211d64ac8ce"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.prefs/java.desktop/libpng.md",
+      "sha256": "f73afb394792f3aeecd959e89487603677a430e56b44eba596d8b572accfd540"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.prefs/java.desktop/mesa3d.md",
+      "sha256": "63f4e6f75caebbccb95d903fb43e46ac7111b3624d0a34f146b276d7d9e7b152"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.prefs/java.xml/bcel.md",
+      "sha256": "cd578186ad93de46cca29ec8ace2b11f9da751987f3f140e6095c528596cc8c1"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.prefs/java.xml/dom.md",
+      "sha256": "6686e8877667584a3a7c07344baadca1a03e29f677162d87c3c0811e990d1148"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.prefs/java.xml/jcup.md",
+      "sha256": "8d5dcfdf50455a3c34c753a98f21e953248af200415a9084e3f102cb6c43b8bf"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.prefs/java.xml/schema10part1.md",
+      "sha256": "b220f891e5bfa3aa4b2a4b34dfab53a291553c2ae0fd0b15a4cb1116d4e97770"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.prefs/java.xml/schema10part2.md",
+      "sha256": "2350e35e91866d5ee5bd7ee7c303b3e424bbca335d36c71452588aac494eaa3e"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.prefs/java.xml/xalan.md",
+      "sha256": "02bd013fc3f438dbb8fa41fa57888177e015efa6431d37fce6e794c6f353a6a1"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.prefs/java.xml/xerces.md",
+      "sha256": "4a6bf6b367193ee68681cb2d9fed30ffc5d62dd2d477bd62e0271707d71b3244"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.prefs/java.xml/xhtml10.md",
+      "sha256": "9a5cde47073ca80cf59127891420f4aed603eb65070738ad027bb19e76fb9319"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.prefs/java.xml/xhtml10schema.md",
+      "sha256": "7bc51d884aaae6ef27551ee78d404ba3116356790da3d06b665679eb2e1cc002"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.prefs/java.xml/xhtml11.md",
+      "sha256": "4f99a390896f0f55a0b78376de89bfd2ac845713de85e67e37f884b77e0c3122"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.prefs/java.xml/xhtml11schema.md",
+      "sha256": "8cd69b1392e286538008f4cb003f85caea3a375c619e697813d820b69857cf74"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.prefs/java.xml/xmlspec.md",
+      "sha256": "afec263bf5dc67697ee33734ee243f86a878161335ef6298273e4041673b0544"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.prefs/java.xml/xmlxsd.md",
+      "sha256": "498a5fec63509a8f3949983bb6878ac5c95aaf1d5e3679272d93314371aa0211"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.prefs/public_suffix.md",
+      "sha256": "861de1e4992a7d28f1de25c73cd50d26a94779ebd749c0643fecfa56442c3429"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.prefs/siphash.md",
+      "sha256": "5a792b5a74ad2a5f3d6a7ad8b7a841116e58a772c18bc6e392320a365b222c76"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.prefs/unicode.md",
+      "sha256": "5194d6760f2e7eccc07804196cc619f84e730fa9d10c0529b71416186f4d12dc"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.prefs/zlib.md",
+      "sha256": "c9c70c36a1f0325e8788771906202d42ba6ab4205caca44ec0f665707e83226b"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.xml/ADDITIONAL_LICENSE_INFO",
+      "sha256": "a69bce275ba7a3570af6579cb0f55682cd75fedfcd49e0e8e9022270c447c916"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.xml/ASSEMBLY_EXCEPTION",
+      "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.xml/LICENSE",
+      "sha256": "4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.xml/aes.md",
+      "sha256": "45c6d4da48325edfbff3dcf71c704e504c057904435ed23c6d57046d551eb69d"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.xml/c-libutl.md",
+      "sha256": "bef40679922d6fdfb7e4ddb223ad6722300f6054ba737bbf6188d60fcec517f9"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.xml/cldr.md",
+      "sha256": "472e341c36efc1136860ed7a6461a2af4a53ae95d55d1126726340f5ba62b06a"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.xml/gcc.md",
+      "sha256": "589e34f142cdf7d1430daa573e61c2e3dd0330c9eb5a2c00d4a98b3a4450810b"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.xml/icu.md",
+      "sha256": "be23ad20a8231d2241b37fcf401548febd8597de8373f89268882020cb7c8818"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.xml/java.desktop/colorimaging.md",
+      "sha256": "04d61e3e8e71dd452ebe52008af5378d9f6640d14578aeb515dc5375973b0189"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.xml/java.desktop/freetype.md",
+      "sha256": "e1f43089a3d7f846ac72709ba3f5e3dfe4a07955cbb1f5b580c3c41cf93792dd"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.xml/java.desktop/giflib.md",
+      "sha256": "206aab89ec75968e48a6a1ed6df7d8b9bfb7aea12cbe4c9345d93e5d97460a25"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.xml/java.desktop/harfbuzz.md",
+      "sha256": "5ec7cba7f8e7fc3a089213140aab6fa1b3bd5bf8a91bf8bddb3b8d315fc5f7d0"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.xml/java.desktop/jpeg.md",
+      "sha256": "c1dfb9719a71ad9f861f8728550542d681e25c8ef40e6393606e6e2a0c1d653a"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.xml/java.desktop/lcms.md",
+      "sha256": "6d409e73a4ce3c25479b4fb01d05fe79c0458bcd1dccc07f72d3e211d64ac8ce"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.xml/java.desktop/libpng.md",
+      "sha256": "f73afb394792f3aeecd959e89487603677a430e56b44eba596d8b572accfd540"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.xml/java.desktop/mesa3d.md",
+      "sha256": "63f4e6f75caebbccb95d903fb43e46ac7111b3624d0a34f146b276d7d9e7b152"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.xml/java.xml/bcel.md",
+      "sha256": "cd578186ad93de46cca29ec8ace2b11f9da751987f3f140e6095c528596cc8c1"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.xml/java.xml/dom.md",
+      "sha256": "6686e8877667584a3a7c07344baadca1a03e29f677162d87c3c0811e990d1148"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.xml/java.xml/jcup.md",
+      "sha256": "8d5dcfdf50455a3c34c753a98f21e953248af200415a9084e3f102cb6c43b8bf"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.xml/java.xml/schema10part1.md",
+      "sha256": "b220f891e5bfa3aa4b2a4b34dfab53a291553c2ae0fd0b15a4cb1116d4e97770"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.xml/java.xml/schema10part2.md",
+      "sha256": "2350e35e91866d5ee5bd7ee7c303b3e424bbca335d36c71452588aac494eaa3e"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.xml/java.xml/xalan.md",
+      "sha256": "02bd013fc3f438dbb8fa41fa57888177e015efa6431d37fce6e794c6f353a6a1"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.xml/java.xml/xerces.md",
+      "sha256": "4a6bf6b367193ee68681cb2d9fed30ffc5d62dd2d477bd62e0271707d71b3244"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.xml/java.xml/xhtml10.md",
+      "sha256": "9a5cde47073ca80cf59127891420f4aed603eb65070738ad027bb19e76fb9319"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.xml/java.xml/xhtml10schema.md",
+      "sha256": "7bc51d884aaae6ef27551ee78d404ba3116356790da3d06b665679eb2e1cc002"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.xml/java.xml/xhtml11.md",
+      "sha256": "4f99a390896f0f55a0b78376de89bfd2ac845713de85e67e37f884b77e0c3122"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.xml/java.xml/xhtml11schema.md",
+      "sha256": "8cd69b1392e286538008f4cb003f85caea3a375c619e697813d820b69857cf74"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.xml/java.xml/xmlspec.md",
+      "sha256": "afec263bf5dc67697ee33734ee243f86a878161335ef6298273e4041673b0544"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.xml/java.xml/xmlxsd.md",
+      "sha256": "498a5fec63509a8f3949983bb6878ac5c95aaf1d5e3679272d93314371aa0211"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.xml/public_suffix.md",
+      "sha256": "861de1e4992a7d28f1de25c73cd50d26a94779ebd749c0643fecfa56442c3429"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.xml/siphash.md",
+      "sha256": "5a792b5a74ad2a5f3d6a7ad8b7a841116e58a772c18bc6e392320a365b222c76"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.xml/unicode.md",
+      "sha256": "5194d6760f2e7eccc07804196cc619f84e730fa9d10c0529b71416186f4d12dc"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.xml/zlib.md",
+      "sha256": "c9c70c36a1f0325e8788771906202d42ba6ab4205caca44ec0f665707e83226b"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.charsets/ADDITIONAL_LICENSE_INFO",
+      "sha256": "a69bce275ba7a3570af6579cb0f55682cd75fedfcd49e0e8e9022270c447c916"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.charsets/ASSEMBLY_EXCEPTION",
+      "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.charsets/LICENSE",
+      "sha256": "4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.charsets/aes.md",
+      "sha256": "45c6d4da48325edfbff3dcf71c704e504c057904435ed23c6d57046d551eb69d"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.charsets/c-libutl.md",
+      "sha256": "bef40679922d6fdfb7e4ddb223ad6722300f6054ba737bbf6188d60fcec517f9"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.charsets/cldr.md",
+      "sha256": "472e341c36efc1136860ed7a6461a2af4a53ae95d55d1126726340f5ba62b06a"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.charsets/gcc.md",
+      "sha256": "589e34f142cdf7d1430daa573e61c2e3dd0330c9eb5a2c00d4a98b3a4450810b"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.charsets/icu.md",
+      "sha256": "be23ad20a8231d2241b37fcf401548febd8597de8373f89268882020cb7c8818"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.charsets/java.desktop/colorimaging.md",
+      "sha256": "04d61e3e8e71dd452ebe52008af5378d9f6640d14578aeb515dc5375973b0189"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.charsets/java.desktop/freetype.md",
+      "sha256": "e1f43089a3d7f846ac72709ba3f5e3dfe4a07955cbb1f5b580c3c41cf93792dd"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.charsets/java.desktop/giflib.md",
+      "sha256": "206aab89ec75968e48a6a1ed6df7d8b9bfb7aea12cbe4c9345d93e5d97460a25"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.charsets/java.desktop/harfbuzz.md",
+      "sha256": "5ec7cba7f8e7fc3a089213140aab6fa1b3bd5bf8a91bf8bddb3b8d315fc5f7d0"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.charsets/java.desktop/jpeg.md",
+      "sha256": "c1dfb9719a71ad9f861f8728550542d681e25c8ef40e6393606e6e2a0c1d653a"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.charsets/java.desktop/lcms.md",
+      "sha256": "6d409e73a4ce3c25479b4fb01d05fe79c0458bcd1dccc07f72d3e211d64ac8ce"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.charsets/java.desktop/libpng.md",
+      "sha256": "f73afb394792f3aeecd959e89487603677a430e56b44eba596d8b572accfd540"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.charsets/java.desktop/mesa3d.md",
+      "sha256": "63f4e6f75caebbccb95d903fb43e46ac7111b3624d0a34f146b276d7d9e7b152"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.charsets/java.xml/bcel.md",
+      "sha256": "cd578186ad93de46cca29ec8ace2b11f9da751987f3f140e6095c528596cc8c1"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.charsets/java.xml/dom.md",
+      "sha256": "6686e8877667584a3a7c07344baadca1a03e29f677162d87c3c0811e990d1148"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.charsets/java.xml/jcup.md",
+      "sha256": "8d5dcfdf50455a3c34c753a98f21e953248af200415a9084e3f102cb6c43b8bf"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.charsets/java.xml/schema10part1.md",
+      "sha256": "b220f891e5bfa3aa4b2a4b34dfab53a291553c2ae0fd0b15a4cb1116d4e97770"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.charsets/java.xml/schema10part2.md",
+      "sha256": "2350e35e91866d5ee5bd7ee7c303b3e424bbca335d36c71452588aac494eaa3e"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.charsets/java.xml/xalan.md",
+      "sha256": "02bd013fc3f438dbb8fa41fa57888177e015efa6431d37fce6e794c6f353a6a1"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.charsets/java.xml/xerces.md",
+      "sha256": "4a6bf6b367193ee68681cb2d9fed30ffc5d62dd2d477bd62e0271707d71b3244"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.charsets/java.xml/xhtml10.md",
+      "sha256": "9a5cde47073ca80cf59127891420f4aed603eb65070738ad027bb19e76fb9319"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.charsets/java.xml/xhtml10schema.md",
+      "sha256": "7bc51d884aaae6ef27551ee78d404ba3116356790da3d06b665679eb2e1cc002"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.charsets/java.xml/xhtml11.md",
+      "sha256": "4f99a390896f0f55a0b78376de89bfd2ac845713de85e67e37f884b77e0c3122"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.charsets/java.xml/xhtml11schema.md",
+      "sha256": "8cd69b1392e286538008f4cb003f85caea3a375c619e697813d820b69857cf74"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.charsets/java.xml/xmlspec.md",
+      "sha256": "afec263bf5dc67697ee33734ee243f86a878161335ef6298273e4041673b0544"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.charsets/java.xml/xmlxsd.md",
+      "sha256": "498a5fec63509a8f3949983bb6878ac5c95aaf1d5e3679272d93314371aa0211"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.charsets/public_suffix.md",
+      "sha256": "861de1e4992a7d28f1de25c73cd50d26a94779ebd749c0643fecfa56442c3429"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.charsets/siphash.md",
+      "sha256": "5a792b5a74ad2a5f3d6a7ad8b7a841116e58a772c18bc6e392320a365b222c76"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.charsets/unicode.md",
+      "sha256": "5194d6760f2e7eccc07804196cc619f84e730fa9d10c0529b71416186f4d12dc"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.charsets/zlib.md",
+      "sha256": "c9c70c36a1f0325e8788771906202d42ba6ab4205caca44ec0f665707e83226b"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.unsupported/ADDITIONAL_LICENSE_INFO",
+      "sha256": "a69bce275ba7a3570af6579cb0f55682cd75fedfcd49e0e8e9022270c447c916"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.unsupported/ASSEMBLY_EXCEPTION",
+      "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.unsupported/LICENSE",
+      "sha256": "4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.unsupported/aes.md",
+      "sha256": "45c6d4da48325edfbff3dcf71c704e504c057904435ed23c6d57046d551eb69d"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.unsupported/c-libutl.md",
+      "sha256": "bef40679922d6fdfb7e4ddb223ad6722300f6054ba737bbf6188d60fcec517f9"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.unsupported/cldr.md",
+      "sha256": "472e341c36efc1136860ed7a6461a2af4a53ae95d55d1126726340f5ba62b06a"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.unsupported/gcc.md",
+      "sha256": "589e34f142cdf7d1430daa573e61c2e3dd0330c9eb5a2c00d4a98b3a4450810b"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.unsupported/icu.md",
+      "sha256": "be23ad20a8231d2241b37fcf401548febd8597de8373f89268882020cb7c8818"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.unsupported/java.desktop/colorimaging.md",
+      "sha256": "04d61e3e8e71dd452ebe52008af5378d9f6640d14578aeb515dc5375973b0189"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.unsupported/java.desktop/freetype.md",
+      "sha256": "e1f43089a3d7f846ac72709ba3f5e3dfe4a07955cbb1f5b580c3c41cf93792dd"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.unsupported/java.desktop/giflib.md",
+      "sha256": "206aab89ec75968e48a6a1ed6df7d8b9bfb7aea12cbe4c9345d93e5d97460a25"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.unsupported/java.desktop/harfbuzz.md",
+      "sha256": "5ec7cba7f8e7fc3a089213140aab6fa1b3bd5bf8a91bf8bddb3b8d315fc5f7d0"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.unsupported/java.desktop/jpeg.md",
+      "sha256": "c1dfb9719a71ad9f861f8728550542d681e25c8ef40e6393606e6e2a0c1d653a"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.unsupported/java.desktop/lcms.md",
+      "sha256": "6d409e73a4ce3c25479b4fb01d05fe79c0458bcd1dccc07f72d3e211d64ac8ce"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.unsupported/java.desktop/libpng.md",
+      "sha256": "f73afb394792f3aeecd959e89487603677a430e56b44eba596d8b572accfd540"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.unsupported/java.desktop/mesa3d.md",
+      "sha256": "63f4e6f75caebbccb95d903fb43e46ac7111b3624d0a34f146b276d7d9e7b152"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.unsupported/java.xml/bcel.md",
+      "sha256": "cd578186ad93de46cca29ec8ace2b11f9da751987f3f140e6095c528596cc8c1"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.unsupported/java.xml/dom.md",
+      "sha256": "6686e8877667584a3a7c07344baadca1a03e29f677162d87c3c0811e990d1148"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.unsupported/java.xml/jcup.md",
+      "sha256": "8d5dcfdf50455a3c34c753a98f21e953248af200415a9084e3f102cb6c43b8bf"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.unsupported/java.xml/schema10part1.md",
+      "sha256": "b220f891e5bfa3aa4b2a4b34dfab53a291553c2ae0fd0b15a4cb1116d4e97770"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.unsupported/java.xml/schema10part2.md",
+      "sha256": "2350e35e91866d5ee5bd7ee7c303b3e424bbca335d36c71452588aac494eaa3e"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.unsupported/java.xml/xalan.md",
+      "sha256": "02bd013fc3f438dbb8fa41fa57888177e015efa6431d37fce6e794c6f353a6a1"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.unsupported/java.xml/xerces.md",
+      "sha256": "4a6bf6b367193ee68681cb2d9fed30ffc5d62dd2d477bd62e0271707d71b3244"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.unsupported/java.xml/xhtml10.md",
+      "sha256": "9a5cde47073ca80cf59127891420f4aed603eb65070738ad027bb19e76fb9319"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.unsupported/java.xml/xhtml10schema.md",
+      "sha256": "7bc51d884aaae6ef27551ee78d404ba3116356790da3d06b665679eb2e1cc002"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.unsupported/java.xml/xhtml11.md",
+      "sha256": "4f99a390896f0f55a0b78376de89bfd2ac845713de85e67e37f884b77e0c3122"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.unsupported/java.xml/xhtml11schema.md",
+      "sha256": "8cd69b1392e286538008f4cb003f85caea3a375c619e697813d820b69857cf74"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.unsupported/java.xml/xmlspec.md",
+      "sha256": "afec263bf5dc67697ee33734ee243f86a878161335ef6298273e4041673b0544"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.unsupported/java.xml/xmlxsd.md",
+      "sha256": "498a5fec63509a8f3949983bb6878ac5c95aaf1d5e3679272d93314371aa0211"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.unsupported/public_suffix.md",
+      "sha256": "861de1e4992a7d28f1de25c73cd50d26a94779ebd749c0643fecfa56442c3429"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.unsupported/siphash.md",
+      "sha256": "5a792b5a74ad2a5f3d6a7ad8b7a841116e58a772c18bc6e392320a365b222c76"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.unsupported/unicode.md",
+      "sha256": "5194d6760f2e7eccc07804196cc619f84e730fa9d10c0529b71416186f4d12dc"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.unsupported/zlib.md",
+      "sha256": "c9c70c36a1f0325e8788771906202d42ba6ab4205caca44ec0f665707e83226b"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/lib/jvm.cfg",
+      "sha256": "40aceb62df970fa0c33a9e3f3f88a433fb0b7dc3a78743beac3a9d84a4b5f90d"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/lib/modules",
+      "sha256": "5205699c46a12cff1c742df9f6188e01e69f97e592e894484bdf9fe5b3332cf8"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/lib/security/blocked.certs",
+      "sha256": "2596bb6dda83c66d96c5a252d7b2ae1f24cc1ae3f1890223b4f3591a8d52bf10"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/lib/security/cacerts",
+      "sha256": "c4ea628ed2497ee7973dc642c362d233e50a6f9d45574bb5a2c619628721d534"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/lib/security/public_suffix_list.dat",
+      "sha256": "16b42002aa6f83a7763c4cdbd399ecf738460377d447e362884495545afd60a3"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/lib/tzdb.dat",
+      "sha256": "a02e3a23d67255782b11ab81070902235ab564080f0f65ffe2a989cdaa86fe89"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/release",
+      "sha256": "e1f68d7b8183b146123af2c9e44de095d840dd88b558afe5803a998e381be104"
+    }
+  ],
+  "runtime_image_modules": [
+    "java.base",
+    "java.logging",
+    "jdk.unsupported",
+    "java.management",
+    "java.desktop",
+    "java.datatransfer",
+    "java.xml",
+    "java.prefs",
+    "jdk.charsets",
+    "java.instrument"
+  ],
+  "runtime_minecraft_profile": true,
+  "applications": [
+    {
+      "name": "switch-diagnostics",
+      "path": "switch/switch-diagnostics/switch-diagnostics.nro",
+      "sha256": "45bf49e86e8c30b5de25d94bed2c5f8f6b0ff9df1d5b3da0dec8bf1a3ce3f3ab",
+      "build_id": "f18ef49e25e719c37848d3d45da1a01f5032a66b",
+      "source_repository": "a1c7e0/switchcraft",
+      "source_revision": "1d716dbe17f9870e5c2cfbeb351d839ea91412fb"
+    },
+    {
+      "name": "java-test",
+      "path": "switch/java-test/java-test.nro",
+      "sha256": "1b574c8a2614aa0cf063e251e51ded50078411309bf4f76e3d7842b2ff72f19b",
+      "build_id": "bec7b732bf17a80987bca15c859cd4dc7c4fe6ce",
+      "source_repository": "a1c7e0/java-switch",
+      "source_revision": "a0f0e168bb282e9585c0353c3d9b70a7ad043ce8"
+    },
+    {
+      "name": "ffi-test",
+      "path": "switch/ffi-test/ffi-test.nro",
+      "sha256": "4bd2a5b0b7139a5a1a837d8aadd0bb018d71f9d701249748e1f553d24900092e",
+      "build_id": "0dff7f80c2c4c3aca7a90c9c4f7e1c0762c22489",
+      "source_repository": "a1c7e0/java-switch",
+      "source_revision": "a0f0e168bb282e9585c0353c3d9b70a7ad043ce8"
+    },
+    {
+      "name": "zero-services-test",
+      "path": "switch/zero-services-test/zero-services-test.nro",
+      "sha256": "e7fe09f4511e1a82775df4b892a9e0d7b185690dd07acb55d60c16ade72301d7",
+      "build_id": "aa1476862f518cd65b1f709b50b89874927e1771",
+      "source_repository": "a1c7e0/java-switch",
+      "source_revision": "a0f0e168bb282e9585c0353c3d9b70a7ad043ce8"
+    },
+    {
+      "name": "vulkan-test",
+      "path": "switch/vulkan-test/vulkan-test.nro",
+      "sha256": "015eed8283be72acd694dd9a5161dac6b40f2ce22523860193aa20f048e8807f",
+      "build_id": "a90f6ddae9ad3d60b3f78fd4ec06b0360b9c965b",
+      "source_repository": "a1c7e0/switchcraft",
+      "source_revision": "1d716dbe17f9870e5c2cfbeb351d839ea91412fb"
+    },
+    {
+      "name": "vulkan-present",
+      "path": "switch/vulkan-present/vulkan-present.nro",
+      "sha256": "48108b4bd390380e42127ef4775ea191b0e51498785847ced81603927701375b",
+      "build_id": "be5338a678161759fd4f81fc194ec6517aab46b0",
+      "source_repository": "a1c7e0/switchcraft",
+      "source_revision": "1d716dbe17f9870e5c2cfbeb351d839ea91412fb"
+    },
+    {
+      "name": "java25-test",
+      "path": "switch/java25-test/java25-test.nro",
+      "sha256": "5b1d57f4961f6cbc1310ff35e89211608cab39c18d48508ebd394c02ce2b1c9d",
+      "build_id": "094ec00aab47e451116340bc463de5550b460448",
+      "source_repository": "a1c7e0/java-switch",
+      "source_revision": "a0f0e168bb282e9585c0353c3d9b70a7ad043ce8"
+    },
+    {
+      "name": "switchcraft-java25",
+      "path": "switch/switchcraft-java25/switchcraft-java25.nro",
+      "sha256": "64402f9bf4fb5018a8c11fe5873d5bc78d4c1aee6be1f076113e2fa8fd9d3323",
+      "build_id": "1953a3660d108183a7dbc3b85fd9afbf349660db",
+      "source_repository": "a1c7e0/switchcraft",
+      "source_revision": "1d716dbe17f9870e5c2cfbeb351d839ea91412fb"
+    },
+    {
+      "name": "minecraft-launcher",
+      "path": "switch/minecraft-launcher/minecraft-launcher.nro",
+      "sha256": "f6e862d3f6ee9c78e88c3b1d9dcf5a3795182c35e33593a5cef793e852571852",
+      "build_id": "f442340f877a6f76d7e1bff631307675e1906438",
+      "source_repository": "a1c7e0/switchcraft",
+      "source_revision": "1d716dbe17f9870e5c2cfbeb351d839ea91412fb"
+    }
+  ],
+  "runtime_and_test_jar_count": 20,
+  "runtime_and_test_jars": [
+    {
+      "path": "switch/mc-runtime/launchers/switchcraft-launcher-bridge.jar",
+      "bytes": 4199,
+      "sha256": "2a2ff3124d669649c35a9d6e0353f0e2444ccd6d41f1d9506a0df30e5afd30d4"
+    },
+    {
+      "path": "switch/mc-runtime/launchers/switchcraft-lwjgl-horizon.jar",
+      "bytes": 51698,
+      "sha256": "3e4bcb500f4572d88b0cdae736d0d950e31c39b02913591b1df37b37d8b49866"
+    },
+    {
+      "path": "switch/mc-runtime/libraries/jspecify-1.0.0.jar",
+      "bytes": 3819,
+      "sha256": "1fad6e6be7557781e4d33729d49ae1cdc8fdda6fe477bb0cc68ce351eafdfbab"
+    },
+    {
+      "path": "switch/mc-runtime/libraries/lwjgl-3.4.3.jar",
+      "bytes": 1255440,
+      "sha256": "46eeca5471833c3cf5da3c1da015b41e3bb3eb16dd3da03f366886da10096751"
+    },
+    {
+      "path": "switch/mc-runtime/libraries/lwjgl-freetype-3.4.3.jar",
+      "bytes": 468438,
+      "sha256": "b331b9d2a29c1b330c3887d33c14dab9d7eed3f763bb8f5ca559eec02d73f075"
+    },
+    {
+      "path": "switch/mc-runtime/libraries/lwjgl-openal-3.4.3.jar",
+      "bytes": 154573,
+      "sha256": "4a0049c8554d6890718fee76507572f2f9f8f3f6144d25d7d2ea76bccc2d9605"
+    },
+    {
+      "path": "switch/mc-runtime/libraries/lwjgl-sdl-3.4.3.jar",
+      "bytes": 989769,
+      "sha256": "dcb33abcbd946553176bb668be80d7adc60cb9d919ab5c71fb01fc51cacc4c8f"
+    },
+    {
+      "path": "switch/mc-runtime/libraries/lwjgl-shaderc-3.4.3.jar",
+      "bytes": 153441,
+      "sha256": "82c7b5270d2c78458f5720c639459710c8f086ca050eea9ab0c44256fee7a626"
+    },
+    {
+      "path": "switch/mc-runtime/libraries/lwjgl-spvc-3.4.3.jar",
+      "bytes": 150189,
+      "sha256": "d737eba8512caa2f53db7a8dbea4c08d9c3d94493bb0a244e6d64af95541f742"
+    },
+    {
+      "path": "switch/mc-runtime/libraries/lwjgl-stb-3.4.3.jar",
+      "bytes": 143041,
+      "sha256": "544753f5e49c53580949b9f1fc341f0e434991303c93d5a428fbaafaacc2cd69"
+    },
+    {
+      "path": "switch/mc-runtime/libraries/lwjgl-vma-3.4.3.jar",
+      "bytes": 110265,
+      "sha256": "254162ef94bd213663a417368902ea916d51e0e0fa3054d07ea0ce9a8b7ac9e6"
+    },
+    {
+      "path": "switch/mc-runtime/libraries/lwjgl-vulkan-3.4.3.jar",
+      "bytes": 8866042,
+      "sha256": "acdb40767775ed1223dc3b2a8c9d3ce740c9e3c4af074444ce2dfe2ea9ba62e0"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/minijvm/minijvm_rt.jar",
+      "bytes": 1186212,
+      "sha256": "e756dbc4261493b09534d3c133fb8f2383f75cc30c937c6e44b62ad6e5682677"
+    },
+    {
+      "path": "switch/mc-runtime/tests/dependency.jar",
+      "bytes": 328,
+      "sha256": "80df10416fa3a7f5927cfcccd59e9fefa09303bcd7c6c88c7770b57b58f7b8d6"
+    },
+    {
+      "path": "switch/mc-runtime/tests/diagnostic-tests.jar",
+      "bytes": 3218,
+      "sha256": "71b3a79832d3713a3104c6fd81e2b96660438b191aa95742ae85b9fb6da0d1ed"
+    },
+    {
+      "path": "switch/mc-runtime/tests/java25-agent-smoke-agent.jar",
+      "bytes": 3091,
+      "sha256": "0cb969691b9fd4e2e4623e2eb245c54061cba03f560dad7082946a3ebc352d6c"
+    },
+    {
+      "path": "switch/mc-runtime/tests/java25-agent-smoke-app.jar",
+      "bytes": 1463,
+      "sha256": "f5c6251ed479c302cc2729bed8690491f9b0659f6018d4bbd089da0ebcf09b1e"
+    },
+    {
+      "path": "switch/mc-runtime/tests/java25-hello.jar",
+      "bytes": 612,
+      "sha256": "b98f8d58745d70667c6a471f534e973daaa1c399203708bd708957f70dde6cc4"
+    },
+    {
+      "path": "switch/mc-runtime/tests/java25-tests.jar",
+      "bytes": 5046,
+      "sha256": "a27641ce0ae62ec1444e9a50ac07864a902f49779191e2a4770086cc3711dc81"
+    },
+    {
+      "path": "switch/mc-runtime/tests/switchcraft-native-smoke.jar",
+      "bytes": 23857,
+      "sha256": "26c32a2288fda7b30ad421cf54eeca267a9cefc2b254de251f44400f718b8ef6"
+    }
+  ],
+  "source_archive": {
+    "name": "switchcraft-source-2026-11-13-r5.tar.gz",
+    "bytes": 152423762,
+    "sha256": "18611a3a1df28c3a8bd1487738996f473410cd9bbb1fd15eb715ea5b562437ac",
+    "lwjgl_upstream_sha256": "db97020d78fb6f6086121fba9c99ac07a50c4188a7658b06d488a2eae021de40",
+    "components": [
+      {
+        "name": "OpenJDK 25 upstream",
+        "path": "third-party/openjdk25-upstream.tar.gz",
+        "sha256": "745846bd4af786f8376945ee09eb71784bdda4c35e32e79618b33e5d252eba32"
+      },
+      {
+        "name": "LWJGL 3.4.3",
+        "path": "third-party/upstream/lwjgl3-upstream.tar.gz",
+        "sha256": "db97020d78fb6f6086121fba9c99ac07a50c4188a7658b06d488a2eae021de40"
+      },
+      {
+        "name": "OpenAL Soft 1.25.1",
+        "path": "third-party/upstream/openal-soft-1.25.1.tar.gz",
+        "sha256": "5f8efe8dfba5e9307a50251ba615ace857c7fa9dddfe34130b83e213d7f7cf24"
+      },
+      {
+        "name": "Shader library glslang",
+        "path": "third-party/upstream/glslang-168d452a4f460d24b588fed08477a81c44ee27a1.tar.gz",
+        "sha256": "c167b2474af06cbab93abae8249efaf88fb79a09f30488e2a24d399e4258ce7a"
+      },
+      {
+        "name": "Shader library shaderc",
+        "path": "third-party/upstream/shaderc-82757e4f72af8518fb679604d352623450cb761f.tar.gz",
+        "sha256": "a870d32b9c938dcea7d731a6c0b638044dfc2a0aca01da326e04d1cd63b81ab9"
+      },
+      {
+        "name": "Shader library spirv_cross",
+        "path": "third-party/upstream/spirv_cross-1a6169566c73d3da552748fc372fe2bbb856e46e.tar.gz",
+        "sha256": "0f295b214b164e42a1d21537c8da7b44569806c16220dda9798558edfaacd11e"
+      },
+      {
+        "name": "Shader library spirv_headers",
+        "path": "third-party/upstream/spirv_headers-29981f65241605e08b0ede4cfeb999fe3b723c6a.tar.gz",
+        "sha256": "232899f1ad4104fb5bc377b94596c7621575eee62ad9a9e8f929b63a7dd8a7ad"
+      },
+      {
+        "name": "Shader library spirv_tools",
+        "path": "third-party/upstream/spirv_tools-b707790a898e44038547df54580022fc1cf89c3d.tar.gz",
+        "sha256": "05d8af89737bde57571c48dbd36714c9f520a69623e14de72c3be6b600e277d6"
+      },
+      {
+        "name": "libffi v3.8.0",
+        "path": "third-party/upstream/libffi-v3.8.0.tar.gz",
+        "sha256": "7da3e2d9a171eb0a038f592ecad3ff2bb2550f3496d87b3b29ad0cf4430c0db4"
+      },
+      {
+        "name": "curl 7.69.1",
+        "path": "third-party/curl-7.69.1.tar.xz",
+        "sha256": "03c7d5e6697f7b7e40ada1b2256e565a555657398e6c1fcfa4cb251ccd819d4f"
+      }
+    ],
+    "licenses": [
+      {
+        "path": "third-party/licenses/switchcraft/CURL-COPYING.txt",
+        "bytes": 1088,
+        "sha256": "db3c4a3b3695a0f317a0c5176acd2f656d18abc45b3ee78e50935a78eb1e132e"
+      },
+      {
+        "path": "third-party/licenses/switchcraft/LIBNX-LICENSE.md",
+        "bytes": 731,
+        "sha256": "5b6675f85016009624d29c9222201d3c0fc6a2d5c59253367f27d3e15011cdb2"
+      },
+      {
+        "path": "third-party/licenses/switchcraft/LWJGL-BSD-3-Clause.txt",
+        "bytes": 1518,
+        "sha256": "4c2f770897d0cfda4d9a65bb4d6d6983dccfd57d4c7eb74ea5ded0762cbc0e75"
+      },
+      {
+        "path": "third-party/licenses/switchcraft/MESA-LICENSE.rst",
+        "bytes": 1816,
+        "sha256": "0d1a0472ecc81830e75c20d59b0ea02841e3db21255e0ebad97ab682c54d6615"
+      },
+      {
+        "path": "third-party/licenses/switchcraft/MINIJVM-JAVA-GPL-2.0.txt",
+        "bytes": 17983,
+        "sha256": "de124e5a899ae4074ebf5c0f790494178ab66d310606b86203d67a6f3ef45168"
+      },
+      {
+        "path": "third-party/licenses/switchcraft/MINIJVM-LICENSE.txt",
+        "bytes": 1255,
+        "sha256": "70eb6717f267823d4ca54645b7ef77086fb3a034459c52c57b551dee779ccd24"
+      },
+      {
+        "path": "third-party/licenses/switchcraft/NVK-NOTICE.md",
+        "bytes": 1649,
+        "sha256": "0a6c77d351bb30d9b9012ff689cafcfcfb8c9f7fe7fac338805d00c5027ec675"
+      },
+      {
+        "path": "third-party/licenses/switchcraft/NVK-PACKAGING-MIT.txt",
+        "bytes": 1270,
+        "sha256": "1a993765e60a1e10b9ebdd79bba2a867b3fde3c9e37b4f433ffe7246439e5e5f"
+      },
+      {
+        "path": "third-party/licenses/switchcraft/PRISM-APACHE-2.0.txt",
+        "bytes": 11358,
+        "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+      },
+      {
+        "path": "third-party/licenses/switchcraft/PRISM-GPL-3.0.txt",
+        "bytes": 35149,
+        "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986"
+      },
+      {
+        "path": "third-party/licenses/switchcraft/SDL3-ZLIB.txt",
+        "bytes": 884,
+        "sha256": "1c040b8271b37e5076359f8fd54240e371114112924d2df81ef87c7d6a1dfdfd"
+      },
+      {
+        "path": "third-party/licenses/switchcraft/STB-TRUETYPE.txt",
+        "bytes": 1606,
+        "sha256": "a94cc632840c6870df575d5e0bc4aa9ccba8c57d70d3dd892fcc13e2fb5344e0"
+      },
+      {
+        "path": "third-party/licenses/switchcraft/VULKAN-HEADERS-APACHE-2.0.txt",
+        "bytes": 11358,
+        "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+      },
+      {
+        "path": "third-party/licenses/switchcraft/VULKAN-HEADERS-MIT.txt",
+        "bytes": 1084,
+        "sha256": "1ca3502222d967f3be5751c55f6b7ee735b5383909c3b501495f54b216dbf227"
+      },
+      {
+        "path": "third-party/licenses/switchcraft/font-audio/FREETYPE-FTL.txt",
+        "bytes": 6743,
+        "sha256": "08c135755dd589039470f1fdbb400daaabaaa50d0b366d19cebff4d22986baa1"
+      },
+      {
+        "path": "third-party/licenses/switchcraft/font-audio/FREETYPE-LICENSE-NOTICE.txt",
+        "bytes": 2074,
+        "sha256": "2e3bbb7d7c5c396368dd0853a790ec29ce5b8647163dde42a0493fb0d6556b2b"
+      },
+      {
+        "path": "third-party/licenses/switchcraft/font-audio/OPENAL-SOFT-COPYING.txt",
+        "bytes": 23330,
+        "sha256": "d808ce217e5b611854da622b57ec29fe545584c48bc5352fae72a4b6e5074a15"
+      },
+      {
+        "path": "third-party/licenses/switchcraft/font-audio/OPENAL-SOFT-FMT-LICENSE.txt",
+        "bytes": 1431,
+        "sha256": "07580f2a3b35709ce703d523f447b242f6dfec7582a8c0df102c7fa2849375f8"
+      },
+      {
+        "path": "third-party/licenses/switchcraft/font-audio/OPENAL-SOFT-GSL-LICENSE.txt",
+        "bytes": 1157,
+        "sha256": "4c21dc82a1c7186ea754fd59d504c00947953a3401fe8e24eaa44109ef8e2555"
+      },
+      {
+        "path": "third-party/licenses/switchcraft/font-audio/OPENAL-SOFT-PFFFT-LICENSE.txt",
+        "bytes": 1669,
+        "sha256": "64056328b3e7bc104e24ef96accc1a7abead156f0c02d1b87c97e3f3a28030de"
+      },
+      {
+        "path": "third-party/licenses/switchcraft/native-shaders/LICENSE.glslang",
+        "bytes": 54615,
+        "sha256": "17e70c676e1521ff3e4686f04a2053d93a7e28a33be8de7ec37ab0ff72feb677"
+      },
+      {
+        "path": "third-party/licenses/switchcraft/native-shaders/LICENSE.shaderc",
+        "bytes": 11357,
+        "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+      },
+      {
+        "path": "third-party/licenses/switchcraft/native-shaders/LICENSE.spirv-cross",
+        "bytes": 11358,
+        "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+      },
+      {
+        "path": "third-party/licenses/switchcraft/native-shaders/LICENSE.spirv-headers",
+        "bytes": 23503,
+        "sha256": "ea43b1de38a6f90c488800d66dec1ed671e68cda530266bc96951fb5b6307613"
+      },
+      {
+        "path": "third-party/licenses/switchcraft/native-shaders/LICENSE.spirv-tools",
+        "bytes": 11358,
+        "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+      },
+      {
+        "path": "third-party/licenses/java-switch/LIBFFI-MIT.txt",
+        "bytes": 1132,
+        "sha256": "17b64dc60f3b6897a60f971e288b973f655c2edcdf08b25f3c3dd5549857881c"
+      },
+      {
+        "path": "third-party/licenses/java-switch/LIBNX-LICENSE.md",
+        "bytes": 731,
+        "sha256": "5b6675f85016009624d29c9222201d3c0fc6a2d5c59253367f27d3e15011cdb2"
+      },
+      {
+        "path": "third-party/licenses/java-switch/MINIJVM-JAVA-GPL-2.0.txt",
+        "bytes": 17983,
+        "sha256": "de124e5a899ae4074ebf5c0f790494178ab66d310606b86203d67a6f3ef45168"
+      },
+      {
+        "path": "third-party/licenses/java-switch/MINIJVM-LICENSE.txt",
+        "bytes": 1255,
+        "sha256": "70eb6717f267823d4ca54645b7ef77086fb3a034459c52c57b551dee779ccd24"
+      },
+      {
+        "path": "third-party/licenses/java-switch/openjdk25-LICENSE.txt",
+        "bytes": 19274,
+        "sha256": "4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726"
+      }
+    ]
+  },
+  "source_archive_notice": "Required separate matching release asset for licensing and reproducibility; not included in the SD ZIP.",
+  "input_manifest_sha256": "cccb7b5ecb310ae404efbfde42676d6cb0368dc1347dd1096d61db97d3044558",
+  "sd_files": [
+    {
+      "path": "README.md",
+      "bytes": 703,
+      "sha256": "29aaf8203f8518b2658ab4ef10350d4b6de98e92d84d974ce84bda212c88fa49"
+    },
+    {
+      "path": "START_HERE.md",
+      "bytes": 2955,
+      "sha256": "c4e2366b3ee6276bcf8a52f0c2d8bb3b9df0e8f72e517e6e91b16ac2df43ae8d"
+    },
+    {
+      "path": "switch/ffi-test/ffi-test.nro",
+      "bytes": 260293,
+      "sha256": "4bd2a5b0b7139a5a1a837d8aadd0bb018d71f9d701249748e1f553d24900092e"
+    },
+    {
+      "path": "switch/java-test/java-test.nro",
+      "bytes": 1165509,
+      "sha256": "1b574c8a2614aa0cf063e251e51ded50078411309bf4f76e3d7842b2ff72f19b"
+    },
+    {
+      "path": "switch/java25-test/java25-test.nro",
+      "bytes": 7100613,
+      "sha256": "5b1d57f4961f6cbc1310ff35e89211608cab39c18d48508ebd394c02ce2b1c9d"
+    },
+    {
+      "path": "switch/mc-runtime/config/launcher.example.json",
+      "bytes": 151,
+      "sha256": "bd59a33a2cd6124ebc603431f531e4b3b4042c23bdb3deac1c69c6bf783a3f2d"
+    },
+    {
+      "path": "switch/mc-runtime/launchers/switchcraft-launcher-bridge.jar",
+      "bytes": 4199,
+      "sha256": "2a2ff3124d669649c35a9d6e0353f0e2444ccd6d41f1d9506a0df30e5afd30d4"
+    },
+    {
+      "path": "switch/mc-runtime/launchers/switchcraft-lwjgl-horizon.jar",
+      "bytes": 51698,
+      "sha256": "3e4bcb500f4572d88b0cdae736d0d950e31c39b02913591b1df37b37d8b49866"
+    },
+    {
+      "path": "switch/mc-runtime/libraries/jspecify-1.0.0.jar",
+      "bytes": 3819,
+      "sha256": "1fad6e6be7557781e4d33729d49ae1cdc8fdda6fe477bb0cc68ce351eafdfbab"
+    },
+    {
+      "path": "switch/mc-runtime/libraries/lwjgl-3.4.3.jar",
+      "bytes": 1255440,
+      "sha256": "46eeca5471833c3cf5da3c1da015b41e3bb3eb16dd3da03f366886da10096751"
+    },
+    {
+      "path": "switch/mc-runtime/libraries/lwjgl-freetype-3.4.3.jar",
+      "bytes": 468438,
+      "sha256": "b331b9d2a29c1b330c3887d33c14dab9d7eed3f763bb8f5ca559eec02d73f075"
+    },
+    {
+      "path": "switch/mc-runtime/libraries/lwjgl-openal-3.4.3.jar",
+      "bytes": 154573,
+      "sha256": "4a0049c8554d6890718fee76507572f2f9f8f3f6144d25d7d2ea76bccc2d9605"
+    },
+    {
+      "path": "switch/mc-runtime/libraries/lwjgl-sdl-3.4.3.jar",
+      "bytes": 989769,
+      "sha256": "dcb33abcbd946553176bb668be80d7adc60cb9d919ab5c71fb01fc51cacc4c8f"
+    },
+    {
+      "path": "switch/mc-runtime/libraries/lwjgl-shaderc-3.4.3.jar",
+      "bytes": 153441,
+      "sha256": "82c7b5270d2c78458f5720c639459710c8f086ca050eea9ab0c44256fee7a626"
+    },
+    {
+      "path": "switch/mc-runtime/libraries/lwjgl-spvc-3.4.3.jar",
+      "bytes": 150189,
+      "sha256": "d737eba8512caa2f53db7a8dbea4c08d9c3d94493bb0a244e6d64af95541f742"
+    },
+    {
+      "path": "switch/mc-runtime/libraries/lwjgl-stb-3.4.3.jar",
+      "bytes": 143041,
+      "sha256": "544753f5e49c53580949b9f1fc341f0e434991303c93d5a428fbaafaacc2cd69"
+    },
+    {
+      "path": "switch/mc-runtime/libraries/lwjgl-vma-3.4.3.jar",
+      "bytes": 110265,
+      "sha256": "254162ef94bd213663a417368902ea916d51e0e0fa3054d07ea0ce9a8b7ac9e6"
+    },
+    {
+      "path": "switch/mc-runtime/libraries/lwjgl-vulkan-3.4.3.jar",
+      "bytes": 8866042,
+      "sha256": "acdb40767775ed1223dc3b2a8c9d3ce740c9e3c4af074444ce2dfe2ea9ba62e0"
+    },
+    {
+      "path": "switch/mc-runtime/licenses/NLOHMANN-JSON-MIT.txt",
+      "bytes": 1076,
+      "sha256": "86b998c792894ccb911a1cb7994f7a9652894e7a094c0b5e45be2f553f45cf14"
+    },
+    {
+      "path": "switch/mc-runtime/licenses/SDL3-ZLIB.txt",
+      "bytes": 884,
+      "sha256": "1c040b8271b37e5076359f8fd54240e371114112924d2df81ef87c7d6a1dfdfd"
+    },
+    {
+      "path": "switch/mc-runtime/licenses/SWITCHCRAFT-MIT.txt",
+      "bytes": 1211,
+      "sha256": "7147956f838324347fcf95f0d793e66790eddf9348be4a9ac53e602901f035e2"
+    },
+    {
+      "path": "switch/mc-runtime/licenses/java-switch/LIBFFI-MIT.txt",
+      "bytes": 1132,
+      "sha256": "17b64dc60f3b6897a60f971e288b973f655c2edcdf08b25f3c3dd5549857881c"
+    },
+    {
+      "path": "switch/mc-runtime/licenses/java-switch/LIBNX-LICENSE.md",
+      "bytes": 731,
+      "sha256": "5b6675f85016009624d29c9222201d3c0fc6a2d5c59253367f27d3e15011cdb2"
+    },
+    {
+      "path": "switch/mc-runtime/licenses/java-switch/MINIJVM-JAVA-GPL-2.0.txt",
+      "bytes": 17983,
+      "sha256": "de124e5a899ae4074ebf5c0f790494178ab66d310606b86203d67a6f3ef45168"
+    },
+    {
+      "path": "switch/mc-runtime/licenses/java-switch/MINIJVM-LICENSE.txt",
+      "bytes": 1255,
+      "sha256": "70eb6717f267823d4ca54645b7ef77086fb3a034459c52c57b551dee779ccd24"
+    },
+    {
+      "path": "switch/mc-runtime/licenses/java-switch/openjdk25-LICENSE.txt",
+      "bytes": 19274,
+      "sha256": "4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726"
+    },
+    {
+      "path": "switch/mc-runtime/licenses/switchcraft/CURL-COPYING.txt",
+      "bytes": 1088,
+      "sha256": "db3c4a3b3695a0f317a0c5176acd2f656d18abc45b3ee78e50935a78eb1e132e"
+    },
+    {
+      "path": "switch/mc-runtime/licenses/switchcraft/LIBNX-LICENSE.md",
+      "bytes": 731,
+      "sha256": "5b6675f85016009624d29c9222201d3c0fc6a2d5c59253367f27d3e15011cdb2"
+    },
+    {
+      "path": "switch/mc-runtime/licenses/switchcraft/LWJGL-BSD-3-Clause.txt",
+      "bytes": 1518,
+      "sha256": "4c2f770897d0cfda4d9a65bb4d6d6983dccfd57d4c7eb74ea5ded0762cbc0e75"
+    },
+    {
+      "path": "switch/mc-runtime/licenses/switchcraft/MESA-LICENSE.rst",
+      "bytes": 1816,
+      "sha256": "0d1a0472ecc81830e75c20d59b0ea02841e3db21255e0ebad97ab682c54d6615"
+    },
+    {
+      "path": "switch/mc-runtime/licenses/switchcraft/MINIJVM-JAVA-GPL-2.0.txt",
+      "bytes": 17983,
+      "sha256": "de124e5a899ae4074ebf5c0f790494178ab66d310606b86203d67a6f3ef45168"
+    },
+    {
+      "path": "switch/mc-runtime/licenses/switchcraft/MINIJVM-LICENSE.txt",
+      "bytes": 1255,
+      "sha256": "70eb6717f267823d4ca54645b7ef77086fb3a034459c52c57b551dee779ccd24"
+    },
+    {
+      "path": "switch/mc-runtime/licenses/switchcraft/NVK-NOTICE.md",
+      "bytes": 1649,
+      "sha256": "0a6c77d351bb30d9b9012ff689cafcfcfb8c9f7fe7fac338805d00c5027ec675"
+    },
+    {
+      "path": "switch/mc-runtime/licenses/switchcraft/NVK-PACKAGING-MIT.txt",
+      "bytes": 1270,
+      "sha256": "1a993765e60a1e10b9ebdd79bba2a867b3fde3c9e37b4f433ffe7246439e5e5f"
+    },
+    {
+      "path": "switch/mc-runtime/licenses/switchcraft/PRISM-APACHE-2.0.txt",
+      "bytes": 11358,
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+    },
+    {
+      "path": "switch/mc-runtime/licenses/switchcraft/PRISM-GPL-3.0.txt",
+      "bytes": 35149,
+      "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986"
+    },
+    {
+      "path": "switch/mc-runtime/licenses/switchcraft/SDL3-ZLIB.txt",
+      "bytes": 884,
+      "sha256": "1c040b8271b37e5076359f8fd54240e371114112924d2df81ef87c7d6a1dfdfd"
+    },
+    {
+      "path": "switch/mc-runtime/licenses/switchcraft/STB-TRUETYPE.txt",
+      "bytes": 1606,
+      "sha256": "a94cc632840c6870df575d5e0bc4aa9ccba8c57d70d3dd892fcc13e2fb5344e0"
+    },
+    {
+      "path": "switch/mc-runtime/licenses/switchcraft/VULKAN-HEADERS-APACHE-2.0.txt",
+      "bytes": 11358,
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+    },
+    {
+      "path": "switch/mc-runtime/licenses/switchcraft/VULKAN-HEADERS-MIT.txt",
+      "bytes": 1084,
+      "sha256": "1ca3502222d967f3be5751c55f6b7ee735b5383909c3b501495f54b216dbf227"
+    },
+    {
+      "path": "switch/mc-runtime/licenses/switchcraft/font-audio/FREETYPE-FTL.txt",
+      "bytes": 6743,
+      "sha256": "08c135755dd589039470f1fdbb400daaabaaa50d0b366d19cebff4d22986baa1"
+    },
+    {
+      "path": "switch/mc-runtime/licenses/switchcraft/font-audio/FREETYPE-LICENSE-NOTICE.txt",
+      "bytes": 2074,
+      "sha256": "2e3bbb7d7c5c396368dd0853a790ec29ce5b8647163dde42a0493fb0d6556b2b"
+    },
+    {
+      "path": "switch/mc-runtime/licenses/switchcraft/font-audio/OPENAL-SOFT-COPYING.txt",
+      "bytes": 23330,
+      "sha256": "d808ce217e5b611854da622b57ec29fe545584c48bc5352fae72a4b6e5074a15"
+    },
+    {
+      "path": "switch/mc-runtime/licenses/switchcraft/font-audio/OPENAL-SOFT-FMT-LICENSE.txt",
+      "bytes": 1431,
+      "sha256": "07580f2a3b35709ce703d523f447b242f6dfec7582a8c0df102c7fa2849375f8"
+    },
+    {
+      "path": "switch/mc-runtime/licenses/switchcraft/font-audio/OPENAL-SOFT-GSL-LICENSE.txt",
+      "bytes": 1157,
+      "sha256": "4c21dc82a1c7186ea754fd59d504c00947953a3401fe8e24eaa44109ef8e2555"
+    },
+    {
+      "path": "switch/mc-runtime/licenses/switchcraft/font-audio/OPENAL-SOFT-PFFFT-LICENSE.txt",
+      "bytes": 1669,
+      "sha256": "64056328b3e7bc104e24ef96accc1a7abead156f0c02d1b87c97e3f3a28030de"
+    },
+    {
+      "path": "switch/mc-runtime/licenses/switchcraft/native-shaders/LICENSE.glslang",
+      "bytes": 54615,
+      "sha256": "17e70c676e1521ff3e4686f04a2053d93a7e28a33be8de7ec37ab0ff72feb677"
+    },
+    {
+      "path": "switch/mc-runtime/licenses/switchcraft/native-shaders/LICENSE.shaderc",
+      "bytes": 11357,
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+    },
+    {
+      "path": "switch/mc-runtime/licenses/switchcraft/native-shaders/LICENSE.spirv-cross",
+      "bytes": 11358,
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+    },
+    {
+      "path": "switch/mc-runtime/licenses/switchcraft/native-shaders/LICENSE.spirv-headers",
+      "bytes": 23503,
+      "sha256": "ea43b1de38a6f90c488800d66dec1ed671e68cda530266bc96951fb5b6307613"
+    },
+    {
+      "path": "switch/mc-runtime/licenses/switchcraft/native-shaders/LICENSE.spirv-tools",
+      "bytes": 11358,
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+    },
+    {
+      "path": "switch/mc-runtime/profiles/26.4-snapshot-6.json",
+      "bytes": 1124,
+      "sha256": "1c2dd86963a72aedf0c6a8b00ea8730adaf828411c275c593e795dbf7b04895f"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/minijvm/minijvm_rt.jar",
+      "bytes": 1186212,
+      "sha256": "e756dbc4261493b09534d3c133fb8f2383f75cc30c937c6e44b62ad6e5682677"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/conf/net.properties",
+      "bytes": 7043,
+      "sha256": "fc290426482925693e5ad9ccd5501930fc9e5cfd414c46cfb6ee3bce681711ad"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/conf/security/java.security",
+      "bytes": 73793,
+      "sha256": "d8583f3389218221f85f4ef2fd440ccb17aa44f0b3f189d08bbba8bf31983cfd"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/conf/security/policy/README.txt",
+      "bytes": 2390,
+      "sha256": "6da0747334b0fea7592fd92614b2bbc8b126535e129b1fee483774d914e98eb5"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/conf/security/policy/limited/default_US_export.policy",
+      "bytes": 146,
+      "sha256": "758b930a526fc670ab7537f8c26321527050a31f5f42149a2dda623c56a0a1a9"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/conf/security/policy/limited/default_local.policy",
+      "bytes": 647,
+      "sha256": "2b2627548e61316150d47ffc3e6cad465ca05b3cccd4785eb7d21aa7baa0f441"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/conf/security/policy/limited/exempt_local.policy",
+      "bytes": 566,
+      "sha256": "8c3d7648abcd95a272ce12db870082937f4d7f6878d730d83cb7fbb31eb8b2c9"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/conf/security/policy/unlimited/default_US_export.policy",
+      "bytes": 146,
+      "sha256": "758b930a526fc670ab7537f8c26321527050a31f5f42149a2dda623c56a0a1a9"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/conf/security/policy/unlimited/default_local.policy",
+      "bytes": 193,
+      "sha256": "8d8a318e6d90dfd7e26612d2b6385aa704f686ca6134c551f8928418d92b851a"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.base/ADDITIONAL_LICENSE_INFO",
+      "bytes": 2114,
+      "sha256": "a69bce275ba7a3570af6579cb0f55682cd75fedfcd49e0e8e9022270c447c916"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.base/ASSEMBLY_EXCEPTION",
+      "bytes": 1514,
+      "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.base/LICENSE",
+      "bytes": 19274,
+      "sha256": "4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.base/aes.md",
+      "bytes": 1444,
+      "sha256": "45c6d4da48325edfbff3dcf71c704e504c057904435ed23c6d57046d551eb69d"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.base/c-libutl.md",
+      "bytes": 1556,
+      "sha256": "bef40679922d6fdfb7e4ddb223ad6722300f6054ba737bbf6188d60fcec517f9"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.base/cldr.md",
+      "bytes": 8790,
+      "sha256": "472e341c36efc1136860ed7a6461a2af4a53ae95d55d1126726340f5ba62b06a"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.base/gcc.md",
+      "bytes": 128099,
+      "sha256": "589e34f142cdf7d1430daa573e61c2e3dd0330c9eb5a2c00d4a98b3a4450810b"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.base/icu.md",
+      "bytes": 4147,
+      "sha256": "be23ad20a8231d2241b37fcf401548febd8597de8373f89268882020cb7c8818"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.base/java.desktop/colorimaging.md",
+      "bytes": 167,
+      "sha256": "04d61e3e8e71dd452ebe52008af5378d9f6640d14578aeb515dc5375973b0189"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.base/java.desktop/freetype.md",
+      "bytes": 30570,
+      "sha256": "e1f43089a3d7f846ac72709ba3f5e3dfe4a07955cbb1f5b580c3c41cf93792dd"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.base/java.desktop/giflib.md",
+      "bytes": 1689,
+      "sha256": "206aab89ec75968e48a6a1ed6df7d8b9bfb7aea12cbe4c9345d93e5d97460a25"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.base/java.desktop/harfbuzz.md",
+      "bytes": 3629,
+      "sha256": "5ec7cba7f8e7fc3a089213140aab6fa1b3bd5bf8a91bf8bddb3b8d315fc5f7d0"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.base/java.desktop/jpeg.md",
+      "bytes": 3474,
+      "sha256": "c1dfb9719a71ad9f861f8728550542d681e25c8ef40e6393606e6e2a0c1d653a"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.base/java.desktop/lcms.md",
+      "bytes": 2655,
+      "sha256": "6d409e73a4ce3c25479b4fb01d05fe79c0458bcd1dccc07f72d3e211d64ac8ce"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.base/java.desktop/libpng.md",
+      "bytes": 7519,
+      "sha256": "f73afb394792f3aeecd959e89487603677a430e56b44eba596d8b572accfd540"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.base/java.desktop/mesa3d.md",
+      "bytes": 5732,
+      "sha256": "63f4e6f75caebbccb95d903fb43e46ac7111b3624d0a34f146b276d7d9e7b152"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.base/java.xml/bcel.md",
+      "bytes": 11196,
+      "sha256": "cd578186ad93de46cca29ec8ace2b11f9da751987f3f140e6095c528596cc8c1"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.base/java.xml/dom.md",
+      "bytes": 3761,
+      "sha256": "6686e8877667584a3a7c07344baadca1a03e29f677162d87c3c0811e990d1148"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.base/java.xml/jcup.md",
+      "bytes": 1448,
+      "sha256": "8d5dcfdf50455a3c34c753a98f21e953248af200415a9084e3f102cb6c43b8bf"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.base/java.xml/schema10part1.md",
+      "bytes": 2138,
+      "sha256": "b220f891e5bfa3aa4b2a4b34dfab53a291553c2ae0fd0b15a4cb1116d4e97770"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.base/java.xml/schema10part2.md",
+      "bytes": 2136,
+      "sha256": "2350e35e91866d5ee5bd7ee7c303b3e424bbca335d36c71452588aac494eaa3e"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.base/java.xml/xalan.md",
+      "bytes": 13477,
+      "sha256": "02bd013fc3f438dbb8fa41fa57888177e015efa6431d37fce6e794c6f353a6a1"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.base/java.xml/xerces.md",
+      "bytes": 11848,
+      "sha256": "4a6bf6b367193ee68681cb2d9fed30ffc5d62dd2d477bd62e0271707d71b3244"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.base/java.xml/xhtml10.md",
+      "bytes": 2634,
+      "sha256": "9a5cde47073ca80cf59127891420f4aed603eb65070738ad027bb19e76fb9319"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.base/java.xml/xhtml10schema.md",
+      "bytes": 7521,
+      "sha256": "7bc51d884aaae6ef27551ee78d404ba3116356790da3d06b665679eb2e1cc002"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.base/java.xml/xhtml11.md",
+      "bytes": 3258,
+      "sha256": "4f99a390896f0f55a0b78376de89bfd2ac845713de85e67e37f884b77e0c3122"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.base/java.xml/xhtml11schema.md",
+      "bytes": 3224,
+      "sha256": "8cd69b1392e286538008f4cb003f85caea3a375c619e697813d820b69857cf74"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.base/java.xml/xmlspec.md",
+      "bytes": 2719,
+      "sha256": "afec263bf5dc67697ee33734ee243f86a878161335ef6298273e4041673b0544"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.base/java.xml/xmlxsd.md",
+      "bytes": 1951,
+      "sha256": "498a5fec63509a8f3949983bb6878ac5c95aaf1d5e3679272d93314371aa0211"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.base/public_suffix.md",
+      "bytes": 17783,
+      "sha256": "861de1e4992a7d28f1de25c73cd50d26a94779ebd749c0643fecfa56442c3429"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.base/siphash.md",
+      "bytes": 8256,
+      "sha256": "5a792b5a74ad2a5f3d6a7ad8b7a841116e58a772c18bc6e392320a365b222c76"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.base/unicode.md",
+      "bytes": 15098,
+      "sha256": "5194d6760f2e7eccc07804196cc619f84e730fa9d10c0529b71416186f4d12dc"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.base/zlib.md",
+      "bytes": 1010,
+      "sha256": "c9c70c36a1f0325e8788771906202d42ba6ab4205caca44ec0f665707e83226b"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.datatransfer/ADDITIONAL_LICENSE_INFO",
+      "bytes": 2114,
+      "sha256": "a69bce275ba7a3570af6579cb0f55682cd75fedfcd49e0e8e9022270c447c916"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.datatransfer/ASSEMBLY_EXCEPTION",
+      "bytes": 1514,
+      "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.datatransfer/LICENSE",
+      "bytes": 19274,
+      "sha256": "4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.datatransfer/aes.md",
+      "bytes": 1444,
+      "sha256": "45c6d4da48325edfbff3dcf71c704e504c057904435ed23c6d57046d551eb69d"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.datatransfer/c-libutl.md",
+      "bytes": 1556,
+      "sha256": "bef40679922d6fdfb7e4ddb223ad6722300f6054ba737bbf6188d60fcec517f9"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.datatransfer/cldr.md",
+      "bytes": 8790,
+      "sha256": "472e341c36efc1136860ed7a6461a2af4a53ae95d55d1126726340f5ba62b06a"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.datatransfer/gcc.md",
+      "bytes": 128099,
+      "sha256": "589e34f142cdf7d1430daa573e61c2e3dd0330c9eb5a2c00d4a98b3a4450810b"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.datatransfer/icu.md",
+      "bytes": 4147,
+      "sha256": "be23ad20a8231d2241b37fcf401548febd8597de8373f89268882020cb7c8818"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.datatransfer/java.desktop/colorimaging.md",
+      "bytes": 167,
+      "sha256": "04d61e3e8e71dd452ebe52008af5378d9f6640d14578aeb515dc5375973b0189"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.datatransfer/java.desktop/freetype.md",
+      "bytes": 30570,
+      "sha256": "e1f43089a3d7f846ac72709ba3f5e3dfe4a07955cbb1f5b580c3c41cf93792dd"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.datatransfer/java.desktop/giflib.md",
+      "bytes": 1689,
+      "sha256": "206aab89ec75968e48a6a1ed6df7d8b9bfb7aea12cbe4c9345d93e5d97460a25"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.datatransfer/java.desktop/harfbuzz.md",
+      "bytes": 3629,
+      "sha256": "5ec7cba7f8e7fc3a089213140aab6fa1b3bd5bf8a91bf8bddb3b8d315fc5f7d0"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.datatransfer/java.desktop/jpeg.md",
+      "bytes": 3474,
+      "sha256": "c1dfb9719a71ad9f861f8728550542d681e25c8ef40e6393606e6e2a0c1d653a"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.datatransfer/java.desktop/lcms.md",
+      "bytes": 2655,
+      "sha256": "6d409e73a4ce3c25479b4fb01d05fe79c0458bcd1dccc07f72d3e211d64ac8ce"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.datatransfer/java.desktop/libpng.md",
+      "bytes": 7519,
+      "sha256": "f73afb394792f3aeecd959e89487603677a430e56b44eba596d8b572accfd540"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.datatransfer/java.desktop/mesa3d.md",
+      "bytes": 5732,
+      "sha256": "63f4e6f75caebbccb95d903fb43e46ac7111b3624d0a34f146b276d7d9e7b152"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.datatransfer/java.xml/bcel.md",
+      "bytes": 11196,
+      "sha256": "cd578186ad93de46cca29ec8ace2b11f9da751987f3f140e6095c528596cc8c1"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.datatransfer/java.xml/dom.md",
+      "bytes": 3761,
+      "sha256": "6686e8877667584a3a7c07344baadca1a03e29f677162d87c3c0811e990d1148"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.datatransfer/java.xml/jcup.md",
+      "bytes": 1448,
+      "sha256": "8d5dcfdf50455a3c34c753a98f21e953248af200415a9084e3f102cb6c43b8bf"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.datatransfer/java.xml/schema10part1.md",
+      "bytes": 2138,
+      "sha256": "b220f891e5bfa3aa4b2a4b34dfab53a291553c2ae0fd0b15a4cb1116d4e97770"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.datatransfer/java.xml/schema10part2.md",
+      "bytes": 2136,
+      "sha256": "2350e35e91866d5ee5bd7ee7c303b3e424bbca335d36c71452588aac494eaa3e"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.datatransfer/java.xml/xalan.md",
+      "bytes": 13477,
+      "sha256": "02bd013fc3f438dbb8fa41fa57888177e015efa6431d37fce6e794c6f353a6a1"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.datatransfer/java.xml/xerces.md",
+      "bytes": 11848,
+      "sha256": "4a6bf6b367193ee68681cb2d9fed30ffc5d62dd2d477bd62e0271707d71b3244"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.datatransfer/java.xml/xhtml10.md",
+      "bytes": 2634,
+      "sha256": "9a5cde47073ca80cf59127891420f4aed603eb65070738ad027bb19e76fb9319"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.datatransfer/java.xml/xhtml10schema.md",
+      "bytes": 7521,
+      "sha256": "7bc51d884aaae6ef27551ee78d404ba3116356790da3d06b665679eb2e1cc002"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.datatransfer/java.xml/xhtml11.md",
+      "bytes": 3258,
+      "sha256": "4f99a390896f0f55a0b78376de89bfd2ac845713de85e67e37f884b77e0c3122"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.datatransfer/java.xml/xhtml11schema.md",
+      "bytes": 3224,
+      "sha256": "8cd69b1392e286538008f4cb003f85caea3a375c619e697813d820b69857cf74"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.datatransfer/java.xml/xmlspec.md",
+      "bytes": 2719,
+      "sha256": "afec263bf5dc67697ee33734ee243f86a878161335ef6298273e4041673b0544"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.datatransfer/java.xml/xmlxsd.md",
+      "bytes": 1951,
+      "sha256": "498a5fec63509a8f3949983bb6878ac5c95aaf1d5e3679272d93314371aa0211"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.datatransfer/public_suffix.md",
+      "bytes": 17783,
+      "sha256": "861de1e4992a7d28f1de25c73cd50d26a94779ebd749c0643fecfa56442c3429"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.datatransfer/siphash.md",
+      "bytes": 8256,
+      "sha256": "5a792b5a74ad2a5f3d6a7ad8b7a841116e58a772c18bc6e392320a365b222c76"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.datatransfer/unicode.md",
+      "bytes": 15098,
+      "sha256": "5194d6760f2e7eccc07804196cc619f84e730fa9d10c0529b71416186f4d12dc"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.datatransfer/zlib.md",
+      "bytes": 1010,
+      "sha256": "c9c70c36a1f0325e8788771906202d42ba6ab4205caca44ec0f665707e83226b"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.desktop/ADDITIONAL_LICENSE_INFO",
+      "bytes": 2114,
+      "sha256": "a69bce275ba7a3570af6579cb0f55682cd75fedfcd49e0e8e9022270c447c916"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.desktop/ASSEMBLY_EXCEPTION",
+      "bytes": 1514,
+      "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.desktop/LICENSE",
+      "bytes": 19274,
+      "sha256": "4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.desktop/aes.md",
+      "bytes": 1444,
+      "sha256": "45c6d4da48325edfbff3dcf71c704e504c057904435ed23c6d57046d551eb69d"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.desktop/c-libutl.md",
+      "bytes": 1556,
+      "sha256": "bef40679922d6fdfb7e4ddb223ad6722300f6054ba737bbf6188d60fcec517f9"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.desktop/cldr.md",
+      "bytes": 8790,
+      "sha256": "472e341c36efc1136860ed7a6461a2af4a53ae95d55d1126726340f5ba62b06a"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.desktop/gcc.md",
+      "bytes": 128099,
+      "sha256": "589e34f142cdf7d1430daa573e61c2e3dd0330c9eb5a2c00d4a98b3a4450810b"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.desktop/icu.md",
+      "bytes": 4147,
+      "sha256": "be23ad20a8231d2241b37fcf401548febd8597de8373f89268882020cb7c8818"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.desktop/java.desktop/colorimaging.md",
+      "bytes": 167,
+      "sha256": "04d61e3e8e71dd452ebe52008af5378d9f6640d14578aeb515dc5375973b0189"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.desktop/java.desktop/freetype.md",
+      "bytes": 30570,
+      "sha256": "e1f43089a3d7f846ac72709ba3f5e3dfe4a07955cbb1f5b580c3c41cf93792dd"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.desktop/java.desktop/giflib.md",
+      "bytes": 1689,
+      "sha256": "206aab89ec75968e48a6a1ed6df7d8b9bfb7aea12cbe4c9345d93e5d97460a25"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.desktop/java.desktop/harfbuzz.md",
+      "bytes": 3629,
+      "sha256": "5ec7cba7f8e7fc3a089213140aab6fa1b3bd5bf8a91bf8bddb3b8d315fc5f7d0"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.desktop/java.desktop/jpeg.md",
+      "bytes": 3474,
+      "sha256": "c1dfb9719a71ad9f861f8728550542d681e25c8ef40e6393606e6e2a0c1d653a"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.desktop/java.desktop/lcms.md",
+      "bytes": 2655,
+      "sha256": "6d409e73a4ce3c25479b4fb01d05fe79c0458bcd1dccc07f72d3e211d64ac8ce"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.desktop/java.desktop/libpng.md",
+      "bytes": 7519,
+      "sha256": "f73afb394792f3aeecd959e89487603677a430e56b44eba596d8b572accfd540"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.desktop/java.desktop/mesa3d.md",
+      "bytes": 5732,
+      "sha256": "63f4e6f75caebbccb95d903fb43e46ac7111b3624d0a34f146b276d7d9e7b152"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.desktop/java.xml/bcel.md",
+      "bytes": 11196,
+      "sha256": "cd578186ad93de46cca29ec8ace2b11f9da751987f3f140e6095c528596cc8c1"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.desktop/java.xml/dom.md",
+      "bytes": 3761,
+      "sha256": "6686e8877667584a3a7c07344baadca1a03e29f677162d87c3c0811e990d1148"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.desktop/java.xml/jcup.md",
+      "bytes": 1448,
+      "sha256": "8d5dcfdf50455a3c34c753a98f21e953248af200415a9084e3f102cb6c43b8bf"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.desktop/java.xml/schema10part1.md",
+      "bytes": 2138,
+      "sha256": "b220f891e5bfa3aa4b2a4b34dfab53a291553c2ae0fd0b15a4cb1116d4e97770"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.desktop/java.xml/schema10part2.md",
+      "bytes": 2136,
+      "sha256": "2350e35e91866d5ee5bd7ee7c303b3e424bbca335d36c71452588aac494eaa3e"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.desktop/java.xml/xalan.md",
+      "bytes": 13477,
+      "sha256": "02bd013fc3f438dbb8fa41fa57888177e015efa6431d37fce6e794c6f353a6a1"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.desktop/java.xml/xerces.md",
+      "bytes": 11848,
+      "sha256": "4a6bf6b367193ee68681cb2d9fed30ffc5d62dd2d477bd62e0271707d71b3244"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.desktop/java.xml/xhtml10.md",
+      "bytes": 2634,
+      "sha256": "9a5cde47073ca80cf59127891420f4aed603eb65070738ad027bb19e76fb9319"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.desktop/java.xml/xhtml10schema.md",
+      "bytes": 7521,
+      "sha256": "7bc51d884aaae6ef27551ee78d404ba3116356790da3d06b665679eb2e1cc002"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.desktop/java.xml/xhtml11.md",
+      "bytes": 3258,
+      "sha256": "4f99a390896f0f55a0b78376de89bfd2ac845713de85e67e37f884b77e0c3122"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.desktop/java.xml/xhtml11schema.md",
+      "bytes": 3224,
+      "sha256": "8cd69b1392e286538008f4cb003f85caea3a375c619e697813d820b69857cf74"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.desktop/java.xml/xmlspec.md",
+      "bytes": 2719,
+      "sha256": "afec263bf5dc67697ee33734ee243f86a878161335ef6298273e4041673b0544"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.desktop/java.xml/xmlxsd.md",
+      "bytes": 1951,
+      "sha256": "498a5fec63509a8f3949983bb6878ac5c95aaf1d5e3679272d93314371aa0211"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.desktop/public_suffix.md",
+      "bytes": 17783,
+      "sha256": "861de1e4992a7d28f1de25c73cd50d26a94779ebd749c0643fecfa56442c3429"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.desktop/siphash.md",
+      "bytes": 8256,
+      "sha256": "5a792b5a74ad2a5f3d6a7ad8b7a841116e58a772c18bc6e392320a365b222c76"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.desktop/unicode.md",
+      "bytes": 15098,
+      "sha256": "5194d6760f2e7eccc07804196cc619f84e730fa9d10c0529b71416186f4d12dc"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.desktop/zlib.md",
+      "bytes": 1010,
+      "sha256": "c9c70c36a1f0325e8788771906202d42ba6ab4205caca44ec0f665707e83226b"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.instrument/ADDITIONAL_LICENSE_INFO",
+      "bytes": 2114,
+      "sha256": "a69bce275ba7a3570af6579cb0f55682cd75fedfcd49e0e8e9022270c447c916"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.instrument/ASSEMBLY_EXCEPTION",
+      "bytes": 1514,
+      "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.instrument/LICENSE",
+      "bytes": 19274,
+      "sha256": "4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.instrument/aes.md",
+      "bytes": 1444,
+      "sha256": "45c6d4da48325edfbff3dcf71c704e504c057904435ed23c6d57046d551eb69d"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.instrument/c-libutl.md",
+      "bytes": 1556,
+      "sha256": "bef40679922d6fdfb7e4ddb223ad6722300f6054ba737bbf6188d60fcec517f9"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.instrument/cldr.md",
+      "bytes": 8790,
+      "sha256": "472e341c36efc1136860ed7a6461a2af4a53ae95d55d1126726340f5ba62b06a"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.instrument/gcc.md",
+      "bytes": 128099,
+      "sha256": "589e34f142cdf7d1430daa573e61c2e3dd0330c9eb5a2c00d4a98b3a4450810b"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.instrument/icu.md",
+      "bytes": 4147,
+      "sha256": "be23ad20a8231d2241b37fcf401548febd8597de8373f89268882020cb7c8818"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.instrument/java.desktop/colorimaging.md",
+      "bytes": 167,
+      "sha256": "04d61e3e8e71dd452ebe52008af5378d9f6640d14578aeb515dc5375973b0189"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.instrument/java.desktop/freetype.md",
+      "bytes": 30570,
+      "sha256": "e1f43089a3d7f846ac72709ba3f5e3dfe4a07955cbb1f5b580c3c41cf93792dd"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.instrument/java.desktop/giflib.md",
+      "bytes": 1689,
+      "sha256": "206aab89ec75968e48a6a1ed6df7d8b9bfb7aea12cbe4c9345d93e5d97460a25"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.instrument/java.desktop/harfbuzz.md",
+      "bytes": 3629,
+      "sha256": "5ec7cba7f8e7fc3a089213140aab6fa1b3bd5bf8a91bf8bddb3b8d315fc5f7d0"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.instrument/java.desktop/jpeg.md",
+      "bytes": 3474,
+      "sha256": "c1dfb9719a71ad9f861f8728550542d681e25c8ef40e6393606e6e2a0c1d653a"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.instrument/java.desktop/lcms.md",
+      "bytes": 2655,
+      "sha256": "6d409e73a4ce3c25479b4fb01d05fe79c0458bcd1dccc07f72d3e211d64ac8ce"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.instrument/java.desktop/libpng.md",
+      "bytes": 7519,
+      "sha256": "f73afb394792f3aeecd959e89487603677a430e56b44eba596d8b572accfd540"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.instrument/java.desktop/mesa3d.md",
+      "bytes": 5732,
+      "sha256": "63f4e6f75caebbccb95d903fb43e46ac7111b3624d0a34f146b276d7d9e7b152"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.instrument/java.xml/bcel.md",
+      "bytes": 11196,
+      "sha256": "cd578186ad93de46cca29ec8ace2b11f9da751987f3f140e6095c528596cc8c1"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.instrument/java.xml/dom.md",
+      "bytes": 3761,
+      "sha256": "6686e8877667584a3a7c07344baadca1a03e29f677162d87c3c0811e990d1148"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.instrument/java.xml/jcup.md",
+      "bytes": 1448,
+      "sha256": "8d5dcfdf50455a3c34c753a98f21e953248af200415a9084e3f102cb6c43b8bf"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.instrument/java.xml/schema10part1.md",
+      "bytes": 2138,
+      "sha256": "b220f891e5bfa3aa4b2a4b34dfab53a291553c2ae0fd0b15a4cb1116d4e97770"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.instrument/java.xml/schema10part2.md",
+      "bytes": 2136,
+      "sha256": "2350e35e91866d5ee5bd7ee7c303b3e424bbca335d36c71452588aac494eaa3e"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.instrument/java.xml/xalan.md",
+      "bytes": 13477,
+      "sha256": "02bd013fc3f438dbb8fa41fa57888177e015efa6431d37fce6e794c6f353a6a1"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.instrument/java.xml/xerces.md",
+      "bytes": 11848,
+      "sha256": "4a6bf6b367193ee68681cb2d9fed30ffc5d62dd2d477bd62e0271707d71b3244"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.instrument/java.xml/xhtml10.md",
+      "bytes": 2634,
+      "sha256": "9a5cde47073ca80cf59127891420f4aed603eb65070738ad027bb19e76fb9319"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.instrument/java.xml/xhtml10schema.md",
+      "bytes": 7521,
+      "sha256": "7bc51d884aaae6ef27551ee78d404ba3116356790da3d06b665679eb2e1cc002"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.instrument/java.xml/xhtml11.md",
+      "bytes": 3258,
+      "sha256": "4f99a390896f0f55a0b78376de89bfd2ac845713de85e67e37f884b77e0c3122"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.instrument/java.xml/xhtml11schema.md",
+      "bytes": 3224,
+      "sha256": "8cd69b1392e286538008f4cb003f85caea3a375c619e697813d820b69857cf74"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.instrument/java.xml/xmlspec.md",
+      "bytes": 2719,
+      "sha256": "afec263bf5dc67697ee33734ee243f86a878161335ef6298273e4041673b0544"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.instrument/java.xml/xmlxsd.md",
+      "bytes": 1951,
+      "sha256": "498a5fec63509a8f3949983bb6878ac5c95aaf1d5e3679272d93314371aa0211"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.instrument/public_suffix.md",
+      "bytes": 17783,
+      "sha256": "861de1e4992a7d28f1de25c73cd50d26a94779ebd749c0643fecfa56442c3429"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.instrument/siphash.md",
+      "bytes": 8256,
+      "sha256": "5a792b5a74ad2a5f3d6a7ad8b7a841116e58a772c18bc6e392320a365b222c76"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.instrument/unicode.md",
+      "bytes": 15098,
+      "sha256": "5194d6760f2e7eccc07804196cc619f84e730fa9d10c0529b71416186f4d12dc"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.instrument/zlib.md",
+      "bytes": 1010,
+      "sha256": "c9c70c36a1f0325e8788771906202d42ba6ab4205caca44ec0f665707e83226b"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.logging/ADDITIONAL_LICENSE_INFO",
+      "bytes": 2114,
+      "sha256": "a69bce275ba7a3570af6579cb0f55682cd75fedfcd49e0e8e9022270c447c916"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.logging/ASSEMBLY_EXCEPTION",
+      "bytes": 1514,
+      "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.logging/LICENSE",
+      "bytes": 19274,
+      "sha256": "4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.logging/aes.md",
+      "bytes": 1444,
+      "sha256": "45c6d4da48325edfbff3dcf71c704e504c057904435ed23c6d57046d551eb69d"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.logging/c-libutl.md",
+      "bytes": 1556,
+      "sha256": "bef40679922d6fdfb7e4ddb223ad6722300f6054ba737bbf6188d60fcec517f9"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.logging/cldr.md",
+      "bytes": 8790,
+      "sha256": "472e341c36efc1136860ed7a6461a2af4a53ae95d55d1126726340f5ba62b06a"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.logging/gcc.md",
+      "bytes": 128099,
+      "sha256": "589e34f142cdf7d1430daa573e61c2e3dd0330c9eb5a2c00d4a98b3a4450810b"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.logging/icu.md",
+      "bytes": 4147,
+      "sha256": "be23ad20a8231d2241b37fcf401548febd8597de8373f89268882020cb7c8818"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.logging/java.desktop/colorimaging.md",
+      "bytes": 167,
+      "sha256": "04d61e3e8e71dd452ebe52008af5378d9f6640d14578aeb515dc5375973b0189"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.logging/java.desktop/freetype.md",
+      "bytes": 30570,
+      "sha256": "e1f43089a3d7f846ac72709ba3f5e3dfe4a07955cbb1f5b580c3c41cf93792dd"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.logging/java.desktop/giflib.md",
+      "bytes": 1689,
+      "sha256": "206aab89ec75968e48a6a1ed6df7d8b9bfb7aea12cbe4c9345d93e5d97460a25"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.logging/java.desktop/harfbuzz.md",
+      "bytes": 3629,
+      "sha256": "5ec7cba7f8e7fc3a089213140aab6fa1b3bd5bf8a91bf8bddb3b8d315fc5f7d0"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.logging/java.desktop/jpeg.md",
+      "bytes": 3474,
+      "sha256": "c1dfb9719a71ad9f861f8728550542d681e25c8ef40e6393606e6e2a0c1d653a"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.logging/java.desktop/lcms.md",
+      "bytes": 2655,
+      "sha256": "6d409e73a4ce3c25479b4fb01d05fe79c0458bcd1dccc07f72d3e211d64ac8ce"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.logging/java.desktop/libpng.md",
+      "bytes": 7519,
+      "sha256": "f73afb394792f3aeecd959e89487603677a430e56b44eba596d8b572accfd540"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.logging/java.desktop/mesa3d.md",
+      "bytes": 5732,
+      "sha256": "63f4e6f75caebbccb95d903fb43e46ac7111b3624d0a34f146b276d7d9e7b152"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.logging/java.xml/bcel.md",
+      "bytes": 11196,
+      "sha256": "cd578186ad93de46cca29ec8ace2b11f9da751987f3f140e6095c528596cc8c1"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.logging/java.xml/dom.md",
+      "bytes": 3761,
+      "sha256": "6686e8877667584a3a7c07344baadca1a03e29f677162d87c3c0811e990d1148"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.logging/java.xml/jcup.md",
+      "bytes": 1448,
+      "sha256": "8d5dcfdf50455a3c34c753a98f21e953248af200415a9084e3f102cb6c43b8bf"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.logging/java.xml/schema10part1.md",
+      "bytes": 2138,
+      "sha256": "b220f891e5bfa3aa4b2a4b34dfab53a291553c2ae0fd0b15a4cb1116d4e97770"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.logging/java.xml/schema10part2.md",
+      "bytes": 2136,
+      "sha256": "2350e35e91866d5ee5bd7ee7c303b3e424bbca335d36c71452588aac494eaa3e"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.logging/java.xml/xalan.md",
+      "bytes": 13477,
+      "sha256": "02bd013fc3f438dbb8fa41fa57888177e015efa6431d37fce6e794c6f353a6a1"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.logging/java.xml/xerces.md",
+      "bytes": 11848,
+      "sha256": "4a6bf6b367193ee68681cb2d9fed30ffc5d62dd2d477bd62e0271707d71b3244"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.logging/java.xml/xhtml10.md",
+      "bytes": 2634,
+      "sha256": "9a5cde47073ca80cf59127891420f4aed603eb65070738ad027bb19e76fb9319"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.logging/java.xml/xhtml10schema.md",
+      "bytes": 7521,
+      "sha256": "7bc51d884aaae6ef27551ee78d404ba3116356790da3d06b665679eb2e1cc002"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.logging/java.xml/xhtml11.md",
+      "bytes": 3258,
+      "sha256": "4f99a390896f0f55a0b78376de89bfd2ac845713de85e67e37f884b77e0c3122"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.logging/java.xml/xhtml11schema.md",
+      "bytes": 3224,
+      "sha256": "8cd69b1392e286538008f4cb003f85caea3a375c619e697813d820b69857cf74"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.logging/java.xml/xmlspec.md",
+      "bytes": 2719,
+      "sha256": "afec263bf5dc67697ee33734ee243f86a878161335ef6298273e4041673b0544"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.logging/java.xml/xmlxsd.md",
+      "bytes": 1951,
+      "sha256": "498a5fec63509a8f3949983bb6878ac5c95aaf1d5e3679272d93314371aa0211"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.logging/public_suffix.md",
+      "bytes": 17783,
+      "sha256": "861de1e4992a7d28f1de25c73cd50d26a94779ebd749c0643fecfa56442c3429"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.logging/siphash.md",
+      "bytes": 8256,
+      "sha256": "5a792b5a74ad2a5f3d6a7ad8b7a841116e58a772c18bc6e392320a365b222c76"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.logging/unicode.md",
+      "bytes": 15098,
+      "sha256": "5194d6760f2e7eccc07804196cc619f84e730fa9d10c0529b71416186f4d12dc"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.logging/zlib.md",
+      "bytes": 1010,
+      "sha256": "c9c70c36a1f0325e8788771906202d42ba6ab4205caca44ec0f665707e83226b"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.management/ADDITIONAL_LICENSE_INFO",
+      "bytes": 2114,
+      "sha256": "a69bce275ba7a3570af6579cb0f55682cd75fedfcd49e0e8e9022270c447c916"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.management/ASSEMBLY_EXCEPTION",
+      "bytes": 1514,
+      "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.management/LICENSE",
+      "bytes": 19274,
+      "sha256": "4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.management/aes.md",
+      "bytes": 1444,
+      "sha256": "45c6d4da48325edfbff3dcf71c704e504c057904435ed23c6d57046d551eb69d"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.management/c-libutl.md",
+      "bytes": 1556,
+      "sha256": "bef40679922d6fdfb7e4ddb223ad6722300f6054ba737bbf6188d60fcec517f9"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.management/cldr.md",
+      "bytes": 8790,
+      "sha256": "472e341c36efc1136860ed7a6461a2af4a53ae95d55d1126726340f5ba62b06a"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.management/gcc.md",
+      "bytes": 128099,
+      "sha256": "589e34f142cdf7d1430daa573e61c2e3dd0330c9eb5a2c00d4a98b3a4450810b"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.management/icu.md",
+      "bytes": 4147,
+      "sha256": "be23ad20a8231d2241b37fcf401548febd8597de8373f89268882020cb7c8818"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.management/java.desktop/colorimaging.md",
+      "bytes": 167,
+      "sha256": "04d61e3e8e71dd452ebe52008af5378d9f6640d14578aeb515dc5375973b0189"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.management/java.desktop/freetype.md",
+      "bytes": 30570,
+      "sha256": "e1f43089a3d7f846ac72709ba3f5e3dfe4a07955cbb1f5b580c3c41cf93792dd"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.management/java.desktop/giflib.md",
+      "bytes": 1689,
+      "sha256": "206aab89ec75968e48a6a1ed6df7d8b9bfb7aea12cbe4c9345d93e5d97460a25"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.management/java.desktop/harfbuzz.md",
+      "bytes": 3629,
+      "sha256": "5ec7cba7f8e7fc3a089213140aab6fa1b3bd5bf8a91bf8bddb3b8d315fc5f7d0"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.management/java.desktop/jpeg.md",
+      "bytes": 3474,
+      "sha256": "c1dfb9719a71ad9f861f8728550542d681e25c8ef40e6393606e6e2a0c1d653a"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.management/java.desktop/lcms.md",
+      "bytes": 2655,
+      "sha256": "6d409e73a4ce3c25479b4fb01d05fe79c0458bcd1dccc07f72d3e211d64ac8ce"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.management/java.desktop/libpng.md",
+      "bytes": 7519,
+      "sha256": "f73afb394792f3aeecd959e89487603677a430e56b44eba596d8b572accfd540"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.management/java.desktop/mesa3d.md",
+      "bytes": 5732,
+      "sha256": "63f4e6f75caebbccb95d903fb43e46ac7111b3624d0a34f146b276d7d9e7b152"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.management/java.xml/bcel.md",
+      "bytes": 11196,
+      "sha256": "cd578186ad93de46cca29ec8ace2b11f9da751987f3f140e6095c528596cc8c1"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.management/java.xml/dom.md",
+      "bytes": 3761,
+      "sha256": "6686e8877667584a3a7c07344baadca1a03e29f677162d87c3c0811e990d1148"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.management/java.xml/jcup.md",
+      "bytes": 1448,
+      "sha256": "8d5dcfdf50455a3c34c753a98f21e953248af200415a9084e3f102cb6c43b8bf"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.management/java.xml/schema10part1.md",
+      "bytes": 2138,
+      "sha256": "b220f891e5bfa3aa4b2a4b34dfab53a291553c2ae0fd0b15a4cb1116d4e97770"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.management/java.xml/schema10part2.md",
+      "bytes": 2136,
+      "sha256": "2350e35e91866d5ee5bd7ee7c303b3e424bbca335d36c71452588aac494eaa3e"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.management/java.xml/xalan.md",
+      "bytes": 13477,
+      "sha256": "02bd013fc3f438dbb8fa41fa57888177e015efa6431d37fce6e794c6f353a6a1"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.management/java.xml/xerces.md",
+      "bytes": 11848,
+      "sha256": "4a6bf6b367193ee68681cb2d9fed30ffc5d62dd2d477bd62e0271707d71b3244"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.management/java.xml/xhtml10.md",
+      "bytes": 2634,
+      "sha256": "9a5cde47073ca80cf59127891420f4aed603eb65070738ad027bb19e76fb9319"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.management/java.xml/xhtml10schema.md",
+      "bytes": 7521,
+      "sha256": "7bc51d884aaae6ef27551ee78d404ba3116356790da3d06b665679eb2e1cc002"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.management/java.xml/xhtml11.md",
+      "bytes": 3258,
+      "sha256": "4f99a390896f0f55a0b78376de89bfd2ac845713de85e67e37f884b77e0c3122"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.management/java.xml/xhtml11schema.md",
+      "bytes": 3224,
+      "sha256": "8cd69b1392e286538008f4cb003f85caea3a375c619e697813d820b69857cf74"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.management/java.xml/xmlspec.md",
+      "bytes": 2719,
+      "sha256": "afec263bf5dc67697ee33734ee243f86a878161335ef6298273e4041673b0544"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.management/java.xml/xmlxsd.md",
+      "bytes": 1951,
+      "sha256": "498a5fec63509a8f3949983bb6878ac5c95aaf1d5e3679272d93314371aa0211"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.management/public_suffix.md",
+      "bytes": 17783,
+      "sha256": "861de1e4992a7d28f1de25c73cd50d26a94779ebd749c0643fecfa56442c3429"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.management/siphash.md",
+      "bytes": 8256,
+      "sha256": "5a792b5a74ad2a5f3d6a7ad8b7a841116e58a772c18bc6e392320a365b222c76"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.management/unicode.md",
+      "bytes": 15098,
+      "sha256": "5194d6760f2e7eccc07804196cc619f84e730fa9d10c0529b71416186f4d12dc"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.management/zlib.md",
+      "bytes": 1010,
+      "sha256": "c9c70c36a1f0325e8788771906202d42ba6ab4205caca44ec0f665707e83226b"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.prefs/ADDITIONAL_LICENSE_INFO",
+      "bytes": 2114,
+      "sha256": "a69bce275ba7a3570af6579cb0f55682cd75fedfcd49e0e8e9022270c447c916"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.prefs/ASSEMBLY_EXCEPTION",
+      "bytes": 1514,
+      "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.prefs/LICENSE",
+      "bytes": 19274,
+      "sha256": "4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.prefs/aes.md",
+      "bytes": 1444,
+      "sha256": "45c6d4da48325edfbff3dcf71c704e504c057904435ed23c6d57046d551eb69d"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.prefs/c-libutl.md",
+      "bytes": 1556,
+      "sha256": "bef40679922d6fdfb7e4ddb223ad6722300f6054ba737bbf6188d60fcec517f9"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.prefs/cldr.md",
+      "bytes": 8790,
+      "sha256": "472e341c36efc1136860ed7a6461a2af4a53ae95d55d1126726340f5ba62b06a"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.prefs/gcc.md",
+      "bytes": 128099,
+      "sha256": "589e34f142cdf7d1430daa573e61c2e3dd0330c9eb5a2c00d4a98b3a4450810b"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.prefs/icu.md",
+      "bytes": 4147,
+      "sha256": "be23ad20a8231d2241b37fcf401548febd8597de8373f89268882020cb7c8818"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.prefs/java.desktop/colorimaging.md",
+      "bytes": 167,
+      "sha256": "04d61e3e8e71dd452ebe52008af5378d9f6640d14578aeb515dc5375973b0189"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.prefs/java.desktop/freetype.md",
+      "bytes": 30570,
+      "sha256": "e1f43089a3d7f846ac72709ba3f5e3dfe4a07955cbb1f5b580c3c41cf93792dd"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.prefs/java.desktop/giflib.md",
+      "bytes": 1689,
+      "sha256": "206aab89ec75968e48a6a1ed6df7d8b9bfb7aea12cbe4c9345d93e5d97460a25"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.prefs/java.desktop/harfbuzz.md",
+      "bytes": 3629,
+      "sha256": "5ec7cba7f8e7fc3a089213140aab6fa1b3bd5bf8a91bf8bddb3b8d315fc5f7d0"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.prefs/java.desktop/jpeg.md",
+      "bytes": 3474,
+      "sha256": "c1dfb9719a71ad9f861f8728550542d681e25c8ef40e6393606e6e2a0c1d653a"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.prefs/java.desktop/lcms.md",
+      "bytes": 2655,
+      "sha256": "6d409e73a4ce3c25479b4fb01d05fe79c0458bcd1dccc07f72d3e211d64ac8ce"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.prefs/java.desktop/libpng.md",
+      "bytes": 7519,
+      "sha256": "f73afb394792f3aeecd959e89487603677a430e56b44eba596d8b572accfd540"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.prefs/java.desktop/mesa3d.md",
+      "bytes": 5732,
+      "sha256": "63f4e6f75caebbccb95d903fb43e46ac7111b3624d0a34f146b276d7d9e7b152"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.prefs/java.xml/bcel.md",
+      "bytes": 11196,
+      "sha256": "cd578186ad93de46cca29ec8ace2b11f9da751987f3f140e6095c528596cc8c1"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.prefs/java.xml/dom.md",
+      "bytes": 3761,
+      "sha256": "6686e8877667584a3a7c07344baadca1a03e29f677162d87c3c0811e990d1148"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.prefs/java.xml/jcup.md",
+      "bytes": 1448,
+      "sha256": "8d5dcfdf50455a3c34c753a98f21e953248af200415a9084e3f102cb6c43b8bf"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.prefs/java.xml/schema10part1.md",
+      "bytes": 2138,
+      "sha256": "b220f891e5bfa3aa4b2a4b34dfab53a291553c2ae0fd0b15a4cb1116d4e97770"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.prefs/java.xml/schema10part2.md",
+      "bytes": 2136,
+      "sha256": "2350e35e91866d5ee5bd7ee7c303b3e424bbca335d36c71452588aac494eaa3e"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.prefs/java.xml/xalan.md",
+      "bytes": 13477,
+      "sha256": "02bd013fc3f438dbb8fa41fa57888177e015efa6431d37fce6e794c6f353a6a1"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.prefs/java.xml/xerces.md",
+      "bytes": 11848,
+      "sha256": "4a6bf6b367193ee68681cb2d9fed30ffc5d62dd2d477bd62e0271707d71b3244"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.prefs/java.xml/xhtml10.md",
+      "bytes": 2634,
+      "sha256": "9a5cde47073ca80cf59127891420f4aed603eb65070738ad027bb19e76fb9319"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.prefs/java.xml/xhtml10schema.md",
+      "bytes": 7521,
+      "sha256": "7bc51d884aaae6ef27551ee78d404ba3116356790da3d06b665679eb2e1cc002"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.prefs/java.xml/xhtml11.md",
+      "bytes": 3258,
+      "sha256": "4f99a390896f0f55a0b78376de89bfd2ac845713de85e67e37f884b77e0c3122"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.prefs/java.xml/xhtml11schema.md",
+      "bytes": 3224,
+      "sha256": "8cd69b1392e286538008f4cb003f85caea3a375c619e697813d820b69857cf74"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.prefs/java.xml/xmlspec.md",
+      "bytes": 2719,
+      "sha256": "afec263bf5dc67697ee33734ee243f86a878161335ef6298273e4041673b0544"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.prefs/java.xml/xmlxsd.md",
+      "bytes": 1951,
+      "sha256": "498a5fec63509a8f3949983bb6878ac5c95aaf1d5e3679272d93314371aa0211"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.prefs/public_suffix.md",
+      "bytes": 17783,
+      "sha256": "861de1e4992a7d28f1de25c73cd50d26a94779ebd749c0643fecfa56442c3429"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.prefs/siphash.md",
+      "bytes": 8256,
+      "sha256": "5a792b5a74ad2a5f3d6a7ad8b7a841116e58a772c18bc6e392320a365b222c76"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.prefs/unicode.md",
+      "bytes": 15098,
+      "sha256": "5194d6760f2e7eccc07804196cc619f84e730fa9d10c0529b71416186f4d12dc"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.prefs/zlib.md",
+      "bytes": 1010,
+      "sha256": "c9c70c36a1f0325e8788771906202d42ba6ab4205caca44ec0f665707e83226b"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.xml/ADDITIONAL_LICENSE_INFO",
+      "bytes": 2114,
+      "sha256": "a69bce275ba7a3570af6579cb0f55682cd75fedfcd49e0e8e9022270c447c916"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.xml/ASSEMBLY_EXCEPTION",
+      "bytes": 1514,
+      "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.xml/LICENSE",
+      "bytes": 19274,
+      "sha256": "4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.xml/aes.md",
+      "bytes": 1444,
+      "sha256": "45c6d4da48325edfbff3dcf71c704e504c057904435ed23c6d57046d551eb69d"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.xml/c-libutl.md",
+      "bytes": 1556,
+      "sha256": "bef40679922d6fdfb7e4ddb223ad6722300f6054ba737bbf6188d60fcec517f9"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.xml/cldr.md",
+      "bytes": 8790,
+      "sha256": "472e341c36efc1136860ed7a6461a2af4a53ae95d55d1126726340f5ba62b06a"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.xml/gcc.md",
+      "bytes": 128099,
+      "sha256": "589e34f142cdf7d1430daa573e61c2e3dd0330c9eb5a2c00d4a98b3a4450810b"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.xml/icu.md",
+      "bytes": 4147,
+      "sha256": "be23ad20a8231d2241b37fcf401548febd8597de8373f89268882020cb7c8818"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.xml/java.desktop/colorimaging.md",
+      "bytes": 167,
+      "sha256": "04d61e3e8e71dd452ebe52008af5378d9f6640d14578aeb515dc5375973b0189"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.xml/java.desktop/freetype.md",
+      "bytes": 30570,
+      "sha256": "e1f43089a3d7f846ac72709ba3f5e3dfe4a07955cbb1f5b580c3c41cf93792dd"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.xml/java.desktop/giflib.md",
+      "bytes": 1689,
+      "sha256": "206aab89ec75968e48a6a1ed6df7d8b9bfb7aea12cbe4c9345d93e5d97460a25"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.xml/java.desktop/harfbuzz.md",
+      "bytes": 3629,
+      "sha256": "5ec7cba7f8e7fc3a089213140aab6fa1b3bd5bf8a91bf8bddb3b8d315fc5f7d0"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.xml/java.desktop/jpeg.md",
+      "bytes": 3474,
+      "sha256": "c1dfb9719a71ad9f861f8728550542d681e25c8ef40e6393606e6e2a0c1d653a"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.xml/java.desktop/lcms.md",
+      "bytes": 2655,
+      "sha256": "6d409e73a4ce3c25479b4fb01d05fe79c0458bcd1dccc07f72d3e211d64ac8ce"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.xml/java.desktop/libpng.md",
+      "bytes": 7519,
+      "sha256": "f73afb394792f3aeecd959e89487603677a430e56b44eba596d8b572accfd540"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.xml/java.desktop/mesa3d.md",
+      "bytes": 5732,
+      "sha256": "63f4e6f75caebbccb95d903fb43e46ac7111b3624d0a34f146b276d7d9e7b152"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.xml/java.xml/bcel.md",
+      "bytes": 11196,
+      "sha256": "cd578186ad93de46cca29ec8ace2b11f9da751987f3f140e6095c528596cc8c1"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.xml/java.xml/dom.md",
+      "bytes": 3761,
+      "sha256": "6686e8877667584a3a7c07344baadca1a03e29f677162d87c3c0811e990d1148"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.xml/java.xml/jcup.md",
+      "bytes": 1448,
+      "sha256": "8d5dcfdf50455a3c34c753a98f21e953248af200415a9084e3f102cb6c43b8bf"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.xml/java.xml/schema10part1.md",
+      "bytes": 2138,
+      "sha256": "b220f891e5bfa3aa4b2a4b34dfab53a291553c2ae0fd0b15a4cb1116d4e97770"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.xml/java.xml/schema10part2.md",
+      "bytes": 2136,
+      "sha256": "2350e35e91866d5ee5bd7ee7c303b3e424bbca335d36c71452588aac494eaa3e"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.xml/java.xml/xalan.md",
+      "bytes": 13477,
+      "sha256": "02bd013fc3f438dbb8fa41fa57888177e015efa6431d37fce6e794c6f353a6a1"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.xml/java.xml/xerces.md",
+      "bytes": 11848,
+      "sha256": "4a6bf6b367193ee68681cb2d9fed30ffc5d62dd2d477bd62e0271707d71b3244"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.xml/java.xml/xhtml10.md",
+      "bytes": 2634,
+      "sha256": "9a5cde47073ca80cf59127891420f4aed603eb65070738ad027bb19e76fb9319"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.xml/java.xml/xhtml10schema.md",
+      "bytes": 7521,
+      "sha256": "7bc51d884aaae6ef27551ee78d404ba3116356790da3d06b665679eb2e1cc002"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.xml/java.xml/xhtml11.md",
+      "bytes": 3258,
+      "sha256": "4f99a390896f0f55a0b78376de89bfd2ac845713de85e67e37f884b77e0c3122"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.xml/java.xml/xhtml11schema.md",
+      "bytes": 3224,
+      "sha256": "8cd69b1392e286538008f4cb003f85caea3a375c619e697813d820b69857cf74"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.xml/java.xml/xmlspec.md",
+      "bytes": 2719,
+      "sha256": "afec263bf5dc67697ee33734ee243f86a878161335ef6298273e4041673b0544"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.xml/java.xml/xmlxsd.md",
+      "bytes": 1951,
+      "sha256": "498a5fec63509a8f3949983bb6878ac5c95aaf1d5e3679272d93314371aa0211"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.xml/public_suffix.md",
+      "bytes": 17783,
+      "sha256": "861de1e4992a7d28f1de25c73cd50d26a94779ebd749c0643fecfa56442c3429"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.xml/siphash.md",
+      "bytes": 8256,
+      "sha256": "5a792b5a74ad2a5f3d6a7ad8b7a841116e58a772c18bc6e392320a365b222c76"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.xml/unicode.md",
+      "bytes": 15098,
+      "sha256": "5194d6760f2e7eccc07804196cc619f84e730fa9d10c0529b71416186f4d12dc"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/java.xml/zlib.md",
+      "bytes": 1010,
+      "sha256": "c9c70c36a1f0325e8788771906202d42ba6ab4205caca44ec0f665707e83226b"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.charsets/ADDITIONAL_LICENSE_INFO",
+      "bytes": 2114,
+      "sha256": "a69bce275ba7a3570af6579cb0f55682cd75fedfcd49e0e8e9022270c447c916"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.charsets/ASSEMBLY_EXCEPTION",
+      "bytes": 1514,
+      "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.charsets/LICENSE",
+      "bytes": 19274,
+      "sha256": "4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.charsets/aes.md",
+      "bytes": 1444,
+      "sha256": "45c6d4da48325edfbff3dcf71c704e504c057904435ed23c6d57046d551eb69d"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.charsets/c-libutl.md",
+      "bytes": 1556,
+      "sha256": "bef40679922d6fdfb7e4ddb223ad6722300f6054ba737bbf6188d60fcec517f9"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.charsets/cldr.md",
+      "bytes": 8790,
+      "sha256": "472e341c36efc1136860ed7a6461a2af4a53ae95d55d1126726340f5ba62b06a"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.charsets/gcc.md",
+      "bytes": 128099,
+      "sha256": "589e34f142cdf7d1430daa573e61c2e3dd0330c9eb5a2c00d4a98b3a4450810b"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.charsets/icu.md",
+      "bytes": 4147,
+      "sha256": "be23ad20a8231d2241b37fcf401548febd8597de8373f89268882020cb7c8818"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.charsets/java.desktop/colorimaging.md",
+      "bytes": 167,
+      "sha256": "04d61e3e8e71dd452ebe52008af5378d9f6640d14578aeb515dc5375973b0189"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.charsets/java.desktop/freetype.md",
+      "bytes": 30570,
+      "sha256": "e1f43089a3d7f846ac72709ba3f5e3dfe4a07955cbb1f5b580c3c41cf93792dd"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.charsets/java.desktop/giflib.md",
+      "bytes": 1689,
+      "sha256": "206aab89ec75968e48a6a1ed6df7d8b9bfb7aea12cbe4c9345d93e5d97460a25"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.charsets/java.desktop/harfbuzz.md",
+      "bytes": 3629,
+      "sha256": "5ec7cba7f8e7fc3a089213140aab6fa1b3bd5bf8a91bf8bddb3b8d315fc5f7d0"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.charsets/java.desktop/jpeg.md",
+      "bytes": 3474,
+      "sha256": "c1dfb9719a71ad9f861f8728550542d681e25c8ef40e6393606e6e2a0c1d653a"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.charsets/java.desktop/lcms.md",
+      "bytes": 2655,
+      "sha256": "6d409e73a4ce3c25479b4fb01d05fe79c0458bcd1dccc07f72d3e211d64ac8ce"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.charsets/java.desktop/libpng.md",
+      "bytes": 7519,
+      "sha256": "f73afb394792f3aeecd959e89487603677a430e56b44eba596d8b572accfd540"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.charsets/java.desktop/mesa3d.md",
+      "bytes": 5732,
+      "sha256": "63f4e6f75caebbccb95d903fb43e46ac7111b3624d0a34f146b276d7d9e7b152"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.charsets/java.xml/bcel.md",
+      "bytes": 11196,
+      "sha256": "cd578186ad93de46cca29ec8ace2b11f9da751987f3f140e6095c528596cc8c1"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.charsets/java.xml/dom.md",
+      "bytes": 3761,
+      "sha256": "6686e8877667584a3a7c07344baadca1a03e29f677162d87c3c0811e990d1148"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.charsets/java.xml/jcup.md",
+      "bytes": 1448,
+      "sha256": "8d5dcfdf50455a3c34c753a98f21e953248af200415a9084e3f102cb6c43b8bf"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.charsets/java.xml/schema10part1.md",
+      "bytes": 2138,
+      "sha256": "b220f891e5bfa3aa4b2a4b34dfab53a291553c2ae0fd0b15a4cb1116d4e97770"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.charsets/java.xml/schema10part2.md",
+      "bytes": 2136,
+      "sha256": "2350e35e91866d5ee5bd7ee7c303b3e424bbca335d36c71452588aac494eaa3e"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.charsets/java.xml/xalan.md",
+      "bytes": 13477,
+      "sha256": "02bd013fc3f438dbb8fa41fa57888177e015efa6431d37fce6e794c6f353a6a1"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.charsets/java.xml/xerces.md",
+      "bytes": 11848,
+      "sha256": "4a6bf6b367193ee68681cb2d9fed30ffc5d62dd2d477bd62e0271707d71b3244"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.charsets/java.xml/xhtml10.md",
+      "bytes": 2634,
+      "sha256": "9a5cde47073ca80cf59127891420f4aed603eb65070738ad027bb19e76fb9319"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.charsets/java.xml/xhtml10schema.md",
+      "bytes": 7521,
+      "sha256": "7bc51d884aaae6ef27551ee78d404ba3116356790da3d06b665679eb2e1cc002"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.charsets/java.xml/xhtml11.md",
+      "bytes": 3258,
+      "sha256": "4f99a390896f0f55a0b78376de89bfd2ac845713de85e67e37f884b77e0c3122"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.charsets/java.xml/xhtml11schema.md",
+      "bytes": 3224,
+      "sha256": "8cd69b1392e286538008f4cb003f85caea3a375c619e697813d820b69857cf74"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.charsets/java.xml/xmlspec.md",
+      "bytes": 2719,
+      "sha256": "afec263bf5dc67697ee33734ee243f86a878161335ef6298273e4041673b0544"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.charsets/java.xml/xmlxsd.md",
+      "bytes": 1951,
+      "sha256": "498a5fec63509a8f3949983bb6878ac5c95aaf1d5e3679272d93314371aa0211"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.charsets/public_suffix.md",
+      "bytes": 17783,
+      "sha256": "861de1e4992a7d28f1de25c73cd50d26a94779ebd749c0643fecfa56442c3429"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.charsets/siphash.md",
+      "bytes": 8256,
+      "sha256": "5a792b5a74ad2a5f3d6a7ad8b7a841116e58a772c18bc6e392320a365b222c76"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.charsets/unicode.md",
+      "bytes": 15098,
+      "sha256": "5194d6760f2e7eccc07804196cc619f84e730fa9d10c0529b71416186f4d12dc"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.charsets/zlib.md",
+      "bytes": 1010,
+      "sha256": "c9c70c36a1f0325e8788771906202d42ba6ab4205caca44ec0f665707e83226b"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.unsupported/ADDITIONAL_LICENSE_INFO",
+      "bytes": 2114,
+      "sha256": "a69bce275ba7a3570af6579cb0f55682cd75fedfcd49e0e8e9022270c447c916"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.unsupported/ASSEMBLY_EXCEPTION",
+      "bytes": 1514,
+      "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.unsupported/LICENSE",
+      "bytes": 19274,
+      "sha256": "4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.unsupported/aes.md",
+      "bytes": 1444,
+      "sha256": "45c6d4da48325edfbff3dcf71c704e504c057904435ed23c6d57046d551eb69d"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.unsupported/c-libutl.md",
+      "bytes": 1556,
+      "sha256": "bef40679922d6fdfb7e4ddb223ad6722300f6054ba737bbf6188d60fcec517f9"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.unsupported/cldr.md",
+      "bytes": 8790,
+      "sha256": "472e341c36efc1136860ed7a6461a2af4a53ae95d55d1126726340f5ba62b06a"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.unsupported/gcc.md",
+      "bytes": 128099,
+      "sha256": "589e34f142cdf7d1430daa573e61c2e3dd0330c9eb5a2c00d4a98b3a4450810b"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.unsupported/icu.md",
+      "bytes": 4147,
+      "sha256": "be23ad20a8231d2241b37fcf401548febd8597de8373f89268882020cb7c8818"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.unsupported/java.desktop/colorimaging.md",
+      "bytes": 167,
+      "sha256": "04d61e3e8e71dd452ebe52008af5378d9f6640d14578aeb515dc5375973b0189"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.unsupported/java.desktop/freetype.md",
+      "bytes": 30570,
+      "sha256": "e1f43089a3d7f846ac72709ba3f5e3dfe4a07955cbb1f5b580c3c41cf93792dd"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.unsupported/java.desktop/giflib.md",
+      "bytes": 1689,
+      "sha256": "206aab89ec75968e48a6a1ed6df7d8b9bfb7aea12cbe4c9345d93e5d97460a25"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.unsupported/java.desktop/harfbuzz.md",
+      "bytes": 3629,
+      "sha256": "5ec7cba7f8e7fc3a089213140aab6fa1b3bd5bf8a91bf8bddb3b8d315fc5f7d0"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.unsupported/java.desktop/jpeg.md",
+      "bytes": 3474,
+      "sha256": "c1dfb9719a71ad9f861f8728550542d681e25c8ef40e6393606e6e2a0c1d653a"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.unsupported/java.desktop/lcms.md",
+      "bytes": 2655,
+      "sha256": "6d409e73a4ce3c25479b4fb01d05fe79c0458bcd1dccc07f72d3e211d64ac8ce"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.unsupported/java.desktop/libpng.md",
+      "bytes": 7519,
+      "sha256": "f73afb394792f3aeecd959e89487603677a430e56b44eba596d8b572accfd540"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.unsupported/java.desktop/mesa3d.md",
+      "bytes": 5732,
+      "sha256": "63f4e6f75caebbccb95d903fb43e46ac7111b3624d0a34f146b276d7d9e7b152"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.unsupported/java.xml/bcel.md",
+      "bytes": 11196,
+      "sha256": "cd578186ad93de46cca29ec8ace2b11f9da751987f3f140e6095c528596cc8c1"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.unsupported/java.xml/dom.md",
+      "bytes": 3761,
+      "sha256": "6686e8877667584a3a7c07344baadca1a03e29f677162d87c3c0811e990d1148"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.unsupported/java.xml/jcup.md",
+      "bytes": 1448,
+      "sha256": "8d5dcfdf50455a3c34c753a98f21e953248af200415a9084e3f102cb6c43b8bf"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.unsupported/java.xml/schema10part1.md",
+      "bytes": 2138,
+      "sha256": "b220f891e5bfa3aa4b2a4b34dfab53a291553c2ae0fd0b15a4cb1116d4e97770"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.unsupported/java.xml/schema10part2.md",
+      "bytes": 2136,
+      "sha256": "2350e35e91866d5ee5bd7ee7c303b3e424bbca335d36c71452588aac494eaa3e"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.unsupported/java.xml/xalan.md",
+      "bytes": 13477,
+      "sha256": "02bd013fc3f438dbb8fa41fa57888177e015efa6431d37fce6e794c6f353a6a1"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.unsupported/java.xml/xerces.md",
+      "bytes": 11848,
+      "sha256": "4a6bf6b367193ee68681cb2d9fed30ffc5d62dd2d477bd62e0271707d71b3244"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.unsupported/java.xml/xhtml10.md",
+      "bytes": 2634,
+      "sha256": "9a5cde47073ca80cf59127891420f4aed603eb65070738ad027bb19e76fb9319"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.unsupported/java.xml/xhtml10schema.md",
+      "bytes": 7521,
+      "sha256": "7bc51d884aaae6ef27551ee78d404ba3116356790da3d06b665679eb2e1cc002"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.unsupported/java.xml/xhtml11.md",
+      "bytes": 3258,
+      "sha256": "4f99a390896f0f55a0b78376de89bfd2ac845713de85e67e37f884b77e0c3122"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.unsupported/java.xml/xhtml11schema.md",
+      "bytes": 3224,
+      "sha256": "8cd69b1392e286538008f4cb003f85caea3a375c619e697813d820b69857cf74"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.unsupported/java.xml/xmlspec.md",
+      "bytes": 2719,
+      "sha256": "afec263bf5dc67697ee33734ee243f86a878161335ef6298273e4041673b0544"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.unsupported/java.xml/xmlxsd.md",
+      "bytes": 1951,
+      "sha256": "498a5fec63509a8f3949983bb6878ac5c95aaf1d5e3679272d93314371aa0211"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.unsupported/public_suffix.md",
+      "bytes": 17783,
+      "sha256": "861de1e4992a7d28f1de25c73cd50d26a94779ebd749c0643fecfa56442c3429"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.unsupported/siphash.md",
+      "bytes": 8256,
+      "sha256": "5a792b5a74ad2a5f3d6a7ad8b7a841116e58a772c18bc6e392320a365b222c76"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.unsupported/unicode.md",
+      "bytes": 15098,
+      "sha256": "5194d6760f2e7eccc07804196cc619f84e730fa9d10c0529b71416186f4d12dc"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/legal/jdk.unsupported/zlib.md",
+      "bytes": 1010,
+      "sha256": "c9c70c36a1f0325e8788771906202d42ba6ab4205caca44ec0f665707e83226b"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/lib/jvm.cfg",
+      "bytes": 42,
+      "sha256": "40aceb62df970fa0c33a9e3f3f88a433fb0b7dc3a78743beac3a9d84a4b5f90d"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/lib/modules",
+      "bytes": 59793269,
+      "sha256": "5205699c46a12cff1c742df9f6188e01e69f97e592e894484bdf9fe5b3332cf8"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/lib/security/blocked.certs",
+      "bytes": 5608,
+      "sha256": "2596bb6dda83c66d96c5a252d7b2ae1f24cc1ae3f1890223b4f3591a8d52bf10"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/lib/security/cacerts",
+      "bytes": 128625,
+      "sha256": "c4ea628ed2497ee7973dc642c362d233e50a6f9d45574bb5a2c619628721d534"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/lib/security/public_suffix_list.dat",
+      "bytes": 227396,
+      "sha256": "16b42002aa6f83a7763c4cdbd399ecf738460377d447e362884495545afd60a3"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/lib/tzdb.dat",
+      "bytes": 103876,
+      "sha256": "a02e3a23d67255782b11ab81070902235ab564080f0f65ffe2a989cdaa86fe89"
+    },
+    {
+      "path": "switch/mc-runtime/runtimes/openjdk25/release",
+      "bytes": 163,
+      "sha256": "e1f68d7b8183b146123af2c9e44de095d840dd88b558afe5803a998e381be104"
+    },
+    {
+      "path": "switch/mc-runtime/tests/dependency.jar",
+      "bytes": 328,
+      "sha256": "80df10416fa3a7f5927cfcccd59e9fefa09303bcd7c6c88c7770b57b58f7b8d6"
+    },
+    {
+      "path": "switch/mc-runtime/tests/diagnostic-tests.jar",
+      "bytes": 3218,
+      "sha256": "71b3a79832d3713a3104c6fd81e2b96660438b191aa95742ae85b9fb6da0d1ed"
+    },
+    {
+      "path": "switch/mc-runtime/tests/java25-agent-smoke-agent.jar",
+      "bytes": 3091,
+      "sha256": "0cb969691b9fd4e2e4623e2eb245c54061cba03f560dad7082946a3ebc352d6c"
+    },
+    {
+      "path": "switch/mc-runtime/tests/java25-agent-smoke-app.jar",
+      "bytes": 1463,
+      "sha256": "f5c6251ed479c302cc2729bed8690491f9b0659f6018d4bbd089da0ebcf09b1e"
+    },
+    {
+      "path": "switch/mc-runtime/tests/java25-hello.jar",
+      "bytes": 612,
+      "sha256": "b98f8d58745d70667c6a471f534e973daaa1c399203708bd708957f70dde6cc4"
+    },
+    {
+      "path": "switch/mc-runtime/tests/java25-tests.jar",
+      "bytes": 5046,
+      "sha256": "a27641ce0ae62ec1444e9a50ac07864a902f49779191e2a4770086cc3711dc81"
+    },
+    {
+      "path": "switch/mc-runtime/tests/switchcraft-native-smoke.jar",
+      "bytes": 23857,
+      "sha256": "26c32a2288fda7b30ad421cf54eeca267a9cefc2b254de251f44400f718b8ef6"
+    },
+    {
+      "path": "switch/mc-runtime/tools/collect-feedback.py",
+      "bytes": 5179,
+      "sha256": "6c41aa1488f4f4ba2a6bbfdbb561b84ab522f94e08721a8a27b55362b9385433"
+    },
+    {
+      "path": "switch/minecraft-launcher/minecraft-launcher.nro",
+      "bytes": 2836677,
+      "sha256": "f6e862d3f6ee9c78e88c3b1d9dcf5a3795182c35e33593a5cef793e852571852"
+    },
+    {
+      "path": "switch/switch-diagnostics/switch-diagnostics.nro",
+      "bytes": 248005,
+      "sha256": "45bf49e86e8c30b5de25d94bed2c5f8f6b0ff9df1d5b3da0dec8bf1a3ce3f3ab"
+    },
+    {
+      "path": "switch/switchcraft-java25/switchcraft-java25.nro",
+      "bytes": 29350085,
+      "sha256": "64402f9bf4fb5018a8c11fe5873d5bc78d4c1aee6be1f076113e2fa8fd9d3323"
+    },
+    {
+      "path": "switch/vulkan-present/vulkan-present.nro",
+      "bytes": 13158597,
+      "sha256": "48108b4bd390380e42127ef4775ea191b0e51498785847ced81603927701375b"
+    },
+    {
+      "path": "switch/vulkan-test/vulkan-test.nro",
+      "bytes": 11999429,
+      "sha256": "015eed8283be72acd694dd9a5161dac6b40f2ce22523860193aa20f048e8807f"
+    },
+    {
+      "path": "switch/zero-services-test/zero-services-test.nro",
+      "bytes": 325829,
+      "sha256": "e7fe09f4511e1a82775df4b892a9e0d7b185690dd07acb55d60c16ade72301d7"
+    }
+  ],
+  "archive": {
+    "name": "switchcraft-test-suite-2026-11-13-r5.zip",
+    "bytes": 54717758,
+    "sha256": "008b93e3af2cbb26ed3069f4d5ad336f2721f30256a972ad517a8aa96c0a5a98"
+  }
+}

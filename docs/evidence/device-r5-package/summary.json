@@ -1,0 +1,23 @@
+{
+  "package": "R5",
+  "release_url": "https://github.com/a1c7e0/switchcraft/releases/tag/test-suite-2026-11-13-r5",
+  "source_revision": "1d716dbe17f9870e5c2cfbeb351d839ea91412fb",
+  "runtime_revision": "a0f0e168bb282e9585c0353c3d9b70a7ad043ce8",
+  "artifact_input_revision": "3f3053607b0685fdb32c9cfe3490920adf2c65f4",
+  "workflow_run": "https://github.com/a1c7e0/switchcraft/actions/runs/43398648407",
+  "workflow_result": "success",
+  "switchcraft_host_tests": 92,
+  "runtime_host_tests": 23,
+  "runtime_classlib_host": "PASS",
+  "source_and_package_verification": "PASS",
+  "remote_asset_sizes_and_server_sha256": "PASS",
+  "sd_zip": {
+    "name": "switchcraft-test-suite-2026-11-13-r5.zip",
+    "bytes": 54717758,
+    "sha256": "008b93e3af2cbb26ed3069f4d5ad336f2721f30256a972ad517a8aa96c0a5a98"
+  },
+  "r4_physical": "zero-services startup and L private-memory contract PASS; VM-ready observed, app/agent classes missing; dependent Java workloads NOT REACHED",
+  "r5_physical": "NOT TESTED",
+  "minecraft_title_on_switch": "NOT ACHIEVED",
+  "first_device_gate": "one fresh application-mode standalone java25-test A; actual Hello, Java major 25, status 0 and completed stage required"
+}
