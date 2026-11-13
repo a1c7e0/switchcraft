@@ -1,0 +1,45 @@
+[tick=4287846646] 
+SESSION app=zero-services-test runtime_source=2d53737168e4aa55601600db3f9d4bc89f9617e4-dirty | current run: UNVERIFIED
+[tick=4288011274] Applet type=0 (Application=0); firmware=21.2.0
+[tick=4288137902] Log: sdmc:/switch/mc-runtime/logs/zero-services-test.log (open)
+[tick=4288259038] Startup stage=main; NRO entry and libnx initialization completed.
+[tick=4288378688] OpenJDK25 Horizon OS-service components only
+NO Java VM, NO classfile execution; hardware NOT TESTED.
+A: time/synchronization probe | X: native thread/permit probe | +: exit
+[tick=4288497777] Y: experimental fault-island probe; may abort if recovery is unsupported
+[tick=4288612856] B: deferred native thread ownership / join / close probe
+[tick=4288728394] L: private VM Alias memory / split release / SDK ownership probe
+[tick=4341571214] Process system-resource total=0 used=0 bytes rc=0x0/0x0
+[tick=4341818802] Private VM memory backend: eager C-heap backing; full size charged until final release; logical uncommit retains backing
+[tick=4341942397] Horizon private VM memory probe: begin (no Java VM execution)
+[tick=4342061669] memory probe reserve aligned private 16 KiB: OK raw=0x0
+[tick=4342179257] memory probe alignment: PASS address=0x2371000000 alignment=65536 backend=eager heap
+[tick=4342295288] memory probe protect uncommitted heap prefix NONE: OK raw=0x0
+[tick=4342419580] memory probe uncommitted guard bookkeeping: PASS query=STATE start=0x0 size=0 raw=0x0
+[tick=4342536860] memory probe commit private 4 pages: OK raw=0x0
+[tick=4342656246] memory probe initial canary: PASS expected=0x484d0000 actual=0x484d0000
+[tick=4342774455] memory probe initial canary: PASS expected=0x484d0001 actual=0x484d0001
+[tick=4342889638] memory probe initial canary: PASS expected=0x484d0002 actual=0x484d0002
+[tick=4343004918] memory probe initial canary: PASS expected=0x484d0003 actual=0x484d0003
+[tick=4343121790] memory probe protect page 0 read-only: OK raw=0x0
+[tick=4343236470] memory probe protect page 0 no-access: OK raw=0x0
+[tick=4343350452] memory probe restore page 0 read-write: OK raw=0x0
+[tick=4343466200] memory probe protection round-trip canary: PASS expected=0x484d0000 actual=0x484d0000
+[tick=4343582580] memory probe uncommit page 1: OK raw=0x0
+[tick=4343696462] memory probe recommit page 1: OK raw=0x0
+[tick=4343810277] memory probe recommit canary: PASS expected=0x484d0001 actual=0x484d0001
+[tick=4343929802] memory probe query committed range: OK raw=0x0
+[tick=4344047531] memory probe committed range: PASS start=0x2371000000 size=16384
+[tick=4344162519] memory probe release middle page 1: OK raw=0x0
+[tick=4344276850] memory probe left child canary: PASS expected=0x484d0000 actual=0x484d0000
+[tick=4344391645] memory probe right child canary: PASS expected=0x484d0002 actual=0x484d0002
+[tick=4344508378] memory probe right child canary: PASS expected=0x484d0003 actual=0x484d0003
+[tick=4344624015] memory probe reserve SDK 4 KiB: OK raw=0x0
+[tick=4344737609] memory probe SDK reservation remains unmapped: PASS raw=0x0 type=0
+[tick=4344926201] memory probe shared SDK/VM reservation: PASS sdk=0x360da00000 left=0x2371000000+4096 right=0x2371002000+8192
+[tick=4345082638] memory probe cleanup SDK reservation: OK raw=0x0
+[tick=4345245283] memory probe cleanup private child: OK raw=0x0
+[tick=4345400029] memory probe cleanup private child: OK raw=0x0
+[tick=4345590770] Horizon private VM memory probe: native PASS (selected backend contract; hardware result only)
+[tick=4621327154] Closing this application process; reopen application-mode hbmenu for another native test.
+[tick=4621604825] Clean exit: zero-services-test

@@ -1,0 +1,31 @@
+{
+  "feedback_received": "2026-11-13",
+  "package_generation": "R4",
+  "uploaded_archive_sha256": "eba923eccce8a5c0a3f4a116877623beefcf128553257dc47090ab69dae15836",
+  "file_count": 21,
+  "firmware": "21.2.0",
+  "atmosphere_version": "not supplied",
+  "mode": "Application (0)",
+  "switchcraft_logged_revision": "e2b9a7759ec62e9a13667eca15568ea08e00e131",
+  "runtime_embedded_log_stamp": "2d53737168e4aa55601600db3f9d4bc89f9617e4-dirty",
+  "published_runtime_revision": "aed255884b8f946a903a4c3d62b2745727f4ef2e",
+  "runtime_stamp_analysis": "Direct diagnostic builds reused a stale build-info.h; R4 package native archives and image hash proofs are coherent. Logs do not supply an on-device NRO hash.",
+  "zero_services": {
+    "startup": "PASS",
+    "L_private_memory": "PASS: eager C-heap backend, guard bookkeeping, protection round-trip, canaries, split release, SDK ownership, cleanup",
+    "other_buttons": "NOT TESTED in supplied logs"
+  },
+  "java25": {
+    "A": "FAIL: valid native JAR preflight, VM-ready, HelloHorizon25 resource/class missing",
+    "X": "NOT REACHED: Java25Smoke class missing at ready hook",
+    "Y": "FAIL: AgentSmokeAgent missing; JPLIS fatal abort before successful premain"
+  },
+  "combined": {
+    "menu": "All A/X/Y/B/R/L labels logged; all six selections observed; earlier suspicion of an old combined NRO is excluded by logged revision",
+    "A": "FAIL: HelloHorizon25 class missing",
+    "X_Y_B_R_L": "NOT REACHED: NativeSymbols class missing at ready hook after VM-ready"
+  },
+  "graphics_audio_shader_application_execution": "NOT REACHED",
+  "minecraft_title_on_switch": "NOT ACHIEVED / NOT TESTED",
+  "next_device_gate": "Fresh standalone A only; stop dependent VM workloads if Hello fails."
+}

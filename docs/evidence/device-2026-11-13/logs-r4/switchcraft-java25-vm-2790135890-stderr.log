@@ -1,0 +1,10 @@
+Java bootstrap property java.class.path=sdmc:/switch/mc-runtime/launchers/switchcraft-lwjgl-horizon.jar;sdmc:/switch/mc-runtime/tests/switchcraft-native-smoke.jar;sdmc:/switch/mc-runtime/libraries/lwjgl-3.4.3.jar;sdmc:/switch/mc-runtime/libraries/lwjgl-sdl-3.4.3.jar;sdmc:/switch/mc-runtime/libraries/lwjgl-vulkan-3.4.3.jar;sdmc:/switch/mc-runtime/libraries/lwjgl-freetype-3.4.3.jar;sdmc:/switch/mc-runtime/libraries/lwjgl-openal-3.4.3.jar;sdmc:/switch/mc-runtime/libraries/lwjgl-stb-3.4.3.jar;sdmc:/switch/mc-runtime/libraries/lwjgl-vma-3.4.3.jar;sdmc:/switch/mc-runtime/libraries/lwjgl-shaderc-3.4.3.jar;sdmc:/switch/mc-runtime/libraries/lwjgl-spvc-3.4.3.jar;sdmc:/switch/mc-runtime/libraries/jspecify-1.0.0.jar
+Java bootstrap property path.separator=;
+Java bootstrap property file.separator=/
+Java system class-loader resource missing for org/switchcraft/runtime/LwjglCoreSmoke
+java.lang.NoClassDefFoundError: org/switchcraft/runtime/NativeSymbols
+Caused by: java.lang.ClassNotFoundException: org.switchcraft.runtime.NativeSymbols
+	at java.base@25/jdk.internal.loader.BuiltinClassLoader.loadClass(Unknown Source)
+	at java.base@25/java.lang.ClassLoader.loadClass(Unknown Source)
+Exception in thread "main" Waiting for a character on stdin; homebrew hosts may not provide keyboard input
+Horizon stdin returned EOF; no keypress was observed

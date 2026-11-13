@@ -1,0 +1,255 @@
+[tick=2006277482] 
+SESSION start tick=2006272861 app=switchcraft-java25 version=0.1.0 source=e2b9a7759ec62e9a13667eca15568ea08e00e131 | current run: UNVERIFIED
+[tick=2006353077] Applet type=0 (Application=0); firmware=21.2.0
+[tick=2006408314] Log: sdmc:/switch/mc-runtime/logs/switchcraft-java25.log (open)
+[tick=2006463568] Experimental real Zero VM + composed JDK/SDL/Vulkan resolver; hardware NOT TESTED.
+[tick=2006515869] Process memory: total=3444572160 used=3440488448 bytes rc=0x0/0x0
+[tick=2006565886] Process limit minus current use=4083712 bytes (not JVM heap)
+[tick=2006620338] Newlib malloc arena=14426112 allocated=14361968 free-in-arena=64144 bytes
+[tick=2006674821] Kernel-used memory includes reserved heap; arena free space is separate.
+[tick=2006726041] Process system-resource memory total=0 used=0 bytes rc=0x0/0x0
+[tick=2007171842] 4 MiB allocation/write/read/free: PASS
+[tick=2007381662] Native heap=268435456 loader override=1 bytes=3408392192; worker stack=4 MiB Java heap=128 MiB
+[tick=2007443197] A: classfile-69 Hello | X: Java JNI/FFM SDL version smoke
+Y: genuine LWJGL JNI + SDL/Vulkan FFM
+B: Java SDL/Vulkan window + VMA | R: FreeType/OpenAL loopback
+L: STB + shader compile/reflection | +: exit without a VM.
+Use standalone java25-test A/X/Y in separate fresh application processes first.
+[tick=2105410595] STAGE install combined resolver=0
+[tick=2105550847] Resolver module=java symbol=JNI_OnLoad_java status=0 address=present
+[tick=2105605209] Resolver module=SDL3 symbol=SDL_CreateWindow status=0 address=present
+[tick=2105685443] Resolver module=SDL3 symbol=SDL_Vulkan_CreateSurface status=0 address=present
+[tick=2105738614] Resolver module=vulkan symbol=vkGetInstanceProcAddr status=0 address=present
+[tick=2105791886] STAGE runtime query=0 available=1 JNI=1 version=25 (symbol presence only)
+[tick=2105847889] STAGE VM output redirect; worker join pauses UI. HOME can close a stalled application.
+stdout=sdmc:/switch/mc-runtime/logs/switchcraft-java25-vm-2105839949-stdout.log
+stderr=sdmc:/switch/mc-runtime/logs/switchcraft-java25-vm-2105839949-stderr.log
+[tick=2106096816] STAGE worker create Result=0x0
+STAGE main-before-worker
+STAGE worker-entry
+TAGE worker start Result=0x0
+STAGE sdk-launch-entry
+STAGE jni-create-entry
+STAGE jni-create-return
+STAGE vm-ready
+[tick=2132837763] STAGE worker join Result=0x0
+[tick=2133037919] STAGE VM status=-103 stage=main-class; verify actual Hello output separately
+[tick=2133091918] STAGE worker close Result=0x0
+[tick=2133138655] Java25 diagnostic stage=vm-ready heartbeat=6
+[tick=2165925855] Closing application process after result review; reopen application-mode hbmenu for another test.
+[tick=2166066948] Clean exit: switchcraft-java25
+[tick=2403702499] 
+SESSION start tick=2403699664 app=switchcraft-java25 version=0.1.0 source=e2b9a7759ec62e9a13667eca15568ea08e00e131 | current run: UNVERIFIED
+[tick=2403743322] Applet type=0 (Application=0); firmware=21.2.0
+[tick=2403790771] Log: sdmc:/switch/mc-runtime/logs/switchcraft-java25.log (open)
+[tick=2403839269] Experimental real Zero VM + composed JDK/SDL/Vulkan resolver; hardware NOT TESTED.
+[tick=2403897138] Process memory: total=3444572160 used=3440488448 bytes rc=0x0/0x0
+[tick=2403942769] Process limit minus current use=4083712 bytes (not JVM heap)
+[tick=2403991754] Newlib malloc arena=14426112 allocated=14361968 free-in-arena=64144 bytes
+[tick=2404038783] Kernel-used memory includes reserved heap; arena free space is separate.
+[tick=2404085794] Process system-resource memory total=0 used=0 bytes rc=0x0/0x0
+[tick=2404356306] 4 MiB allocation/write/read/free: PASS
+[tick=2404508545] Native heap=268435456 loader override=1 bytes=3408392192; worker stack=4 MiB Java heap=128 MiB
+[tick=2404559445] A: classfile-69 Hello | X: Java JNI/FFM SDL version smoke
+Y: genuine LWJGL JNI + SDL/Vulkan FFM
+B: Java SDL/Vulkan window + VMA | R: FreeType/OpenAL loopback
+L: STB + shader compile/reflection | +: exit without a VM.
+Use standalone java25-test A/X/Y in separate fresh application processes first.
+[tick=2491971694] Selected Java JNI/FFM SDL version test; requires real fallback linker.
+[tick=2492110713] STAGE install combined resolver=0
+[tick=2492174386] Resolver module=java symbol=JNI_OnLoad_java status=0 address=present
+[tick=2492229550] Resolver module=SDL3 symbol=SDL_CreateWindow status=0 address=present
+[tick=2492307189] Resolver module=SDL3 symbol=SDL_Vulkan_CreateSurface status=0 address=present
+[tick=2492364293] Resolver module=vulkan symbol=vkGetInstanceProcAddr status=0 address=present
+[tick=2492419856] STAGE runtime query=0 available=1 JNI=1 version=25 (symbol presence only)
+[tick=2492483605] STAGE VM output redirect; worker join pauses UI. HOME can close a stalled application.
+stdout=sdmc:/switch/mc-runtime/logs/switchcraft-java25-vm-2492475707-stdout.log
+stderr=sdmc:/switch/mc-runtime/logs/switchcraft-java25-vm-2492475707-stderr.log
+[tick=2492692184] STAGE worker create Result=0x0
+STAGE main-before-worker
+STAGE worker-entry
+TAGE worker start Result=0x0
+STAGE sdk-launch-entry
+STAGE jni-create-entry
+STAGE jni-create-return
+STAGE vm-ready
+[tick=2518561326] STAGE worker join Result=0x0
+[tick=2518854404] STAGE VM status=-103 stage=vm-ready-hook; verify actual Hello output separately
+[tick=2519015971] STAGE worker close Result=0x0
+[tick=2519073779] Java25 diagnostic stage=vm-ready heartbeat=6
+[tick=2540325950] Closing application process after result review; reopen application-mode hbmenu for another test.
+[tick=2540464420] Clean exit: switchcraft-java25
+[tick=2770791439] 
+SESSION start tick=2770788594 app=switchcraft-java25 version=0.1.0 source=e2b9a7759ec62e9a13667eca15568ea08e00e131 | current run: UNVERIFIED
+[tick=2770835845] Applet type=0 (Application=0); firmware=21.2.0
+[tick=2770884750] Log: sdmc:/switch/mc-runtime/logs/switchcraft-java25.log (open)
+[tick=2770935233] Experimental real Zero VM + composed JDK/SDL/Vulkan resolver; hardware NOT TESTED.
+[tick=2770981661] Process memory: total=3444572160 used=3440488448 bytes rc=0x0/0x0
+[tick=2771028469] Process limit minus current use=4083712 bytes (not JVM heap)
+[tick=2771080682] Newlib malloc arena=14426112 allocated=14361968 free-in-arena=64144 bytes
+[tick=2771131489] Kernel-used memory includes reserved heap; arena free space is separate.
+[tick=2771178380] Process system-resource memory total=0 used=0 bytes rc=0x0/0x0
+[tick=2771450735] 4 MiB allocation/write/read/free: PASS
+[tick=2771505484] Native heap=268435456 loader override=1 bytes=3408392192; worker stack=4 MiB Java heap=128 MiB
+[tick=2771564026] A: classfile-69 Hello | X: Java JNI/FFM SDL version smoke
+Y: genuine LWJGL JNI + SDL/Vulkan FFM
+B: Java SDL/Vulkan window + VMA | R: FreeType/OpenAL loopback
+L: STB + shader compile/reflection | +: exit without a VM.
+Use standalone java25-test A/X/Y in separate fresh application processes first.
+[tick=2789571241] Selected genuine LWJGL core JNI and SDL/Vulkan FFM test.
+[tick=2789737732] STAGE install combined resolver=0
+[tick=2789820178] Resolver module=java symbol=JNI_OnLoad_java status=0 address=present
+[tick=2789876529] Resolver module=SDL3 symbol=SDL_CreateWindow status=0 address=present
+[tick=2789929043] Resolver module=SDL3 symbol=SDL_Vulkan_CreateSurface status=0 address=present
+[tick=2789983788] Resolver module=vulkan symbol=vkGetInstanceProcAddr status=0 address=present
+[tick=2790034560] Resolver module=lwjgl symbol=JNI_OnLoad_lwjgl status=0 address=present
+[tick=2790087561] STAGE runtime query=0 available=1 JNI=1 version=25 (symbol presence only)
+[tick=2790143914] STAGE VM output redirect; worker join pauses UI. HOME can close a stalled application.
+stdout=sdmc:/switch/mc-runtime/logs/switchcraft-java25-vm-2790135890-stdout.log
+stderr=sdmc:/switch/mc-runtime/logs/switchcraft-java25-vm-2790135890-stderr.log
+[tick=2790358073] STAGE worker create Result=0x0
+STAGE main-before-worker
+STAGE worker-entry
+TAGE worker start Result=0x0
+STAGE sdk-launch-entry
+STAGE jni-create-entry
+STAGE jni-create-return
+STAGE vm-ready
+[tick=2818219260] STAGE worker join Result=0x0
+[tick=2819364932] STAGE VM status=-103 stage=vm-ready-hook; verify actual Hello output separately
+[tick=2819436593] STAGE worker close Result=0x0
+[tick=2819483854] Java25 diagnostic stage=vm-ready heartbeat=6
+[tick=2834405743] Closing application process after result review; reopen application-mode hbmenu for another test.
+[tick=2834543427] Clean exit: switchcraft-java25
+[tick=3040014781] 
+SESSION start tick=3040010101 app=switchcraft-java25 version=0.1.0 source=e2b9a7759ec62e9a13667eca15568ea08e00e131 | current run: UNVERIFIED
+[tick=3040058938] Applet type=0 (Application=0); firmware=21.2.0
+[tick=3040117696] Log: sdmc:/switch/mc-runtime/logs/switchcraft-java25.log (open)
+[tick=3040174300] Experimental real Zero VM + composed JDK/SDL/Vulkan resolver; hardware NOT TESTED.
+[tick=3040261457] Process memory: total=3444572160 used=3440488448 bytes rc=0x0/0x0
+[tick=3040317532] Process limit minus current use=4083712 bytes (not JVM heap)
+[tick=3040377375] Newlib malloc arena=14426112 allocated=14361968 free-in-arena=64144 bytes
+[tick=3040433567] Kernel-used memory includes reserved heap; arena free space is separate.
+[tick=3040494135] Process system-resource memory total=0 used=0 bytes rc=0x0/0x0
+[tick=3040943994] 4 MiB allocation/write/read/free: PASS
+[tick=3041125418] Native heap=268435456 loader override=1 bytes=3408392192; worker stack=4 MiB Java heap=128 MiB
+[tick=3041192327] A: classfile-69 Hello | X: Java JNI/FFM SDL version smoke
+Y: genuine LWJGL JNI + SDL/Vulkan FFM
+B: Java SDL/Vulkan window + VMA | R: FreeType/OpenAL loopback
+L: STB + shader compile/reflection | +: exit without a VM.
+Use standalone java25-test A/X/Y in separate fresh application processes first.
+[tick=3051653169] Selected Java workload=org/switchcraft/runtime/HorizonGraphicsSmoke; success requires its actual completion markers.
+[tick=3051792377] STAGE install combined resolver=0
+[tick=3051847390] Resolver module=java symbol=JNI_OnLoad_java status=0 address=present
+[tick=3051899589] Resolver module=SDL3 symbol=SDL_CreateWindow status=0 address=present
+[tick=3051951887] Resolver module=SDL3 symbol=SDL_Vulkan_CreateSurface status=0 address=present
+[tick=3052005888] Resolver module=vulkan symbol=vkGetInstanceProcAddr status=0 address=present
+[tick=3052060405] Resolver module=lwjgl symbol=JNI_OnLoad_lwjgl status=0 address=present
+[tick=3052115043] Resolver module=lwjgl_vma symbol=JNI_OnLoad_lwjgl_vma status=0 address=present
+[tick=3052166337] STAGE runtime query=0 available=1 JNI=1 version=25 (symbol presence only)
+[tick=3052223829] STAGE VM output redirect; worker join pauses UI. HOME can close a stalled application.
+stdout=sdmc:/switch/mc-runtime/logs/switchcraft-java25-vm-3052216001-stdout.log
+stderr=sdmc:/switch/mc-runtime/logs/switchcraft-java25-vm-3052216001-stderr.log
+[tick=3052453250] STAGE worker create Result=0x0
+STAGE main-before-worker
+STAGE worker-entry
+TAGE worker start Result=0x0
+STAGE sdk-launch-entry
+STAGE jni-create-entry
+STAGE jni-create-return
+STAGE vm-ready
+[tick=3079993829] STAGE worker join Result=0x0
+[tick=3080208253] STAGE VM status=-103 stage=vm-ready-hook; verify actual Hello output separately
+[tick=3080266437] STAGE worker close Result=0x0
+[tick=3080323119] Java25 diagnostic stage=vm-ready heartbeat=6
+[tick=3121765954] Closing application process after result review; reopen application-mode hbmenu for another test.
+[tick=3121910014] Clean exit: switchcraft-java25
+[tick=3634486793] 
+SESSION start tick=3634483953 app=switchcraft-java25 version=0.1.0 source=e2b9a7759ec62e9a13667eca15568ea08e00e131 | current run: UNVERIFIED
+[tick=3634582743] Applet type=0 (Application=0); firmware=21.2.0
+[tick=3634637825] Log: sdmc:/switch/mc-runtime/logs/switchcraft-java25.log (open)
+[tick=3634691985] Experimental real Zero VM + composed JDK/SDL/Vulkan resolver; hardware NOT TESTED.
+[tick=3634745599] Process memory: total=3444572160 used=3440488448 bytes rc=0x0/0x0
+[tick=3634798481] Process limit minus current use=4083712 bytes (not JVM heap)
+[tick=3634846285] Newlib malloc arena=14426112 allocated=14361968 free-in-arena=64144 bytes
+[tick=3634901004] Kernel-used memory includes reserved heap; arena free space is separate.
+[tick=3634944801] Process system-resource memory total=0 used=0 bytes rc=0x0/0x0
+[tick=3635214321] 4 MiB allocation/write/read/free: PASS
+[tick=3635272993] Native heap=268435456 loader override=1 bytes=3408392192; worker stack=4 MiB Java heap=128 MiB
+[tick=3635346515] A: classfile-69 Hello | X: Java JNI/FFM SDL version smoke
+Y: genuine LWJGL JNI + SDL/Vulkan FFM
+B: Java SDL/Vulkan window + VMA | R: FreeType/OpenAL loopback
+L: STB + shader compile/reflection | +: exit without a VM.
+Use standalone java25-test A/X/Y in separate fresh application processes first.
+[tick=3644933319] Selected Java workload=org/switchcraft/runtime/HorizonFontAudioSmoke; success requires its actual completion markers.
+[tick=3645072783] STAGE install combined resolver=0
+[tick=3645128940] Resolver module=java symbol=JNI_OnLoad_java status=0 address=present
+[tick=3645186825] Resolver module=SDL3 symbol=SDL_CreateWindow status=0 address=present
+[tick=3645254819] Resolver module=SDL3 symbol=SDL_Vulkan_CreateSurface status=0 address=present
+[tick=3645314353] Resolver module=vulkan symbol=vkGetInstanceProcAddr status=0 address=present
+[tick=3645375073] Resolver module=lwjgl symbol=JNI_OnLoad_lwjgl status=0 address=present
+[tick=3645437048] Resolver module=freetype symbol=FT_Init_FreeType status=0 address=present
+[tick=3645497526] Resolver module=openal symbol=alcOpenDevice status=0 address=present
+[tick=3645554223] STAGE runtime query=0 available=1 JNI=1 version=25 (symbol presence only)
+[tick=3645620194] STAGE VM output redirect; worker join pauses UI. HOME can close a stalled application.
+stdout=sdmc:/switch/mc-runtime/logs/switchcraft-java25-vm-3645612240-stdout.log
+stderr=sdmc:/switch/mc-runtime/logs/switchcraft-java25-vm-3645612240-stderr.log
+[tick=3645849506] STAGE worker create Result=0x0
+STAGE main-before-worker
+STAGE worker-entry
+TAGE worker start Result=0x0
+STAGE sdk-launch-entry
+STAGE jni-create-entry
+STAGE jni-create-return
+STAGE vm-ready
+[tick=3674348466] STAGE worker join Result=0x0
+[tick=3674551721] STAGE VM status=-103 stage=vm-ready-hook; verify actual Hello output separately
+[tick=3674612832] STAGE worker close Result=0x0
+[tick=3674663790] Java25 diagnostic stage=vm-ready heartbeat=6
+[tick=3698086080] Closing application process after result review; reopen application-mode hbmenu for another test.
+[tick=3698224493] Clean exit: switchcraft-java25
+[tick=3972072599] 
+SESSION start tick=3972069748 app=switchcraft-java25 version=0.1.0 source=e2b9a7759ec62e9a13667eca15568ea08e00e131 | current run: UNVERIFIED
+[tick=3972109909] Applet type=0 (Application=0); firmware=21.2.0
+[tick=3972166406] Log: sdmc:/switch/mc-runtime/logs/switchcraft-java25.log (open)
+[tick=3972215951] Experimental real Zero VM + composed JDK/SDL/Vulkan resolver; hardware NOT TESTED.
+[tick=3972270170] Process memory: total=3444572160 used=3440488448 bytes rc=0x0/0x0
+[tick=3972323790] Process limit minus current use=4083712 bytes (not JVM heap)
+[tick=3972380789] Newlib malloc arena=14426112 allocated=14361968 free-in-arena=64144 bytes
+[tick=3972433516] Kernel-used memory includes reserved heap; arena free space is separate.
+[tick=3972486591] Process system-resource memory total=0 used=0 bytes rc=0x0/0x0
+[tick=3972765288] 4 MiB allocation/write/read/free: PASS
+[tick=3972929735] Native heap=268435456 loader override=1 bytes=3408392192; worker stack=4 MiB Java heap=128 MiB
+[tick=3972986989] A: classfile-69 Hello | X: Java JNI/FFM SDL version smoke
+Y: genuine LWJGL JNI + SDL/Vulkan FFM
+B: Java SDL/Vulkan window + VMA | R: FreeType/OpenAL loopback
+L: STB + shader compile/reflection | +: exit without a VM.
+Use standalone java25-test A/X/Y in separate fresh application processes first.
+[tick=4020933092] Selected Java workload=org/switchcraft/runtime/HorizonUtilitiesSmoke; success requires its actual completion markers.
+[tick=4021119331] STAGE install combined resolver=0
+[tick=4021241161] Resolver module=java symbol=JNI_OnLoad_java status=0 address=present
+[tick=4021358372] Resolver module=SDL3 symbol=SDL_CreateWindow status=0 address=present
+[tick=4021477545] Resolver module=SDL3 symbol=SDL_Vulkan_CreateSurface status=0 address=present
+[tick=4021596928] Resolver module=vulkan symbol=vkGetInstanceProcAddr status=0 address=present
+[tick=4021719627] Resolver module=lwjgl symbol=JNI_OnLoad_lwjgl status=0 address=present
+[tick=4021897544] Resolver module=lwjgl_stb symbol=JNI_OnLoad_lwjgl_stb status=0 address=present
+[tick=4022015105] Resolver module=shaderc symbol=shaderc_compiler_initialize status=0 address=present
+[tick=4022135703] Resolver module=spirv-cross-c symbol=spvc_context_create status=0 address=present
+[tick=4022253902] STAGE runtime query=0 available=1 JNI=1 version=25 (symbol presence only)
+[tick=4022377739] STAGE VM output redirect; worker join pauses UI. HOME can close a stalled application.
+stdout=sdmc:/switch/mc-runtime/logs/switchcraft-java25-vm-4022369636-stdout.log
+stderr=sdmc:/switch/mc-runtime/logs/switchcraft-java25-vm-4022369636-stderr.log
+[tick=4022709440] STAGE worker create Result=0x0
+STAGE main-before-worker
+STAGE worker-entry
+TAGE worker start Result=0x0
+STAGE sdk-launch-entry
+STAGE jni-create-entry
+STAGE jni-create-return
+STAGE vm-ready
+[tick=4058515822] STAGE worker join Result=0x0
+[tick=4058753393] STAGE VM status=-103 stage=vm-ready-hook; verify actual Hello output separately
+[tick=4058877261] STAGE worker close Result=0x0
+[tick=4058999140] Java25 diagnostic stage=vm-ready heartbeat=6
+[tick=4085925579] Closing application process after result review; reopen application-mode hbmenu for another test.
+[tick=4086112616] Clean exit: switchcraft-java25
