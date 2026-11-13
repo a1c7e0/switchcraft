@@ -1,0 +1,88 @@
+{
+  "release_tag": "test-suite-2026-11-13-r5",
+  "filename": "switchcraft-test-suite-2026-11-13-r5.zip",
+  "parts": [
+    {
+      "name": "switchcraft-test-suite-2026-11-13-r5.zip.part01",
+      "sha256": "085632eefc99eb28d49adf298bb271a4b44ca0e78c532bc5fad0300bbf2f6b48"
+    },
+    {
+      "name": "switchcraft-test-suite-2026-11-13-r5.zip.part02",
+      "sha256": "992a8da6dce824ad1eb60eb341920c731a5c7814fb9d3c41fb054b26ecc79c26"
+    }
+  ],
+  "sha256": "008b93e3af2cbb26ed3069f4d5ad336f2721f30256a972ad517a8aa96c0a5a98",
+  "bytes": 54717758,
+  "source_revision": "1d716dbe17f9870e5c2cfbeb351d839ea91412fb",
+  "java_switch_revision": "a0f0e168bb282e9585c0353c3d9b70a7ad043ce8",
+  "manifest": {
+    "name": "manifest.json",
+    "sha256": "1ce720c69c524b58454554fcab1510ddb6475ffbfe245718a81dd35ab6dc8dac"
+  },
+  "sha256sums": {
+    "name": "SHA256SUMS",
+    "sha256": "f031a3dfd03f0d8788c326d3bcea0e2794b769d5098759e6734da8406affa4c4"
+  },
+  "optional_assets": [
+    {
+      "name": "switchcraft-source-2026-11-13-r5.tar.gz",
+      "parts": [
+        {
+          "name": "switchcraft-source-2026-11-13-r5.tar.gz.part01",
+          "sha256": "ab017dbebbce81b6520902f8bcd4494199e8c4206a6ede0533fb2f11bce8d219"
+        },
+        {
+          "name": "switchcraft-source-2026-11-13-r5.tar.gz.part02",
+          "sha256": "46484d11e2906d1d24de86092f61ced3b1c46e270b9f1b4ad5953d7fec51b8ac"
+        },
+        {
+          "name": "switchcraft-source-2026-11-13-r5.tar.gz.part03",
+          "sha256": "9c4e4c55af5749740626d0f13d54168960637458757458e4bfdc8db95fb73e5b"
+        },
+        {
+          "name": "switchcraft-source-2026-11-13-r5.tar.gz.part04",
+          "sha256": "de7962b8260bf0b495a34c8955973cb2431385609cf027d62ecba0585d727f88"
+        }
+      ],
+      "bytes": 152423762,
+      "sha256": "18611a3a1df28c3a8bd1487738996f473410cd9bbb1fd15eb715ea5b562437ac"
+    },
+    {
+      "name": "switchcraft-debug-symbols-2026-11-13-r5.zip",
+      "parts": [
+        {
+          "name": "switchcraft-debug-symbols-2026-11-13-r5.zip.part01",
+          "sha256": "9a2137e063430544d011d3248e361e38195952125adb7282d5a094c126412bf0"
+        },
+        {
+          "name": "switchcraft-debug-symbols-2026-11-13-r5.zip.part02",
+          "sha256": "ff0a35ca203bc87d32a5a30110032b90ac1498e0a203342a3b0d3e37b61cf89f"
+        }
+      ],
+      "bytes": 57491035,
+      "sha256": "5037d154ad2f6fa6f5addd7b239036c206b3067151290fe4e4299aa58947f78e"
+    },
+    {
+      "name": "switchcraft-native-sdk-2026-11-13-r5.tar.gz",
+      "parts": [
+        {
+          "name": "switchcraft-native-sdk-2026-11-13-r5.tar.gz.part01",
+          "sha256": "deb2eed33122d84cd411dfed9e539f9386ac0ff6a0d0ec0d679f3fee98a53efb"
+        }
+      ],
+      "bytes": 25477597,
+      "sha256": "deb2eed33122d84cd411dfed9e539f9386ac0ff6a0d0ec0d679f3fee98a53efb"
+    },
+    {
+      "name": "switchcraft-r5-validation.txt",
+      "parts": [
+        {
+          "name": "switchcraft-r5-validation.txt.part01",
+          "sha256": "1945451d8eeb4a513adb1630b2648b127a6c9c5bd91f2860ebc3afcbad714b20"
+        }
+      ],
+      "bytes": 125164,
+      "sha256": "1945451d8eeb4a513adb1630b2648b127a6c9c5bd91f2860ebc3afcbad714b20"
+    }
+  ]
+}

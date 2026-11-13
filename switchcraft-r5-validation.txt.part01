@@ -1,0 +1,1422 @@
+Switchcraft R5 validation (2026-11-13)
+
+Switchcraft source: 1d716dbe17f9870e5c2cfbeb351d839ea91412fb
+java-switch runtime pin: a0f0e168bb282e9585c0353c3d9b70a7ad043ce8
+SD ZIP SHA-256: 008b93e3af2cbb26ed3069f4d5ad336f2721f30256a972ad517a8aa96c0a5a98
+
+R4 PHYSICAL: zero-services opens and its L eager C-heap memory contract passes.
+The genuine VM reaches vm-ready, but Hello, application JNI/FFM and agent
+classes are missing. Graphics, audio, shader and Minecraft workloads are NOT
+REACHED. The 21 raw logs and their byte-preserved hashes are in the source.
+
+R5 FIXES: local file-URL translation for JAR/directory classes and resources,
+fresh standalone diagnostic source stamps, explicit complete menu redraw/flush.
+SDK ABI 1 and one VM per application process remain unchanged.
+
+R5 HORIZON: NOT TESTED. Start with one fresh standalone java25-test A. Actual
+Hello output and stage completed are required before dependent Java workloads.
+No Minecraft title on Switch is claimed.
+
+HOST: all 92 Switchcraft tests passed, including the official client renderer
+transform and actual SDL/Vulkan/VMA 60-frame test with Khronos validation
+enabled on Mesa llvmpipe. All 23 runtime tests and the class-library suite pass.
+Maintained patched JDK loaders reproduce the unpatched CNFE, then load real
+JAR/directory classes and resource streams. The supplemental fresh sole-localhost
+URL loader check passes. These results are HOST ONLY.
+
+BUILD: the genuine instrumented OpenJDK25 Zero Minecraft profile cross-built,
+including the complete ten-module classfile-69 image and real native JDK
+providers. Clean source/package reconstruction verification passed. All four
+standalone diagnostics were relinked at the clean final runtime SHA, and actual
+ELF/NRO identity and SD-copy hashes were audited. The combined final link has
+zero undefined symbols and no GL/EGL API definitions. Final NRO formats, SD
+inventory/hashes, matching source/debug/SDK companions and ZIP checks pass.
+
+REPRODUCTION:
+Build java-switch at the immutable pin using:
+  bash scripts/build-openjdk25-runtime.sh --with-instrument --with-minecraft
+Then build Switchcraft at its immutable source using:
+  JAVA_SWITCH_SOURCE=/path/to/java-switch bash scripts/build-all.sh
+For this complete host run the following environment was also used:
+  SWITCHCRAFT_CLIENT_JAR=/tmp/r4-mc-reference/client.jar
+  SWITCHCRAFT_SHADER_BUILD_DIR=/tmp/switchcraft-shader-build
+  SWITCHCRAFT_GRAPHICS_HOST_RUN=1 DISPLAY=:93 SDL_VIDEODRIVER=x11
+  XDG_RUNTIME_DIR=/tmp
+  VK_ICD_FILENAMES=/tmp/r4-mc-reference/debian-mesa/root/usr/share/vulkan/icd.d/lvp_icd.json
+  VK_LAYER_PATH=/tmp/switchcraft-validation-layer/usr/share/vulkan/explicit_layer.d
+  VK_INSTANCE_LAYERS=VK_LAYER_KHRONOS_validation
+  LD_LIBRARY_PATH=/tmp/r4-mc-reference/debian-mesa/root/usr/lib/x86_64-linux-gnu:/tmp/switchcraft-validation-layer/usr/lib/x86_64-linux-gnu
+
+These /tmp paths are local research caches. Game assets, desktop JDKs/natives,
+credentials and keys are excluded from the SD ZIP and source companion. The
+historical 2026-11-12 official snapshot Demo title screenshot is HOST ONLY;
+that title run was not repeated for this Horizon path-conversion change.
+
+
+===== /workspace/switchcraft/build/host-tests.log =====
+python3 scripts/build-info.py
+python3 -m unittest discover -s tests -v
+test_actual_binaries (test_artifacts.ArtifactTests.test_actual_binaries) ... ok
+test_renamed_elf_and_truncation_rejected (test_artifacts.ArtifactTests.test_renamed_elf_and_truncation_rejected) ... ok
+test_real_sdk_publication_and_composed_lookups (test_composite_resolver.CompositeResolverTests.test_real_sdk_publication_and_composed_lookups) ... ok
+test_malformed_config_and_symlink_destination_are_preserved (test_config.ConfigTests.test_malformed_config_and_symlink_destination_are_preserved) ... ok
+test_preferences_preserve_unknown_settings_and_do_not_follow_stale_stage (test_config.ConfigTests.test_preferences_preserve_unknown_settings_and_do_not_follow_stale_stage) ... ok
+test_bounded_text_and_https_only_default (test_download.DownloadTests.test_bounded_text_and_https_only_default) ... ok
+test_cancellation_and_stale_part_leave_destination_untouched (test_download.DownloadTests.test_cancellation_and_stale_part_leave_destination_untouched) ... ok
+test_corrupt_existing_file_is_preserved_unless_repair_requested (test_download.DownloadTests.test_corrupt_existing_file_is_preserved_unless_repair_requested) ... ok
+test_hash_verified_download_retries_from_clean_start (test_download.DownloadTests.test_hash_verified_download_retries_from_clean_start) ... ok
+test_mismatched_or_symlink_partial_journal_is_never_repaired (test_download.DownloadTests.test_mismatched_or_symlink_partial_journal_is_never_repaired) ... ok
+test_owned_stale_partial_requires_repair_and_clean_restarts (test_download.DownloadTests.test_owned_stale_partial_requires_repair_and_clean_restarts) ... ok
+test_read_only_local_verification (test_download.DownloadTests.test_read_only_local_verification) ... ok
+test_sha1_mismatch_does_not_publish_and_valid_destination_is_reused (test_download.DownloadTests.test_sha1_mismatch_does_not_publish_and_valid_destination_is_reused) ... ok
+test_tls_rejects_untrusted_certificate_and_accepts_configured_ca (test_download.DownloadTests.test_tls_rejects_untrusted_certificate_and_accepts_configured_ca) ... ok
+test_transport_shutdown_allows_clean_reinitialization (test_download.DownloadTests.test_transport_shutdown_allows_clean_reinitialization) ... ok
+test_allowlist_and_no_overwrite (test_feedback.FeedbackTests.test_allowlist_and_no_overwrite) ... ok
+test_crash_report_file_limit_is_enforced (test_feedback.FeedbackTests.test_crash_report_file_limit_is_enforced) ... ok
+test_only_bounded_java_crash_reports_are_included (test_feedback.FeedbackTests.test_only_bounded_java_crash_reports_are_included) ... ok
+test_symlink_is_rejected (test_feedback.FeedbackTests.test_symlink_is_rejected) ... ok
+test_total_export_size_is_bounded (test_feedback.FeedbackTests.test_total_export_size_is_bounded) ... ok
+test_unique_attempts_survive_one_export_and_other_files_are_excluded (test_feedback.FeedbackTests.test_unique_attempts_survive_one_export_and_other_files_are_excluded) ... ok
+test_module_scope_and_export_inventory (test_font_audio.FontAudioHostTest.test_module_scope_and_export_inventory) ... ok
+test_openal_procedures_and_real_loopback_when_available (test_font_audio.FontAudioHostTest.test_openal_procedures_and_real_loopback_when_available) ... [W][08:59:13.340160] pw.conf      | [          conf.c: 1182 try_load_conf()] can't load config client.conf: No such file or directory
+[E][08:59:13.340207] pw.conf      | [          conf.c: 1215 pw_conf_load_conf_for_context()] can't load config client.conf: No such file or directory
+[ALSOFT] (EE) Failed to create PipeWire event context (errno: 2)
+XDG_RUNTIME_DIR (/tmp) is not owned by us (uid 1000), but by uid 0! (This could e.g. happen if you try to connect to a non-root PulseAudio as a root user, over the native protocol. Don't do that.)
+ok
+test_real_freetype_renders_a_glyph (test_font_audio.FontAudioHostTest.test_real_freetype_renders_a_glyph) ... ok
+test_horizon_can_import_gl_classes_and_rejects_real_gl_creation (test_gl_deferred.DeferredGlTests.test_horizon_can_import_gl_classes_and_rejects_real_gl_creation) ... ok
+test_cancellation_and_unrelated_files (test_install.InstallTests.test_cancellation_and_unrelated_files) ... ok
+test_corrupt_cache_preserved_until_explicit_repair (test_install.InstallTests.test_corrupt_cache_preserved_until_explicit_repair) ... ok
+test_full_refresh_download_filter_deduplicate_verify_and_retry (test_install.InstallTests.test_full_refresh_download_filter_deduplicate_verify_and_retry) ... ok
+test_metadata_stage_symlink_cannot_clobber_save (test_install.InstallTests.test_metadata_stage_symlink_cannot_clobber_save) ... ok
+test_receipt_symlink_is_refused_without_touching_save (test_install.InstallTests.test_receipt_symlink_is_refused_without_touching_save) ... ok
+test_refresh_real_prism_target_and_suggested_dependency (test_install.InstallTests.test_refresh_real_prism_target_and_suggested_dependency) ... ok
+test_refresh_requires_explicit_test_mirror_option (test_install.InstallTests.test_refresh_requires_explicit_test_mirror_option) ... ok
+test_archive_restore_collision_preserves_world_bytes (test_instances.InstanceTests.test_archive_restore_collision_preserves_world_bytes) ... ok
+test_duplicate_has_empty_game_directory_and_no_install_writes (test_instances.InstanceTests.test_duplicate_has_empty_game_directory_and_no_install_writes) ... ok
+test_import_limits_cancellation_symlinks_and_bad_profiles_leave_no_partial_instance (test_instances.InstanceTests.test_import_limits_cancellation_symlinks_and_bad_profiles_leave_no_partial_instance) ... ok
+test_import_modern_qsettings_general_unicode_opaque_and_unknown_groups (test_instances.InstanceTests.test_import_modern_qsettings_general_unicode_opaque_and_unknown_groups) ... ok
+test_import_preserves_profile_and_world_without_changing_source (test_instances.InstanceTests.test_import_preserves_profile_and_world_without_changing_source) ... ok
+test_prism_cached_version_is_resolved_without_download (test_instances.InstanceTests.test_prism_cached_version_is_resolved_without_download) ... ok
+test_prism_ini_roundtrips_quoted_unicode_and_escaped_characters (test_instances.InstanceTests.test_prism_ini_roundtrips_quoted_unicode_and_escaped_characters) ... ok
+test_prism_profile_crud_isolation_and_planner_path (test_instances.InstanceTests.test_prism_profile_crud_isolation_and_planner_path) ... ok
+test_symlink_instance_and_metadata_are_rejected (test_instances.InstanceTests.test_symlink_instance_and_metadata_are_rejected) ... ok
+test_traversal_malformed_metadata_collision_and_heap_bounds (test_instances.InstanceTests.test_traversal_malformed_metadata_collision_and_heap_bounds) ... ok
+test_update_version_resolves_cached_dependencies_and_refuses_unknown_components (test_instances.InstanceTests.test_update_version_resolves_cached_dependencies_and_refuses_unknown_components) ... ok
+test_menu_choices_revision_and_bounds (test_java25_menu.Java25MenuTests.test_menu_choices_revision_and_bounds) ... ok
+test_mutated_runtime_or_sdk_are_rejected (test_java25_package.Java25PackageTests.test_mutated_runtime_or_sdk_are_rejected) ... ok
+test_public_lwjgl_font_audio_calls_use_horizon_ffm_and_jni_bridge (test_java_font_audio.JavaFontAudioTests.test_public_lwjgl_font_audio_calls_use_horizon_ffm_and_jni_bridge) ... ok
+test_compiles_against_locked_lwjgl_343_apis (test_java_graphics_smoke.JavaGraphicsSmokeTests.test_compiles_against_locked_lwjgl_343_apis) ... ok
+test_host_sdl_vulkan_and_vma_present_60_frames (test_java_graphics_smoke.JavaGraphicsSmokeTests.test_host_sdl_vulkan_and_vma_present_60_frames) ... ok
+test_real_lwjgl_utility_calls_through_horizon_adapter (test_java_utilities.JavaUtilitiesSmokeTests.test_real_lwjgl_utility_calls_through_horizon_adapter) ... ok
+test_launcher_controller_sequences (test_launcher_controller.WorkflowTests.test_launcher_controller_sequences) ... ok
+test_worker_cancel_join_retry_and_exception_visibility (test_launcher_jobs.LauncherJobTests.test_worker_cancel_join_retry_and_exception_visibility) ... ok
+test_launcher_session_workflows (test_launcher_session.WorkflowTests.test_launcher_session_workflows) ... ok
+test_pinned_lwjgl_jar_calls_real_upstream_core_jni (test_lwjgl_core.TestLWJGLCore.test_pinned_lwjgl_jar_calls_real_upstream_core_jni) ... make[1]: Entering directory '/workspace/switchcraft/build/lwjgl-core/host/libffi-private'
+make  all-recursive
+make[2]: Entering directory '/workspace/switchcraft/build/lwjgl-core/host/libffi-private'
+Making all in include
+make[3]: Entering directory '/workspace/switchcraft/build/lwjgl-core/host/libffi-private/include'
+make[3]: Nothing to be done for 'all'.
+make[3]: Leaving directory '/workspace/switchcraft/build/lwjgl-core/host/libffi-private/include'
+Making all in testsuite
+make[3]: Entering directory '/workspace/switchcraft/build/lwjgl-core/host/libffi-private/testsuite'
+make[3]: Nothing to be done for 'all'.
+make[3]: Leaving directory '/workspace/switchcraft/build/lwjgl-core/host/libffi-private/testsuite'
+Making all in man
+make[3]: Entering directory '/workspace/switchcraft/build/lwjgl-core/host/libffi-private/man'
+make[3]: Nothing to be done for 'all'.
+make[3]: Leaving directory '/workspace/switchcraft/build/lwjgl-core/host/libffi-private/man'
+make[3]: Entering directory '/workspace/switchcraft/build/lwjgl-core/host/libffi-private'
+make[3]: Leaving directory '/workspace/switchcraft/build/lwjgl-core/host/libffi-private'
+make[2]: Leaving directory '/workspace/switchcraft/build/lwjgl-core/host/libffi-private'
+make[1]: Leaving directory '/workspace/switchcraft/build/lwjgl-core/host/libffi-private'
+host: 1957 genuine Java JNI exports + 2 lifecycle exports from 15 upstream C files; libffi ABIs=UNIX64,WIN64,GNUW64,EFI64 -> /workspace/switchcraft/build/lwjgl-core/host/liblwjgl-core.a
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by org.lwjgl.system.MemoryBackendUnsafeLegacy (file:/workspace/switchcraft/.deps/lwjgl_core.jar)
+WARNING: Please consider reporting this to the maintainers of class org.lwjgl.system.MemoryBackendUnsafeLegacy
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+LWJGL 3.4.3 pinned jar genuine core JNI calls passed
+ok
+test_sdl_timer_thread_calls_java_through_real_lwjgl_upcalls (test_lwjgl_core_callbacks.TestLWJGLCoreCallbacks.test_sdl_timer_thread_calls_java_through_real_lwjgl_upcalls) ... make[1]: Entering directory '/workspace/switchcraft/build/lwjgl-core/host/libffi-private'
+make  all-recursive
+make[2]: Entering directory '/workspace/switchcraft/build/lwjgl-core/host/libffi-private'
+Making all in include
+make[3]: Entering directory '/workspace/switchcraft/build/lwjgl-core/host/libffi-private/include'
+make[3]: Nothing to be done for 'all'.
+make[3]: Leaving directory '/workspace/switchcraft/build/lwjgl-core/host/libffi-private/include'
+Making all in testsuite
+make[3]: Entering directory '/workspace/switchcraft/build/lwjgl-core/host/libffi-private/testsuite'
+make[3]: Nothing to be done for 'all'.
+make[3]: Leaving directory '/workspace/switchcraft/build/lwjgl-core/host/libffi-private/testsuite'
+Making all in man
+make[3]: Entering directory '/workspace/switchcraft/build/lwjgl-core/host/libffi-private/man'
+make[3]: Nothing to be done for 'all'.
+make[3]: Leaving directory '/workspace/switchcraft/build/lwjgl-core/host/libffi-private/man'
+make[3]: Entering directory '/workspace/switchcraft/build/lwjgl-core/host/libffi-private'
+make[3]: Leaving directory '/workspace/switchcraft/build/lwjgl-core/host/libffi-private'
+make[2]: Leaving directory '/workspace/switchcraft/build/lwjgl-core/host/libffi-private'
+make[1]: Leaving directory '/workspace/switchcraft/build/lwjgl-core/host/libffi-private'
+host: 1957 genuine Java JNI exports + 2 lifecycle exports from 15 upstream C files; libffi ABIs=UNIX64,WIN64,GNUW64,EFI64 -> /workspace/switchcraft/build/lwjgl-core/host/liblwjgl-core.a
+Note: /tmp/lwjgl-core-upcall-ivuulpx5/LWJGLCoreCallbackProbe.java uses or overrides a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+ok
+test_real_lwjgl_static_shared_library_provider (test_lwjgl_horizon.LwjglHorizonTests.test_real_lwjgl_static_shared_library_provider) ... ok
+test_packaged_workload_calls_core_jni_and_ffm_via_static_provider (test_lwjgl_native_smoke.LwjglNativeSmokeTests.test_packaged_workload_calls_core_jni_and_ffm_via_static_provider) ... ok
+test_real_stb_vma_jar_calls_and_module_resolver (test_lwjgl_utilities.TestLWJGLUtilities.test_real_stb_vma_jar_calls_and_module_resolver) ... WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by org.lwjgl.system.MemoryBackendUnsafeLegacy (file:/workspace/switchcraft/.deps/lwjgl_core.jar)
+WARNING: Please consider reporting this to the maintainers of class org.lwjgl.system.MemoryBackendUnsafeLegacy
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+Pinned LWJGL STB decode/text packing and VMA Vulkan allocator calls passed
+ok
+test_cycle_missing_parent_traversal_and_bad_json (test_metadata.MetadataTests.test_cycle_missing_parent_traversal_and_bad_json) ... ok
+test_inheritance_library_override_and_parent_jar (test_metadata.MetadataTests.test_inheritance_library_override_and_parent_jar) ... ok
+test_legacy_quotes_and_asset_index (test_metadata.MetadataTests.test_legacy_quotes_and_asset_index) ... ok
+test_official_manifest_listing (test_metadata.MetadataTests.test_official_manifest_listing) ... ok
+test_prism_legacy_arguments_keep_strict_vulkan_and_maven_artifact_paths (test_metadata.MetadataTests.test_prism_legacy_arguments_keep_strict_vulkan_and_maven_artifact_paths) ... ok
+test_read_only_and_no_token_substitution (test_metadata.MetadataTests.test_read_only_and_no_token_substitution) ... ok
+test_rules_and_native_substitutions (test_metadata.MetadataTests.test_rules_and_native_substitutions) ... ok
+test_snapshot_horizon_overrides_precede_lwjgl_and_options_are_explicit (test_metadata.MetadataTests.test_snapshot_horizon_overrides_precede_lwjgl_and_options_are_explicit) ... ok
+test_malformed_request_is_consumed_without_launch (test_minecraft_launch.MinecraftLaunchRequestTests.test_malformed_request_is_consumed_without_launch) ... ok
+test_prepared_request_is_consumed_and_rebuilt_as_fixed_demo (test_minecraft_launch.MinecraftLaunchRequestTests.test_prepared_request_is_consumed_and_rebuilt_as_fixed_demo) ... ok
+test_stale_settings_request_is_consumed_without_launch (test_minecraft_launch.MinecraftLaunchRequestTests.test_stale_settings_request_is_consumed_without_launch) ... ok
+test_allowlisted_function_lookup_and_call (test_native_lookup.NativeLookupTests.test_allowlisted_function_lookup_and_call) ... ok
+test_real_jni_registration_and_ffm_downcall_through_sdk (test_native_symbols_jni.NativeSymbolsJniTests.test_real_jni_registration_and_ffm_downcall_through_sdk) ... ok
+test_existing_different_metadata_is_preserved (test_prism_cache.PrismCacheTests.test_existing_different_metadata_is_preserved) ... ok
+test_hash_mismatch_never_publishes_version (test_prism_cache.PrismCacheTests.test_hash_mismatch_never_publishes_version) ... ok
+test_hash_verified_cache_and_suggested_dependency (test_prism_cache.PrismCacheTests.test_hash_verified_cache_and_suggested_dependency) ... ok
+test_path_and_token_rejections (test_prism_cache.PrismCacheTests.test_path_and_token_rejections) ... ok
+test_dependency_missing_cycle_conflict_and_unknown_fail_closed (test_prism_metadata.PrismMetadataTests.test_dependency_missing_cycle_conflict_and_unknown_fail_closed) ... ok
+test_index_sorts_offsets_as_instants_and_rejects_invalid_date (test_prism_metadata.PrismMetadataTests.test_index_sorts_offsets_as_instants_and_rejects_invalid_date) ... ok
+test_index_time_order (test_prism_metadata.PrismMetadataTests.test_index_time_order) ... ok
+test_local_patch_overrides_cached_metadata (test_prism_metadata.PrismMetadataTests.test_local_patch_overrides_cached_metadata) ... ok
+test_order_dependencies_library_override_and_java_args (test_prism_metadata.PrismMetadataTests.test_order_dependencies_library_override_and_java_args) ... ok
+test_real_snapshot_metadata_and_dependency_selection (test_prism_metadata.PrismMetadataTests.test_real_snapshot_metadata_and_dependency_selection) ... ok
+test_requirement_cycle_conflict_and_unsupported_jarmod (test_prism_metadata.PrismMetadataTests.test_requirement_cycle_conflict_and_unsupported_jarmod) ... ok
+test_game_profile_rejects_base_sdk_and_mismatched_module_image (test_runtime_profile.RuntimeProfileTests.test_game_profile_rejects_base_sdk_and_mismatched_module_image) ... ok
+test_instrument_profile_requires_real_vm_and_agent_features (test_runtime_profile.RuntimeProfileTests.test_instrument_profile_requires_real_vm_and_agent_features) ... ok
+test_generator_intersects_public_declarations_with_archive (test_sdl_exports.SdlExportTests.test_generator_intersects_public_declarations_with_archive) ... ok
+test_pinned_switch_archive_has_complete_public_sdl_surface (test_sdl_exports.SdlExportTests.test_pinned_switch_archive_has_complete_public_sdl_surface) ... ok
+test_pinned_lwjgl_shader_functions_compile_and_reflect (test_shader_libraries.TestShaderLibraries.test_pinned_lwjgl_shader_functions_compile_and_reflect) ... -- Shaderc: build type is "MinSizeRel".
+-- Configuring Shaderc to avoid building tests.
+-- Configuring Shaderc to avoid building examples.
+-- Configuring Shaderc to build executables.
+-- Configuring Shaderc to check copyrights.
+-- asciidoctor was not found - no documentation will be generated
+CMake Warning (deprecated) at third_party/glslang/CMakeLists.txt:111 (message):
+  ENABLE_HLSL is deprecated.  The HLSL front-end will be removed in a future
+  major release of glslang.  See
+  https://github.com/KhronosGroup/glslang/issues/4210 for details.
+This warning is for project developers.  Use -Wno-author or -Wno-deprecated
+to suppress it.
+
+-- optimizer enabled
+-- Configuring done (0.5s)
+-- Generating done (0.2s)
+-- Build files have been written to: /tmp/switchcraft-shader-build/host/shaderc
+gmake[1]: Entering directory '/tmp/switchcraft-shader-build/host/shaderc'
+[  0%] Built target spirv-tools-header-OpenCLDebugInfo100
+[  0%] Built target spirv-tools-header-DebugInfo
+[  0%] Built target spirv-tools-tables
+[  0%] Built target extinst_tables
+[  1%] Built target core_tables
+[ 32%] Built target SPIRV-Tools-static
+[ 76%] Built target SPIRV-Tools-opt
+[ 76%] Built target SPIRV
+[ 93%] Built target glslang
+[ 98%] Built target shaderc_util
+[100%] Built target shaderc
+[100%] Built target shaderc_combined
+gmake[1]: Leaving directory '/tmp/switchcraft-shader-build/host/shaderc'
+-- SPIRV-Cross: Finding Git version for SPIRV-Cross.
+-- SPIRV-Cross: Git not found, using unknown build version.
+-- Configuring done (0.0s)
+-- Generating done (0.0s)
+-- Build files have been written to: /tmp/switchcraft-shader-build/host/spirv-cross
+gmake[1]: Entering directory '/tmp/switchcraft-shader-build/host/spirv-cross'
+[ 11%] Built target spirv-cross-reflect
+[ 41%] Built target spirv-cross-core
+[ 52%] Built target spirv-cross-glsl
+[ 64%] Built target spirv-cross-cpp
+[ 76%] Built target spirv-cross-msl
+[ 88%] Built target spirv-cross-hlsl
+[100%] Built target spirv-cross-c
+gmake[1]: Leaving directory '/tmp/switchcraft-shader-build/host/spirv-cross'
+host: 45 shaderc_* + 169 spvc_* defined function symbols; all LWJGL API pointers resolve
+host: real GLSL -> SPIR-V compilation and SPIRV-Cross stage-input reflection passed
+shader libraries built with genuine upstream C APIs
+ok
+test_matching_base_features_never_claim_game_title (test_snapshot_profile.SnapshotProfileTests.test_matching_base_features_never_claim_game_title) ... ok
+test_nonconformance_is_not_silently_hidden (test_snapshot_profile.SnapshotProfileTests.test_nonconformance_is_not_silently_hidden) ... ok
+test_wrong_snapshot_is_rejected (test_snapshot_profile.SnapshotProfileTests.test_wrong_snapshot_is_rejected) ... ok
+test_clipping_preserves_guards_and_touch_matches_visible_controls (test_ui_canvas.CanvasTests.test_clipping_preserves_guards_and_touch_matches_visible_controls) ... ok
+test_renderer_is_single_vulkan_and_wrong_hash_is_rejected (test_vulkan_transform.VulkanTransformTests.test_renderer_is_single_vulkan_and_wrong_hash_is_rejected) ... ok
+test_verified_official_snapshot_class (test_vulkan_transform.VulkanTransformTests.test_verified_official_snapshot_class) ... ok
+
+----------------------------------------------------------------------
+Ran 92 tests in 170.509s
+
+OK
+HOST_FFM_BOOTED os.arch=amd64
+SWITCHCRAFT_FREETYPE_GLYPH_PASS codepoint=65
+SWITCHCRAFT_FREETYPE_JAVA_PASS version=2.13.3
+SWITCHCRAFT_OPENAL_LOOPBACK_JAVA_PASS frames=4096 nonzero=8120
+SWITCHCRAFT_FONT_AUDIO_JAVA_PASS hardware_output=NOT_TESTED
+HOST_FFM_BOOTED os.arch=amd64
+SWITCHCRAFT_STB_PNG_JAVA_PASS width=1 height=1 rgba=10,80,e0,ff
+SWITCHCRAFT_SHADERC_JAVA_PASS bytes=896
+SWITCHCRAFT_SPVC_REFLECTION_JAVA_PASS stage_input=position location=0
+SWITCHCRAFT_UTILITIES_JAVA_PASS
+
+
+===== /workspace/switchcraft/build/native-link.log =====
+AArch64 linked static symbol proof; GL/EGL API definitions absent: PASS
+Genuine VM, instrumentation, composed resolver and SDL/Vulkan link; zero undefined symbols: PASS
+
+
+===== /tmp/java-switch-minecraft/build/host-tests.log =====
+# Host FFM controls require the pinned OpenJDK source even before VM configure.
+python3 scripts/openjdk25.py prepare
+OpenJDK 275848b087112429235f4f235822e294a1a288ef, patches SHA256 15894d6e4c39e008c5a50d27a304b541686e7a8be326e3d8b106cdd3c30870ab
+python3 -m unittest discover -s tests -v
+test_replaces_shared_minijvm_link_without_touching_source (test_bootstrap_deps.BootstrapDependencyTests.test_replaces_shared_minijvm_link_without_touching_source) ... patching file utils/d_type.c
+patching file utils/d_type.h
+patching file jvm/jvm.h
+patching file jvm/immix.c
+patching file jvm/os_posix.c
+patching file jvm/jvm_util.c
+patching file jvm/jni_std.c
+patching file jvm/jvm.c
+patching file jvm/jni_io.c
+patching file jvm/jit.h
+patching file utils/https/mbedtls/include/mbedtls/config.h
+patching file jvm/class_load.c
+patching file jvm/class_load.c
+patching file jvm/jni_reflect.c
+patching file jvm/jni_io.c
+ok
+test_lifecycle_with_simulated_jit_failures (test_ffi_horizon.HorizonClosureTests.test_lifecycle_with_simulated_jit_failures) ... ok
+test_interpreter_jar_io_thread_reflection_and_native_bridge (test_java.JavaTests.test_interpreter_jar_io_thread_reflection_and_native_bridge) ... ok
+test_loader_rejects_newer_or_invalid_classfile_headers (test_java.JavaTests.test_loader_rejects_newer_or_invalid_classfile_headers) ... ok
+test_jni_creation_native_registration_and_ffm (test_java25.Java25InvocationTests.test_jni_creation_native_registration_and_ffm) ... ok
+test_unavailable_vm_and_wrong_java_are_blocked_before_execution (test_java25.Java25InvocationTests.test_unavailable_vm_and_wrong_java_are_blocked_before_execution) ... ok
+test_device_uri_and_exclusive_create_on_actual_minijvm (test_java8_filesystem.Java8FilesystemTests.test_device_uri_and_exclusive_create_on_actual_minijvm) ... ok
+test_real_function_lookup_and_lifetime_gates (test_native_resolver.NativeResolverTests.test_real_function_lookup_and_lifetime_gates) ... native resolver host test passed
+ok
+test_refresh_tracks_current_commit_and_dirty_state (test_openjdk25_build_info.OpenJDK25BuildInfoTests.test_refresh_tracks_current_commit_and_dirty_state) ... ok
+test_clean_base_and_instrument_configuration_creates_parent_directories (test_openjdk25_configure.OpenJDK25ConfigureTests.test_clean_base_and_instrument_configuration_creates_parent_directories) ... ok
+test_patch_applies_cleanly_and_limits_behavior_change_to_horizon (test_openjdk25_fatal_heap_report_patch.FatalHeapReportPatchTests.test_patch_applies_cleanly_and_limits_behavior_change_to_horizon) ... ok
+test_actual_pinned_jdk_direct_and_symlinked_roots (test_openjdk25_ffm_host.OpenJDK25FfmHostTests.test_actual_pinned_jdk_direct_and_symlinked_roots) ... ok
+test_missing_and_empty_jdk_roots_fail_with_clear_error (test_openjdk25_ffm_host.OpenJDK25FfmHostTests.test_missing_and_empty_jdk_roots_fail_with_clear_error) ... ok
+test_ambiguous_or_conflicting_archive_definitions_are_rejected (test_openjdk25_native_resolver_generator.OpenJDK25NativeResolverGeneratorTests.test_ambiguous_or_conflicting_archive_definitions_are_rejected) ... ok
+test_missing_archive_duplicate_module_and_missing_nm_fail_closed (test_openjdk25_native_resolver_generator.OpenJDK25NativeResolverGeneratorTests.test_missing_archive_duplicate_module_and_missing_nm_fail_closed) ... ok
+test_per_module_symbol_filters_keep_only_requested_real_exports (test_openjdk25_native_resolver_generator.OpenJDK25NativeResolverGeneratorTests.test_per_module_symbol_filters_keep_only_requested_real_exports) ... ok
+test_real_archive_symbols_are_module_and_global_resolvable (test_openjdk25_native_resolver_generator.OpenJDK25NativeResolverGeneratorTests.test_real_archive_symbols_are_module_and_global_resolvable) ... ok
+test_symbol_filter_requires_each_safe_export_and_known_module (test_openjdk25_native_resolver_generator.OpenJDK25NativeResolverGeneratorTests.test_symbol_filter_requires_each_safe_export_and_known_module) ... ok
+test_failed_patch_preserves_published_tree_and_corrected_retry_succeeds (test_openjdk25_prepare.OpenJDK25PrepareTests.test_failed_patch_preserves_published_tree_and_corrected_retry_succeeds) ... patching file sample.txt
+OpenJDK fixture-revision, patches SHA256 6adc4494d02b32f449e2781bd1e61d155d4bf121290287a5fa377ae8d14ca163
+patching file sample.txt
+Hunk #1 FAILED at 1.
+1 out of 1 hunk FAILED -- saving rejects to file sample.txt.rej
+patching file sample.txt
+OpenJDK fixture-revision, patches SHA256 1f4893d8485ee765c880b12a191e1a18126735bbdbbfbe98e20ee6951e03c7ba
+ok
+test_private_definitions_and_references_are_namespaced (test_private_crypto_isolation.PrivateCryptoIsolationTest.test_private_definitions_and_references_are_namespaced) ... ok
+test_hotspot_os_protect_none_uncommitted_reaches_bridge (test_vmem_horizon.HorizonMemoryTests.test_hotspot_os_protect_none_uncommitted_reaches_bridge) ... ok
+test_openjdk_bridge_uses_alias_region (test_vmem_horizon.HorizonMemoryTests.test_openjdk_bridge_uses_alias_region) ... ok
+test_state_and_injected_system_failures (test_vmem_horizon.HorizonMemoryTests.test_state_and_injected_system_failures) ... ok
+
+----------------------------------------------------------------------
+Ran 23 tests in 12.469s
+
+OK
+
+
+===== /tmp/java-switch-minecraft/build/openjdk25-classlib-host.log =====
+$ bash /tmp/java-switch-minecraft/ports/openjdk25/tests/java_io/test-host.sh
+Horizon java.io native host tests: PASS
+$ bash /tmp/java-switch-minecraft/ports/openjdk25/tests/java_props/test-host.sh
+Horizon java.base property host tests: PASS
+$ bash /tmp/java-switch-minecraft/ports/openjdk25/tests/java_paths/test-host.sh
+patching file make/common/Modules.gmk
+patching file make/modules/java.base/Java.gmk
+patching file src/java.base/share/classes/jdk/internal/util/OperatingSystem.java
+patching file src/java.base/share/classes/sun/net/www/ParseUtil.java
+patching file src/java.base/unix/classes/jdk/internal/loader/FileURLMapper.java
+patching file src/java.base/share/classes/jdk/internal/loader/URLClassPath.java
+patching file src/java.base/share/classes/sun/net/www/protocol/jar/URLJarFile.java
+patching file src/java.base/unix/classes/sun/net/www/protocol/file/Handler.java
+patching file src/java.base/unix/classes/java/io/UnixFileSystem.java
+patching file src/java.base/unix/classes/sun/net/PortConfig.java
+patching file src/java.base/unix/classes/sun/nio/fs/UnixFileSystem.java
+patching file src/java.base/unix/classes/sun/nio/fs/UnixPath.java
+patching file src/java.base/unix/classes/sun/nio/fs/UnixUriUtils.java
+Horizon UnixPath host test: PASS
+$ bash /tmp/java-switch-minecraft/ports/openjdk25/tests/java_paths/test-classpath-host.sh
+Unpatched class loader reproduces payload CNFE
+Maintained Horizon URLClassPath loaded encoded device JAR and directory classes; JAR and file URL resource streams passed; localhost/Unix paths passed; remote URLs and missing resource stayed absent; Switch NOT TESTED
+$ bash /tmp/java-switch-minecraft/ports/openjdk25/tests/ffm_platform/test-host.sh
+patching file src/java.base/share/classes/jdk/internal/foreign/CABI.java
+Horizon C ABI initialization host tests passed
+$ bash /tmp/java-switch-minecraft/ports/openjdk25/tests/nio_native/test-host.sh
+Horizon native NIO host test: PASS
+Horizon NIO realpath device-root fallback: HOST-PASSED; Switch NOT TESTED
+Horizon NIO JNI dispatcher host test: PASS
+Horizon IOUtil and NativeThread JNI host test: PASS
+Horizon unavailable NIO service JNI host test: PASS
+Horizon socket/datagram JNI loopback host test: PASS
+$ bash /tmp/java-switch-minecraft/ports/openjdk25/tests/nio_native/test-inherited-channel-host.sh
+Horizon inherited channel JNI host test: PASS
+$ bash /tmp/java-switch-minecraft/ports/openjdk25/tests/nio_native/test-wakeup.sh
+Horizon selector wakeup TCP host test: PASS
+$ python3 /tmp/java-switch-minecraft/scripts/test-openjdk25-jimage-host.py
+Horizon libjimage: snapshot release failed; ownership retained (status=4, Result=0xdeadbeef)
+Horizon libjimage: snapshot rollback failed (status=4, Result=0xdeadbeef)
+Horizon libjimage: monitor allocation failed
+Horizon libjimage host contract checks passed (bridge calls mocked)
+$ python3 /tmp/java-switch-minecraft/scripts/test-openjdk25-jimage-zlib-host.py
+Horizon jimage direct libzip binding passed with host zlib; not Horizon execution
+$ gcc -std=gnu11 -O2 -Wall -Wextra -Wno-unused-parameter -ffunction-sections -fdata-sections -I/tmp/java-switch-minecraft/ports/openjdk25/tests/net_util/mocks -I/tmp/java-switch-minecraft/ports/openjdk25/src/java.base/horizon/native/libnet -I/tmp/java-switch-minecraft/ports/openjdk25/src/java.base/horizon/native/libjava -I/tmp/java-switch-minecraft/.deps/openjdk25-source/src/java.base/share/native/libnet -I/tmp/java-switch-minecraft/.deps/openjdk25-source/src/java.base/share/native/libjava -I/tmp/java-switch-minecraft/.deps/openjdk25-source/src/java.base/unix/native/libjava -I/tmp/java-switch-minecraft/build/openjdk25-horizon/support/headers/java.base -I/tmp/java-switch-minecraft/.deps/openjdk25-source/src/hotspot/share/include -I/tmp/java-switch-minecraft/ports/openjdk25/src/hotspot/os/horizon/include -I/tmp/java-switch-minecraft/.deps/host-jdk25/jdk-25.0.5+8/include -I/tmp/java-switch-minecraft/.deps/host-jdk25/jdk-25.0.5+8/include/linux /tmp/java-switch-minecraft/ports/openjdk25/src/java.base/horizon/native/libnet/net_util_md.c /tmp/java-switch-minecraft/ports/openjdk25/tests/net_util/test_net_util_init.c -pthread -Wl,--gc-sections -o /tmp/java-switch-minecraft/build/openjdk25-classlib-host/net-init
+$ /tmp/java-switch-minecraft/build/openjdk25-classlib-host/net-init
+libnet process-lifetime socket initialization: PASS (initialized)
+$ /tmp/java-switch-minecraft/build/openjdk25-classlib-host/net-init already
+libnet process-lifetime socket initialization: PASS (already initialized)
+$ /tmp/java-switch-minecraft/build/openjdk25-classlib-host/net-init failure
+Horizon BSD socket initialization failed: Result=0x00004567
+libnet process-lifetime socket initialization: PASS (failure retained)
+$ gcc -std=gnu11 -O2 -Wall -Wextra -Wno-unused-parameter -ffunction-sections -fdata-sections -I/tmp/java-switch-minecraft/ports/openjdk25/src/java.base/horizon/native/libnet -I/tmp/java-switch-minecraft/ports/openjdk25/src/java.base/horizon/native/libjava -I/tmp/java-switch-minecraft/.deps/openjdk25-source/src/java.base/share/native/libnet -I/tmp/java-switch-minecraft/.deps/openjdk25-source/src/java.base/share/native/libjava -I/tmp/java-switch-minecraft/.deps/openjdk25-source/src/java.base/unix/native/libjava -I/tmp/java-switch-minecraft/build/openjdk25-horizon/support/headers/java.base -I/tmp/java-switch-minecraft/.deps/openjdk25-source/src/hotspot/share/include -I/tmp/java-switch-minecraft/ports/openjdk25/src/hotspot/os/horizon/include -I/tmp/java-switch-minecraft/.deps/host-jdk25/jdk-25.0.5+8/include -I/tmp/java-switch-minecraft/.deps/host-jdk25/jdk-25.0.5+8/include/linux /tmp/java-switch-minecraft/ports/openjdk25/src/java.base/horizon/native/libnet/DefaultProxySelector.c /tmp/java-switch-minecraft/ports/openjdk25/src/java.base/horizon/native/libnet/NetworkInterface.c /tmp/java-switch-minecraft/ports/openjdk25/tests/net_util/test_unsupported_queries.c -Wl,--gc-sections -o /tmp/java-switch-minecraft/build/openjdk25-classlib-host/net-unsupported
+$ /tmp/java-switch-minecraft/build/openjdk25-classlib-host/net-unsupported
+Horizon unsupported proxy/interface queries report explicit errors: PASS
+$ gcc -std=gnu11 -O2 -Wall -Wextra -Wno-unused-parameter -ffunction-sections -fdata-sections -I/tmp/java-switch-minecraft/ports/openjdk25/src/java.base/horizon/native/libnet -I/tmp/java-switch-minecraft/ports/openjdk25/src/java.base/horizon/native/libjava -I/tmp/java-switch-minecraft/.deps/openjdk25-source/src/java.base/share/native/libnet -I/tmp/java-switch-minecraft/.deps/openjdk25-source/src/java.base/share/native/libjava -I/tmp/java-switch-minecraft/.deps/openjdk25-source/src/java.base/unix/native/libjava -I/tmp/java-switch-minecraft/build/openjdk25-horizon/support/headers/java.base -I/tmp/java-switch-minecraft/.deps/openjdk25-source/src/hotspot/share/include -I/tmp/java-switch-minecraft/ports/openjdk25/src/hotspot/os/horizon/include -I/tmp/java-switch-minecraft/.deps/host-jdk25/jdk-25.0.5+8/include -I/tmp/java-switch-minecraft/.deps/host-jdk25/jdk-25.0.5+8/include/linux /tmp/java-switch-minecraft/ports/openjdk25/src/java.base/horizon/native/libnet/ResolverConfigurationImpl.c /tmp/java-switch-minecraft/ports/openjdk25/tests/net_util/test_resolver_fallback.c -Wl,--wrap=gethostname -Wl,--gc-sections -o /tmp/java-switch-minecraft/build/openjdk25-classlib-host/resolver-config
+$ /tmp/java-switch-minecraft/build/openjdk25-classlib-host/resolver-config
+Horizon resolver fallback uses only the reported hostname: PASS
+$ gcc -std=gnu11 -O2 -Wall -Wextra -Wno-unused-parameter -ffunction-sections -fdata-sections -Werror -I/tmp/java-switch-minecraft/ports/openjdk25/tests/seed_generator/mocks -I/tmp/java-switch-minecraft/ports/openjdk25/src/java.base/horizon/native/libnet -I/tmp/java-switch-minecraft/ports/openjdk25/src/java.base/horizon/native/libjava -I/tmp/java-switch-minecraft/.deps/openjdk25-source/src/java.base/share/native/libnet -I/tmp/java-switch-minecraft/.deps/openjdk25-source/src/java.base/share/native/libjava -I/tmp/java-switch-minecraft/.deps/openjdk25-source/src/java.base/unix/native/libjava -I/tmp/java-switch-minecraft/build/openjdk25-horizon/support/headers/java.base -I/tmp/java-switch-minecraft/.deps/openjdk25-source/src/hotspot/share/include -I/tmp/java-switch-minecraft/ports/openjdk25/src/hotspot/os/horizon/include -I/tmp/java-switch-minecraft/.deps/host-jdk25/jdk-25.0.5+8/include -I/tmp/java-switch-minecraft/.deps/host-jdk25/jdk-25.0.5+8/include/linux /tmp/java-switch-minecraft/ports/openjdk25/src/java.base/horizon/native/libjava/SeedGenerator.c /tmp/java-switch-minecraft/ports/openjdk25/tests/seed_generator/test_seed_generator.c -o /tmp/java-switch-minecraft/build/openjdk25-classlib-host/seed-generator
+$ /tmp/java-switch-minecraft/build/openjdk25-classlib-host/seed-generator
+SeedGenerator CSRNG bridge tests passed
+HOST-PASSED: host syscalls and mocked JNI/Horizon services; Switch NOT TESTED
+
+
+===== /tmp/java-switch-minecraft/build/openjdk25-runtime-link-minecraft.log =====
+Real upstream Zero archive SHA256 72210e3ca85fcf41ece6962aeba11d0c5d2e607397969033768ff2c756c2127f
+$ /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3 /tmp/java-switch-minecraft/scripts/generate-openjdk25-native-resolver.py --nm /workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/bin/aarch64-none-elf-nm --output /tmp/java-switch-minecraft/build/openjdk25-horizon/runtime-link-minecraft/native_resolver.c --manifest /tmp/java-switch-minecraft/build/openjdk25-horizon/runtime-link-minecraft/native_resolver.json --library java=/tmp/java-switch-minecraft/build/openjdk25-horizon/support/native/java.base/libjava/static/libjava.a --library zip=/tmp/java-switch-minecraft/build/openjdk25-horizon/support/native/java.base/libzip/static/libzip.a --library jimage=/tmp/java-switch-minecraft/build/openjdk25-horizon/support/native/java.base/libjimage/static/libjimage.a --library verify=/tmp/java-switch-minecraft/build/openjdk25-horizon/support/native/java.base/libverify/static/libverify.a --library net=/tmp/java-switch-minecraft/build/openjdk25-horizon/support/native/java.base/libnet/static/libnet.a --library nio=/tmp/java-switch-minecraft/build/openjdk25-horizon/support/native/java.base/libnio/static/libnio.a --library fallbackLinker=/tmp/java-switch-minecraft/build/openjdk25-horizon/support/native/java.base/libfallbackLinker/static/libfallbackLinker.a --library syslookup=/tmp/java-switch-minecraft/build/openjdk25-horizon/support/native/java.base/libsyslookup/static/libsyslookup.a --library jli_manifest=/tmp/java-switch-minecraft/build/openjdk25-horizon/support/native/java.base/libjli_manifest/static/libjli_manifest.a --library instrument=/tmp/java-switch-minecraft/build/openjdk25-horizon/support/native/java.instrument/libinstrument/static/libinstrument.a --library management=/tmp/java-switch-minecraft/build/openjdk25-horizon/support/native/java.management/libmanagement/static/libmanagement.a --library syslookup=/workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/aarch64-none-elf/lib/pic/libc.a --library syslookup=/workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/aarch64-none-elf/lib/pic/libm.a --symbols syslookup=JNI_OnLoad_syslookup,syslookup,strlen,strcmp,strncmp,strcpy,strncpy,strcat,strncat,strchr,strrchr,strstr,strspn,strcspn,strpbrk,memcpy,memmove,memcmp,memset,memchr,malloc,calloc,realloc,free,abort,printf,snprintf,sprintf,puts,putchar,fopen,fclose,fread,fwrite,fflush,fseek,ftell,sin,cos,tan,atan2,pow,sqrt,ceil,floor,fabs,fmod,exp,log
+$ /workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc -march=armv8-a+crc+crypto -mtune=cortex-a57 -mno-outline-atomics -mtp=soft -fPIE -I/tmp/java-switch-minecraft/include -I/tmp/java-switch-minecraft/build -c /tmp/java-switch-minecraft/build/openjdk25-horizon/runtime-link-minecraft/native_resolver.c -o /tmp/java-switch-minecraft/build/openjdk25-horizon/runtime-link-minecraft/native_resolver.o
+$ /workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc -march=armv8-a+crc+crypto -mtune=cortex-a57 -mno-outline-atomics -mtp=soft -fPIE -DJS_OPENJDK25_STATIC_PROVIDER -DJS_OPENJDK25_INSTRUMENT -D__SWITCH__ -I/workspace/switchcraft/.toolchain/opt/devkitpro/libnx/include -I/tmp/java-switch-minecraft/include -I/tmp/java-switch-minecraft/build -I/tmp/java-switch-minecraft/src -I/tmp/java-switch-minecraft/build -I/tmp/java-switch-minecraft/.deps/openjdk25-horizon/src/java.base/share/native/include -I/tmp/java-switch-minecraft/.deps/openjdk25-horizon/src/java.base/horizon/native/include -c /tmp/java-switch-minecraft/src/java25_vm_test.c -o /tmp/java-switch-minecraft/build/openjdk25-horizon/runtime-link-minecraft/java25_vm_test.o
+$ /workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc -march=armv8-a+crc+crypto -mtune=cortex-a57 -mno-outline-atomics -mtp=soft -fPIE -DJS_OPENJDK25_STATIC_PROVIDER -DJS_OPENJDK25_INSTRUMENT -D__SWITCH__ -I/workspace/switchcraft/.toolchain/opt/devkitpro/libnx/include -I/tmp/java-switch-minecraft/include -I/tmp/java-switch-minecraft/build -I/tmp/java-switch-minecraft/src -I/tmp/java-switch-minecraft/build -I/tmp/java-switch-minecraft/.deps/openjdk25-horizon/src/java.base/share/native/include -I/tmp/java-switch-minecraft/.deps/openjdk25-horizon/src/java.base/horizon/native/include -c /tmp/java-switch-minecraft/src/platform.c -o /tmp/java-switch-minecraft/build/openjdk25-horizon/runtime-link-minecraft/platform.o
+$ /workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc -march=armv8-a+crc+crypto -mtune=cortex-a57 -mno-outline-atomics -mtp=soft -fPIE -DJS_OPENJDK25_STATIC_PROVIDER -DJS_OPENJDK25_INSTRUMENT -D__SWITCH__ -I/workspace/switchcraft/.toolchain/opt/devkitpro/libnx/include -I/tmp/java-switch-minecraft/include -I/tmp/java-switch-minecraft/build -I/tmp/java-switch-minecraft/src -I/tmp/java-switch-minecraft/build -I/tmp/java-switch-minecraft/.deps/openjdk25-horizon/src/java.base/share/native/include -I/tmp/java-switch-minecraft/.deps/openjdk25-horizon/src/java.base/horizon/native/include -c /tmp/java-switch-minecraft/src/runtime_openjdk.c -o /tmp/java-switch-minecraft/build/openjdk25-horizon/runtime-link-minecraft/runtime_openjdk.o
+$ /workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/bin/aarch64-none-elf-g++ -march=armv8-a+crc+crypto -mtune=cortex-a57 -mno-outline-atomics -mtp=soft -fPIE -specs=/workspace/switchcraft/.toolchain/opt/devkitpro/libnx/switch.specs -L/workspace/switchcraft/.toolchain/opt/devkitpro/libnx/lib -Wl,--gc-sections -Wl,-u,JNI_CreateJavaVM /tmp/java-switch-minecraft/build/openjdk25-horizon/runtime-link-minecraft/java25_vm_test.o /tmp/java-switch-minecraft/build/openjdk25-horizon/runtime-link-minecraft/platform.o /tmp/java-switch-minecraft/build/openjdk25-horizon/runtime-link-minecraft/runtime_openjdk.o /tmp/java-switch-minecraft/build/openjdk25-horizon/runtime-link-minecraft/native_resolver.o -Wl,--start-group /tmp/java-switch-minecraft/build/openjdk25-horizon/support/native/java.base/libjava/static/libjava.a /tmp/java-switch-minecraft/build/openjdk25-horizon/support/native/java.base/libzip/static/libzip.a /tmp/java-switch-minecraft/build/openjdk25-horizon/support/native/java.base/libjimage/static/libjimage.a /tmp/java-switch-minecraft/build/openjdk25-horizon/support/native/java.base/libverify/static/libverify.a /tmp/java-switch-minecraft/build/openjdk25-horizon/support/native/java.base/libnet/static/libnet.a /tmp/java-switch-minecraft/build/openjdk25-horizon/support/native/java.base/libnio/static/libnio.a /tmp/java-switch-minecraft/build/openjdk25-horizon/support/native/java.base/libfallbackLinker/static/libfallbackLinker.a /tmp/java-switch-minecraft/build/openjdk25-horizon/support/native/java.base/libsyslookup/static/libsyslookup.a /tmp/java-switch-minecraft/build/openjdk25-horizon/support/native/java.base/libjli_manifest/static/libjli_manifest.a /tmp/java-switch-minecraft/build/openjdk25-horizon/support/native/java.instrument/libinstrument/static/libinstrument.a /tmp/java-switch-minecraft/build/openjdk25-horizon/support/native/java.management/libmanagement/static/libmanagement.a /tmp/java-switch-minecraft/build/openjdk25-horizon/hotspot/variant-zero/libjvm/objs/static/libjvm.a /tmp/java-switch-minecraft/build/sdk/libjavaswitch.a -lnx /workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/aarch64-none-elf/lib/pic/libc.a /workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/aarch64-none-elf/lib/pic/libm.a -lm -Wl,--end-group -o /tmp/java-switch-minecraft/build/openjdk25-horizon/runtime-link-minecraft/java25-test.elf
+
+ELF link exit status: 0; NRO conversion has not run yet
+
+
+===== /tmp/java-switch-minecraft/build/openjdk25-runtime-link-minecraft.json =====
+{
+  "archive_port_digest": "15894d6e4c39e008c5a50d27a304b541686e7a8be326e3d8b106cdd3c30870ab",
+  "archive_sha256": "72210e3ca85fcf41ece6962aeba11d0c5d2e607397969033768ff2c756c2127f",
+  "jvm_features": [
+    "jni-check",
+    "jvmti",
+    "management",
+    "serialgc",
+    "services",
+    "zero"
+  ],
+  "java_instrument": true,
+  "sdk_sha256": "5087427aa9ab94fc68806eaf3e7507fd316e9c62c6cb370cfb3846e1a67ad6b6",
+  "link_exit_status": 0,
+  "missing_symbols": [],
+  "java_execution": "NOT TESTED",
+  "horizon_execution": "NOT TESTED",
+  "elf_sha256": "fbe4cb3ffc5955e50689f7dc459e72b0b7a58aa83f5fe7dace0ca977adcc55de",
+  "class_library_provider": {
+    "address_model": "symbol addresses use final static-link selection; a strong definition that overrides a weak same-name definition is visible in each module table",
+    "archives": [
+      {
+        "defined_symbol_count": 264,
+        "ignored_type_counts": {},
+        "module": "java",
+        "path": "/tmp/java-switch-minecraft/build/openjdk25-horizon/support/native/java.base/libjava/static/libjava.a",
+        "resolver_symbol_count": 264,
+        "sha256": "e84384821de7ff4e2fd98c07b285f89b640eb8131049c763652bca05d78c04ec",
+        "unsafe_identifier_count": 0
+      },
+      {
+        "defined_symbol_count": 161,
+        "ignored_type_counts": {},
+        "module": "zip",
+        "path": "/tmp/java-switch-minecraft/build/openjdk25-horizon/support/native/java.base/libzip/static/libzip.a",
+        "resolver_symbol_count": 153,
+        "sha256": "0076767dc6663c9fac1afa3c809cae1abd135b57240dda05d04b9fc855f815af",
+        "unsafe_identifier_count": 8
+      },
+      {
+        "defined_symbol_count": 116,
+        "ignored_type_counts": {},
+        "module": "jimage",
+        "path": "/tmp/java-switch-minecraft/build/openjdk25-horizon/support/native/java.base/libjimage/static/libjimage.a",
+        "resolver_symbol_count": 8,
+        "sha256": "9ae0fd28e3cb04bea2dbf5776a3cfbedc8a0b3ac43ed8efa40be59f0425e7c0b",
+        "unsafe_identifier_count": 108
+      },
+      {
+        "defined_symbol_count": 4,
+        "ignored_type_counts": {},
+        "module": "verify",
+        "path": "/tmp/java-switch-minecraft/build/openjdk25-horizon/support/native/java.base/libverify/static/libverify.a",
+        "resolver_symbol_count": 4,
+        "sha256": "12f4d53f6ca7694530cb7e775892250d16d60d353341fc180c7f34ccf75923f7",
+        "unsafe_identifier_count": 0
+      },
+      {
+        "defined_symbol_count": 108,
+        "ignored_type_counts": {},
+        "module": "net",
+        "path": "/tmp/java-switch-minecraft/build/openjdk25-horizon/support/native/java.base/libnet/static/libnet.a",
+        "resolver_symbol_count": 108,
+        "sha256": "bbeedbc7d6e9056fe68de5e6547da7b20817aa3d501b1d05bccced23280ce31c",
+        "unsafe_identifier_count": 0
+      },
+      {
+        "defined_symbol_count": 183,
+        "ignored_type_counts": {},
+        "module": "nio",
+        "path": "/tmp/java-switch-minecraft/build/openjdk25-horizon/support/native/java.base/libnio/static/libnio.a",
+        "resolver_symbol_count": 183,
+        "sha256": "44b1766b7322f64cc6dc032512a2934f82845cd6224ce4d8d7f5e36aed5335cf",
+        "unsafe_identifier_count": 0
+      },
+      {
+        "defined_symbol_count": 28,
+        "ignored_type_counts": {},
+        "module": "fallbackLinker",
+        "path": "/tmp/java-switch-minecraft/build/openjdk25-horizon/support/native/java.base/libfallbackLinker/static/libfallbackLinker.a",
+        "resolver_symbol_count": 28,
+        "sha256": "0734e27f7656bf3b3e26227c5b895a3c691c3de1eb51696f317b233855f4f97b",
+        "unsafe_identifier_count": 0
+      },
+      {
+        "defined_symbol_count": 2,
+        "ignored_type_counts": {},
+        "module": "syslookup",
+        "path": "/tmp/java-switch-minecraft/build/openjdk25-horizon/support/native/java.base/libsyslookup/static/libsyslookup.a",
+        "resolver_symbol_count": 2,
+        "sha256": "4f9eba270b22d13d0d03b6e82315ff214719847b020a5d8d33d4e072dc8345f8",
+        "unsafe_identifier_count": 0
+      },
+      {
+        "defined_symbol_count": 4,
+        "ignored_type_counts": {},
+        "module": "jli_manifest",
+        "path": "/tmp/java-switch-minecraft/build/openjdk25-horizon/support/native/java.base/libjli_manifest/static/libjli_manifest.a",
+        "resolver_symbol_count": 4,
+        "sha256": "45f6e2d71f4e1036b3eb0202e1b373225029e465e96297fe1ffaf5c69d2263ef",
+        "unsafe_identifier_count": 0
+      },
+      {
+        "defined_symbol_count": 102,
+        "ignored_type_counts": {},
+        "module": "instrument",
+        "path": "/tmp/java-switch-minecraft/build/openjdk25-horizon/support/native/java.instrument/libinstrument/static/libinstrument.a",
+        "resolver_symbol_count": 102,
+        "sha256": "c24dd53f1618345627964362100df7652f1c69d65759b8086b91e30358c19072",
+        "unsafe_identifier_count": 0
+      },
+      {
+        "defined_symbol_count": 71,
+        "ignored_type_counts": {},
+        "module": "management",
+        "path": "/tmp/java-switch-minecraft/build/openjdk25-horizon/support/native/java.management/libmanagement/static/libmanagement.a",
+        "resolver_symbol_count": 71,
+        "sha256": "a2ac759ff22111088232f1673c7ae3b8933ddb87d65a8f6cb06dacf93dd4278c",
+        "unsafe_identifier_count": 0
+      },
+      {
+        "defined_symbol_count": 1069,
+        "ignored_type_counts": {},
+        "module": "syslookup",
+        "path": "/workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/aarch64-none-elf/lib/pic/libc.a",
+        "resolver_symbol_count": 591,
+        "sha256": "9bf41282aadf7957fe18b8c1fc71394bf255fca6175c8b449fd3f23ff387a362",
+        "unsafe_identifier_count": 478
+      },
+      {
+        "defined_symbol_count": 402,
+        "ignored_type_counts": {},
+        "module": "syslookup",
+        "path": "/workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/aarch64-none-elf/lib/pic/libm.a",
+        "resolver_symbol_count": 282,
+        "sha256": "e9d2e4ae3376222d8cac21f6f5143481e4ef5b58f51ba48c6d4b24b9e2c7bad7",
+        "unsafe_identifier_count": 120
+      }
+    ],
+    "descriptor": "js_openjdk25_native_resolver",
+    "generator": "/tmp/java-switch-minecraft/scripts/generate-openjdk25-native-resolver.py",
+    "generator_sha256": "ba337369aeb244dc9a952c7900386706ca6dc51d250f094987dc82cb701f08b8",
+    "global_duplicate_choices": [],
+    "global_symbol_count": 974,
+    "modules": [
+      "fallbackLinker",
+      "instrument",
+      "java",
+      "jimage",
+      "jli_manifest",
+      "management",
+      "net",
+      "nio",
+      "syslookup",
+      "verify",
+      "zip"
+    ],
+    "nm": {
+      "flags": [
+        "-g",
+        "--defined-only",
+        "--format=posix"
+      ],
+      "invocations": [
+        {
+          "argv": [
+            "/workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/bin/aarch64-none-elf-nm",
+            "-g",
+            "--defined-only",
+            "--format=posix",
+            "/tmp/java-switch-minecraft/build/openjdk25-horizon/support/native/java.base/libjava/static/libjava.a"
+          ],
+          "exit_status": 0
+        },
+        {
+          "argv": [
+            "/workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/bin/aarch64-none-elf-nm",
+            "-g",
+            "--defined-only",
+            "--format=posix",
+            "/tmp/java-switch-minecraft/build/openjdk25-horizon/support/native/java.base/libzip/static/libzip.a"
+          ],
+          "exit_status": 0
+        },
+        {
+          "argv": [
+            "/workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/bin/aarch64-none-elf-nm",
+            "-g",
+            "--defined-only",
+            "--format=posix",
+            "/tmp/java-switch-minecraft/build/openjdk25-horizon/support/native/java.base/libjimage/static/libjimage.a"
+          ],
+          "exit_status": 0
+        },
+        {
+          "argv": [
+            "/workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/bin/aarch64-none-elf-nm",
+            "-g",
+            "--defined-only",
+            "--format=posix",
+            "/tmp/java-switch-minecraft/build/openjdk25-horizon/support/native/java.base/libverify/static/libverify.a"
+          ],
+          "exit_status": 0
+        },
+        {
+          "argv": [
+            "/workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/bin/aarch64-none-elf-nm",
+            "-g",
+            "--defined-only",
+            "--format=posix",
+            "/tmp/java-switch-minecraft/build/openjdk25-horizon/support/native/java.base/libnet/static/libnet.a"
+          ],
+          "exit_status": 0
+        },
+        {
+          "argv": [
+            "/workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/bin/aarch64-none-elf-nm",
+            "-g",
+            "--defined-only",
+            "--format=posix",
+            "/tmp/java-switch-minecraft/build/openjdk25-horizon/support/native/java.base/libnio/static/libnio.a"
+          ],
+          "exit_status": 0
+        },
+        {
+          "argv": [
+            "/workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/bin/aarch64-none-elf-nm",
+            "-g",
+            "--defined-only",
+            "--format=posix",
+            "/tmp/java-switch-minecraft/build/openjdk25-horizon/support/native/java.base/libfallbackLinker/static/libfallbackLinker.a"
+          ],
+          "exit_status": 0
+        },
+        {
+          "argv": [
+            "/workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/bin/aarch64-none-elf-nm",
+            "-g",
+            "--defined-only",
+            "--format=posix",
+            "/tmp/java-switch-minecraft/build/openjdk25-horizon/support/native/java.base/libsyslookup/static/libsyslookup.a"
+          ],
+          "exit_status": 0
+        },
+        {
+          "argv": [
+            "/workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/bin/aarch64-none-elf-nm",
+            "-g",
+            "--defined-only",
+            "--format=posix",
+            "/tmp/java-switch-minecraft/build/openjdk25-horizon/support/native/java.base/libjli_manifest/static/libjli_manifest.a"
+          ],
+          "exit_status": 0
+        },
+        {
+          "argv": [
+            "/workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/bin/aarch64-none-elf-nm",
+            "-g",
+            "--defined-only",
+            "--format=posix",
+            "/tmp/java-switch-minecraft/build/openjdk25-horizon/support/native/java.instrument/libinstrument/static/libinstrument.a"
+          ],
+          "exit_status": 0
+        },
+        {
+          "argv": [
+            "/workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/bin/aarch64-none-elf-nm",
+            "-g",
+            "--defined-only",
+            "--format=posix",
+            "/tmp/java-switch-minecraft/build/openjdk25-horizon/support/native/java.management/libmanagement/static/libmanagement.a"
+          ],
+          "exit_status": 0
+        },
+        {
+          "argv": [
+            "/workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/bin/aarch64-none-elf-nm",
+            "-g",
+            "--defined-only",
+            "--format=posix",
+            "/workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/aarch64-none-elf/lib/pic/libc.a"
+          ],
+          "exit_status": 0
+        },
+        {
+          "argv": [
+            "/workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/bin/aarch64-none-elf-nm",
+            "-g",
+            "--defined-only",
+            "--format=posix",
+            "/workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/aarch64-none-elf/lib/pic/libm.a"
+          ],
+          "exit_status": 0
+        }
+      ],
+      "path": "/workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/bin/aarch64-none-elf-nm",
+      "version": "GNU nm (GNU Binutils) 2.45.1"
+    },
+    "resolver_symbol_count": 974,
+    "schema_version": 2,
+    "source_sha256": "9c88fb1bad2daf01be1aeacbb0ce33f3fb2fbf7ae44bd1ca0617849adcd2e3df",
+    "symbol_filters": {
+      "syslookup": [
+        "JNI_OnLoad_syslookup",
+        "abort",
+        "atan2",
+        "calloc",
+        "ceil",
+        "cos",
+        "exp",
+        "fabs",
+        "fclose",
+        "fflush",
+        "floor",
+        "fmod",
+        "fopen",
+        "fread",
+        "free",
+        "fseek",
+        "ftell",
+        "fwrite",
+        "log",
+        "malloc",
+        "memchr",
+        "memcmp",
+        "memcpy",
+        "memmove",
+        "memset",
+        "pow",
+        "printf",
+        "putchar",
+        "puts",
+        "realloc",
+        "sin",
+        "snprintf",
+        "sprintf",
+        "sqrt",
+        "strcat",
+        "strchr",
+        "strcmp",
+        "strcpy",
+        "strcspn",
+        "strlen",
+        "strncat",
+        "strncmp",
+        "strncpy",
+        "strpbrk",
+        "strrchr",
+        "strspn",
+        "strstr",
+        "syslookup",
+        "tan"
+      ]
+    }
+  },
+  "launcher_sha256": "42da2744a1c460d432c431e1009733956c5e177a5edaf9836e67717b30c6b1be",
+  "minecraft_profile": true,
+  "nro_sha256": "5b1d57f4961f6cbc1310ff35e89211608cab39c18d48508ebd394c02ce2b1c9d"
+}
+
+
+===== /tmp/java-switch-minecraft/build/openjdk25-image.log =====
+$ /tmp/java-switch-minecraft/.deps/host-jdk25/jdk-25.0.5+8/bin/javac --patch-module java.base=/tmp/java-switch-minecraft/build/openjdk25-image-zjnmro08/tool-src -d /tmp/java-switch-minecraft/build/openjdk25-image-zjnmro08/tool-classes /tmp/java-switch-minecraft/build/openjdk25-image-zjnmro08/tool-src/jdk/internal/util/OperatingSystem.java
+$ /tmp/java-switch-minecraft/.deps/host-jdk25/jdk-25.0.5+8/bin/jmod create --class-path /tmp/java-switch-minecraft/build/openjdk25-image-zjnmro08/classes/java.base --target-platform horizon-aarch64 --module-version 25 --config /tmp/java-switch-minecraft/build/openjdk25-horizon/support/modules_conf/java.base --legal-notices /tmp/java-switch-minecraft/build/openjdk25-image-zjnmro08/legal --libs /tmp/java-switch-minecraft/build/openjdk25-horizon/support/modules_libs/java.base /tmp/java-switch-minecraft/build/openjdk25-image-zjnmro08/jmods/java.base.jmod
+$ /tmp/java-switch-minecraft/.deps/host-jdk25/jdk-25.0.5+8/bin/jmod create --class-path /tmp/java-switch-minecraft/build/openjdk25-image-zjnmro08/classes/java.logging --target-platform horizon-aarch64 --module-version 25 --legal-notices /tmp/java-switch-minecraft/build/openjdk25-image-zjnmro08/legal /tmp/java-switch-minecraft/build/openjdk25-image-zjnmro08/jmods/java.logging.jmod
+$ /tmp/java-switch-minecraft/.deps/host-jdk25/jdk-25.0.5+8/bin/jmod create --class-path /tmp/java-switch-minecraft/build/openjdk25-image-zjnmro08/classes/jdk.unsupported --target-platform horizon-aarch64 --module-version 25 --legal-notices /tmp/java-switch-minecraft/build/openjdk25-image-zjnmro08/legal /tmp/java-switch-minecraft/build/openjdk25-image-zjnmro08/jmods/jdk.unsupported.jmod
+$ /tmp/java-switch-minecraft/.deps/host-jdk25/jdk-25.0.5+8/bin/jmod create --class-path /tmp/java-switch-minecraft/build/openjdk25-image-zjnmro08/classes/java.management --target-platform horizon-aarch64 --module-version 25 --legal-notices /tmp/java-switch-minecraft/build/openjdk25-image-zjnmro08/legal /tmp/java-switch-minecraft/build/openjdk25-image-zjnmro08/jmods/java.management.jmod
+$ /tmp/java-switch-minecraft/.deps/host-jdk25/jdk-25.0.5+8/bin/jmod create --class-path /tmp/java-switch-minecraft/build/openjdk25-image-zjnmro08/classes/java.desktop --target-platform horizon-aarch64 --module-version 25 --legal-notices /tmp/java-switch-minecraft/build/openjdk25-image-zjnmro08/legal /tmp/java-switch-minecraft/build/openjdk25-image-zjnmro08/jmods/java.desktop.jmod
+$ /tmp/java-switch-minecraft/.deps/host-jdk25/jdk-25.0.5+8/bin/jmod create --class-path /tmp/java-switch-minecraft/build/openjdk25-image-zjnmro08/classes/java.datatransfer --target-platform horizon-aarch64 --module-version 25 --legal-notices /tmp/java-switch-minecraft/build/openjdk25-image-zjnmro08/legal /tmp/java-switch-minecraft/build/openjdk25-image-zjnmro08/jmods/java.datatransfer.jmod
+$ /tmp/java-switch-minecraft/.deps/host-jdk25/jdk-25.0.5+8/bin/jmod create --class-path /tmp/java-switch-minecraft/build/openjdk25-image-zjnmro08/classes/java.xml --target-platform horizon-aarch64 --module-version 25 --legal-notices /tmp/java-switch-minecraft/build/openjdk25-image-zjnmro08/legal /tmp/java-switch-minecraft/build/openjdk25-image-zjnmro08/jmods/java.xml.jmod
+$ /tmp/java-switch-minecraft/.deps/host-jdk25/jdk-25.0.5+8/bin/jmod create --class-path /tmp/java-switch-minecraft/build/openjdk25-image-zjnmro08/classes/java.prefs --target-platform horizon-aarch64 --module-version 25 --legal-notices /tmp/java-switch-minecraft/build/openjdk25-image-zjnmro08/legal /tmp/java-switch-minecraft/build/openjdk25-image-zjnmro08/jmods/java.prefs.jmod
+$ /tmp/java-switch-minecraft/.deps/host-jdk25/jdk-25.0.5+8/bin/jmod create --class-path /tmp/java-switch-minecraft/build/openjdk25-image-zjnmro08/classes/jdk.charsets --target-platform horizon-aarch64 --module-version 25 --legal-notices /tmp/java-switch-minecraft/build/openjdk25-image-zjnmro08/legal /tmp/java-switch-minecraft/build/openjdk25-image-zjnmro08/jmods/jdk.charsets.jmod
+$ /tmp/java-switch-minecraft/.deps/host-jdk25/jdk-25.0.5+8/bin/jmod create --class-path /tmp/java-switch-minecraft/build/openjdk25-image-zjnmro08/classes/java.instrument --target-platform horizon-aarch64 --module-version 25 --legal-notices /tmp/java-switch-minecraft/build/openjdk25-image-zjnmro08/legal /tmp/java-switch-minecraft/build/openjdk25-image-zjnmro08/jmods/java.instrument.jmod
+$ /tmp/java-switch-minecraft/.deps/host-jdk25/jdk-25.0.5+8/bin/java --patch-module java.base=/tmp/java-switch-minecraft/build/openjdk25-image-zjnmro08/tool-classes -m jdk.jlink/jdk.tools.jlink.internal.Main --module-path /tmp/java-switch-minecraft/build/openjdk25-image-zjnmro08/jmods --add-modules java.base,java.logging,jdk.unsupported,java.management,java.desktop,java.datatransfer,java.xml,java.prefs,jdk.charsets,java.instrument --endian little --strip-debug --no-header-files --no-man-pages --output /tmp/java-switch-minecraft/build/openjdk25-runtime
+$ /tmp/java-switch-minecraft/.deps/host-jdk25/jdk-25.0.5+8/bin/jimage verify /tmp/java-switch-minecraft/build/openjdk25-runtime/lib/modules
+jimage: /tmp/java-switch-minecraft/build/openjdk25-runtime/lib/modules
+Image modules: java.base, java.logging, jdk.unsupported, java.management, java.desktop, java.datatransfer, java.xml, java.prefs, jdk.charsets, java.instrument
+Image built from Horizon target classes; execution NOT TESTED
+
+
+===== /tmp/java-switch-minecraft/build/a0-nro-build-info-audit.log =====
+NRO: dist/java-test.nro
+ELF: build/java-test.elf
+ELF build stamp: a0f0e168bb282e9585c0353c3d9b70a7ad043ce8
+NRO build stamp: a0f0e168bb282e9585c0353c3d9b70a7ad043ce8
+1b574c8a2614aa0cf063e251e51ded50078411309bf4f76e3d7842b2ff72f19b  dist/java-test.nro
+
+NRO: dist/ffi-test.nro
+ELF: build/ffi-test.elf
+ELF build stamp: a0f0e168bb282e9585c0353c3d9b70a7ad043ce8
+NRO build stamp: a0f0e168bb282e9585c0353c3d9b70a7ad043ce8
+4bd2a5b0b7139a5a1a837d8aadd0bb018d71f9d701249748e1f553d24900092e  dist/ffi-test.nro
+
+NRO: dist/java25-test.nro
+ELF: build/openjdk25-horizon/runtime-link-minecraft/java25-test.elf
+ELF build stamp: a0f0e168bb282e9585c0353c3d9b70a7ad043ce8
+NRO build stamp: a0f0e168bb282e9585c0353c3d9b70a7ad043ce8
+5b1d57f4961f6cbc1310ff35e89211608cab39c18d48508ebd394c02ce2b1c9d  dist/java25-test.nro
+
+NRO: dist/zero-services-test.nro
+ELF: build/openjdk25-horizon/components/zero-services-test.elf
+ELF build stamp: a0f0e168bb282e9585c0353c3d9b70a7ad043ce8
+NRO build stamp: a0f0e168bb282e9585c0353c3d9b70a7ad043ce8
+e7fe09f4511e1a82775df4b892a9e0d7b185690dd07acb55d60c16ade72301d7  dist/zero-services-test.nro
+
+1b574c8a2614aa0cf063e251e51ded50078411309bf4f76e3d7842b2ff72f19b  dist/COPY_TO_SD/switch/java-test/java-test.nro
+4bd2a5b0b7139a5a1a837d8aadd0bb018d71f9d701249748e1f553d24900092e  dist/COPY_TO_SD/switch/ffi-test/ffi-test.nro
+5b1d57f4961f6cbc1310ff35e89211608cab39c18d48508ebd394c02ce2b1c9d  dist/COPY_TO_SD/switch/java25-test/java25-test.nro
+e7fe09f4511e1a82775df4b892a9e0d7b185690dd07acb55d60c16ade72301d7  dist/COPY_TO_SD/switch/zero-services-test/zero-services-test.nro
+
+
+===== /tmp/java-switch-minecraft/build/a0-localhost-host-audit.log =====
+REPRODUCER_DIR=/tmp/java-switch-localhost-audit.92EEmc
++ set -euo pipefail
+++ git rev-parse --show-toplevel
++ ROOT=/tmp/java-switch-minecraft
++ AUDIT_DIR=/tmp/java-switch-localhost-audit.92EEmc
++ SOURCE_ROOT=/tmp/java-switch-minecraft/.deps/openjdk25-source
++ HOST_JDK=/tmp/java-switch-minecraft/.deps/host-jdk25/jdk-25.0.5+8
+++ git rev-parse HEAD
++ printf 'ROOT=%s\nAUDIT_DIR=%s\nHEAD=%s\n' /tmp/java-switch-minecraft /tmp/java-switch-localhost-audit.92EEmc a0f0e168bb282e9585c0353c3d9b70a7ad043ce8
+ROOT=/tmp/java-switch-minecraft
+AUDIT_DIR=/tmp/java-switch-localhost-audit.92EEmc
+HEAD=a0f0e168bb282e9585c0353c3d9b70a7ad043ce8
++ mkdir -p /tmp/java-switch-localhost-audit.92EEmc/source /tmp/java-switch-localhost-audit.92EEmc/patch-classes /tmp/java-switch-localhost-audit.92EEmc/test-classes '/tmp/java-switch-localhost-audit.92EEmc/cwd/sdmc:/switch/mc runtime/測試'
++ FILES=(src/java.base/share/classes/sun/net/www/ParseUtil.java src/java.base/unix/classes/jdk/internal/loader/FileURLMapper.java src/java.base/share/classes/jdk/internal/loader/URLClassPath.java src/java.base/share/classes/sun/net/www/protocol/jar/URLJarFile.java src/java.base/unix/classes/sun/net/www/protocol/file/Handler.java)
++ for FILE in "${FILES[@]}"
+++ dirname src/java.base/share/classes/sun/net/www/ParseUtil.java
++ mkdir -p /tmp/java-switch-localhost-audit.92EEmc/source/src/java.base/share/classes/sun/net/www
++ cp /tmp/java-switch-minecraft/.deps/openjdk25-source/src/java.base/share/classes/sun/net/www/ParseUtil.java /tmp/java-switch-localhost-audit.92EEmc/source/src/java.base/share/classes/sun/net/www/ParseUtil.java
++ for FILE in "${FILES[@]}"
+++ dirname src/java.base/unix/classes/jdk/internal/loader/FileURLMapper.java
++ mkdir -p /tmp/java-switch-localhost-audit.92EEmc/source/src/java.base/unix/classes/jdk/internal/loader
++ cp /tmp/java-switch-minecraft/.deps/openjdk25-source/src/java.base/unix/classes/jdk/internal/loader/FileURLMapper.java /tmp/java-switch-localhost-audit.92EEmc/source/src/java.base/unix/classes/jdk/internal/loader/FileURLMapper.java
++ for FILE in "${FILES[@]}"
+++ dirname src/java.base/share/classes/jdk/internal/loader/URLClassPath.java
++ mkdir -p /tmp/java-switch-localhost-audit.92EEmc/source/src/java.base/share/classes/jdk/internal/loader
++ cp /tmp/java-switch-minecraft/.deps/openjdk25-source/src/java.base/share/classes/jdk/internal/loader/URLClassPath.java /tmp/java-switch-localhost-audit.92EEmc/source/src/java.base/share/classes/jdk/internal/loader/URLClassPath.java
++ for FILE in "${FILES[@]}"
+++ dirname src/java.base/share/classes/sun/net/www/protocol/jar/URLJarFile.java
++ mkdir -p /tmp/java-switch-localhost-audit.92EEmc/source/src/java.base/share/classes/sun/net/www/protocol/jar
++ cp /tmp/java-switch-minecraft/.deps/openjdk25-source/src/java.base/share/classes/sun/net/www/protocol/jar/URLJarFile.java /tmp/java-switch-localhost-audit.92EEmc/source/src/java.base/share/classes/sun/net/www/protocol/jar/URLJarFile.java
++ for FILE in "${FILES[@]}"
+++ dirname src/java.base/unix/classes/sun/net/www/protocol/file/Handler.java
++ mkdir -p /tmp/java-switch-localhost-audit.92EEmc/source/src/java.base/unix/classes/sun/net/www/protocol/file
++ cp /tmp/java-switch-minecraft/.deps/openjdk25-source/src/java.base/unix/classes/sun/net/www/protocol/file/Handler.java /tmp/java-switch-localhost-audit.92EEmc/source/src/java.base/unix/classes/sun/net/www/protocol/file/Handler.java
++ python3 - /tmp/java-switch-minecraft /tmp/java-switch-localhost-audit.92EEmc
++ printf 'Applying only five filtered patch sections from tracked 0013 with --fuzz=0\n'
+Applying only five filtered patch sections from tracked 0013 with --fuzz=0
++ cd /tmp/java-switch-localhost-audit.92EEmc/source
++ patch -p1 --batch --fuzz=0 -i /tmp/java-switch-localhost-audit.92EEmc/classpath-0013-filtered.patch
+patching file src/java.base/share/classes/sun/net/www/ParseUtil.java
+patching file src/java.base/unix/classes/jdk/internal/loader/FileURLMapper.java
+patching file src/java.base/share/classes/jdk/internal/loader/URLClassPath.java
+patching file src/java.base/share/classes/sun/net/www/protocol/jar/URLJarFile.java
+patching file src/java.base/unix/classes/sun/net/www/protocol/file/Handler.java
++ PATCHED=("$AUDIT_DIR/source/src/java.base/share/classes/sun/net/www/ParseUtil.java" "$AUDIT_DIR/source/src/java.base/unix/classes/jdk/internal/loader/FileURLMapper.java" "$AUDIT_DIR/source/src/java.base/share/classes/jdk/internal/loader/URLClassPath.java" "$AUDIT_DIR/source/src/java.base/share/classes/sun/net/www/protocol/jar/URLJarFile.java" "$AUDIT_DIR/source/src/java.base/unix/classes/sun/net/www/protocol/file/Handler.java")
+++ dirname /tmp/java-switch-localhost-audit.92EEmc/source/src/java.base/share/classes/sun/net/www/ParseUtil.java
+++ dirname /tmp/java-switch-localhost-audit.92EEmc/source/src/java.base/unix/classes/jdk/internal/loader/FileURLMapper.java
+++ dirname /tmp/java-switch-localhost-audit.92EEmc/source/src/java.base/share/classes/jdk/internal/loader/URLClassPath.java
+++ dirname /tmp/java-switch-localhost-audit.92EEmc/source/src/java.base/share/classes/sun/net/www/protocol/jar/URLJarFile.java
+++ dirname /tmp/java-switch-localhost-audit.92EEmc/source/src/java.base/unix/classes/sun/net/www/protocol/file/Handler.java
++ PATCH_PATH=/tmp/java-switch-localhost-audit.92EEmc/source/src/java.base/share/classes/sun/net/www:/tmp/java-switch-localhost-audit.92EEmc/source/src/java.base/unix/classes/jdk/internal/loader:/tmp/java-switch-localhost-audit.92EEmc/source/src/java.base/share/classes/jdk/internal/loader:/tmp/java-switch-localhost-audit.92EEmc/source/src/java.base/share/classes/sun/net/www/protocol/jar:/tmp/java-switch-localhost-audit.92EEmc/source/src/java.base/unix/classes/sun/net/www/protocol/file
++ /tmp/java-switch-minecraft/.deps/host-jdk25/jdk-25.0.5+8/bin/javac --patch-module java.base=/tmp/java-switch-localhost-audit.92EEmc/source/src/java.base/share/classes/sun/net/www:/tmp/java-switch-localhost-audit.92EEmc/source/src/java.base/unix/classes/jdk/internal/loader:/tmp/java-switch-localhost-audit.92EEmc/source/src/java.base/share/classes/jdk/internal/loader:/tmp/java-switch-localhost-audit.92EEmc/source/src/java.base/share/classes/sun/net/www/protocol/jar:/tmp/java-switch-localhost-audit.92EEmc/source/src/java.base/unix/classes/sun/net/www/protocol/file -d /tmp/java-switch-localhost-audit.92EEmc/patch-classes /tmp/java-switch-localhost-audit.92EEmc/source/src/java.base/share/classes/sun/net/www/ParseUtil.java /tmp/java-switch-localhost-audit.92EEmc/source/src/java.base/unix/classes/jdk/internal/loader/FileURLMapper.java /tmp/java-switch-localhost-audit.92EEmc/source/src/java.base/share/classes/jdk/internal/loader/URLClassPath.java /tmp/java-switch-localhost-audit.92EEmc/source/src/java.base/share/classes/sun/net/www/protocol/jar/URLJarFile.java /tmp/java-switch-localhost-audit.92EEmc/source/src/java.base/unix/classes/sun/net/www/protocol/file/Handler.java
++ cat
++ /tmp/java-switch-minecraft/.deps/host-jdk25/jdk-25.0.5+8/bin/javac -Xlint:all -Werror -d /tmp/java-switch-localhost-audit.92EEmc/test-classes /tmp/java-switch-minecraft/ports/openjdk25/tests/java_paths/SdmcClasspathPayload.java /tmp/java-switch-localhost-audit.92EEmc/LocalhostClasspathAudit.java
++ printf 'localhost-resource-read\n'
++ /tmp/java-switch-minecraft/.deps/host-jdk25/jdk-25.0.5+8/bin/jar --create --file '/tmp/java-switch-localhost-audit.92EEmc/cwd/sdmc:/switch/mc runtime/測試/payload.jar' -C /tmp/java-switch-localhost-audit.92EEmc/test-classes hostclasspath/SdmcClasspathPayload.class -C '/tmp/java-switch-localhost-audit.92EEmc/cwd/sdmc:/switch/mc runtime/測試' payload.txt
++ cd /tmp/java-switch-localhost-audit.92EEmc/cwd
++ /tmp/java-switch-minecraft/.deps/host-jdk25/jdk-25.0.5+8/bin/java --patch-module java.base=/tmp/java-switch-localhost-audit.92EEmc/patch-classes -Dos.name=Horizon -cp /tmp/java-switch-localhost-audit.92EEmc/test-classes LocalhostClasspathAudit
+HOST-PASSED: sole localhost file URL loaded payload class and read JAR resource; Horizon NOT TESTED
+
+
+===== /tmp/r5-final-binary-audit.txt =====
+R5 final-candidate binary provenance audit (read-only)
+Audit UTC: 2026-11-13T09:02:51.302659+00:00
+SC HEAD: 1d716dbe17f9870e5c2cfbeb351d839ea91412fb
+Frozen java-switch HEAD: a0f0e168bb282e9585c0353c3d9b70a7ad043ce8
+
+External diagnostics: NRO and linked ELF embed the exact frozen runtime SHA; all four NROs also byte-match frozen dist copies.
+name | NRO SHA256 | ELF SHA256 | NRO frozen match | embedded runtime SHA
+java-test | 1b574c8a2614aa0cf063e251e51ded50078411309bf4f76e3d7842b2ff72f19b | f6c39d5dfdb9e055c6666d7cf8015a8f58e662f8e4ad95e39bf6c791558ea3a4 | True | True
+ffi-test | 4bd2a5b0b7139a5a1a837d8aadd0bb018d71f9d701249748e1f553d24900092e | 9e23ac9700e4bd4b315ed8d1b814c71c39c23f47e1a0204c6efdbbf3071ba28c | True | True
+java25-test | 5b1d57f4961f6cbc1310ff35e89211608cab39c18d48508ebd394c02ce2b1c9d | fbe4cb3ffc5955e50689f7dc459e72b0b7a58aa83f5fe7dace0ca977adcc55de | True | True
+zero-services-test | e7fe09f4511e1a82775df4b892a9e0d7b185690dd07acb55d60c16ade72301d7 | d5be92ee788353e272660cf169a76b625b94ad9343a446426352d09ed62b0865 | True | True
+
+Switchcraft NRO and linked ELF source check: all embed current SC HEAD.
+name | NRO SHA256 | ELF SHA256 | both embed current SC HEAD
+minecraft-launcher | f6e862d3f6ee9c78e88c3b1d9dcf5a3795182c35e33593a5cef793e852571852 | 4d245b76c9d5acae2ebfa1ac093ed95b890264a37579aaa28208b5d64cc43b50 | True
+switch-diagnostics | 45bf49e86e8c30b5de25d94bed2c5f8f6b0ff9df1d5b3da0dec8bf1a3ce3f3ab | ab09149be47d890cd507fb90557cf7faf7339a5f764e26d4dfc96e9360a5dc50 | True
+switchcraft-java25 | 64402f9bf4fb5018a8c11fe5873d5bc78d4c1aee6be1f076113e2fa8fd9d3323 | f152c7f18fc6cef973dbd1eb42f03b2232fa7f3d7263a3bb9c6f40b59acd8ea4 | True
+vulkan-present | 48108b4bd390380e42127ef4775ea191b0e51498785847ced81603927701375b | ef2c6a42076cf7af1798da78d10f765c98941877e43ddd3c8352b126d5d4be75 | True
+vulkan-test | 015eed8283be72acd694dd9a5161dac6b40f2ce22523860193aa20f048e8807f | 69be8a01658e51ee57751e22510918d97c36b2c80057856b3e30d88c4c3fcc94 | True
+
+Combined menu controls in switchcraft-java25.nro:
+A / Hello: True
+X / JNI-FFM SDL: True
+Y / LWJGL JNI and SDL/Vulkan: True
+B / SDL-Vulkan VMA: True
+R / FreeType-OpenAL: True
+L / STB and shader tools: True
++ / exit: True
+one VM per choice: True
+close and reopen before another attempt: True
+
+Package-metadata status at audit time: NOT CURRENT. dist/manifest.json source_revision=1d716dbe17f9870e5c2cfbeb351d839ea91412fb; current SC HEAD=1d716dbe17f9870e5c2cfbeb351d839ea91412fb.
+Every candidate SC/external NRO differs from its manifest SHA256; dist/SHA256SUMS also contains pre-R5 NRO hashes. Packaging/re-manifesting must complete before this package is deliverable.
+Frozen runtime manifest is source_revision=a0f0e168bb282e9585c0353c3d9b70a7ad043ce8 and ABI=1. Candidate external NROs equal those frozen runtime artifact hashes. SC Java integration declares JS_ABI_VERSION 1; no ABI mismatch found.
+Note: switchcraft-native-sdk.tar.gz returned unexpected EOF when inspected during this audit; it appears to be mid-write, so its archive integrity was not evaluated.
+
+Conclusion: embedded binary identities and combined menu controls pass. The current SC dist manifest/SHA256SUMS are stale relative to these NRO candidates; rerun package and verify regenerated metadata/archive integrity.
+
+
+===== /tmp/r5-clean-build-all.log =====
+Dependencies verified
+python3 scripts/build-info.py
+python3 scripts/build-sdl3.py > build/sdl3-build.log 2>&1
+mkdir -p build/launcher
+/workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/bin/aarch64-none-elf-g++ -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE -O2 -g -Wall -Wextra -ffunction-sections -fdata-sections -D__SWITCH__ -isystem /workspace/switchcraft/.toolchain/opt/devkitpro/libnx/include -Isrc -Iinclude -Ibuild -std=c++17 -Ivendor -I/workspace/switchcraft/.toolchain/opt/devkitpro/portlibs/switch/include -DCURL_STATICLIB -Ibuild/java25-integrated/sdk/include -c src/launcher.cpp -o build/launcher/launcher.o
+mkdir -p build/launcher
+/workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/bin/aarch64-none-elf-g++ -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE -O2 -g -Wall -Wextra -ffunction-sections -fdata-sections -D__SWITCH__ -isystem /workspace/switchcraft/.toolchain/opt/devkitpro/libnx/include -Isrc -Iinclude -Ibuild -std=c++17 -Ivendor -I/workspace/switchcraft/.toolchain/opt/devkitpro/portlibs/switch/include -DCURL_STATICLIB -Ibuild/java25-integrated/sdk/include -c src/launcher_console.cpp -o build/launcher/launcher_console.o
+mkdir -p build/launcher
+/workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/bin/aarch64-none-elf-g++ -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE -O2 -g -Wall -Wextra -ffunction-sections -fdata-sections -D__SWITCH__ -isystem /workspace/switchcraft/.toolchain/opt/devkitpro/libnx/include -Isrc -Iinclude -Ibuild -std=c++17 -Ivendor -I/workspace/switchcraft/.toolchain/opt/devkitpro/portlibs/switch/include -DCURL_STATICLIB -Ibuild/java25-integrated/sdk/include -c src/instances.cpp -o build/launcher/instances.o
+mkdir -p build/launcher
+/workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/bin/aarch64-none-elf-g++ -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE -O2 -g -Wall -Wextra -ffunction-sections -fdata-sections -D__SWITCH__ -isystem /workspace/switchcraft/.toolchain/opt/devkitpro/libnx/include -Isrc -Iinclude -Ibuild -std=c++17 -Ivendor -I/workspace/switchcraft/.toolchain/opt/devkitpro/portlibs/switch/include -DCURL_STATICLIB -Ibuild/java25-integrated/sdk/include -c src/prism_metadata.cpp -o build/launcher/prism_metadata.o
+mkdir -p build/launcher
+/workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/bin/aarch64-none-elf-g++ -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE -O2 -g -Wall -Wextra -ffunction-sections -fdata-sections -D__SWITCH__ -isystem /workspace/switchcraft/.toolchain/opt/devkitpro/libnx/include -Isrc -Iinclude -Ibuild -std=c++17 -Ivendor -I/workspace/switchcraft/.toolchain/opt/devkitpro/portlibs/switch/include -DCURL_STATICLIB -Ibuild/java25-integrated/sdk/include -c src/launcher_ui.cpp -o build/launcher/launcher_ui.o
+mkdir -p build/launcher
+/workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/bin/aarch64-none-elf-g++ -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE -O2 -g -Wall -Wextra -ffunction-sections -fdata-sections -D__SWITCH__ -isystem /workspace/switchcraft/.toolchain/opt/devkitpro/libnx/include -Isrc -Iinclude -Ibuild -std=c++17 -Ivendor -I/workspace/switchcraft/.toolchain/opt/devkitpro/portlibs/switch/include -DCURL_STATICLIB -Ibuild/java25-integrated/sdk/include -c src/ui_canvas.cpp -o build/launcher/ui_canvas.o
+mkdir -p build/launcher
+/workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/bin/aarch64-none-elf-g++ -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE -O2 -g -Wall -Wextra -ffunction-sections -fdata-sections -D__SWITCH__ -isystem /workspace/switchcraft/.toolchain/opt/devkitpro/libnx/include -Isrc -Iinclude -Ibuild -std=c++17 -Ivendor -I/workspace/switchcraft/.toolchain/opt/devkitpro/portlibs/switch/include -DCURL_STATICLIB -Ibuild/java25-integrated/sdk/include -c src/launcher_controller.cpp -o build/launcher/launcher_controller.o
+mkdir -p build/launcher
+/workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/bin/aarch64-none-elf-g++ -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE -O2 -g -Wall -Wextra -ffunction-sections -fdata-sections -D__SWITCH__ -isystem /workspace/switchcraft/.toolchain/opt/devkitpro/libnx/include -Isrc -Iinclude -Ibuild -std=c++17 -Ivendor -I/workspace/switchcraft/.toolchain/opt/devkitpro/portlibs/switch/include -DCURL_STATICLIB -Ibuild/java25-integrated/sdk/include -c src/launcher_jobs.cpp -o build/launcher/launcher_jobs.o
+mkdir -p build/launcher
+/workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/bin/aarch64-none-elf-g++ -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE -O2 -g -Wall -Wextra -ffunction-sections -fdata-sections -D__SWITCH__ -isystem /workspace/switchcraft/.toolchain/opt/devkitpro/libnx/include -Isrc -Iinclude -Ibuild -std=c++17 -Ivendor -I/workspace/switchcraft/.toolchain/opt/devkitpro/portlibs/switch/include -DCURL_STATICLIB -Ibuild/java25-integrated/sdk/include -c src/launcher_session.cpp -o build/launcher/launcher_session.o
+mkdir -p build/launcher
+/workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/bin/aarch64-none-elf-g++ -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE -O2 -g -Wall -Wextra -ffunction-sections -fdata-sections -D__SWITCH__ -isystem /workspace/switchcraft/.toolchain/opt/devkitpro/libnx/include -Isrc -Iinclude -Ibuild -std=c++17 -Ivendor -I/workspace/switchcraft/.toolchain/opt/devkitpro/portlibs/switch/include -DCURL_STATICLIB -Ibuild/java25-integrated/sdk/include -c src/install.cpp -o build/launcher/install.o
+mkdir -p build/launcher
+/workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/bin/aarch64-none-elf-g++ -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE -O2 -g -Wall -Wextra -ffunction-sections -fdata-sections -D__SWITCH__ -isystem /workspace/switchcraft/.toolchain/opt/devkitpro/libnx/include -Isrc -Iinclude -Ibuild -std=c++17 -Ivendor -I/workspace/switchcraft/.toolchain/opt/devkitpro/portlibs/switch/include -DCURL_STATICLIB -Ibuild/java25-integrated/sdk/include -c src/download.cpp -o build/launcher/download.o
+mkdir -p build/launcher
+/workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/bin/aarch64-none-elf-g++ -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE -O2 -g -Wall -Wextra -ffunction-sections -fdata-sections -D__SWITCH__ -isystem /workspace/switchcraft/.toolchain/opt/devkitpro/libnx/include -Isrc -Iinclude -Ibuild -std=c++17 -Ivendor -I/workspace/switchcraft/.toolchain/opt/devkitpro/portlibs/switch/include -DCURL_STATICLIB -Ibuild/java25-integrated/sdk/include -c src/minecraft_launch_request.cpp -o build/launcher/minecraft_launch_request.o
+cp /tmp/java-switch-minecraft/dist/java-test.nro dist/java-test.nro
+cp /tmp/java-switch-minecraft/dist/ffi-test.nro dist/ffi-test.nro
+cp /tmp/java-switch-minecraft/dist/zero-services-test.nro dist/zero-services-test.nro
+cp /tmp/java-switch-minecraft/dist/java25-test.nro dist/java25-test.nro
+/workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE -O2 -g -Wall -Wextra -ffunction-sections -fdata-sections -D__SWITCH__ -isystem /workspace/switchcraft/.toolchain/opt/devkitpro/libnx/include -Isrc -Iinclude -Ibuild -mno-outline-atomics -Ibuild/java25-integrated/sdk/include -c src/java25_integration.c -o build/java25_integration.o
+/workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE -O2 -g -Wall -Wextra -ffunction-sections -fdata-sections -D__SWITCH__ -isystem /workspace/switchcraft/.toolchain/opt/devkitpro/libnx/include -Isrc -Iinclude -Ibuild -mno-outline-atomics -Ibuild/java25-integrated/sdk/include -c src/composite_resolver.c -o build/composite_resolver.o
+/workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE -O2 -g -Wall -Wextra -ffunction-sections -fdata-sections -D__SWITCH__ -isystem /workspace/switchcraft/.toolchain/opt/devkitpro/libnx/include -Isrc -Iinclude -Ibuild -mno-outline-atomics -Ibuild/java25-integrated/sdk/include -Ibuild/java25-integrated/runtime/openjdk25-horizon-runtime/include -Ibuild/java25-integrated/runtime/openjdk25-horizon-runtime/include/horizon -c src/native_symbols_jni.c -o build/native_symbols_jni.o
+/workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE -O2 -g -Wall -Wextra -ffunction-sections -fdata-sections -D__SWITCH__ -isystem /workspace/switchcraft/.toolchain/opt/devkitpro/libnx/include -Isrc -Iinclude -Ibuild -mno-outline-atomics -Ibuild/java25-integrated/sdk/include -c build/java25-integrated/runtime/openjdk25-horizon-runtime/native/native_resolver.c -o build/jdk_native_resolver.o
+python3 scripts/build-lwjgl-core.py --cross > build/lwjgl-core.log 2>&1
+python3 scripts/build-font-audio.py --cross > build/font-audio.log 2>&1
+python3 scripts/build-launcher-bridge.py
+python3 scripts/build-lwjgl-horizon.py
+Built LWJGL Horizon core/Vulkan/OpenAL/GL overrides and NativeSymbols bridge; native binding completeness NOT CLAIMED
+/workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE -O2 -g -Wall -Wextra -ffunction-sections -fdata-sections -D__SWITCH__ -isystem /workspace/switchcraft/.toolchain/opt/devkitpro/libnx/include -Isrc -Iinclude -Ibuild -c src/platform.c -o build/platform.o
+/workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE -O2 -g -Wall -Wextra -ffunction-sections -fdata-sections -D__SWITCH__ -isystem /workspace/switchcraft/.toolchain/opt/devkitpro/libnx/include -Isrc -Iinclude -Ibuild -I.deps/sdl3/include -I.deps/nvk/include -DVK_NO_PROTOTYPES -c src/vulkan_present.c -o build/vulkan_present.o
+python3 scripts/generate-sdl-symbols.py --cc /workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc --include .deps/sdl3/include --include .deps/nvk/include
+/workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/bin/aarch64-none-elf-g++ -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE -specs=/workspace/switchcraft/.toolchain/opt/devkitpro/libnx/switch.specs -L/workspace/switchcraft/.toolchain/opt/devkitpro/libnx/lib -L/workspace/switchcraft/.toolchain/opt/devkitpro/portlibs/switch/lib -Wl,--gc-sections build/launcher/launcher.o build/launcher/launcher_console.o build/launcher/instances.o build/launcher/prism_metadata.o build/launcher/launcher_ui.o build/launcher/ui_canvas.o build/launcher/launcher_controller.o build/launcher/launcher_jobs.o build/launcher/launcher_session.o build/launcher/install.o build/launcher/download.o build/launcher/minecraft_launch_request.o build/metadata.o build/platform.o build/java25-integrated/sdk/lib/libjavaswitch.a -Wl,--start-group -lcurl -lz -lnx -lm -Wl,--end-group -o build/minecraft-launcher.elf -Wl,-Map,build/minecraft-launcher.elf.map
+/workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/bin/aarch64-none-elf-ar rcs build/libswitchcraft-java-resolver.a build/composite_resolver.o build/native_symbols_jni.o
+python3 scripts/build-lwjgl-utilities.py --cross > build/lwjgl-utilities.log 2>&1
+SDL public functions declared=1242 archive=1944 matched=1242 header_sha256=b3345c0a11f76df6ce8b7c3491dcae4ded26d67d7c5f1bb986f9bcc15630745a
+SWITCHCRAFT_SHADER_BUILD_DIR=/workspace/switchcraft/build/shader-libraries python3 scripts/build-shader-libraries.py --cross > build/shader-libraries.log 2>&1
+python3 scripts/build-native-smoke.py
+Built Java 25 JNI/FFM resolver smoke JAR; Horizon execution NOT TESTED
+/workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE -O2 -g -Wall -Wextra -ffunction-sections -fdata-sections -D__SWITCH__ -isystem /workspace/switchcraft/.toolchain/opt/devkitpro/libnx/include -Isrc -Iinclude -Ibuild -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE -specs=/workspace/switchcraft/.toolchain/opt/devkitpro/libnx/switch.specs -L/workspace/switchcraft/.toolchain/opt/devkitpro/libnx/lib -L/workspace/switchcraft/.toolchain/opt/devkitpro/portlibs/switch/lib -Wl,--gc-sections src/diagnostics.c build/platform.o -lnx -o build/switch-diagnostics.elf -Wl,-Map,build/switch-diagnostics.elf.map
+/workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/bin/aarch64-none-elf-g++ -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE -specs=/workspace/switchcraft/.toolchain/opt/devkitpro/libnx/switch.specs -L/workspace/switchcraft/.toolchain/opt/devkitpro/libnx/lib -L/workspace/switchcraft/.toolchain/opt/devkitpro/portlibs/switch/lib -Wl,--gc-sections build/vulkan.o build/platform.o .deps/nvk/lib/libvulkan.a -Wl,--start-group -ldrm_nouveau -lzstd -lz -lnx -lm -Wl,--end-group -o build/vulkan-test.elf -Wl,-Map,build/vulkan-test.elf.map
+/workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE -O2 -g -Wall -Wextra -ffunction-sections -fdata-sections -D__SWITCH__ -isystem /workspace/switchcraft/.toolchain/opt/devkitpro/libnx/include -Isrc -Iinclude -Ibuild -I.deps/sdl3/include -I.deps/nvk/include -DVK_NO_PROTOTYPES -c src/native_symbols_horizon.c -o build/native_symbols_horizon.o
+/workspace/switchcraft/.toolchain/opt/devkitpro/tools/bin/nacptool --create "minecraft-launcher" Switchcraft 0.1.0 build/minecraft-launcher.nacp
+/workspace/switchcraft/.toolchain/opt/devkitpro/tools/bin/elf2nro build/minecraft-launcher.elf dist/minecraft-launcher.nro --nacp=build/minecraft-launcher.nacp --icon=/workspace/switchcraft/.toolchain/opt/devkitpro/libnx/default_icon.jpg
+/workspace/switchcraft/.toolchain/opt/devkitpro/tools/bin/nacptool --create "switch-diagnostics" Switchcraft 0.1.0 build/switch-diagnostics.nacp
+/workspace/switchcraft/.toolchain/opt/devkitpro/tools/bin/elf2nro build/switch-diagnostics.elf dist/switch-diagnostics.nro --nacp=build/switch-diagnostics.nacp --icon=/workspace/switchcraft/.toolchain/opt/devkitpro/libnx/default_icon.jpg
+/workspace/switchcraft/.toolchain/opt/devkitpro/tools/bin/nacptool --create "vulkan-test" Switchcraft 0.1.0 build/vulkan-test.nacp
+/workspace/switchcraft/.toolchain/opt/devkitpro/tools/bin/elf2nro build/vulkan-test.elf dist/vulkan-test.nro --nacp=build/vulkan-test.nacp --icon=/workspace/switchcraft/.toolchain/opt/devkitpro/libnx/default_icon.jpg
+/workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/bin/aarch64-none-elf-ar rcs build/libswitchcraft-native.a build/native_lookup.o build/native_symbols_horizon.o
+/workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/bin/aarch64-none-elf-g++ -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE -specs=/workspace/switchcraft/.toolchain/opt/devkitpro/libnx/switch.specs -L/workspace/switchcraft/.toolchain/opt/devkitpro/libnx/lib -L/workspace/switchcraft/.toolchain/opt/devkitpro/portlibs/switch/lib -Wl,--gc-sections build/vulkan_present.o build/platform.o build/libswitchcraft-native.a .deps/sdl3/lib/libSDL3.a .deps/nvk/lib/libvulkan.a -Wl,--start-group -ldrm_nouveau -lzstd -lz -lnx -lm -Wl,--end-group -o build/vulkan-present.elf -Wl,-Map,build/vulkan-present.elf.map
+/workspace/switchcraft/.toolchain/opt/devkitpro/tools/bin/nacptool --create "vulkan-present" Switchcraft 0.1.0 build/vulkan-present.nacp
+/workspace/switchcraft/.toolchain/opt/devkitpro/tools/bin/elf2nro build/vulkan-present.elf dist/vulkan-present.nro --nacp=build/vulkan-present.nacp --icon=/workspace/switchcraft/.toolchain/opt/devkitpro/libnx/default_icon.jpg
+/workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/bin/aarch64-none-elf-g++ -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE -specs=/workspace/switchcraft/.toolchain/opt/devkitpro/libnx/switch.specs -L/workspace/switchcraft/.toolchain/opt/devkitpro/libnx/lib -L/workspace/switchcraft/.toolchain/opt/devkitpro/portlibs/switch/lib -Wl,--gc-sections -mno-outline-atomics -Wl,-u,JNI_CreateJavaVM build/java25_integration.o build/libswitchcraft-java-resolver.a build/jdk_native_resolver.o build/platform.o build/metadata.o build/launcher/minecraft_launch_request.o build/launcher/instances.o build/launcher/install.o build/launcher/download.o build/launcher/prism_metadata.o build/libswitchcraft-native.a build/lwjgl-core/horizon/liblwjgl-core.a build/lwjgl-utilities/horizon/liblwjgl-utilities.a build/font-audio/horizon/libswitchcraft-font-audio.a build/shader-libraries/horizon/libswitchcraft-shader-libraries-provider.a -Wl,--start-group .deps/sdl3/lib/libSDL3.a .deps/nvk/lib/libvulkan.a build/font-audio/openal-cross/libopenal.a build/shader-libraries/horizon/shaderc/libshaderc/libshaderc_combined.a build/shader-libraries/horizon/spirv-cross/libspirv-cross-c.a build/shader-libraries/horizon/spirv-cross/libspirv-cross-core.a build/shader-libraries/horizon/spirv-cross/libspirv-cross-glsl.a build/shader-libraries/horizon/spirv-cross/libspirv-cross-hlsl.a build/shader-libraries/horizon/spirv-cross/libspirv-cross-msl.a build/shader-libraries/horizon/spirv-cross/libspirv-cross-cpp.a build/shader-libraries/horizon/spirv-cross/libspirv-cross-reflect.a build/java25-integrated/runtime/openjdk25-horizon-runtime/native/libfallbackLinker.a build/java25-integrated/runtime/openjdk25-horizon-runtime/native/libinstrument.a build/java25-integrated/runtime/openjdk25-horizon-runtime/native/libjava.a build/java25-integrated/runtime/openjdk25-horizon-runtime/native/libjimage.a build/java25-integrated/runtime/openjdk25-horizon-runtime/native/libjli_manifest.a build/java25-integrated/runtime/openjdk25-horizon-runtime/native/libjvm.a build/java25-integrated/runtime/openjdk25-horizon-runtime/native/libmanagement.a build/java25-integrated/runtime/openjdk25-horizon-runtime/native/libnet.a build/java25-integrated/runtime/openjdk25-horizon-runtime/native/libnio.a build/java25-integrated/runtime/openjdk25-horizon-runtime/native/libsyslookup.a build/java25-integrated/runtime/openjdk25-horizon-runtime/native/libverify.a build/java25-integrated/runtime/openjdk25-horizon-runtime/native/libzip.a build/java25-integrated/sdk/lib/libjavaswitch.a -lfreetype -lharfbuzz -lpng16 -lbz2 -lcurl -ldrm_nouveau -lzstd -lz -lnx -lc -lm -pthread -Wl,--end-group -o build/switchcraft-java25.elf -Wl,-Map,build/switchcraft-java25.elf.map
+/workspace/switchcraft/.toolchain/opt/devkitpro/tools/bin/nacptool --create "switchcraft-java25" Switchcraft 0.1.0 build/switchcraft-java25.nacp
+/workspace/switchcraft/.toolchain/opt/devkitpro/tools/bin/elf2nro build/switchcraft-java25.elf dist/switchcraft-java25.nro --nacp=build/switchcraft-java25.nacp --icon=/workspace/switchcraft/.toolchain/opt/devkitpro/libnx/default_icon.jpg
+AArch64 linked static symbol proof; GL/EGL API definitions absent: PASS
+Genuine VM, instrumentation, composed resolver and SDL/Vulkan link; zero undefined symbols: PASS
+python3 scripts/build-info.py
+python3 -m unittest discover -s tests -v
+test_actual_binaries (test_artifacts.ArtifactTests.test_actual_binaries) ... ok
+test_renamed_elf_and_truncation_rejected (test_artifacts.ArtifactTests.test_renamed_elf_and_truncation_rejected) ... ok
+test_real_sdk_publication_and_composed_lookups (test_composite_resolver.CompositeResolverTests.test_real_sdk_publication_and_composed_lookups) ... ok
+test_malformed_config_and_symlink_destination_are_preserved (test_config.ConfigTests.test_malformed_config_and_symlink_destination_are_preserved) ... ok
+test_preferences_preserve_unknown_settings_and_do_not_follow_stale_stage (test_config.ConfigTests.test_preferences_preserve_unknown_settings_and_do_not_follow_stale_stage) ... ok
+test_bounded_text_and_https_only_default (test_download.DownloadTests.test_bounded_text_and_https_only_default) ... ok
+test_cancellation_and_stale_part_leave_destination_untouched (test_download.DownloadTests.test_cancellation_and_stale_part_leave_destination_untouched) ... ok
+test_corrupt_existing_file_is_preserved_unless_repair_requested (test_download.DownloadTests.test_corrupt_existing_file_is_preserved_unless_repair_requested) ... ok
+test_hash_verified_download_retries_from_clean_start (test_download.DownloadTests.test_hash_verified_download_retries_from_clean_start) ... ok
+test_mismatched_or_symlink_partial_journal_is_never_repaired (test_download.DownloadTests.test_mismatched_or_symlink_partial_journal_is_never_repaired) ... ok
+test_owned_stale_partial_requires_repair_and_clean_restarts (test_download.DownloadTests.test_owned_stale_partial_requires_repair_and_clean_restarts) ... ok
+test_read_only_local_verification (test_download.DownloadTests.test_read_only_local_verification) ... ok
+test_sha1_mismatch_does_not_publish_and_valid_destination_is_reused (test_download.DownloadTests.test_sha1_mismatch_does_not_publish_and_valid_destination_is_reused) ... ok
+test_tls_rejects_untrusted_certificate_and_accepts_configured_ca (test_download.DownloadTests.test_tls_rejects_untrusted_certificate_and_accepts_configured_ca) ... ok
+test_transport_shutdown_allows_clean_reinitialization (test_download.DownloadTests.test_transport_shutdown_allows_clean_reinitialization) ... ok
+test_allowlist_and_no_overwrite (test_feedback.FeedbackTests.test_allowlist_and_no_overwrite) ... ok
+test_crash_report_file_limit_is_enforced (test_feedback.FeedbackTests.test_crash_report_file_limit_is_enforced) ... ok
+test_only_bounded_java_crash_reports_are_included (test_feedback.FeedbackTests.test_only_bounded_java_crash_reports_are_included) ... ok
+test_symlink_is_rejected (test_feedback.FeedbackTests.test_symlink_is_rejected) ... ok
+test_total_export_size_is_bounded (test_feedback.FeedbackTests.test_total_export_size_is_bounded) ... ok
+test_unique_attempts_survive_one_export_and_other_files_are_excluded (test_feedback.FeedbackTests.test_unique_attempts_survive_one_export_and_other_files_are_excluded) ... ok
+test_module_scope_and_export_inventory (test_font_audio.FontAudioHostTest.test_module_scope_and_export_inventory) ... ok
+test_openal_procedures_and_real_loopback_when_available (test_font_audio.FontAudioHostTest.test_openal_procedures_and_real_loopback_when_available) ... [W][08:59:13.340160] pw.conf      | [          conf.c: 1182 try_load_conf()] can't load config client.conf: No such file or directory
+[E][08:59:13.340207] pw.conf      | [          conf.c: 1215 pw_conf_load_conf_for_context()] can't load config client.conf: No such file or directory
+[ALSOFT] (EE) Failed to create PipeWire event context (errno: 2)
+XDG_RUNTIME_DIR (/tmp) is not owned by us (uid 1000), but by uid 0! (This could e.g. happen if you try to connect to a non-root PulseAudio as a root user, over the native protocol. Don't do that.)
+ok
+test_real_freetype_renders_a_glyph (test_font_audio.FontAudioHostTest.test_real_freetype_renders_a_glyph) ... ok
+test_horizon_can_import_gl_classes_and_rejects_real_gl_creation (test_gl_deferred.DeferredGlTests.test_horizon_can_import_gl_classes_and_rejects_real_gl_creation) ... ok
+test_cancellation_and_unrelated_files (test_install.InstallTests.test_cancellation_and_unrelated_files) ... ok
+test_corrupt_cache_preserved_until_explicit_repair (test_install.InstallTests.test_corrupt_cache_preserved_until_explicit_repair) ... ok
+test_full_refresh_download_filter_deduplicate_verify_and_retry (test_install.InstallTests.test_full_refresh_download_filter_deduplicate_verify_and_retry) ... ok
+test_metadata_stage_symlink_cannot_clobber_save (test_install.InstallTests.test_metadata_stage_symlink_cannot_clobber_save) ... ok
+test_receipt_symlink_is_refused_without_touching_save (test_install.InstallTests.test_receipt_symlink_is_refused_without_touching_save) ... ok
+test_refresh_real_prism_target_and_suggested_dependency (test_install.InstallTests.test_refresh_real_prism_target_and_suggested_dependency) ... ok
+test_refresh_requires_explicit_test_mirror_option (test_install.InstallTests.test_refresh_requires_explicit_test_mirror_option) ... ok
+test_archive_restore_collision_preserves_world_bytes (test_instances.InstanceTests.test_archive_restore_collision_preserves_world_bytes) ... ok
+test_duplicate_has_empty_game_directory_and_no_install_writes (test_instances.InstanceTests.test_duplicate_has_empty_game_directory_and_no_install_writes) ... ok
+test_import_limits_cancellation_symlinks_and_bad_profiles_leave_no_partial_instance (test_instances.InstanceTests.test_import_limits_cancellation_symlinks_and_bad_profiles_leave_no_partial_instance) ... ok
+test_import_modern_qsettings_general_unicode_opaque_and_unknown_groups (test_instances.InstanceTests.test_import_modern_qsettings_general_unicode_opaque_and_unknown_groups) ... ok
+test_import_preserves_profile_and_world_without_changing_source (test_instances.InstanceTests.test_import_preserves_profile_and_world_without_changing_source) ... ok
+test_prism_cached_version_is_resolved_without_download (test_instances.InstanceTests.test_prism_cached_version_is_resolved_without_download) ... ok
+test_prism_ini_roundtrips_quoted_unicode_and_escaped_characters (test_instances.InstanceTests.test_prism_ini_roundtrips_quoted_unicode_and_escaped_characters) ... ok
+test_prism_profile_crud_isolation_and_planner_path (test_instances.InstanceTests.test_prism_profile_crud_isolation_and_planner_path) ... ok
+test_symlink_instance_and_metadata_are_rejected (test_instances.InstanceTests.test_symlink_instance_and_metadata_are_rejected) ... ok
+test_traversal_malformed_metadata_collision_and_heap_bounds (test_instances.InstanceTests.test_traversal_malformed_metadata_collision_and_heap_bounds) ... ok
+test_update_version_resolves_cached_dependencies_and_refuses_unknown_components (test_instances.InstanceTests.test_update_version_resolves_cached_dependencies_and_refuses_unknown_components) ... ok
+test_menu_choices_revision_and_bounds (test_java25_menu.Java25MenuTests.test_menu_choices_revision_and_bounds) ... ok
+test_mutated_runtime_or_sdk_are_rejected (test_java25_package.Java25PackageTests.test_mutated_runtime_or_sdk_are_rejected) ... ok
+test_public_lwjgl_font_audio_calls_use_horizon_ffm_and_jni_bridge (test_java_font_audio.JavaFontAudioTests.test_public_lwjgl_font_audio_calls_use_horizon_ffm_and_jni_bridge) ... ok
+test_compiles_against_locked_lwjgl_343_apis (test_java_graphics_smoke.JavaGraphicsSmokeTests.test_compiles_against_locked_lwjgl_343_apis) ... ok
+test_host_sdl_vulkan_and_vma_present_60_frames (test_java_graphics_smoke.JavaGraphicsSmokeTests.test_host_sdl_vulkan_and_vma_present_60_frames) ... ok
+test_real_lwjgl_utility_calls_through_horizon_adapter (test_java_utilities.JavaUtilitiesSmokeTests.test_real_lwjgl_utility_calls_through_horizon_adapter) ... ok
+test_launcher_controller_sequences (test_launcher_controller.WorkflowTests.test_launcher_controller_sequences) ... ok
+test_worker_cancel_join_retry_and_exception_visibility (test_launcher_jobs.LauncherJobTests.test_worker_cancel_join_retry_and_exception_visibility) ... ok
+test_launcher_session_workflows (test_launcher_session.WorkflowTests.test_launcher_session_workflows) ... ok
+test_pinned_lwjgl_jar_calls_real_upstream_core_jni (test_lwjgl_core.TestLWJGLCore.test_pinned_lwjgl_jar_calls_real_upstream_core_jni) ... make[1]: Entering directory '/workspace/switchcraft/build/lwjgl-core/host/libffi-private'
+make  all-recursive
+make[2]: Entering directory '/workspace/switchcraft/build/lwjgl-core/host/libffi-private'
+Making all in include
+make[3]: Entering directory '/workspace/switchcraft/build/lwjgl-core/host/libffi-private/include'
+make[3]: Nothing to be done for 'all'.
+make[3]: Leaving directory '/workspace/switchcraft/build/lwjgl-core/host/libffi-private/include'
+Making all in testsuite
+make[3]: Entering directory '/workspace/switchcraft/build/lwjgl-core/host/libffi-private/testsuite'
+make[3]: Nothing to be done for 'all'.
+make[3]: Leaving directory '/workspace/switchcraft/build/lwjgl-core/host/libffi-private/testsuite'
+Making all in man
+make[3]: Entering directory '/workspace/switchcraft/build/lwjgl-core/host/libffi-private/man'
+make[3]: Nothing to be done for 'all'.
+make[3]: Leaving directory '/workspace/switchcraft/build/lwjgl-core/host/libffi-private/man'
+make[3]: Entering directory '/workspace/switchcraft/build/lwjgl-core/host/libffi-private'
+make[3]: Leaving directory '/workspace/switchcraft/build/lwjgl-core/host/libffi-private'
+make[2]: Leaving directory '/workspace/switchcraft/build/lwjgl-core/host/libffi-private'
+make[1]: Leaving directory '/workspace/switchcraft/build/lwjgl-core/host/libffi-private'
+host: 1957 genuine Java JNI exports + 2 lifecycle exports from 15 upstream C files; libffi ABIs=UNIX64,WIN64,GNUW64,EFI64 -> /workspace/switchcraft/build/lwjgl-core/host/liblwjgl-core.a
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by org.lwjgl.system.MemoryBackendUnsafeLegacy (file:/workspace/switchcraft/.deps/lwjgl_core.jar)
+WARNING: Please consider reporting this to the maintainers of class org.lwjgl.system.MemoryBackendUnsafeLegacy
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+LWJGL 3.4.3 pinned jar genuine core JNI calls passed
+ok
+test_sdl_timer_thread_calls_java_through_real_lwjgl_upcalls (test_lwjgl_core_callbacks.TestLWJGLCoreCallbacks.test_sdl_timer_thread_calls_java_through_real_lwjgl_upcalls) ... make[1]: Entering directory '/workspace/switchcraft/build/lwjgl-core/host/libffi-private'
+make  all-recursive
+make[2]: Entering directory '/workspace/switchcraft/build/lwjgl-core/host/libffi-private'
+Making all in include
+make[3]: Entering directory '/workspace/switchcraft/build/lwjgl-core/host/libffi-private/include'
+make[3]: Nothing to be done for 'all'.
+make[3]: Leaving directory '/workspace/switchcraft/build/lwjgl-core/host/libffi-private/include'
+Making all in testsuite
+make[3]: Entering directory '/workspace/switchcraft/build/lwjgl-core/host/libffi-private/testsuite'
+make[3]: Nothing to be done for 'all'.
+make[3]: Leaving directory '/workspace/switchcraft/build/lwjgl-core/host/libffi-private/testsuite'
+Making all in man
+make[3]: Entering directory '/workspace/switchcraft/build/lwjgl-core/host/libffi-private/man'
+make[3]: Nothing to be done for 'all'.
+make[3]: Leaving directory '/workspace/switchcraft/build/lwjgl-core/host/libffi-private/man'
+make[3]: Entering directory '/workspace/switchcraft/build/lwjgl-core/host/libffi-private'
+make[3]: Leaving directory '/workspace/switchcraft/build/lwjgl-core/host/libffi-private'
+make[2]: Leaving directory '/workspace/switchcraft/build/lwjgl-core/host/libffi-private'
+make[1]: Leaving directory '/workspace/switchcraft/build/lwjgl-core/host/libffi-private'
+host: 1957 genuine Java JNI exports + 2 lifecycle exports from 15 upstream C files; libffi ABIs=UNIX64,WIN64,GNUW64,EFI64 -> /workspace/switchcraft/build/lwjgl-core/host/liblwjgl-core.a
+Note: /tmp/lwjgl-core-upcall-ivuulpx5/LWJGLCoreCallbackProbe.java uses or overrides a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+ok
+test_real_lwjgl_static_shared_library_provider (test_lwjgl_horizon.LwjglHorizonTests.test_real_lwjgl_static_shared_library_provider) ... ok
+test_packaged_workload_calls_core_jni_and_ffm_via_static_provider (test_lwjgl_native_smoke.LwjglNativeSmokeTests.test_packaged_workload_calls_core_jni_and_ffm_via_static_provider) ... ok
+test_real_stb_vma_jar_calls_and_module_resolver (test_lwjgl_utilities.TestLWJGLUtilities.test_real_stb_vma_jar_calls_and_module_resolver) ... WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by org.lwjgl.system.MemoryBackendUnsafeLegacy (file:/workspace/switchcraft/.deps/lwjgl_core.jar)
+WARNING: Please consider reporting this to the maintainers of class org.lwjgl.system.MemoryBackendUnsafeLegacy
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+Pinned LWJGL STB decode/text packing and VMA Vulkan allocator calls passed
+ok
+test_cycle_missing_parent_traversal_and_bad_json (test_metadata.MetadataTests.test_cycle_missing_parent_traversal_and_bad_json) ... ok
+test_inheritance_library_override_and_parent_jar (test_metadata.MetadataTests.test_inheritance_library_override_and_parent_jar) ... ok
+test_legacy_quotes_and_asset_index (test_metadata.MetadataTests.test_legacy_quotes_and_asset_index) ... ok
+test_official_manifest_listing (test_metadata.MetadataTests.test_official_manifest_listing) ... ok
+test_prism_legacy_arguments_keep_strict_vulkan_and_maven_artifact_paths (test_metadata.MetadataTests.test_prism_legacy_arguments_keep_strict_vulkan_and_maven_artifact_paths) ... ok
+test_read_only_and_no_token_substitution (test_metadata.MetadataTests.test_read_only_and_no_token_substitution) ... ok
+test_rules_and_native_substitutions (test_metadata.MetadataTests.test_rules_and_native_substitutions) ... ok
+test_snapshot_horizon_overrides_precede_lwjgl_and_options_are_explicit (test_metadata.MetadataTests.test_snapshot_horizon_overrides_precede_lwjgl_and_options_are_explicit) ... ok
+test_malformed_request_is_consumed_without_launch (test_minecraft_launch.MinecraftLaunchRequestTests.test_malformed_request_is_consumed_without_launch) ... ok
+test_prepared_request_is_consumed_and_rebuilt_as_fixed_demo (test_minecraft_launch.MinecraftLaunchRequestTests.test_prepared_request_is_consumed_and_rebuilt_as_fixed_demo) ... ok
+test_stale_settings_request_is_consumed_without_launch (test_minecraft_launch.MinecraftLaunchRequestTests.test_stale_settings_request_is_consumed_without_launch) ... ok
+test_allowlisted_function_lookup_and_call (test_native_lookup.NativeLookupTests.test_allowlisted_function_lookup_and_call) ... ok
+test_real_jni_registration_and_ffm_downcall_through_sdk (test_native_symbols_jni.NativeSymbolsJniTests.test_real_jni_registration_and_ffm_downcall_through_sdk) ... ok
+test_existing_different_metadata_is_preserved (test_prism_cache.PrismCacheTests.test_existing_different_metadata_is_preserved) ... ok
+test_hash_mismatch_never_publishes_version (test_prism_cache.PrismCacheTests.test_hash_mismatch_never_publishes_version) ... ok
+test_hash_verified_cache_and_suggested_dependency (test_prism_cache.PrismCacheTests.test_hash_verified_cache_and_suggested_dependency) ... ok
+test_path_and_token_rejections (test_prism_cache.PrismCacheTests.test_path_and_token_rejections) ... ok
+test_dependency_missing_cycle_conflict_and_unknown_fail_closed (test_prism_metadata.PrismMetadataTests.test_dependency_missing_cycle_conflict_and_unknown_fail_closed) ... ok
+test_index_sorts_offsets_as_instants_and_rejects_invalid_date (test_prism_metadata.PrismMetadataTests.test_index_sorts_offsets_as_instants_and_rejects_invalid_date) ... ok
+test_index_time_order (test_prism_metadata.PrismMetadataTests.test_index_time_order) ... ok
+test_local_patch_overrides_cached_metadata (test_prism_metadata.PrismMetadataTests.test_local_patch_overrides_cached_metadata) ... ok
+test_order_dependencies_library_override_and_java_args (test_prism_metadata.PrismMetadataTests.test_order_dependencies_library_override_and_java_args) ... ok
+test_real_snapshot_metadata_and_dependency_selection (test_prism_metadata.PrismMetadataTests.test_real_snapshot_metadata_and_dependency_selection) ... ok
+test_requirement_cycle_conflict_and_unsupported_jarmod (test_prism_metadata.PrismMetadataTests.test_requirement_cycle_conflict_and_unsupported_jarmod) ... ok
+test_game_profile_rejects_base_sdk_and_mismatched_module_image (test_runtime_profile.RuntimeProfileTests.test_game_profile_rejects_base_sdk_and_mismatched_module_image) ... ok
+test_instrument_profile_requires_real_vm_and_agent_features (test_runtime_profile.RuntimeProfileTests.test_instrument_profile_requires_real_vm_and_agent_features) ... ok
+test_generator_intersects_public_declarations_with_archive (test_sdl_exports.SdlExportTests.test_generator_intersects_public_declarations_with_archive) ... ok
+test_pinned_switch_archive_has_complete_public_sdl_surface (test_sdl_exports.SdlExportTests.test_pinned_switch_archive_has_complete_public_sdl_surface) ... ok
+test_pinned_lwjgl_shader_functions_compile_and_reflect (test_shader_libraries.TestShaderLibraries.test_pinned_lwjgl_shader_functions_compile_and_reflect) ... -- Shaderc: build type is "MinSizeRel".
+-- Configuring Shaderc to avoid building tests.
+-- Configuring Shaderc to avoid building examples.
+-- Configuring Shaderc to build executables.
+-- Configuring Shaderc to check copyrights.
+-- asciidoctor was not found - no documentation will be generated
+CMake Warning (deprecated) at third_party/glslang/CMakeLists.txt:111 (message):
+  ENABLE_HLSL is deprecated.  The HLSL front-end will be removed in a future
+  major release of glslang.  See
+  https://github.com/KhronosGroup/glslang/issues/4210 for details.
+This warning is for project developers.  Use -Wno-author or -Wno-deprecated
+to suppress it.
+
+-- optimizer enabled
+-- Configuring done (0.5s)
+-- Generating done (0.2s)
+-- Build files have been written to: /tmp/switchcraft-shader-build/host/shaderc
+gmake[1]: Entering directory '/tmp/switchcraft-shader-build/host/shaderc'
+[  0%] Built target spirv-tools-header-OpenCLDebugInfo100
+[  0%] Built target spirv-tools-header-DebugInfo
+[  0%] Built target spirv-tools-tables
+[  0%] Built target extinst_tables
+[  1%] Built target core_tables
+[ 32%] Built target SPIRV-Tools-static
+[ 76%] Built target SPIRV-Tools-opt
+[ 76%] Built target SPIRV
+[ 93%] Built target glslang
+[ 98%] Built target shaderc_util
+[100%] Built target shaderc
+[100%] Built target shaderc_combined
+gmake[1]: Leaving directory '/tmp/switchcraft-shader-build/host/shaderc'
+-- SPIRV-Cross: Finding Git version for SPIRV-Cross.
+-- SPIRV-Cross: Git not found, using unknown build version.
+-- Configuring done (0.0s)
+-- Generating done (0.0s)
+-- Build files have been written to: /tmp/switchcraft-shader-build/host/spirv-cross
+gmake[1]: Entering directory '/tmp/switchcraft-shader-build/host/spirv-cross'
+[ 11%] Built target spirv-cross-reflect
+[ 41%] Built target spirv-cross-core
+[ 52%] Built target spirv-cross-glsl
+[ 64%] Built target spirv-cross-cpp
+[ 76%] Built target spirv-cross-msl
+[ 88%] Built target spirv-cross-hlsl
+[100%] Built target spirv-cross-c
+gmake[1]: Leaving directory '/tmp/switchcraft-shader-build/host/spirv-cross'
+host: 45 shaderc_* + 169 spvc_* defined function symbols; all LWJGL API pointers resolve
+host: real GLSL -> SPIR-V compilation and SPIRV-Cross stage-input reflection passed
+shader libraries built with genuine upstream C APIs
+ok
+test_matching_base_features_never_claim_game_title (test_snapshot_profile.SnapshotProfileTests.test_matching_base_features_never_claim_game_title) ... ok
+test_nonconformance_is_not_silently_hidden (test_snapshot_profile.SnapshotProfileTests.test_nonconformance_is_not_silently_hidden) ... ok
+test_wrong_snapshot_is_rejected (test_snapshot_profile.SnapshotProfileTests.test_wrong_snapshot_is_rejected) ... ok
+test_clipping_preserves_guards_and_touch_matches_visible_controls (test_ui_canvas.CanvasTests.test_clipping_preserves_guards_and_touch_matches_visible_controls) ... ok
+test_renderer_is_single_vulkan_and_wrong_hash_is_rejected (test_vulkan_transform.VulkanTransformTests.test_renderer_is_single_vulkan_and_wrong_hash_is_rejected) ... ok
+test_verified_official_snapshot_class (test_vulkan_transform.VulkanTransformTests.test_verified_official_snapshot_class) ... ok
+
+----------------------------------------------------------------------
+Ran 92 tests in 170.509s
+
+OK
+HOST_FFM_BOOTED os.arch=amd64
+SWITCHCRAFT_FREETYPE_GLYPH_PASS codepoint=65
+SWITCHCRAFT_FREETYPE_JAVA_PASS version=2.13.3
+SWITCHCRAFT_OPENAL_LOOPBACK_JAVA_PASS frames=4096 nonzero=8120
+SWITCHCRAFT_FONT_AUDIO_JAVA_PASS hardware_output=NOT_TESTED
+HOST_FFM_BOOTED os.arch=amd64
+SWITCHCRAFT_STB_PNG_JAVA_PASS width=1 height=1 rgba=10,80,e0,ff
+SWITCHCRAFT_SHADERC_JAVA_PASS bytes=896
+SWITCHCRAFT_SPVC_REFLECTION_JAVA_PASS stage_input=position location=0
+SWITCHCRAFT_UTILITIES_JAVA_PASS
+[
+  {
+    "name": "switch-diagnostics.nro",
+    "bytes": 248005,
+    "sha256": "45bf49e86e8c30b5de25d94bed2c5f8f6b0ff9df1d5b3da0dec8bf1a3ce3f3ab",
+    "architecture": "AArch64",
+    "format": "NRO0+ASET",
+    "nacp_title": "switch-diagnostics",
+    "build_id": "f18ef49e25e719c37848d3d45da1a01f5032a66b",
+    "build_verification": "PASS",
+    "hardware_verification": "NOT TESTED"
+  },
+  {
+    "name": "vulkan-test.nro",
+    "bytes": 11999429,
+    "sha256": "015eed8283be72acd694dd9a5161dac6b40f2ce22523860193aa20f048e8807f",
+    "architecture": "AArch64",
+    "format": "NRO0+ASET",
+    "nacp_title": "vulkan-test",
+    "build_id": "a90f6ddae9ad3d60b3f78fd4ec06b0360b9c965b",
+    "build_verification": "PASS",
+    "hardware_verification": "NOT TESTED"
+  },
+  {
+    "name": "vulkan-present.nro",
+    "bytes": 13158597,
+    "sha256": "48108b4bd390380e42127ef4775ea191b0e51498785847ced81603927701375b",
+    "architecture": "AArch64",
+    "format": "NRO0+ASET",
+    "nacp_title": "vulkan-present",
+    "build_id": "be5338a678161759fd4f81fc194ec6517aab46b0",
+    "build_verification": "PASS",
+    "hardware_verification": "NOT TESTED"
+  },
+  {
+    "name": "minecraft-launcher.nro",
+    "bytes": 2836677,
+    "sha256": "f6e862d3f6ee9c78e88c3b1d9dcf5a3795182c35e33593a5cef793e852571852",
+    "architecture": "AArch64",
+    "format": "NRO0+ASET",
+    "nacp_title": "minecraft-launcher",
+    "build_id": "f442340f877a6f76d7e1bff631307675e1906438",
+    "build_verification": "PASS",
+    "hardware_verification": "NOT TESTED"
+  },
+  {
+    "name": "java-test.nro",
+    "bytes": 1165509,
+    "sha256": "1b574c8a2614aa0cf063e251e51ded50078411309bf4f76e3d7842b2ff72f19b",
+    "architecture": "AArch64",
+    "format": "NRO0+ASET",
+    "nacp_title": "java-test",
+    "build_id": "bec7b732bf17a80987bca15c859cd4dc7c4fe6ce",
+    "build_verification": "PASS",
+    "hardware_verification": "NOT TESTED"
+  },
+  {
+    "name": "ffi-test.nro",
+    "bytes": 260293,
+    "sha256": "4bd2a5b0b7139a5a1a837d8aadd0bb018d71f9d701249748e1f553d24900092e",
+    "architecture": "AArch64",
+    "format": "NRO0+ASET",
+    "nacp_title": "ffi-test",
+    "build_id": "0dff7f80c2c4c3aca7a90c9c4f7e1c0762c22489",
+    "build_verification": "PASS",
+    "hardware_verification": "NOT TESTED"
+  },
+  {
+    "name": "zero-services-test.nro",
+    "bytes": 325829,
+    "sha256": "e7fe09f4511e1a82775df4b892a9e0d7b185690dd07acb55d60c16ade72301d7",
+    "architecture": "AArch64",
+    "format": "NRO0+ASET",
+    "nacp_title": "zero-services-test",
+    "build_id": "aa1476862f518cd65b1f709b50b89874927e1771",
+    "build_verification": "PASS",
+    "hardware_verification": "NOT TESTED"
+  },
+  {
+    "name": "java25-test.nro",
+    "bytes": 7100613,
+    "sha256": "5b1d57f4961f6cbc1310ff35e89211608cab39c18d48508ebd394c02ce2b1c9d",
+    "architecture": "AArch64",
+    "format": "NRO0+ASET",
+    "nacp_title": "java25-test",
+    "build_id": "094ec00aab47e451116340bc463de5550b460448",
+    "build_verification": "PASS",
+    "hardware_verification": "NOT TESTED"
+  },
+  {
+    "name": "switchcraft-java25.nro",
+    "bytes": 29350085,
+    "sha256": "64402f9bf4fb5018a8c11fe5873d5bc78d4c1aee6be1f076113e2fa8fd9d3323",
+    "architecture": "AArch64",
+    "format": "NRO0+ASET",
+    "nacp_title": "switchcraft-java25",
+    "build_id": "1953a3660d108183a7dbc3b85fd9afbf349660db",
+    "build_verification": "PASS",
+    "hardware_verification": "NOT TESTED"
+  }
+]
+{
+  "archive": {
+    "name": "switchcraft-test-suite-2026-11-13-r5.zip",
+    "bytes": 54717758,
+    "sha256": "008b93e3af2cbb26ed3069f4d5ad336f2721f30256a972ad517a8aa96c0a5a98"
+  },
+  "sd_files": 414,
+  "nros": 9,
+  "jars": 20,
+  "runtime_image_files": 345,
+  "hardware_verification": "NOT TESTED"
+}
+Prepared minimal SD tree and companion artifacts for snapshot 6
+[
+  {
+    "name": "switch-diagnostics.nro",
+    "bytes": 248005,
+    "sha256": "45bf49e86e8c30b5de25d94bed2c5f8f6b0ff9df1d5b3da0dec8bf1a3ce3f3ab",
+    "architecture": "AArch64",
+    "format": "NRO0+ASET",
+    "nacp_title": "switch-diagnostics",
+    "build_id": "f18ef49e25e719c37848d3d45da1a01f5032a66b",
+    "build_verification": "PASS",
+    "hardware_verification": "NOT TESTED"
+  },
+  {
+    "name": "vulkan-test.nro",
+    "bytes": 11999429,
+    "sha256": "015eed8283be72acd694dd9a5161dac6b40f2ce22523860193aa20f048e8807f",
+    "architecture": "AArch64",
+    "format": "NRO0+ASET",
+    "nacp_title": "vulkan-test",
+    "build_id": "a90f6ddae9ad3d60b3f78fd4ec06b0360b9c965b",
+    "build_verification": "PASS",
+    "hardware_verification": "NOT TESTED"
+  },
+  {
+    "name": "vulkan-present.nro",
+    "bytes": 13158597,
+    "sha256": "48108b4bd390380e42127ef4775ea191b0e51498785847ced81603927701375b",
+    "architecture": "AArch64",
+    "format": "NRO0+ASET",
+    "nacp_title": "vulkan-present",
+    "build_id": "be5338a678161759fd4f81fc194ec6517aab46b0",
+    "build_verification": "PASS",
+    "hardware_verification": "NOT TESTED"
+  },
+  {
+    "name": "minecraft-launcher.nro",
+    "bytes": 2836677,
+    "sha256": "f6e862d3f6ee9c78e88c3b1d9dcf5a3795182c35e33593a5cef793e852571852",
+    "architecture": "AArch64",
+    "format": "NRO0+ASET",
+    "nacp_title": "minecraft-launcher",
+    "build_id": "f442340f877a6f76d7e1bff631307675e1906438",
+    "build_verification": "PASS",
+    "hardware_verification": "NOT TESTED"
+  },
+  {
+    "name": "java-test.nro",
+    "bytes": 1165509,
+    "sha256": "1b574c8a2614aa0cf063e251e51ded50078411309bf4f76e3d7842b2ff72f19b",
+    "architecture": "AArch64",
+    "format": "NRO0+ASET",
+    "nacp_title": "java-test",
+    "build_id": "bec7b732bf17a80987bca15c859cd4dc7c4fe6ce",
+    "build_verification": "PASS",
+    "hardware_verification": "NOT TESTED"
+  },
+  {
+    "name": "ffi-test.nro",
+    "bytes": 260293,
+    "sha256": "4bd2a5b0b7139a5a1a837d8aadd0bb018d71f9d701249748e1f553d24900092e",
+    "architecture": "AArch64",
+    "format": "NRO0+ASET",
+    "nacp_title": "ffi-test",
+    "build_id": "0dff7f80c2c4c3aca7a90c9c4f7e1c0762c22489",
+    "build_verification": "PASS",
+    "hardware_verification": "NOT TESTED"
+  },
+  {
+    "name": "zero-services-test.nro",
+    "bytes": 325829,
+    "sha256": "e7fe09f4511e1a82775df4b892a9e0d7b185690dd07acb55d60c16ade72301d7",
+    "architecture": "AArch64",
+    "format": "NRO0+ASET",
+    "nacp_title": "zero-services-test",
+    "build_id": "aa1476862f518cd65b1f709b50b89874927e1771",
+    "build_verification": "PASS",
+    "hardware_verification": "NOT TESTED"
+  },
+  {
+    "name": "java25-test.nro",
+    "bytes": 7100613,
+    "sha256": "5b1d57f4961f6cbc1310ff35e89211608cab39c18d48508ebd394c02ce2b1c9d",
+    "architecture": "AArch64",
+    "format": "NRO0+ASET",
+    "nacp_title": "java25-test",
+    "build_id": "094ec00aab47e451116340bc463de5550b460448",
+    "build_verification": "PASS",
+    "hardware_verification": "NOT TESTED"
+  },
+  {
+    "name": "switchcraft-java25.nro",
+    "bytes": 29350085,
+    "sha256": "64402f9bf4fb5018a8c11fe5873d5bc78d4c1aee6be1f076113e2fa8fd9d3323",
+    "architecture": "AArch64",
+    "format": "NRO0+ASET",
+    "nacp_title": "switchcraft-java25",
+    "build_id": "1953a3660d108183a7dbc3b85fd9afbf349660db",
+    "build_verification": "PASS",
+    "hardware_verification": "NOT TESTED"
+  }
+]
+Manifest, SHA256SUMS, ZIP layout and all packaged NROs: PASS
