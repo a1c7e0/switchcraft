@@ -134,7 +134,7 @@ with tarfile.open(source,'w:gz',dereference=True) as archive:
     add_pinned_source(archive,'LWJGL 3.4.3',ROOT/'.deps/lwjgl_core_source.archive',
         LOCK['lwjgl_core']['source_archive_sha256'],'third-party/upstream/lwjgl3-upstream.tar.gz')
     openal=LOCK['openal_soft']
-    add_pinned_source(archive,'OpenAL Soft '+openal['version'],ROOT/'.deps/openal-soft-'+openal['version']+'.tar.gz',
+    add_pinned_source(archive,'OpenAL Soft '+openal['version'],ROOT/'.deps'/('openal-soft-'+openal['version']+'.tar.gz'),
         openal['source_archive_sha256'],'third-party/upstream/openal-soft-'+openal['version']+'.tar.gz')
     for name,pin in sorted(LOCK['shader_libraries'].items()):
         add_pinned_source(archive,'Shader library '+name,
