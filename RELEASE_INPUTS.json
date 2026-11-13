@@ -78,11 +78,11 @@
       "parts": [
         {
           "name": "switchcraft-r5-validation.txt.part01",
-          "sha256": "1945451d8eeb4a513adb1630b2648b127a6c9c5bd91f2860ebc3afcbad714b20"
+          "sha256": "3bb804028813bdb293e58a87c494ac3acd1938bd5db062d8b05730d1505d7e5a"
         }
       ],
-      "bytes": 125164,
-      "sha256": "1945451d8eeb4a513adb1630b2648b127a6c9c5bd91f2860ebc3afcbad714b20"
+      "bytes": 133784,
+      "sha256": "3bb804028813bdb293e58a87c494ac3acd1938bd5db062d8b05730d1505d7e5a"
     }
   ]
 }
