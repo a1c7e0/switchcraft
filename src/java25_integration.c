@@ -1,5 +1,7 @@
 /* Experimental same-process VM + JDK + SDL/Vulkan resolver smoke test. */
 #include "platform.h"
+#include "build-info.h"
+#include <switchcraft/java25_menu.h>
 #include <javaswitch/runtime.h>
 #include <javaswitch/native_resolver.h>
 #include <switchcraft/composite_resolver.h>
@@ -100,13 +102,24 @@ int main(void){
     }else if(launch_error[0]&&strcmp(launch_error,"No pending Minecraft launch request")){
         sc_log("Pending Demo request rejected and consumed: %s\n",launch_error);
     }
-    if(!selected)while(sc_frame(&keys)){
-        if(keys&HidNpadButton_A){selected=true;break;}
-        if(keys&HidNpadButton_X){selected=true;ffi_smoke=true;break;}
-        if(keys&HidNpadButton_Y){selected=true;lwjgl_smoke=true;break;}
-        if(keys&HidNpadButton_B){selected=true;graphics_smoke=true;break;}
-        if(keys&HidNpadButton_R){selected=true;font_audio_smoke=true;break;}
-        if(keys&HidNpadButton_L){selected=true;utilities_smoke=true;break;}
+    if(!selected){
+        char menu[768];
+        int menu_size=sc_java25_menu_format(menu,sizeof(menu),SC_BUILD_REVISION);
+        if(menu_size>0){
+            /* Earlier startup diagnostics remain in the SD log; replace the
+               scrolled console view with one stable, readable menu. */
+            printf("\x1b[2J\x1b[H%s",menu);
+            fflush(stdout);
+            consoleUpdate(NULL);
+        }
+        while(sc_frame(&keys)){
+            if(keys&HidNpadButton_A){selected=true;break;}
+            if(keys&HidNpadButton_X){selected=true;ffi_smoke=true;break;}
+            if(keys&HidNpadButton_Y){selected=true;lwjgl_smoke=true;break;}
+            if(keys&HidNpadButton_B){selected=true;graphics_smoke=true;break;}
+            if(keys&HidNpadButton_R){selected=true;font_audio_smoke=true;break;}
+            if(keys&HidNpadButton_L){selected=true;utilities_smoke=true;break;}
+        }
     }
     if(!selected){sc_exit();return 0;}
     if(appletGetAppletType()!=AppletType_Application){

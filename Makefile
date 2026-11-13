@@ -71,7 +71,7 @@ MC_REQUEST_SOURCES := src/minecraft_launch_request.cpp src/instances.cpp src/ins
 MC_REQUEST_OBJECTS := $(MC_REQUEST_SOURCES:src/%.cpp=build/launcher/%.o)
 build/jdk_native_resolver.o: build/java-runtime.stamp
 	$(DK)gcc $(CFLAGS) -mno-outline-atomics -I$(JAVASDK)/include -c $(JAVA25)/native/native_resolver.c -o $@
-build/java25_integration.o: src/java25_integration.c src/platform.h include/switchcraft/composite_resolver.h include/switchcraft/minecraft_launch.h build/java-runtime.stamp
+build/java25_integration.o: src/java25_integration.c src/platform.h include/switchcraft/java25_menu.h include/switchcraft/composite_resolver.h include/switchcraft/minecraft_launch.h build/build-info.h build/java-runtime.stamp
 	$(DK)gcc $(CFLAGS) -mno-outline-atomics -I$(JAVASDK)/include -c $< -o $@
 build/native_symbols_jni.o: src/native_symbols_jni.c include/switchcraft/native_symbols_jni.h build/java-runtime.stamp
 	$(DK)gcc $(CFLAGS) -mno-outline-atomics -I$(JAVASDK)/include -I$(JAVA25)/include -I$(JAVA25)/include/horizon -c $< -o $@
