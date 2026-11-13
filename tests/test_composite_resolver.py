@@ -14,4 +14,5 @@ class CompositeResolverTests(unittest.TestCase):
                 str(JAVA/'src/native_resolver.c'), 'tests/composite_resolver_host.c',
                 '-o',str(exe)],cwd=ROOT,check=True)
             subprocess.run([str(exe)],cwd=ROOT,check=True)
-            subprocess.run([str(exe)],cwd=ROOT,check=True,env={**os.environ,'SC_TEST_COLLISION':'1'})
+            for module in ['SDL3','vulkan','lwjgl','lwjgl_stb','lwjgl_vma','freetype','openal','shaderc','spirv-cross-c']:
+                subprocess.run([str(exe)],cwd=ROOT,check=True,env={**os.environ,'SC_TEST_COLLISION':module})

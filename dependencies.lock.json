@@ -20,7 +20,20 @@
   },
   "java_switch": {
     "url": "https://github.com/a1c7e0/java-switch.git",
-    "revision": "2d53737168e4aa55601600db3f9d4bc89f9617e4"
+    "revision": "aed255884b8f946a903a4c3d62b2745727f4ef2e",
+    "build_profile": "minecraft",
+    "runtime_image_modules": [
+      "java.base",
+      "java.datatransfer",
+      "java.desktop",
+      "java.instrument",
+      "java.logging",
+      "java.management",
+      "java.prefs",
+      "java.xml",
+      "jdk.charsets",
+      "jdk.unsupported"
+    ]
   },
   "host_cmake": {
     "url": "https://files.pythonhosted.org/packages/7e/d5/664ea06d01864f25d6067f09fa218404e4d588edd5e495135ac91429fecb/cmake-4.4.4-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl",

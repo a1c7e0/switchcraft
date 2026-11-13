@@ -3,8 +3,8 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 java_switch_source="${JAVA_SWITCH_SOURCE:-$PWD/.deps/java-switch}"
 export DEVKITPRO="${DEVKITPRO:-$PWD/.toolchain/opt/devkitpro}"
-python3 "$java_switch_source/scripts/bootstrap-deps.py"
 if [[ ! -f "$java_switch_source/dist/openjdk25-horizon-runtime.tar.gz" || ! -f "$java_switch_source/dist/manifest.json" ]]; then
+    python3 "$java_switch_source/scripts/bootstrap-deps.py"
     runtime_profile=$(python3 -c 'import json; print(json.load(open("dependencies.lock.json"))["java_switch"].get("build_profile", "instrument"))')
     case "$runtime_profile" in
       instrument) runtime_build_options=(--with-instrument) ;;

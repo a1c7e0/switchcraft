@@ -4,10 +4,13 @@
 #include <javaswitch/native_resolver.h>
 #include <switchcraft/composite_resolver.h>
 #include <switchcraft/native_symbols_jni.h>
+#include <switchcraft/minecraft_launch.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
 #include <stdatomic.h>
+#include <string.h>
+#include <unistd.h>
 
 /* Retain physical budget for VM Alias mappings. The loader may override this. */
 size_t __nx_heap_size=256u*1024u*1024u;
@@ -22,7 +25,29 @@ static atomic_bool finished;
 static JsLaunchResult launch_result;
 static int launch_status=JS_UNAVAILABLE;
 static char vm_stdout[192],vm_stderr[192];
-static const char *const options[]={"--add-exports=java.base/jdk.internal.misc=ALL-UNNAMED"};
+static const char *const options[]={
+    "--add-exports=java.base/jdk.internal.misc=ALL-UNNAMED",
+    "--enable-native-access=ALL-UNNAMED",
+    "-Dorg.lwjgl.system.allocator=system", "-Djava.awt.headless=true"
+};
+/* The SD package verifies these unmodified upstream JARs against the lock. */
+static const char smoke_classpath[]=
+    SC_ROOT "/launchers/switchcraft-lwjgl-horizon.jar;"
+    SC_ROOT "/tests/switchcraft-native-smoke.jar;"
+    SC_ROOT "/libraries/lwjgl-3.4.3.jar;"
+    SC_ROOT "/libraries/lwjgl-sdl-3.4.3.jar;"
+    SC_ROOT "/libraries/lwjgl-vulkan-3.4.3.jar;"
+    SC_ROOT "/libraries/lwjgl-freetype-3.4.3.jar;"
+    SC_ROOT "/libraries/lwjgl-openal-3.4.3.jar;"
+    SC_ROOT "/libraries/lwjgl-stb-3.4.3.jar;"
+    SC_ROOT "/libraries/lwjgl-vma-3.4.3.jar;"
+    SC_ROOT "/libraries/lwjgl-shaderc-3.4.3.jar;"
+    SC_ROOT "/libraries/lwjgl-spvc-3.4.3.jar;"
+    SC_ROOT "/libraries/jspecify-1.0.0.jar";
+static ScMinecraftLaunchRequest minecraft_request;
+static const char *minecraft_arguments[SC_MC_LAUNCH_MAX_ARGS];
+static const char *minecraft_options[SC_MC_LAUNCH_MAX_OPTIONS];
+static bool minecraft_launch;
 static JsLaunchRequest request={
     .abi_version=JS_ABI_VERSION,.required_java_major=25,.backend="openjdk25",
     .classpath=SC_ROOT "/tests/java25-hello.jar",.main_class="HelloHorizon25",.heap_mib=128
@@ -30,7 +55,9 @@ static JsLaunchRequest request={
 static void run_vm(void *unused){
     (void)unused;
     sc_diag_stage(2); /* Shared with the runtime provider's startup stages. */
-    launch_status=js_runtime_launch_with_options(&request,options,1,&launch_result);
+    launch_status=js_runtime_launch_with_options(&request,
+        minecraft_launch?minecraft_options:options,
+        minecraft_launch?minecraft_request.option_count:sizeof(options)/sizeof(options[0]),&launch_result);
     atomic_store_explicit(&finished,true,memory_order_release);
 }
 static bool check_symbol(const char *module,const char *symbol){
@@ -45,12 +72,41 @@ int main(void){
     sc_memory();
     sc_log("Native heap=%zu loader override=%d bytes=%llu; worker stack=4 MiB Java heap=128 MiB\n",
            __nx_heap_size,envHasHeapOverride(),(unsigned long long)(envHasHeapOverride()?envGetHeapOverrideSize():0));
-    sc_log("A: classfile-69 Hello | X: Java JNI/FFM SDL version smoke | +: exit without a VM.\n"
+    sc_log("A: classfile-69 Hello | X: Java JNI/FFM SDL version smoke\n"
+           "Y: genuine LWJGL JNI + SDL/Vulkan FFM\n"
+           "B: Java SDL/Vulkan window + VMA | R: FreeType/OpenAL loopback\n"
+           "L: STB + shader compile/reflection | +: exit without a VM.\n"
            "Use standalone java25-test A/X/Y in separate fresh application processes first.\n");
-    u64 keys=0;bool selected=false,ffi_smoke=false;
-    while(sc_frame(&keys)){
+    u64 keys=0;bool selected=false,ffi_smoke=false,lwjgl_smoke=false;
+    bool graphics_smoke=false,font_audio_smoke=false,utilities_smoke=false;
+    char launch_error[512]={0};
+    int pending=sc_minecraft_launch_consume(SC_ROOT,&minecraft_request,launch_error,sizeof(launch_error));
+    if(pending){
+        minecraft_launch=true;selected=true;
+        request.classpath=minecraft_request.classpath;
+        request.main_class=minecraft_request.main_class;
+        request.arguments=minecraft_arguments;
+        request.argument_count=minecraft_request.argument_count;
+        request.heap_mib=minecraft_request.heap_mib;
+        request.on_vm_ready=sc_register_native_symbols;
+        for(size_t i=0;i<minecraft_request.argument_count;i++)minecraft_arguments[i]=minecraft_request.arguments[i];
+        for(size_t i=0;i<minecraft_request.option_count;i++)minecraft_options[i]=minecraft_request.options[i];
+        sc_log("Validated pending official Demo request: snapshot=26.4-snapshot-6 Java=25 Vulkan heap=%u MiB args=%u options=%u\n",
+               request.heap_mib,(unsigned)request.argument_count,(unsigned)minecraft_request.option_count);
+        if(chdir(minecraft_request.game_directory)!=0){
+            sc_log("Cannot set the instance game directory errno=%d; launch is not retried\n",errno);
+            selected=false;
+        }
+    }else if(launch_error[0]&&strcmp(launch_error,"No pending Minecraft launch request")){
+        sc_log("Pending Demo request rejected and consumed: %s\n",launch_error);
+    }
+    if(!selected)while(sc_frame(&keys)){
         if(keys&HidNpadButton_A){selected=true;break;}
         if(keys&HidNpadButton_X){selected=true;ffi_smoke=true;break;}
+        if(keys&HidNpadButton_Y){selected=true;lwjgl_smoke=true;break;}
+        if(keys&HidNpadButton_B){selected=true;graphics_smoke=true;break;}
+        if(keys&HidNpadButton_R){selected=true;font_audio_smoke=true;break;}
+        if(keys&HidNpadButton_L){selected=true;utilities_smoke=true;break;}
     }
     if(!selected){sc_exit();return 0;}
     if(appletGetAppletType()!=AppletType_Application){
@@ -62,11 +118,36 @@ int main(void){
         request.on_vm_ready=sc_register_native_symbols;
         sc_log("Selected Java JNI/FFM SDL version test; requires real fallback linker.\n");
     }
+    if(lwjgl_smoke){
+        request.classpath=smoke_classpath;
+        request.main_class="org/switchcraft/runtime/LwjglCoreSmoke";
+        request.on_vm_ready=sc_register_native_symbols;
+        sc_log("Selected genuine LWJGL core JNI and SDL/Vulkan FFM test.\n");
+    }
+    if(graphics_smoke || font_audio_smoke || utilities_smoke){
+        request.classpath=smoke_classpath;
+        request.main_class=graphics_smoke?"org/switchcraft/runtime/HorizonGraphicsSmoke":
+            font_audio_smoke?"org/switchcraft/runtime/HorizonFontAudioSmoke":
+                             "org/switchcraft/runtime/HorizonUtilitiesSmoke";
+        request.on_vm_ready=sc_register_native_symbols;
+        sc_log("Selected Java workload=%s; success requires its actual completion markers.\n",request.main_class);
+    }
+    if(minecraft_launch)
+        sc_log("Starting one fresh official Demo VM attempt. Empty access token is the standard --demo reference behavior; no account credentials are used.\n");
     int rc=sc_install_composite_resolver();
     sc_log("STAGE install combined resolver=%d\n",rc);
     if(rc!=JS_OK)goto done;
     if(!check_symbol("java","JNI_OnLoad_java") || !check_symbol("SDL3","SDL_CreateWindow") ||
-       !check_symbol("SDL3","SDL_Vulkan_CreateSurface") || !check_symbol("vulkan","vkGetInstanceProcAddr")){
+       !check_symbol("SDL3","SDL_Vulkan_CreateSurface") || !check_symbol("vulkan","vkGetInstanceProcAddr") ||
+       ((lwjgl_smoke||graphics_smoke||font_audio_smoke||utilities_smoke||minecraft_launch) &&
+        !check_symbol("lwjgl","JNI_OnLoad_lwjgl")) ||
+       ((graphics_smoke||minecraft_launch) && !check_symbol("lwjgl_vma","JNI_OnLoad_lwjgl_vma")) ||
+       ((font_audio_smoke||minecraft_launch) &&
+        (!check_symbol("freetype","FT_Init_FreeType")||!check_symbol("openal","alcOpenDevice"))) ||
+       ((utilities_smoke||minecraft_launch) &&
+        (!check_symbol("lwjgl_stb","JNI_OnLoad_lwjgl_stb")||
+         !check_symbol("shaderc","shaderc_compiler_initialize")||
+         !check_symbol("spirv-cross-c","spvc_context_create")))){
         sc_log("STAGE resolver preflight failed; VM not started\n");goto done;
     }
     JsRuntimeInfo info={0};rc=js_runtime_query("openjdk25",&info);
@@ -90,10 +171,16 @@ int main(void){
     sc_log("STAGE worker create Result=0x%x\n",rc);
     if(R_FAILED(rc))goto done;
     sc_diag_stage(1);
+    /* SDL3 owns the default window during Java execution; libnx's console
+       framebuffer must be gone before Java can create its Vulkan window. */
+    sc_console(false);
     rc=threadStart(&worker);sc_log("STAGE worker start Result=0x%x\n",rc);
-    if(R_FAILED(rc)){Result closed=threadClose(&worker);sc_log("Unstarted worker close Result=0x%x\n",closed);goto done;}
+    if(R_FAILED(rc)){sc_console(true);Result closed=threadClose(&worker);sc_log("Unstarted worker close Result=0x%x\n",closed);goto done;}
     rc=threadWaitForExit(&worker);sc_log("STAGE worker join Result=0x%x\n",rc);
-    if(R_FAILED(rc)){sc_log("Worker ownership retained until process exit\n");goto done;}
+    if(R_FAILED(rc)){sc_log("Worker ownership retained until process exit\n");fflush(NULL);svcExitProcess();}
+    /* Java returned and SDL teardown completed, so the result pane may use
+       the libnx console again. A crashing/unknown worker is never restored. */
+    sc_console(true);
     if(atomic_load_explicit(&finished,memory_order_acquire))
         sc_log("STAGE VM status=%d stage=%s; verify actual Hello output separately\n",launch_status,launch_result.stage?launch_result.stage:"unknown");
     else sc_log("Worker exited without publishing a result\n");

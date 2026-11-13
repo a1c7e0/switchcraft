@@ -19,6 +19,11 @@ combined=ROOT/'build/switchcraft-java25.elf'
 output=subprocess.check_output([str(nm),'--defined-only',str(combined)],text=True)
 linked={line.split()[-1] for line in output.splitlines() if line.split()}
 required={'JNI_CreateJavaVM','JNI_OnLoad_java','Agent_OnLoad_instrument',
+          'JNI_OnLoad_lwjgl','sc_lwjgl_core_lookup','Java_org_lwjgl_system_JNI_invokeI__J',
+          'JNI_OnLoad_lwjgl_stb','JNI_OnLoad_lwjgl_vma','sc_lwjgl_utilities_lookup',
+          'sc_font_audio_lookup','FT_Init_FreeType','alcOpenDevice',
+          'sc_shader_libraries_lookup','shaderc_compiler_initialize','spvc_context_create',
+          'Java_org_lwjgl_system_MemoryAccessJNI_getPointerSize',
           'JNI_OnLoad_instrument','JLI_ManifestIterate','js_openjdk25_native_resolver',
           'sc_install_composite_resolver','sc_register_native_symbols','SDL_GetVersion','SDL_CreateWindow','SDL_Vulkan_CreateSurface','vkGetInstanceProcAddr'}
 if required-linked:raise SystemExit('Combined VM link missing: '+', '.join(sorted(required-linked)))
