@@ -1,0 +1,362 @@
+Switchcraft R4 release validation
+Source: e2b9a7759ec62e9a13667eca15568ea08e00e131
+Java runtime: aed255884b8f946a903a4c3d62b2745727f4ef2e
+Host suite: 91 tests passed, including requested 60-frame Java graphics run with Khronos validation and the owned-client transformation check.
+Runtime suite: 22 tests passed; clean-pin runtime source/package verifier passed.
+The only subsequent changes were packaging path/verifier fixes; native artifacts were rebuilt and their package verification passed.
+Horizon execution of these R4 binaries: NOT TESTED. Physical R3 observed VM startup/java.base loader paths, but Hello/JNI/agent workloads did not pass.
+Minecraft Demo title on Linux: visually confirmed; no physical Switch title claim.
+
+
+===== Host suite =====
+python3 scripts/build-info.py
+g++ -std=c++17 -O2 -Wall -Wextra -Ivendor -Isrc src/metadata.cpp src/inspect.cpp -o build/switchcraft-inspect
+python3 -m unittest discover -s tests -v
+test_actual_binaries (test_artifacts.ArtifactTests.test_actual_binaries) ... ok
+test_renamed_elf_and_truncation_rejected (test_artifacts.ArtifactTests.test_renamed_elf_and_truncation_rejected) ... ok
+test_real_sdk_publication_and_composed_lookups (test_composite_resolver.CompositeResolverTests.test_real_sdk_publication_and_composed_lookups) ... ok
+test_malformed_config_and_symlink_destination_are_preserved (test_config.ConfigTests.test_malformed_config_and_symlink_destination_are_preserved) ... ok
+test_preferences_preserve_unknown_settings_and_do_not_follow_stale_stage (test_config.ConfigTests.test_preferences_preserve_unknown_settings_and_do_not_follow_stale_stage) ... ok
+test_bounded_text_and_https_only_default (test_download.DownloadTests.test_bounded_text_and_https_only_default) ... ok
+test_cancellation_and_stale_part_leave_destination_untouched (test_download.DownloadTests.test_cancellation_and_stale_part_leave_destination_untouched) ... ok
+test_corrupt_existing_file_is_preserved_unless_repair_requested (test_download.DownloadTests.test_corrupt_existing_file_is_preserved_unless_repair_requested) ... ok
+test_hash_verified_download_retries_from_clean_start (test_download.DownloadTests.test_hash_verified_download_retries_from_clean_start) ... ok
+test_mismatched_or_symlink_partial_journal_is_never_repaired (test_download.DownloadTests.test_mismatched_or_symlink_partial_journal_is_never_repaired) ... ok
+test_owned_stale_partial_requires_repair_and_clean_restarts (test_download.DownloadTests.test_owned_stale_partial_requires_repair_and_clean_restarts) ... ok
+test_read_only_local_verification (test_download.DownloadTests.test_read_only_local_verification) ... ok
+test_sha1_mismatch_does_not_publish_and_valid_destination_is_reused (test_download.DownloadTests.test_sha1_mismatch_does_not_publish_and_valid_destination_is_reused) ... ok
+test_tls_rejects_untrusted_certificate_and_accepts_configured_ca (test_download.DownloadTests.test_tls_rejects_untrusted_certificate_and_accepts_configured_ca) ... ok
+test_transport_shutdown_allows_clean_reinitialization (test_download.DownloadTests.test_transport_shutdown_allows_clean_reinitialization) ... ok
+test_allowlist_and_no_overwrite (test_feedback.FeedbackTests.test_allowlist_and_no_overwrite) ... ok
+test_crash_report_file_limit_is_enforced (test_feedback.FeedbackTests.test_crash_report_file_limit_is_enforced) ... ok
+test_only_bounded_java_crash_reports_are_included (test_feedback.FeedbackTests.test_only_bounded_java_crash_reports_are_included) ... ok
+test_symlink_is_rejected (test_feedback.FeedbackTests.test_symlink_is_rejected) ... ok
+test_total_export_size_is_bounded (test_feedback.FeedbackTests.test_total_export_size_is_bounded) ... ok
+test_unique_attempts_survive_one_export_and_other_files_are_excluded (test_feedback.FeedbackTests.test_unique_attempts_survive_one_export_and_other_files_are_excluded) ... ok
+test_module_scope_and_export_inventory (test_font_audio.FontAudioHostTest.test_module_scope_and_export_inventory) ... ok
+test_openal_procedures_and_real_loopback_when_available (test_font_audio.FontAudioHostTest.test_openal_procedures_and_real_loopback_when_available) ... [W][03:00:31.483623] pw.conf      | [          conf.c: 1182 try_load_conf()] can't load config client.conf: No such file or directory
+[E][03:00:31.483661] pw.conf      | [          conf.c: 1215 pw_conf_load_conf_for_context()] can't load config client.conf: No such file or directory
+[ALSOFT] (EE) Failed to create PipeWire event context (errno: 2)
+XDG_RUNTIME_DIR (/tmp) is not owned by us (uid 1000), but by uid 0! (This could e.g. happen if you try to connect to a non-root PulseAudio as a root user, over the native protocol. Don't do that.)
+ok
+test_real_freetype_renders_a_glyph (test_font_audio.FontAudioHostTest.test_real_freetype_renders_a_glyph) ... ok
+test_horizon_can_import_gl_classes_and_rejects_real_gl_creation (test_gl_deferred.DeferredGlTests.test_horizon_can_import_gl_classes_and_rejects_real_gl_creation) ... ok
+test_cancellation_and_unrelated_files (test_install.InstallTests.test_cancellation_and_unrelated_files) ... ok
+test_corrupt_cache_preserved_until_explicit_repair (test_install.InstallTests.test_corrupt_cache_preserved_until_explicit_repair) ... ok
+test_full_refresh_download_filter_deduplicate_verify_and_retry (test_install.InstallTests.test_full_refresh_download_filter_deduplicate_verify_and_retry) ... ok
+test_metadata_stage_symlink_cannot_clobber_save (test_install.InstallTests.test_metadata_stage_symlink_cannot_clobber_save) ... ok
+test_receipt_symlink_is_refused_without_touching_save (test_install.InstallTests.test_receipt_symlink_is_refused_without_touching_save) ... ok
+test_refresh_real_prism_target_and_suggested_dependency (test_install.InstallTests.test_refresh_real_prism_target_and_suggested_dependency) ... ok
+test_refresh_requires_explicit_test_mirror_option (test_install.InstallTests.test_refresh_requires_explicit_test_mirror_option) ... ok
+test_archive_restore_collision_preserves_world_bytes (test_instances.InstanceTests.test_archive_restore_collision_preserves_world_bytes) ... ok
+test_duplicate_has_empty_game_directory_and_no_install_writes (test_instances.InstanceTests.test_duplicate_has_empty_game_directory_and_no_install_writes) ... ok
+test_import_limits_cancellation_symlinks_and_bad_profiles_leave_no_partial_instance (test_instances.InstanceTests.test_import_limits_cancellation_symlinks_and_bad_profiles_leave_no_partial_instance) ... ok
+test_import_modern_qsettings_general_unicode_opaque_and_unknown_groups (test_instances.InstanceTests.test_import_modern_qsettings_general_unicode_opaque_and_unknown_groups) ... ok
+test_import_preserves_profile_and_world_without_changing_source (test_instances.InstanceTests.test_import_preserves_profile_and_world_without_changing_source) ... ok
+test_prism_cached_version_is_resolved_without_download (test_instances.InstanceTests.test_prism_cached_version_is_resolved_without_download) ... ok
+test_prism_ini_roundtrips_quoted_unicode_and_escaped_characters (test_instances.InstanceTests.test_prism_ini_roundtrips_quoted_unicode_and_escaped_characters) ... ok
+test_prism_profile_crud_isolation_and_planner_path (test_instances.InstanceTests.test_prism_profile_crud_isolation_and_planner_path) ... ok
+test_symlink_instance_and_metadata_are_rejected (test_instances.InstanceTests.test_symlink_instance_and_metadata_are_rejected) ... ok
+test_traversal_malformed_metadata_collision_and_heap_bounds (test_instances.InstanceTests.test_traversal_malformed_metadata_collision_and_heap_bounds) ... ok
+test_update_version_resolves_cached_dependencies_and_refuses_unknown_components (test_instances.InstanceTests.test_update_version_resolves_cached_dependencies_and_refuses_unknown_components) ... ok
+test_mutated_runtime_or_sdk_are_rejected (test_java25_package.Java25PackageTests.test_mutated_runtime_or_sdk_are_rejected) ... ok
+test_public_lwjgl_font_audio_calls_use_horizon_ffm_and_jni_bridge (test_java_font_audio.JavaFontAudioTests.test_public_lwjgl_font_audio_calls_use_horizon_ffm_and_jni_bridge) ... ok
+test_compiles_against_locked_lwjgl_343_apis (test_java_graphics_smoke.JavaGraphicsSmokeTests.test_compiles_against_locked_lwjgl_343_apis) ... ok
+test_host_sdl_vulkan_and_vma_present_60_frames (test_java_graphics_smoke.JavaGraphicsSmokeTests.test_host_sdl_vulkan_and_vma_present_60_frames) ... ok
+test_real_lwjgl_utility_calls_through_horizon_adapter (test_java_utilities.JavaUtilitiesSmokeTests.test_real_lwjgl_utility_calls_through_horizon_adapter) ... ok
+test_launcher_controller_sequences (test_launcher_controller.WorkflowTests.test_launcher_controller_sequences) ... ok
+test_worker_cancel_join_retry_and_exception_visibility (test_launcher_jobs.LauncherJobTests.test_worker_cancel_join_retry_and_exception_visibility) ... ok
+test_launcher_session_workflows (test_launcher_session.WorkflowTests.test_launcher_session_workflows) ... ok
+test_pinned_lwjgl_jar_calls_real_upstream_core_jni (test_lwjgl_core.TestLWJGLCore.test_pinned_lwjgl_jar_calls_real_upstream_core_jni) ... make[1]: Entering directory '/workspace/switchcraft/build/lwjgl-core/host/libffi-private'
+make  all-recursive
+make[2]: Entering directory '/workspace/switchcraft/build/lwjgl-core/host/libffi-private'
+Making all in include
+make[3]: Entering directory '/workspace/switchcraft/build/lwjgl-core/host/libffi-private/include'
+make[3]: Nothing to be done for 'all'.
+make[3]: Leaving directory '/workspace/switchcraft/build/lwjgl-core/host/libffi-private/include'
+Making all in testsuite
+make[3]: Entering directory '/workspace/switchcraft/build/lwjgl-core/host/libffi-private/testsuite'
+make[3]: Nothing to be done for 'all'.
+make[3]: Leaving directory '/workspace/switchcraft/build/lwjgl-core/host/libffi-private/testsuite'
+Making all in man
+make[3]: Entering directory '/workspace/switchcraft/build/lwjgl-core/host/libffi-private/man'
+make[3]: Nothing to be done for 'all'.
+make[3]: Leaving directory '/workspace/switchcraft/build/lwjgl-core/host/libffi-private/man'
+make[3]: Entering directory '/workspace/switchcraft/build/lwjgl-core/host/libffi-private'
+make[3]: Leaving directory '/workspace/switchcraft/build/lwjgl-core/host/libffi-private'
+make[2]: Leaving directory '/workspace/switchcraft/build/lwjgl-core/host/libffi-private'
+make[1]: Leaving directory '/workspace/switchcraft/build/lwjgl-core/host/libffi-private'
+host: 1957 genuine Java JNI exports + 2 lifecycle exports from 15 upstream C files; libffi ABIs=UNIX64,WIN64,GNUW64,EFI64 -> /workspace/switchcraft/build/lwjgl-core/host/liblwjgl-core.a
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by org.lwjgl.system.MemoryBackendUnsafeLegacy (file:/workspace/switchcraft/.deps/lwjgl_core.jar)
+WARNING: Please consider reporting this to the maintainers of class org.lwjgl.system.MemoryBackendUnsafeLegacy
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+LWJGL 3.4.3 pinned jar genuine core JNI calls passed
+ok
+test_sdl_timer_thread_calls_java_through_real_lwjgl_upcalls (test_lwjgl_core_callbacks.TestLWJGLCoreCallbacks.test_sdl_timer_thread_calls_java_through_real_lwjgl_upcalls) ... make[1]: Entering directory '/workspace/switchcraft/build/lwjgl-core/host/libffi-private'
+make  all-recursive
+make[2]: Entering directory '/workspace/switchcraft/build/lwjgl-core/host/libffi-private'
+Making all in include
+make[3]: Entering directory '/workspace/switchcraft/build/lwjgl-core/host/libffi-private/include'
+make[3]: Nothing to be done for 'all'.
+make[3]: Leaving directory '/workspace/switchcraft/build/lwjgl-core/host/libffi-private/include'
+Making all in testsuite
+make[3]: Entering directory '/workspace/switchcraft/build/lwjgl-core/host/libffi-private/testsuite'
+make[3]: Nothing to be done for 'all'.
+make[3]: Leaving directory '/workspace/switchcraft/build/lwjgl-core/host/libffi-private/testsuite'
+Making all in man
+make[3]: Entering directory '/workspace/switchcraft/build/lwjgl-core/host/libffi-private/man'
+make[3]: Nothing to be done for 'all'.
+make[3]: Leaving directory '/workspace/switchcraft/build/lwjgl-core/host/libffi-private/man'
+make[3]: Entering directory '/workspace/switchcraft/build/lwjgl-core/host/libffi-private'
+make[3]: Leaving directory '/workspace/switchcraft/build/lwjgl-core/host/libffi-private'
+make[2]: Leaving directory '/workspace/switchcraft/build/lwjgl-core/host/libffi-private'
+make[1]: Leaving directory '/workspace/switchcraft/build/lwjgl-core/host/libffi-private'
+host: 1957 genuine Java JNI exports + 2 lifecycle exports from 15 upstream C files; libffi ABIs=UNIX64,WIN64,GNUW64,EFI64 -> /workspace/switchcraft/build/lwjgl-core/host/liblwjgl-core.a
+Note: /tmp/lwjgl-core-upcall-5wu1h57x/LWJGLCoreCallbackProbe.java uses or overrides a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+ok
+test_real_lwjgl_static_shared_library_provider (test_lwjgl_horizon.LwjglHorizonTests.test_real_lwjgl_static_shared_library_provider) ... ok
+test_packaged_workload_calls_core_jni_and_ffm_via_static_provider (test_lwjgl_native_smoke.LwjglNativeSmokeTests.test_packaged_workload_calls_core_jni_and_ffm_via_static_provider) ... ok
+test_real_stb_vma_jar_calls_and_module_resolver (test_lwjgl_utilities.TestLWJGLUtilities.test_real_stb_vma_jar_calls_and_module_resolver) ... WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by org.lwjgl.system.MemoryBackendUnsafeLegacy (file:/workspace/switchcraft/.deps/lwjgl_core.jar)
+WARNING: Please consider reporting this to the maintainers of class org.lwjgl.system.MemoryBackendUnsafeLegacy
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+Pinned LWJGL STB decode/text packing and VMA Vulkan allocator calls passed
+ok
+test_cycle_missing_parent_traversal_and_bad_json (test_metadata.MetadataTests.test_cycle_missing_parent_traversal_and_bad_json) ... ok
+test_inheritance_library_override_and_parent_jar (test_metadata.MetadataTests.test_inheritance_library_override_and_parent_jar) ... ok
+test_legacy_quotes_and_asset_index (test_metadata.MetadataTests.test_legacy_quotes_and_asset_index) ... ok
+test_official_manifest_listing (test_metadata.MetadataTests.test_official_manifest_listing) ... ok
+test_prism_legacy_arguments_keep_strict_vulkan_and_maven_artifact_paths (test_metadata.MetadataTests.test_prism_legacy_arguments_keep_strict_vulkan_and_maven_artifact_paths) ... ok
+test_read_only_and_no_token_substitution (test_metadata.MetadataTests.test_read_only_and_no_token_substitution) ... ok
+test_rules_and_native_substitutions (test_metadata.MetadataTests.test_rules_and_native_substitutions) ... ok
+test_snapshot_horizon_overrides_precede_lwjgl_and_options_are_explicit (test_metadata.MetadataTests.test_snapshot_horizon_overrides_precede_lwjgl_and_options_are_explicit) ... ok
+test_malformed_request_is_consumed_without_launch (test_minecraft_launch.MinecraftLaunchRequestTests.test_malformed_request_is_consumed_without_launch) ... ok
+test_prepared_request_is_consumed_and_rebuilt_as_fixed_demo (test_minecraft_launch.MinecraftLaunchRequestTests.test_prepared_request_is_consumed_and_rebuilt_as_fixed_demo) ... ok
+test_stale_settings_request_is_consumed_without_launch (test_minecraft_launch.MinecraftLaunchRequestTests.test_stale_settings_request_is_consumed_without_launch) ... ok
+test_allowlisted_function_lookup_and_call (test_native_lookup.NativeLookupTests.test_allowlisted_function_lookup_and_call) ... ok
+test_real_jni_registration_and_ffm_downcall_through_sdk (test_native_symbols_jni.NativeSymbolsJniTests.test_real_jni_registration_and_ffm_downcall_through_sdk) ... ok
+test_existing_different_metadata_is_preserved (test_prism_cache.PrismCacheTests.test_existing_different_metadata_is_preserved) ... ok
+test_hash_mismatch_never_publishes_version (test_prism_cache.PrismCacheTests.test_hash_mismatch_never_publishes_version) ... ok
+test_hash_verified_cache_and_suggested_dependency (test_prism_cache.PrismCacheTests.test_hash_verified_cache_and_suggested_dependency) ... ok
+test_path_and_token_rejections (test_prism_cache.PrismCacheTests.test_path_and_token_rejections) ... ok
+test_dependency_missing_cycle_conflict_and_unknown_fail_closed (test_prism_metadata.PrismMetadataTests.test_dependency_missing_cycle_conflict_and_unknown_fail_closed) ... ok
+test_index_sorts_offsets_as_instants_and_rejects_invalid_date (test_prism_metadata.PrismMetadataTests.test_index_sorts_offsets_as_instants_and_rejects_invalid_date) ... ok
+test_index_time_order (test_prism_metadata.PrismMetadataTests.test_index_time_order) ... ok
+test_local_patch_overrides_cached_metadata (test_prism_metadata.PrismMetadataTests.test_local_patch_overrides_cached_metadata) ... ok
+test_order_dependencies_library_override_and_java_args (test_prism_metadata.PrismMetadataTests.test_order_dependencies_library_override_and_java_args) ... ok
+test_real_snapshot_metadata_and_dependency_selection (test_prism_metadata.PrismMetadataTests.test_real_snapshot_metadata_and_dependency_selection) ... ok
+test_requirement_cycle_conflict_and_unsupported_jarmod (test_prism_metadata.PrismMetadataTests.test_requirement_cycle_conflict_and_unsupported_jarmod) ... ok
+test_game_profile_rejects_base_sdk_and_mismatched_module_image (test_runtime_profile.RuntimeProfileTests.test_game_profile_rejects_base_sdk_and_mismatched_module_image) ... ok
+test_instrument_profile_requires_real_vm_and_agent_features (test_runtime_profile.RuntimeProfileTests.test_instrument_profile_requires_real_vm_and_agent_features) ... ok
+test_generator_intersects_public_declarations_with_archive (test_sdl_exports.SdlExportTests.test_generator_intersects_public_declarations_with_archive) ... ok
+test_pinned_switch_archive_has_complete_public_sdl_surface (test_sdl_exports.SdlExportTests.test_pinned_switch_archive_has_complete_public_sdl_surface) ... ok
+test_pinned_lwjgl_shader_functions_compile_and_reflect (test_shader_libraries.TestShaderLibraries.test_pinned_lwjgl_shader_functions_compile_and_reflect) ... -- Shaderc: build type is "MinSizeRel".
+-- Configuring Shaderc to avoid building tests.
+-- Configuring Shaderc to avoid building examples.
+-- Configuring Shaderc to build executables.
+-- Configuring Shaderc to check copyrights.
+-- asciidoctor was not found - no documentation will be generated
+CMake Warning (deprecated) at third_party/glslang/CMakeLists.txt:111 (message):
+  ENABLE_HLSL is deprecated.  The HLSL front-end will be removed in a future
+  major release of glslang.  See
+  https://github.com/KhronosGroup/glslang/issues/4210 for details.
+This warning is for project developers.  Use -Wno-author or -Wno-deprecated
+to suppress it.
+
+-- optimizer enabled
+-- Configuring done (0.5s)
+-- Generating done (0.2s)
+-- Build files have been written to: /tmp/switchcraft-shader-build/host/shaderc
+gmake[1]: Entering directory '/tmp/switchcraft-shader-build/host/shaderc'
+[  0%] Built target spirv-tools-header-OpenCLDebugInfo100
+[  0%] Built target spirv-tools-header-DebugInfo
+[  0%] Built target extinst_tables
+[  0%] Built target spirv-tools-tables
+[  1%] Built target core_tables
+[ 32%] Built target SPIRV-Tools-static
+[ 76%] Built target SPIRV-Tools-opt
+[ 76%] Built target SPIRV
+[ 93%] Built target glslang
+[ 98%] Built target shaderc_util
+[100%] Built target shaderc
+[100%] Built target shaderc_combined
+gmake[1]: Leaving directory '/tmp/switchcraft-shader-build/host/shaderc'
+-- SPIRV-Cross: Finding Git version for SPIRV-Cross.
+-- SPIRV-Cross: Git not found, using unknown build version.
+-- Configuring done (0.0s)
+-- Generating done (0.0s)
+-- Build files have been written to: /tmp/switchcraft-shader-build/host/spirv-cross
+gmake[1]: Entering directory '/tmp/switchcraft-shader-build/host/spirv-cross'
+[ 11%] Built target spirv-cross-reflect
+[ 41%] Built target spirv-cross-core
+[ 52%] Built target spirv-cross-glsl
+[ 64%] Built target spirv-cross-msl
+[ 76%] Built target spirv-cross-cpp
+[ 88%] Built target spirv-cross-hlsl
+[100%] Built target spirv-cross-c
+gmake[1]: Leaving directory '/tmp/switchcraft-shader-build/host/spirv-cross'
+host: 45 shaderc_* + 169 spvc_* defined function symbols; all LWJGL API pointers resolve
+host: real GLSL -> SPIR-V compilation and SPIRV-Cross stage-input reflection passed
+shader libraries built with genuine upstream C APIs
+ok
+test_matching_base_features_never_claim_game_title (test_snapshot_profile.SnapshotProfileTests.test_matching_base_features_never_claim_game_title) ... ok
+test_nonconformance_is_not_silently_hidden (test_snapshot_profile.SnapshotProfileTests.test_nonconformance_is_not_silently_hidden) ... ok
+test_wrong_snapshot_is_rejected (test_snapshot_profile.SnapshotProfileTests.test_wrong_snapshot_is_rejected) ... ok
+test_clipping_preserves_guards_and_touch_matches_visible_controls (test_ui_canvas.CanvasTests.test_clipping_preserves_guards_and_touch_matches_visible_controls) ... ok
+test_renderer_is_single_vulkan_and_wrong_hash_is_rejected (test_vulkan_transform.VulkanTransformTests.test_renderer_is_single_vulkan_and_wrong_hash_is_rejected) ... ok
+test_verified_official_snapshot_class (test_vulkan_transform.VulkanTransformTests.test_verified_official_snapshot_class) ... ok
+
+----------------------------------------------------------------------
+Ran 91 tests in 164.867s
+
+OK
+HOST_FFM_BOOTED os.arch=amd64
+SWITCHCRAFT_FREETYPE_GLYPH_PASS codepoint=65
+SWITCHCRAFT_FREETYPE_JAVA_PASS version=2.13.3
+SWITCHCRAFT_OPENAL_LOOPBACK_JAVA_PASS frames=4096 nonzero=8120
+SWITCHCRAFT_FONT_AUDIO_JAVA_PASS hardware_output=NOT_TESTED
+HOST_FFM_BOOTED os.arch=amd64
+SWITCHCRAFT_STB_PNG_JAVA_PASS width=1 height=1 rgba=10,80,e0,ff
+SWITCHCRAFT_SHADERC_JAVA_PASS bytes=896
+SWITCHCRAFT_SPVC_REFLECTION_JAVA_PASS stage_input=position location=0
+SWITCHCRAFT_UTILITIES_JAVA_PASS
+
+===== Final native artifact build/link =====
+python3 scripts/build-info.py
+/workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE -O2 -g -Wall -Wextra -ffunction-sections -fdata-sections -D__SWITCH__ -isystem /workspace/switchcraft/.toolchain/opt/devkitpro/libnx/include -Isrc -Iinclude -Ibuild -c src/platform.c -o build/platform.o
+/workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE -O2 -g -Wall -Wextra -ffunction-sections -fdata-sections -D__SWITCH__ -isystem /workspace/switchcraft/.toolchain/opt/devkitpro/libnx/include -Isrc -Iinclude -Ibuild -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE -specs=/workspace/switchcraft/.toolchain/opt/devkitpro/libnx/switch.specs -L/workspace/switchcraft/.toolchain/opt/devkitpro/libnx/lib -L/workspace/switchcraft/.toolchain/opt/devkitpro/portlibs/switch/lib -Wl,--gc-sections src/diagnostics.c build/platform.o -lnx -o build/switch-diagnostics.elf -Wl,-Map,build/switch-diagnostics.elf.map
+/workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/bin/aarch64-none-elf-g++ -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE -specs=/workspace/switchcraft/.toolchain/opt/devkitpro/libnx/switch.specs -L/workspace/switchcraft/.toolchain/opt/devkitpro/libnx/lib -L/workspace/switchcraft/.toolchain/opt/devkitpro/portlibs/switch/lib -Wl,--gc-sections build/vulkan.o build/platform.o .deps/nvk/lib/libvulkan.a -Wl,--start-group -ldrm_nouveau -lzstd -lz -lnx -lm -Wl,--end-group -o build/vulkan-test.elf -Wl,-Map,build/vulkan-test.elf.map
+/workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/bin/aarch64-none-elf-g++ -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE -specs=/workspace/switchcraft/.toolchain/opt/devkitpro/libnx/switch.specs -L/workspace/switchcraft/.toolchain/opt/devkitpro/libnx/lib -L/workspace/switchcraft/.toolchain/opt/devkitpro/portlibs/switch/lib -Wl,--gc-sections build/vulkan_present.o build/platform.o build/libswitchcraft-native.a .deps/sdl3/lib/libSDL3.a .deps/nvk/lib/libvulkan.a -Wl,--start-group -ldrm_nouveau -lzstd -lz -lnx -lm -Wl,--end-group -o build/vulkan-present.elf -Wl,-Map,build/vulkan-present.elf.map
+/workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/bin/aarch64-none-elf-g++ -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE -specs=/workspace/switchcraft/.toolchain/opt/devkitpro/libnx/switch.specs -L/workspace/switchcraft/.toolchain/opt/devkitpro/libnx/lib -L/workspace/switchcraft/.toolchain/opt/devkitpro/portlibs/switch/lib -Wl,--gc-sections build/launcher/launcher.o build/launcher/launcher_console.o build/launcher/instances.o build/launcher/prism_metadata.o build/launcher/launcher_ui.o build/launcher/ui_canvas.o build/launcher/launcher_controller.o build/launcher/launcher_jobs.o build/launcher/launcher_session.o build/launcher/install.o build/launcher/download.o build/launcher/minecraft_launch_request.o build/metadata.o build/platform.o build/java25-integrated/sdk/lib/libjavaswitch.a -Wl,--start-group -lcurl -lz -lnx -lm -Wl,--end-group -o build/minecraft-launcher.elf -Wl,-Map,build/minecraft-launcher.elf.map
+/workspace/switchcraft/.toolchain/opt/devkitpro/devkitA64/bin/aarch64-none-elf-g++ -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE -specs=/workspace/switchcraft/.toolchain/opt/devkitpro/libnx/switch.specs -L/workspace/switchcraft/.toolchain/opt/devkitpro/libnx/lib -L/workspace/switchcraft/.toolchain/opt/devkitpro/portlibs/switch/lib -Wl,--gc-sections -mno-outline-atomics -Wl,-u,JNI_CreateJavaVM build/java25_integration.o build/libswitchcraft-java-resolver.a build/jdk_native_resolver.o build/platform.o build/metadata.o build/launcher/minecraft_launch_request.o build/launcher/instances.o build/launcher/install.o build/launcher/download.o build/launcher/prism_metadata.o build/libswitchcraft-native.a build/lwjgl-core/horizon/liblwjgl-core.a build/lwjgl-utilities/horizon/liblwjgl-utilities.a build/font-audio/horizon/libswitchcraft-font-audio.a build/shader-libraries/horizon/libswitchcraft-shader-libraries-provider.a -Wl,--start-group .deps/sdl3/lib/libSDL3.a .deps/nvk/lib/libvulkan.a build/font-audio/openal-cross/libopenal.a build/shader-libraries/horizon/shaderc/libshaderc/libshaderc_combined.a build/shader-libraries/horizon/spirv-cross/libspirv-cross-c.a build/shader-libraries/horizon/spirv-cross/libspirv-cross-core.a build/shader-libraries/horizon/spirv-cross/libspirv-cross-glsl.a build/shader-libraries/horizon/spirv-cross/libspirv-cross-hlsl.a build/shader-libraries/horizon/spirv-cross/libspirv-cross-msl.a build/shader-libraries/horizon/spirv-cross/libspirv-cross-cpp.a build/shader-libraries/horizon/spirv-cross/libspirv-cross-reflect.a build/java25-integrated/runtime/openjdk25-horizon-runtime/native/libfallbackLinker.a build/java25-integrated/runtime/openjdk25-horizon-runtime/native/libinstrument.a build/java25-integrated/runtime/openjdk25-horizon-runtime/native/libjava.a build/java25-integrated/runtime/openjdk25-horizon-runtime/native/libjimage.a build/java25-integrated/runtime/openjdk25-horizon-runtime/native/libjli_manifest.a build/java25-integrated/runtime/openjdk25-horizon-runtime/native/libjvm.a build/java25-integrated/runtime/openjdk25-horizon-runtime/native/libmanagement.a build/java25-integrated/runtime/openjdk25-horizon-runtime/native/libnet.a build/java25-integrated/runtime/openjdk25-horizon-runtime/native/libnio.a build/java25-integrated/runtime/openjdk25-horizon-runtime/native/libsyslookup.a build/java25-integrated/runtime/openjdk25-horizon-runtime/native/libverify.a build/java25-integrated/runtime/openjdk25-horizon-runtime/native/libzip.a build/java25-integrated/sdk/lib/libjavaswitch.a -lfreetype -lharfbuzz -lpng16 -lbz2 -lcurl -ldrm_nouveau -lzstd -lz -lnx -lc -lm -pthread -Wl,--end-group -o build/switchcraft-java25.elf -Wl,-Map,build/switchcraft-java25.elf.map
+/workspace/switchcraft/.toolchain/opt/devkitpro/tools/bin/nacptool --create "switch-diagnostics" Switchcraft 0.1.0 build/switch-diagnostics.nacp
+/workspace/switchcraft/.toolchain/opt/devkitpro/tools/bin/elf2nro build/switch-diagnostics.elf dist/switch-diagnostics.nro --nacp=build/switch-diagnostics.nacp --icon=/workspace/switchcraft/.toolchain/opt/devkitpro/libnx/default_icon.jpg
+/workspace/switchcraft/.toolchain/opt/devkitpro/tools/bin/nacptool --create "vulkan-test" Switchcraft 0.1.0 build/vulkan-test.nacp
+/workspace/switchcraft/.toolchain/opt/devkitpro/tools/bin/elf2nro build/vulkan-test.elf dist/vulkan-test.nro --nacp=build/vulkan-test.nacp --icon=/workspace/switchcraft/.toolchain/opt/devkitpro/libnx/default_icon.jpg
+/workspace/switchcraft/.toolchain/opt/devkitpro/tools/bin/nacptool --create "vulkan-present" Switchcraft 0.1.0 build/vulkan-present.nacp
+/workspace/switchcraft/.toolchain/opt/devkitpro/tools/bin/elf2nro build/vulkan-present.elf dist/vulkan-present.nro --nacp=build/vulkan-present.nacp --icon=/workspace/switchcraft/.toolchain/opt/devkitpro/libnx/default_icon.jpg
+/workspace/switchcraft/.toolchain/opt/devkitpro/tools/bin/nacptool --create "minecraft-launcher" Switchcraft 0.1.0 build/minecraft-launcher.nacp
+/workspace/switchcraft/.toolchain/opt/devkitpro/tools/bin/elf2nro build/minecraft-launcher.elf dist/minecraft-launcher.nro --nacp=build/minecraft-launcher.nacp --icon=/workspace/switchcraft/.toolchain/opt/devkitpro/libnx/default_icon.jpg
+/workspace/switchcraft/.toolchain/opt/devkitpro/tools/bin/nacptool --create "switchcraft-java25" Switchcraft 0.1.0 build/switchcraft-java25.nacp
+/workspace/switchcraft/.toolchain/opt/devkitpro/tools/bin/elf2nro build/switchcraft-java25.elf dist/switchcraft-java25.nro --nacp=build/switchcraft-java25.nacp --icon=/workspace/switchcraft/.toolchain/opt/devkitpro/libnx/default_icon.jpg
+AArch64 linked static symbol proof; GL/EGL API definitions absent: PASS
+Genuine VM, instrumentation, composed resolver and SDL/Vulkan link; zero undefined symbols: PASS
+
+===== Final package verification =====
+{
+  "archive": {
+    "name": "switchcraft-test-suite-2026-11-12-r4.zip",
+    "bytes": 54717708,
+    "sha256": "f765f02277c3fa05fdc05b3d5f6dfde544d7fb6e5b45b719732d2f8fbb81aad0"
+  },
+  "sd_files": 414,
+  "nros": 9,
+  "jars": 20,
+  "runtime_image_files": 345,
+  "hardware_verification": "NOT TESTED"
+}
+Prepared minimal SD tree and companion artifacts for snapshot 6
+[
+  {
+    "name": "switch-diagnostics.nro",
+    "bytes": 248005,
+    "sha256": "247785ac777b3b7b3f0f5819573291ae64f2a4ca2c044b642284a3204c036382",
+    "architecture": "AArch64",
+    "format": "NRO0+ASET",
+    "nacp_title": "switch-diagnostics",
+    "build_id": "d3f2a942a3b52aad43eb4071ac6af8bb855bf9fb",
+    "build_verification": "PASS",
+    "hardware_verification": "NOT TESTED"
+  },
+  {
+    "name": "vulkan-test.nro",
+    "bytes": 11999429,
+    "sha256": "8b7fd3b292620ab0392b179f66c57fda9c59492a7c6403cbc7a18e942309accd",
+    "architecture": "AArch64",
+    "format": "NRO0+ASET",
+    "nacp_title": "vulkan-test",
+    "build_id": "1589fa5e365bfe367540285ad6a570ba75ed6249",
+    "build_verification": "PASS",
+    "hardware_verification": "NOT TESTED"
+  },
+  {
+    "name": "vulkan-present.nro",
+    "bytes": 13158597,
+    "sha256": "bcdf245a09209421124cd9b47ff886644020988613b6bc3ce3ba2983a8bfd876",
+    "architecture": "AArch64",
+    "format": "NRO0+ASET",
+    "nacp_title": "vulkan-present",
+    "build_id": "fe9c08a47f8c50729f5aba213d6a3ec831eda822",
+    "build_verification": "PASS",
+    "hardware_verification": "NOT TESTED"
+  },
+  {
+    "name": "minecraft-launcher.nro",
+    "bytes": 2836677,
+    "sha256": "7d8c6e64585c1c587065efe92714aa2325b2a9d2f9e9e8dfc8db04d499758fa7",
+    "architecture": "AArch64",
+    "format": "NRO0+ASET",
+    "nacp_title": "minecraft-launcher",
+    "build_id": "810b86b8090b5b5026b38525813e26629f90d371",
+    "build_verification": "PASS",
+    "hardware_verification": "NOT TESTED"
+  },
+  {
+    "name": "java-test.nro",
+    "bytes": 1165509,
+    "sha256": "974fb431f0dcc0ffe9b29a9597f2017b7c92fca79d5107a94a2ec81259027190",
+    "architecture": "AArch64",
+    "format": "NRO0+ASET",
+    "nacp_title": "java-test",
+    "build_id": "35e51bd1b3c4bf044fd633d322f3e80fd6fa2008",
+    "build_verification": "PASS",
+    "hardware_verification": "NOT TESTED"
+  },
+  {
+    "name": "ffi-test.nro",
+    "bytes": 260293,
+    "sha256": "031824bd60725925db91ac4b9711c80d6d48abca008101d3d76a604cf4d18aac",
+    "architecture": "AArch64",
+    "format": "NRO0+ASET",
+    "nacp_title": "ffi-test",
+    "build_id": "040cb897f8e6e2e4a44220930f61f244d3680a77",
+    "build_verification": "PASS",
+    "hardware_verification": "NOT TESTED"
+  },
+  {
+    "name": "zero-services-test.nro",
+    "bytes": 325829,
+    "sha256": "47f7ce35832673eab861125d74a1e56b94911d219965ce309b1c587b8fc8bd3f",
+    "architecture": "AArch64",
+    "format": "NRO0+ASET",
+    "nacp_title": "zero-services-test",
+    "build_id": "5675b52dad00816b77d9f0576ae5be11e4ad1898",
+    "build_verification": "PASS",
+    "hardware_verification": "NOT TESTED"
+  },
+  {
+    "name": "java25-test.nro",
+    "bytes": 7100613,
+    "sha256": "60c306af37ad4427f3d3f6980443fec88c69bab4b18a1d3abbf15058b6e35e7f",
+    "architecture": "AArch64",
+    "format": "NRO0+ASET",
+    "nacp_title": "java25-test",
+    "build_id": "009afd047a38dfb6dbe19e5d5ebc55f988c8357c",
+    "build_verification": "PASS",
+    "hardware_verification": "NOT TESTED"
+  },
+  {
+    "name": "switchcraft-java25.nro",
+    "bytes": 29350085,
+    "sha256": "63bef353677fefd55de17e5386e93e6150e315b42db7d0a3d89f8551e258d59a",
+    "architecture": "AArch64",
+    "format": "NRO0+ASET",
+    "nacp_title": "switchcraft-java25",
+    "build_id": "8b706fdb542747e987c115fe66226c80d754ec72",
+    "build_verification": "PASS",
+    "hardware_verification": "NOT TESTED"
+  }
+]
+Manifest, SHA256SUMS, ZIP layout and all packaged NROs: PASS
