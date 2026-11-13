@@ -8,10 +8,11 @@ Horizon package does not launch Minecraft.
 
 ## Install the matching package
 
-Use [the R3 device test-suite release](https://github.com/a1c7e0/switchcraft/releases/tag/test-suite-2026-11-09-r3).
-Download `switchcraft-test-suite-2026-11-09-r3.zip` and optionally verify its
-SHA-256 in SHA256SUMS. The SD package contains `switch/`, `START_HERE.md` and
-`manifest.json`; source and debug materials are separate optional release assets.
+Use [the R4 device test-suite release](https://github.com/a1c7e0/switchcraft/releases/tag/test-suite-2026-11-12-r4).
+Download `switchcraft-test-suite-2026-11-12-r4.zip` and optionally verify its
+SHA-256 in SHA256SUMS. The SD package contains `switch/`, short install
+instructions, and manifests/hashes. The matching source companion is a required
+separate release asset; debug materials are separate from the SD ZIP.
 Read the manifest for the exact java-switch runtime revision. See
 [SD_TEST_PACKAGE.md](SD_TEST_PACKAGE.md).
 
@@ -19,8 +20,8 @@ Read the manifest for the exact java-switch runtime revision. See
    merging the directories while preserving existing saves and configuration.
    The result must be `SD:/switch/java25-test/java25-test.nro`, not an additional
    wrapper directory. Keep the complete runtime, test JARs and notices; copying
-   the NRO files alone is insufficient. Source archives are separate optional
-   release assets, not part of the SD ZIP.
+   the NRO files alone is insufficient. The matching source archive is a
+   separate required release asset, not part of the SD ZIP.
 2. Use Switch 1, Atmosphere and **application-mode hbmenu**. Use your existing
    title-override setup, commonly holding R while starting an installed game.
    Album/applet mode has a different memory budget and is unsuitable for the VM
@@ -29,15 +30,16 @@ Read the manifest for the exact java-switch runtime revision. See
    sufficient. No game assets, account credentials or custom JARs are needed
    for the required diagnostics.
 
-## First pass: native prerequisites
+## Optional native checks
 
 Diagnostic log names below are under `SD:/switch/mc-runtime/logs/`; Java crash
 reports, when present, are in the app folders. Record every raw Result/status
 and failed stage. A permission error is useful evidence, not a functional PASS.
-For the focused R3 retest, run `zero-services-test` **L first**, export its logs,
-then make one fresh `java25-test` A attempt. The remaining native rows are
-available for a fuller baseline; they are not prerequisites for that focused
-retest.
+These diagnostics are separate from Java 25 and are not prerequisites for Java A.
+The R3 `zero-services-test` app was reported unable to start, but no log or
+crash capture was supplied. Its cause is unknown. Treat every zero-services
+action, including L, as optional and do not let it block the fresh `java25-test`
+A attempt. To prioritize the R4 Java sequence, skip to the next section.
 
 | Application | Action | Expected observation | Log |
 | --- | --- | --- | --- |
@@ -47,7 +49,7 @@ retest.
 | `java-test` | Fresh process, A once | `DIAGNOSTIC SUITE PASS`, native bridge PASS and `call_main -> 0`; Java 8 diagnostic only | `java-test.log` |
 | `ffi-test` | A | Integer downcall 42, mixed downcall 41.5 | `ffi-test.log` |
 | `ffi-test` | X, after A passed | Integer upcall 42, mixed upcall 41.5; both close Results 0 | Same |
-| `zero-services-test` | L, before public map probes | Private VM mapping reports raw status/Result, protection and canary outcome | `zero-services-test.log` |
+| `zero-services-test` | L, optional | Private VM mapping reports raw status/Result, protection and canary outcome | `zero-services-test.log` |
 | `ffi-test` | Y | Record each step; public physical map may be unsupported (`0xfa01`), which is not a PASS | `ffi-test.log` |
 | `ffi-test` | B | Record partial mapping/protection results; unsupported public mapping is not a PASS | Same |
 | `zero-services-test` | A | Clock, semaphore, Atomics, monitor and event checks complete without errors | `zero-services-test.log` |
@@ -63,7 +65,7 @@ logs. Expected fallback values are -12345 and -67890; the process may abort or
 stall if recovery fails. If it returns, run X again and retain the result. Keep
 any crash report. This is distinct from the non-faulting FFI Y memory test.
 
-## Second pass: genuine Java 25
+## Java 25 device sequence
 
 **Each row requires a new application process.** Do not run A then X/Y inside
 the same Java25 session, even if the UI appears to allow it. After a completed
@@ -73,23 +75,41 @@ exit alone does not establish success.
 
 | Application | Action | Pass requires |
 | --- | --- | --- |
-| `java25-test` | A, fresh process after the private L probe | SDK status 0 / stage `completed`, actual stdout `Hello from Horizon Java 25`, Java major 25 |
+| `java25-test` | A, fresh process; private L is optional | SDK status 0 / stage `completed`, actual stdout `Hello from Horizon Java 25`, Java major 25 |
 | Fresh `java25-test` | X, only if A prints Hello | Stage `completed` and `JAVA25 JNI FFM SUITE PASS` |
 | Fresh `java25-test` | Y, only if A prints Hello and X passes | Stage `completed` and `JAVA25_AGENT_SMOKE_PASS` |
 | Fresh `switchcraft-java25` | A, only if standalone Java 25 succeeds | Resolver preflight statuses 0, stage `completed`, actual Hello output |
 | Fresh `switchcraft-java25` | X, only if combined A succeeds | Preflight passes, stage `completed`, `SWITCHCRAFT_SDL_FFM_PASS SDL_version=` reporting SDL major 3 |
+| Fresh `switchcraft-java25` | Y, only if combined X succeeds | Stage `completed`, `SWITCHCRAFT_LWJGL_CORE_PASS SDL_version=...` and `SWITCHCRAFT_LWJGL_VULKAN_FFM_PASS apiVersion=...` |
+| Fresh `switchcraft-java25` | B, after standalone and combined A/X/Y pass | Stage `completed`, `PRESENTATION_PASS frames=60`, and VMA allocator initialized/destroyed |
+| Fresh `switchcraft-java25` | R, after standalone and combined A/X/Y pass | Stage `completed`, FreeType and OpenAL loopback pass markers; this does not test physical audio output |
+| Fresh `switchcraft-java25` | L, after standalone and combined A/X/Y pass | Stage `completed`, STB PNG decode, shaderc compile, SPIR-V Cross reflection and utilities pass markers |
 
 Y uses the instrument profile included in this artifact set. Keep both
 `java25-agent-smoke-agent.jar` and `java25-agent-smoke-app.jar` under
-`switch/mc-runtime/tests/` and the full `java.base`/`java.instrument` image under
-`switch/mc-runtime/runtimes/openjdk25/`. The combined X test also needs
+`switch/mc-runtime/tests/` and the full pinned Minecraft Java module profile,
+including `java.base` and `java.instrument`, under
+`switch/mc-runtime/runtimes/openjdk25/`. The manifest lists every image file
+and hash; use that inventory rather than assuming a fixed file count. The combined X test also needs
 `switchcraft-native-smoke.jar`; it calls linked SDL_GetVersion through JNI and
-Java FFM, without creating a window.
+Java FFM, without creating a window. Combined Y uses the pinned LWJGL 3.4.3
+core JAR and linked core JNI provider for its SDL/Vulkan FFM test; no LWJGL
+native library is bundled. Run B, R and L as separate fresh processes after
+the standalone and combined A/X/Y prerequisites pass. R tests generated PCM
+through OpenAL loopback, not the Switch's physical audio output.
+
+R3 physical feedback showed that `JNI_CreateJavaVM` returned and `vm-ready` was
+reached, then Hello and Java25Smoke failed because their classes were missing;
+the startup agent also failed because its agent class was missing. The combined
+app exited without selecting a VM. `zero-services-test` could not launch and no
+log was produced. See [the preserved R3 feedback](DEVICE_FEEDBACK_2026_11_12.md).
+These observations establish VM creation and `java.base` missing-class handling,
+not a successful Java app or workload.
 
 R2's Java 25 A attempts reached heap reservation and then terminated with
 `memoryReserver.cpp:521` because the reservation could not protect its
-protection page. Java 25 execution, JNI/FFM, the agent and combined launcher
-remain unachieved on hardware. Make one fresh A attempt with R3 and preserve
+protection page. Java 25 Hello, JNI/FFM, the agent and combined launcher remain
+unachieved on hardware. Make one fresh A attempt with R4 and preserve
 the generated Java crash report. If A does not print Hello, stop the Java 25
 sequence; do not repeat the VM attempt. If A succeeds, continue with fresh
 processes in the order above.

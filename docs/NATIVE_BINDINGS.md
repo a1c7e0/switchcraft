@@ -5,22 +5,32 @@ FreeType, OpenAL, STB, jemalloc and OpenGL. The strict renderer transformation
 selects Vulkan only; the OpenGL metadata entry remains part of the official
 client. The SDL3/VI executable is native code, not an LWJGL implementation.
 
-`build/libswitchcraft-native.a` contains an AArch64, exact-name allowlist lookup.
-The current table covers SDL initialization/teardown, errors, windows, event and
-gamepad enumeration/open/close, SDL Vulkan extensions/surface, and Vulkan
-`vkGetInstanceProcAddr`. The `vulkan-present` NRO links and calls the table;
-unknown names return NULL. `scripts/verify-native-link.py` verifies actual linked
-symbols and checks that GL/EGL entry points are absent. A host test invokes a
-function found by a synthetic table and verifies missing-name behavior. This is
-not a Java lookup implementation, dynamic loader, full SDL API, or ABI proof
-for arbitrary signatures. Resolve Vulkan device functions through the driver.
+`build/libswitchcraft-native.a` contains an AArch64, exact-name resolver.
+`scripts/generate-sdl-symbols.py` preprocesses the public SDL headers with the
+Switch target compiler and intersects active `SDL_DECLSPEC`/`SDLCALL`
+declarations with global function definitions in the built SDL archive. At the
+pinned build, the generated `build/sdl_symbols_generated.h` table includes
+1,242 SDL functions across 52 headers; `build/sdl_symbols_generated.json`
+records the archive and output hashes. Functions missing from the archive or
+inactive for Switch are not emitted. The table resolves genuine linked SDL
+addresses; it does not implement each Java binding signature. Vulkan exposes
+only global `vkGetInstanceProcAddr`; device functions remain under Vulkan's
+normal dispatch. `tests/test_sdl_exports.py` checks fixture intersection and
+regenerates the real table with the pinned AArch64 compiler. The
+`vulkan-present` NRO links the same table, `scripts/verify-native-link.py`
+checks linked functions and absence of GL/EGL entry points, and unknown names
+return NULL.
 
 Native WSI uses pinned etonedemid/SDL, zlib license, plus Mesa NVK and libnx;
-revisions and archive hashes are in dependencies.lock.json. No new Vulkan driver
-is implemented here. VMA, shaderc, SPIR-V Cross, FreeType, OpenAL, STB, jemalloc,
-LWJGL core native/FFM marshalling and Java static-library registration have not
-been integrated into a Horizon JVM. That work remains blocked on actual runtime
-interfaces and dependencies. No claim of Joy-Con gameplay is made.
+revisions and archive hashes are in dependencies.lock.json. LWJGL's core
+provider contains 1,957 actual JNI exports and two lifecycle entries, including
+libc, libffi, thread TLS and Java callbacks. STB/VMA use genuine upstream JNI
+sources. FreeType uses the target FreeType archive; OpenAL Soft is built with
+the SDL3 backend. Shaderc and SPIRV-Cross compile their pinned upstream C APIs.
+See the focused build documents for each family's measured verification.
+Jemalloc is not provided: the launch selects LWJGL's real system allocator.
+OpenGL remains excluded from the renderer, and no Joy-Con gameplay result is
+claimed. See [the optional-native audit](NATIVE_STARTUP_AUDIT.md).
 
 ## Horizon platform and library initialization
 
@@ -31,9 +41,10 @@ override JAR precedes the original classpath entry for the exact snapshot.
 Horizon is an explicit enum with AArch64 recognition and no Linux identity.
 JNI load requests are passed by name to the JVM's real static loader; missing
 `lwjgl` core providers fail normally. The Horizon `SharedLibrary` adapter now
-maps only LWJGL 3.4.3's `org.lwjgl.sdl`/`SDL3` and
-`org.lwjgl.vulkan`/`libvulkan.so.1` requests to the real `SDL3` and `vulkan`
-static modules via `NativeSymbols`. Exact lookup returns zero for missing
+maps the exact LWJGL 3.4.3 SDL3, Vulkan, FreeType, OpenAL, Shaderc and
+SPIRV-Cross requests to their real static modules via `NativeSymbols`.
+The exact alias table is in [LWJGL_HORIZON_COMPAT.md](LWJGL_HORIZON_COMPAT.md).
+STB/VMA use the JVM's static JNI loader instead. Exact lookup returns zero for missing
 symbols; unsupported names or unavailable modules throw `UnsatisfiedLinkError`.
 It reports no filesystem path or dynamic-library handle, and `free()` does not
 unload process-owned code. The override JAR includes the `NativeSymbols` Java
@@ -46,10 +57,13 @@ routes supported Horizon loads directly through the adapter and avoids that
 desktop-only factory.
 
 The combined Java25 diagnostic composes the generated JDK provider with the
-actual static SDL3/Vulkan lookup before the JVM seals the resolver. It links the
-real agent and VM archives and checks required symbol definitions. It executes
-the Java25 Hello or JNI/FFM SDL_GetVersion workload if selected on hardware; no
-Java window or graphics path is claimed. The JNI callback resolves exact static
-module and symbol names, returns real linked function addresses, and returns zero
-for missing entries. The host test calls a host-only fixture via the same SDK
-and JNI/FFM bridge. Further LWJGL native JNI/FFM integration is still required.
+application modules before the JVM seals the resolver. JDK entries take
+precedence; module-name collisions are rejected. Missing entries return zero.
+It links the real agent and VM archives and checks required definitions.
+Its explicit diagnostic workloads cover Hello, JNI/FFM, LWJGL core, Java
+SDL/Vulkan/VMA presentation, FreeType/OpenAL loopback, and STB/shader utilities.
+Only actual completion markers establish a workload result. In particular,
+OpenAL loopback PCM does not establish physical audio output, and creating a
+Vulkan swapchain does not establish presentation. All new Horizon workloads
+require device evidence; historical R3 VM startup and class-loader failures
+remain recorded separately in [DEVICE_FEEDBACK_2026_11_12.md](DEVICE_FEEDBACK_2026_11_12.md).

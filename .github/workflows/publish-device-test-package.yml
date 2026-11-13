@@ -33,7 +33,7 @@ jobs:
           RELEASE_TAG: ${{ inputs.release_tag }}
         run: |
           python3 - <<'PY'
-          import hashlib, json, os, pathlib, re, urllib.request, zipfile
+          import hashlib, io, json, os, pathlib, re, tarfile, urllib.request, zipfile
 
           revision = os.environ['ARTIFACT_REVISION']
           requested_tag = os.environ['RELEASE_TAG']
@@ -52,6 +52,10 @@ jobs:
           record = json.loads(record_bytes)
           if record.get('release_tag') != requested_tag:
               raise SystemExit('requested release tag does not match pinned RELEASE_INPUTS.json')
+          if requested_tag != 'test-suite-2026-11-12-r4':
+              raise SystemExit('this publisher is pinned to the R4 device test package')
+          dependency_lock = json.loads(fetch(base + '/dependencies.lock.json'))
+          curl_source_pin = json.loads(fetch(base + '/vendor/curl/UPSTREAM.json'))
           filename = record['filename']
           if pathlib.PurePosixPath(filename).name != filename or not filename.endswith('.zip'):
               raise SystemExit('invalid package filename in release inputs')
@@ -87,8 +91,20 @@ jobs:
                   raise SystemExit(f"optional asset size or SHA-256 mismatch: {asset_name}")
               optional_names.add(asset_name)
               optional_data.append((asset_name, bytes(body)))
+          source_name = 'switchcraft-source-2026-11-12-r4.tar.gz'
+          expected_lwjgl_source = dependency_lock['lwjgl_core']['source_archive_sha256']
+          matching_sources = [(name, data) for name, data in optional_data if name == source_name]
+          if len(matching_sources) != 1:
+              raise SystemExit('the matching R4 source archive is a required separate release asset')
+          with tarfile.open(fileobj=io.BytesIO(matching_sources[0][1]), mode='r:gz') as source:
+              upstream = source.extractfile('third-party/upstream/lwjgl3-upstream.tar.gz')
+              if upstream is None or hashlib.file_digest(upstream, 'sha256').hexdigest() != expected_lwjgl_source:
+                  raise SystemExit('R4 source archive lacks the full pinned LWJGL upstream source')
           with zipfile.ZipFile(__import__('io').BytesIO(package)) as z:
               names = set(z.namelist())
+              if any(not (n.startswith('switch/') or n in {'README.md', 'START_HERE.md', 'manifest.json'})
+                     for n in names):
+                  raise SystemExit('SD ZIP must contain only switch/, short instructions and its manifest')
               required = {
                   'switch/switch-diagnostics/switch-diagnostics.nro',
                   'switch/java-test/java-test.nro',
@@ -106,6 +122,7 @@ jobs:
                   'switch/mc-runtime/tests/java25-agent-smoke-agent.jar',
                   'switch/mc-runtime/tests/java25-agent-smoke-app.jar',
                   'switch/mc-runtime/tests/switchcraft-native-smoke.jar',
+                  'switch/mc-runtime/libraries/lwjgl-3.4.3.jar',
                   'switch/mc-runtime/launchers/switchcraft-launcher-bridge.jar',
                   'switch/mc-runtime/launchers/switchcraft-lwjgl-horizon.jar',
                   'switch/mc-runtime/runtimes/minijvm/minijvm_rt.jar',
@@ -129,20 +146,97 @@ jobs:
           manifest_obj = json.loads(manifest)
           if any(manifest_obj.get(key) not in (None, requested_tag) for key in ('release_tag','package_id')):
               raise SystemExit('package manifest identifies a different release')
+          source_record = manifest_obj.get('source_archive', {})
+          if (source_record.get('name') != source_name or
+                  source_record.get('sha256') != digest(matching_sources[0][1]) or
+                  source_record.get('bytes') != len(matching_sources[0][1]) or
+                  source_record.get('lwjgl_upstream_sha256') != expected_lwjgl_source):
+              raise SystemExit('separate source release asset does not match the package manifest')
+          with tarfile.open(fileobj=io.BytesIO(matching_sources[0][1]), mode='r:gz') as source:
+              java_lock_member = source.extractfile('java-switch/dependencies.lock.json')
+              if java_lock_member is None:
+                  raise SystemExit('source companion lacks the pinned java-switch dependency lock')
+              java_lock = json.loads(java_lock_member.read())
+              expected_sources = {
+                  'third-party/openjdk25-upstream.tar.gz': java_lock['openjdk25_source']['sha256'],
+                  'third-party/upstream/lwjgl3-upstream.tar.gz': expected_lwjgl_source,
+                  'third-party/upstream/openal-soft-' + dependency_lock['openal_soft']['version'] + '.tar.gz': dependency_lock['openal_soft']['source_archive_sha256'],
+                  'third-party/upstream/libffi-' + java_lock['libffi']['tag'] + '.tar.gz': java_lock['libffi']['sha256'],
+                  'third-party/curl-7.69.1.tar.xz': curl_source_pin['source_sha256'],
+              }
+              for name, pin in dependency_lock['shader_libraries'].items():
+                  expected_sources['third-party/upstream/' + name + '-' + pin['source_revision'] + '.tar.gz'] = pin['source_archive_sha256']
+              components = source_record.get('components', [])
+              component_paths = {item.get('path') for item in components if isinstance(item, dict)}
+              if component_paths != set(expected_sources) or len(components) != len(component_paths):
+                  raise SystemExit('source companion source inventory differs from the pinned dependencies')
+              for item in components:
+                  if expected_sources[item['path']] != item.get('sha256'):
+                      raise SystemExit('source component hash differs from its dependency pin: ' + item['path'])
+                  member = source.extractfile(item.get('path', ''))
+                  if member is None or hashlib.file_digest(member, 'sha256').hexdigest() != item.get('sha256'):
+                      raise SystemExit('source companion component hash mismatch: ' + str(item.get('path')))
+              names = source.getnames()
+              licenses = source_record.get('licenses', [])
+              license_paths = {item.get('path') for item in licenses if isinstance(item, dict)}
+              required_prefixes = ('third-party/licenses/switchcraft/', 'third-party/licenses/java-switch/')
+              if (not licenses or len(license_paths) != len(licenses) or
+                      any(not any(path.startswith(prefix) for prefix in required_prefixes) for path in license_paths) or
+                      any(not any(path.startswith(prefix) for path in license_paths) for prefix in required_prefixes)):
+                  raise SystemExit('source companion has an incomplete or invalid namespaced license inventory')
+              actual_license_paths = {name for name in names if any(name.startswith(prefix) for prefix in required_prefixes)}
+              if actual_license_paths != license_paths:
+                  raise SystemExit('source companion license files differ from the package manifest')
+              for item in licenses:
+                  member = source.extractfile(item['path'])
+                  if (member is None or len(member.read()) != item.get('bytes')):
+                      raise SystemExit('source companion license size mismatch: ' + str(item.get('path')))
+                  member = source.extractfile(item['path'])
+                  if hashlib.file_digest(member, 'sha256').hexdigest() != item.get('sha256'):
+                      raise SystemExit('source companion license hash mismatch: ' + str(item.get('path')))
           with zipfile.ZipFile(__import__('io').BytesIO(package)) as z:
               if z.testzip() is not None: raise SystemExit('ZIP CRC check failed')
               names = set(z.namelist())
+              if any(n.startswith(('switchcraft-docs/','minecraft/')) for n in names):
+                  raise SystemExit('SD ZIP must not contain source/docs trees or game configuration')
+              if any(n.endswith(('.elf','.o','.a','.debug','.tar.gz')) for n in names):
+                  raise SystemExit('SD ZIP must not contain build/debug/source archive files')
               nro_paths = sorted(n for n in names if n.endswith('.nro'))
               if len(nro_paths) != 9:
                   raise SystemExit(f'expected exactly nine NROs, found {len(nro_paths)}')
               jars = [n for n in names if n.startswith('switch/mc-runtime/') and n.endswith('.jar')]
-              if len(jars) != 10:
-                  raise SystemExit(f'expected exactly ten runtime/test JARs, found {len(jars)}')
-              if not any(n.startswith('switch/mc-runtime/runtimes/openjdk25/') and n.endswith('/modules') for n in names):
+              jar_inventory = manifest_obj.get('runtime_and_test_jars', [])
+              jar_paths = {item.get('path') for item in jar_inventory if isinstance(item, dict)}
+              if not jar_inventory or len(jar_paths) != len(jar_inventory) or set(jars) != jar_paths:
+                  raise SystemExit('runtime/test JAR inventory does not exactly match the ZIP')
+              for item in jar_inventory:
+                  raw = z.read(item['path'])
+                  if digest(raw) != item.get('sha256'):
+                      raise SystemExit('runtime/test JAR hash mismatch: ' + item['path'])
+                  with zipfile.ZipFile(io.BytesIO(raw)) as jar:
+                      members = jar.namelist()
+                      if any(n.lower().endswith(('.so', '.dll', '.dylib')) for n in members):
+                          raise SystemExit('host-native binary found inside runtime/test JAR: ' + item['path'])
+                      if any(any(platform in n.lower() for platform in ('natives-linux', 'natives-windows', 'natives-macos'))
+                             for n in members):
+                          raise SystemExit('host-native JAR content found in SD package: ' + item['path'])
+              core = z.read('switch/mc-runtime/libraries/lwjgl-3.4.3.jar')
+              if digest(core) != '46eeca5471833c3cf5da3c1da015b41e3bb3eb16dd3da03f366886da10096751':
+                  raise SystemExit('LWJGL 3.4.3 core JAR does not match the pinned artifact')
+              expected_modules = set(dependency_lock.get('java_switch', {}).get('runtime_image_modules', []))
+              if len(expected_modules) != 10 or not {'java.base', 'java.instrument'} <= expected_modules:
+                  raise SystemExit('pinned dependency lock lacks the ten-module Minecraft Java profile')
+              if (set(manifest_obj.get('runtime_image_modules', [])) != expected_modules or
+                      manifest_obj.get('runtime_minecraft_profile') is not True):
+                  raise SystemExit('package does not identify the full Minecraft Java profile')
+              if 'switch/mc-runtime/runtimes/openjdk25/lib/modules' not in names:
                   raise SystemExit('package lacks the genuine Java 25 runtime image')
               runtime_files = manifest_obj.get('runtime_image_files', [])
-              if len(runtime_files) != 39:
-                  raise SystemExit(f'expected exactly 39 Java 25 runtime image files, found {len(runtime_files)}')
+              if (not runtime_files or
+                      len({item.get('path') for item in runtime_files if isinstance(item, dict)}) != len(runtime_files) or
+                      'switch/mc-runtime/runtimes/openjdk25/lib/modules' not in {item.get('path') for item in runtime_files} or
+                      'switch/mc-runtime/runtimes/openjdk25/lib/security/cacerts' not in {item.get('path') for item in runtime_files}):
+                  raise SystemExit('package has an incomplete Java 25 runtime image inventory')
               missing_runtime = [item.get('path') for item in runtime_files if item.get('path') not in names]
               if missing_runtime:
                   raise SystemExit('manifest runtime image members missing from ZIP: ' + ', '.join(missing_runtime[:10]))
@@ -173,10 +267,11 @@ jobs:
               (out / name).write_bytes(data)
           note_lines = [f"Verified minimal Switchcraft device test package `{filename}`.",
                         f"SHA-256: `{record['sha256']}` ({record['bytes']} bytes).",
-                        'This ZIP is ready to extract directly onto the SD root. Use application-mode hbmenu and the included START_HERE.md. Java25 attempts require a fresh process.',
+                        'This R4 ZIP is ready to extract directly onto the SD root. Use application-mode hbmenu and the included START_HERE.md. Standalone and combined Java25 A/X/Y attempts require fresh processes.',
                         'Physical execution is NOT TESTED until fresh Switch logs establish results. Cross-builds and host tests do not establish Java, JNI/FFM, instrumentation, graphics or Minecraft execution.']
           for asset in optional_assets:
-              note_lines.append(f"Optional licensing/reproducibility asset: `{asset['name']}` ({asset['bytes']} bytes, SHA-256 `{asset['sha256']}`).")
+              label = 'Required separate source companion' if asset['name'] == source_name else 'Optional asset'
+              note_lines.append(f"{label}: `{asset['name']}` ({asset['bytes']} bytes, SHA-256 `{asset['sha256']}`).")
           for key, label in (('source_revision', 'Switchcraft source revision'),
                              ('java_switch_revision', 'java-switch runtime revision')):
               if record.get(key):
