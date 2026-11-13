@@ -20,7 +20,7 @@
   },
   "java_switch": {
     "url": "https://github.com/a1c7e0/java-switch.git",
-    "revision": "aed255884b8f946a903a4c3d62b2745727f4ef2e",
+    "revision": "a0f0e168bb282e9585c0353c3d9b70a7ad043ce8",
     "build_profile": "minecraft",
     "runtime_image_modules": [
       "java.base",

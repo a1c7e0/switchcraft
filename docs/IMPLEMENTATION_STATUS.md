@@ -9,8 +9,11 @@ belongs to the pinned `java-switch` repository. The legacy branch remains
 R4 was published from Switchcraft `e2b9a77` and runtime `aed2558`. Its new
 physical logs show a native L memory pass and continued application class-loading
 failures. See [the R4 report](DEVICE_FEEDBACK_2026_11_13.md). R5 is being prepared
-with file-URL conversion and menu/provenance fixes; those fixes are not yet
-verified on physical hardware. Cross-link and host results remain separate.
+with runtime `a0f0e168bb282e9585c0353c3d9b70a7ad043ce8`, file-URL conversion
+and menu/provenance fixes. The instrumented Minecraft-profile runtime build,
+23 runtime host tests, real loader/resource regressions and pinned-source
+package verification pass. Those fixes are not yet verified on physical
+hardware. Cross-link and host results remain separate.
 
 | Area | Implemented and built | Host evidence | Horizon evidence |
 | --- | --- | --- | --- |
@@ -20,7 +23,7 @@ verified on physical hardware. Cross-link and host results remain separate.
 | FreeType and OpenAL | 284 FreeType and 341 OpenAL functions cross-built | FreeType and OpenAL loopback Java smoke passed; loopback is not physical audio output | NOT TESTED |
 | Shaderc and SPIR-V Cross | 45 Shaderc and 169 SPVC functions verified in the actual AArch64 archives; cross-link proof passed | Real GLSL-to-SPIR-V compilation and stage-input reflection passed through Java | NOT TESTED |
 | SDL/Vulkan/VMA Java graphics smoke | Window, Vulkan surface/swapchain, and VMA initialization succeeded on the host | 60 frames presented on Mesa with validation enabled and no validation errors; explicit count fields fixed | NOT TESTED |
-| Java 25 runtime profile | Ten target modules, genuine 577-object management VM and instrument-enabled runtime image/package built | Clean-pin runtime source reconstruction and package verifier passed; R4 package used runtime aed2558; a new immutable fix pin is being prepared | NOT TESTED |
+| Java 25 runtime profile | Ten target modules, genuine 577-object management VM and instrument-enabled runtime image/package built | Clean-pin runtime source reconstruction and package verifier passed at a0f0e168; real JAR/directory classes and resources pass host regressions | R4 VM-ready and loader paths observed; application classes failed. R5 NOT TESTED |
 | Combined Java 25 diagnostic link | Genuine VM/instrumentation plus SDL, FreeType, OpenAL, STB, VMA, Shaderc, and SPIR-V Cross providers | R4 link passed with zero undefined symbols and no OpenGL symbols, including the real management/instrumented runtime | NOT TESTED |
 | Minecraft title on a host | Java 25 strict-Vulkan Demo title visually confirmed under Mesa llvmpipe 25.0.7; HOST ONLY | Full log and screenshot: `docs/evidence/host-2026-11-12/llvmpipe-attempt-02`; game audio disabled because this host had no ALSA sound device. A separate SwiftShader run stopped at an unsupported-feature UI. | NOT ACHIEVED on Switch |
 | Minecraft title on Switch | Explicit Demo handoff implemented; no successful Horizon launch | Host results do not establish this milestone | NOT ACHIEVED |
@@ -74,7 +77,7 @@ start, without a supplied log or crash capture, so its cause is unknown. See
 
 R3 proves VM creation and limited class-loader execution; it does not prove
 successful Hello, JNI, FFM, instrumentation, graphics, or game execution. R4
-changes and current cross-builds have no device evidence yet. Use fresh logs
+device results are recorded above; the R5 fixes have no device evidence yet. Use fresh logs
 from the exact package and runtime pin to establish any new result.
 
 ## Earlier verified Switchcraft baseline

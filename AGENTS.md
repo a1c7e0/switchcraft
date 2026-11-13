@@ -39,6 +39,12 @@ URLs keep an artificial slash before sdmc: in loader/resource native paths;
 R5 adapts that conversion with real patched-JDK class/resource regressions.
 Do not describe the new fix as hardware-passed before new logs.
 
+R5 intentionally pins java-switch `a0f0e168bb282e9585c0353c3d9b70a7ad043ce8`.
+Its complete instrumented Minecraft-profile cross-build, 23 runtime host tests,
+actual JDK class/resource loader regressions and clean source/package verifier
+pass. SDK ABI 1 and one VM per process are unchanged. Consume this SDK and its
+complete ten-module image together; do not reuse R4 extracted SDK caches.
+
 Standalone R4 logs contain an old 2d53737-dirty source stamp. Archive/image/link
 hashes are coherent with the published SDK; direct diagnostic builds omitted
 build-info header refresh. The runtime build script fix refreshes that header

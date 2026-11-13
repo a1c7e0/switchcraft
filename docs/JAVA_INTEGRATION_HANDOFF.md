@@ -1,7 +1,7 @@
 # Java SDK integration handoff
 
 Switchcraft pins `a1c7e0/java-switch` at
-`4d362d4830cfa4e88313dadfcd3a865e826609a5` for the R3 package. The main assistant is authorized
+`a0f0e168bb282e9585c0353c3d9b70a7ad043ce8` for the R5 package. The main assistant is authorized
 to edit, commit and push java-switch directly. Use an isolated worktree, focused
 clean commits and immutable full-SHA references; update this pin only as an
 intentional integration change. Actively delegate bounded tasks to `gpt-6-luna`
@@ -13,6 +13,31 @@ push directly to java-switch. Do not create new issues unless explicitly
 requested; issue creation or updates are not a prerequisite. Keep complete
 reproduction steps, logs and validation limits in commits/documentation and
 validate at immutable SHAs. Existing issue links below are historical references.
+
+## R5 integration checkpoint
+
+R4 physical logs establish genuine VM creation and java.base loader/error paths,
+but Hello, JNI/FFM application tests and the startup agent all stop at application
+class lookup. The native zero-services app opens and its L memory contract
+passes. The combined app logs the correct R4 source and all A/X/Y/B/R/L choices;
+the missing visible labels were not an old-NRO problem. See
+[the complete device report](DEVICE_FEEDBACK_2026_11_13.md).
+
+The new runtime pin fixes local file-URL translation for JAR and directory
+classes and resources on Horizon: `file:/sdmc:/...` becomes native `sdmc:/...`.
+Actual maintained JDK loader classes pass host positive/negative controls,
+including escaped paths, resource streams and ordinary Unix paths. It also
+refreshes the standalone diagnostic build stamp before direct compilations.
+The complete instrumented Minecraft-profile cross-build, 23 runtime host tests,
+class-library suite and clean pinned-source package verifier pass. The ten
+modules and exact image inventory are locked in `dependencies.lock.json`.
+
+SDK ABI 1, composed static providers and one VM per process remain unchanged.
+R5 adds an explicit, flushed on-screen menu redraw. R5 Horizon Hello, JNI/FFM,
+instrumentation, graphics, audio, shaders and Minecraft execution remain
+**NOT TESTED**. Start with a single fresh standalone A and continue only if
+actual Hello output and stage `completed` are captured. The older sections
+below describe their original revisions, not the current provider inventory.
 
 R2 physical feedback establishes Java8 diagnostic, private HotSpot memory L and
 300-frame Vulkan presentation passes at runtime
