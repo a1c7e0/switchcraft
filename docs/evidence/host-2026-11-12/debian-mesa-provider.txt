@@ -1,0 +1,21 @@
+Source distribution: Debian 13 (Trixie), official deb.debian.org mirror
+Packages index: https://deb.debian.org/debian/dists/trixie/main/binary-amd64/Packages.xz
+Packages.xz SHA-256: 7778d3e3f303b7ddb8ce0fe7c8d57473a076c6bf2e8f241f75421d2396352498
+
+Package: mesa-vulkan-drivers
+Version: 25.0.7-2+deb13u1
+Architecture: amd64
+Filename: pool/main/m/mesa/mesa-vulkan-drivers_25.0.7-2+deb13u1_amd64.deb
+Size: 14185752 bytes
+SHA-256 (as listed in Packages.xz and verified after download):
+caf2f7d296b7522efe74e40a74bce762a3ce84c33b53b5e54e1248ac2e0a13a5
+
+Downloaded from:
+https://deb.debian.org/debian/pool/main/m/mesa/mesa-vulkan-drivers_25.0.7-2+deb13u1_amd64.deb
+
+The package was extracted, not installed, under
+/tmp/r4-mc-reference/debian-mesa/root. Its ICD manifest was
+usr/share/vulkan/icd.d/lvp_icd.json; its driver was
+usr/lib/x86_64-linux-gnu/libvulkan_lvp.so. `ldd` resolved all listed shared
+libraries from the host system. No package manager or privileged installation
+was used. The client log reports Mesa 25.0.7-2+deb13u1 / LLVM 19.1.7.
