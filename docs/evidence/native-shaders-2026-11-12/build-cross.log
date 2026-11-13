@@ -1,0 +1,61 @@
+-- Shaderc: build type is "MinSizeRel".
+-- Configuring Shaderc to avoid building tests.
+-- Configuring Shaderc to avoid building examples.
+-- Configuring Shaderc to build executables.
+-- Configuring Shaderc to check copyrights.
+-- asciidoctor was not found - no documentation will be generated
+CMake Warning (author) at third_party/spirv-tools/source/CMakeLists.txt:348 (add_library):
+  ADD_LIBRARY called with SHARED option but the target platform does not
+  support dynamic linking.  Building a STATIC library instead.  This may lead
+  to problems.
+This warning is for project developers.  Use -Wno-author to suppress it.
+
+CMake Warning (deprecated) at third_party/glslang/CMakeLists.txt:111 (message):
+  ENABLE_HLSL is deprecated.  The HLSL front-end will be removed in a future
+  major release of glslang.  See
+  https://github.com/KhronosGroup/glslang/issues/4210 for details.
+This warning is for project developers.  Use -Wno-author or -Wno-deprecated
+to suppress it.
+
+unknown platform
+-- optimizer enabled
+unknown platform
+CMake Warning (author) at libshaderc/CMakeLists.txt:34 (add_library):
+  ADD_LIBRARY called with SHARED option but the target platform does not
+  support dynamic linking.  Building a STATIC library instead.  This may lead
+  to problems.
+This warning is for project developers.  Use -Wno-author to suppress it.
+
+-- Configuring done (1.1s)
+-- Generating done (0.9s)
+-- Build files have been written to: /workspace/switchcraft/build/shader-libraries/horizon/shaderc
+[  0%] Built target spirv-tools-header-DebugInfo
+[  0%] Built target spirv-tools-header-OpenCLDebugInfo100
+[  0%] Built target spirv-tools-tables
+[  1%] Built target core_tables
+[  1%] Built target extinst_tables
+[  1%] Update build-version.inc in the SPIRV-Tools build directory (if necessary).
+[  1%] Building CXX object third_party/spirv-tools/source/CMakeFiles/SPIRV-Tools-static.dir/software_version.cpp.obj
+[  3%] Linking CXX static library libSPIRV-Tools.a
+[ 31%] Built target SPIRV-Tools-static
+[ 75%] Built target SPIRV-Tools-opt
+[ 77%] Built target SPIRV
+[ 93%] Built target glslang
+[ 98%] Built target shaderc_util
+[100%] Built target shaderc
+[100%] Linking CXX static library libshaderc_combined.a
+[100%] Built target shaderc_combined
+-- SPIRV-Cross: Finding Git version for SPIRV-Cross.
+-- SPIRV-Cross: Git not found, using unknown build version.
+-- Configuring done (0.1s)
+-- Generating done (0.1s)
+-- Build files have been written to: /workspace/switchcraft/build/shader-libraries/horizon/spirv-cross
+[ 11%] Built target spirv-cross-reflect
+[ 41%] Built target spirv-cross-core
+[ 52%] Built target spirv-cross-glsl
+[ 64%] Built target spirv-cross-msl
+[ 76%] Built target spirv-cross-hlsl
+[ 88%] Built target spirv-cross-cpp
+[100%] Built target spirv-cross-c
+horizon: 45 shaderc_* + 169 spvc_* defined function symbols; all LWJGL API pointers resolve
+shader libraries built with genuine upstream C APIs

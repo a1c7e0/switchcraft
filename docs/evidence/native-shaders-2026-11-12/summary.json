@@ -1,0 +1,154 @@
+{
+  "build": {
+    "cmake_build_type": "MinSizeRel",
+    "compiler": "devkitA64 aarch64-none-elf GCC/G++",
+    "environment": {
+      "GIT_CEILING_DIRECTORIES": "source-tree parent and repository root, preserving caller ceilings",
+      "SOURCE_DATE_EPOCH": "0"
+    },
+    "flags": [
+      "-Os",
+      "-g0",
+      "-ffunction-sections",
+      "-fdata-sections",
+      "-march=armv8-a+crc+crypto",
+      "-mtune=cortex-a57",
+      "-mtp=soft",
+      "-mno-outline-atomics",
+      "-fPIE",
+      "-D__SWITCH__",
+      "-DLWJGL_HORIZON_SHADERC",
+      "-DCMAKE_POSITION_INDEPENDENT_CODE=ON",
+      "-DCMAKE_DISABLE_FIND_PACKAGE_Git=ON for SPIRV-Cross"
+    ]
+  },
+  "date": "2026-11-12",
+  "exports": {
+    "all_pinned_LWJGL_3_4_3_function_pointers_present": true,
+    "shaderc_defined_text_or_weak": 45,
+    "spirv_cross_defined_text_or_weak": 169
+  },
+  "horizon_link_proof": {
+    "artifacts": {
+      "provider": {
+        "path": "build/shader-libraries/horizon/libswitchcraft-shader-libraries-provider.a",
+        "sha256": "577a307e9447b0fc5249a5c65bbc8ee2a9918dabc09f7c1559dc3e3d69db8600"
+      },
+      "shaderc_combined": {
+        "path": "build/shader-libraries/horizon/shaderc/libshaderc/libshaderc_combined.a",
+        "sha256": "5f1ec677d2fa69e5efb4870f0dfa181069e96630b5d87a5d0bda62056f016b1f"
+      },
+      "spirv_cross_c": {
+        "path": "build/shader-libraries/horizon/spirv-cross/libspirv-cross-c.a",
+        "sha256": "e800d4aab331705f30c8a13a9c8fbddaa1967caaa61d4f5619760c500b70ef03"
+      },
+      "spirv_cross_core": {
+        "path": "build/shader-libraries/horizon/spirv-cross/libspirv-cross-core.a",
+        "sha256": "912cbcac3cb13142bec7c22d4b799f93ea70db9c5fd030a6f574bfec07befdba"
+      },
+      "spirv_cross_cpp": {
+        "path": "build/shader-libraries/horizon/spirv-cross/libspirv-cross-cpp.a",
+        "sha256": "b33b5d4e1411486df7ad210903d1d92f7991ad6b43e8be11ea94c8992fab26b4"
+      },
+      "spirv_cross_glsl": {
+        "path": "build/shader-libraries/horizon/spirv-cross/libspirv-cross-glsl.a",
+        "sha256": "3356e28f783a11b20b14e23c0850ac4c00963e0396bc5c7230dcf576ef7e8fc9"
+      },
+      "spirv_cross_hlsl": {
+        "path": "build/shader-libraries/horizon/spirv-cross/libspirv-cross-hlsl.a",
+        "sha256": "bf892babf9dd112e7834198f05423ee3d6ec54ac55f5309c6eaf9cf9a9af1422"
+      },
+      "spirv_cross_msl": {
+        "path": "build/shader-libraries/horizon/spirv-cross/libspirv-cross-msl.a",
+        "sha256": "1aba0290d4e12902e26c23d16ba634f508ab9e942547ccc83657c2c2dcf28849"
+      },
+      "spirv_cross_reflect": {
+        "path": "build/shader-libraries/horizon/spirv-cross/libspirv-cross-reflect.a",
+        "sha256": "22ba84bd38d5f55148262e94df3f651753f52fb29de0ad7b0316a7f2fb4a3540"
+      }
+    },
+    "empty_libpthread_archive_selected": false,
+    "format": "AArch64 static PIE ELF",
+    "linker_map": "build/shader-libraries/horizon/shader-libraries-link-proof.map",
+    "path": "build/shader-libraries/horizon/shader-libraries-link-proof.elf",
+    "required_map_evidence": [
+      "libsysbase.a(libsysbase_libsysbase_a-pthread.o)",
+      "pthread_mutex_lock",
+      "libnx.a(newlib.o)",
+      "__syscall_tls_get",
+      "__aarch64_read_tp"
+    ],
+    "sha256": "dd4d805b8e51e44c3ba1ab480e0d4423178e30ad107b902059d8d894b9c151fb",
+    "undefined_symbols": "none"
+  },
+  "host_validation": {
+    "artifacts": {
+      "provider": {
+        "path": "/tmp/switchcraft-shader-build/host/libswitchcraft-shader-libraries-provider.a",
+        "sha256": "eb5856b34ee82223851eee2d6b89b2535737b530c36e636b6248be3d0c36eba8"
+      },
+      "shaderc_combined": {
+        "path": "/tmp/switchcraft-shader-build/host/shaderc/libshaderc/libshaderc_combined.a",
+        "sha256": "65d4ebc5fa04101bf840101fac00da54f5555f003c01422b32ec5447083240ea"
+      },
+      "spirv_cross_c": {
+        "path": "/tmp/switchcraft-shader-build/host/spirv-cross/libspirv-cross-c.a",
+        "sha256": "72602c05bc5aa122964246d0c8b7940a077258c3c93153af36e2afa4400feb88"
+      },
+      "spirv_cross_core": {
+        "path": "/tmp/switchcraft-shader-build/host/spirv-cross/libspirv-cross-core.a",
+        "sha256": "79cccae2d77019f190ec14223c2a2f8f01ff9c134b7a0a6371da6c41ed05d253"
+      },
+      "spirv_cross_cpp": {
+        "path": "/tmp/switchcraft-shader-build/host/spirv-cross/libspirv-cross-cpp.a",
+        "sha256": "e66babd13d06b402b9388d385b441afad6b364386a8b45e94539e0b0d7326dfb"
+      },
+      "spirv_cross_glsl": {
+        "path": "/tmp/switchcraft-shader-build/host/spirv-cross/libspirv-cross-glsl.a",
+        "sha256": "557f65adece95e3dcffc1ad7885bedd1b8804884b962cafed489cf3e85e274fe"
+      },
+      "spirv_cross_hlsl": {
+        "path": "/tmp/switchcraft-shader-build/host/spirv-cross/libspirv-cross-hlsl.a",
+        "sha256": "b2f29f8f62146edcc461d63c2493d780ab910edd34a2dc458dbed2396978d1b9"
+      },
+      "spirv_cross_msl": {
+        "path": "/tmp/switchcraft-shader-build/host/spirv-cross/libspirv-cross-msl.a",
+        "sha256": "db8267a587971b2d23de4940ad0042a9b4512a1c10dc1252a4ca1b0e81bd90fd"
+      },
+      "spirv_cross_reflect": {
+        "path": "/tmp/switchcraft-shader-build/host/spirv-cross/libspirv-cross-reflect.a",
+        "sha256": "d805b742735f91d59b5975d97d76840e62a3264522be89c6d9c1a5e0c1c571cf"
+      }
+    },
+    "behavior": "real GLSL compile to SPIR-V, parse and stage-input reflection; exact LWJGL API pointer coverage",
+    "result": "passed; 1 test",
+    "test": "SWITCHCRAFT_SHADER_BUILD_DIR=/tmp/switchcraft-shader-build python3 -m unittest tests.test_shader_libraries"
+  },
+  "limits": [
+    "Cross link and host API smoke tests do not establish Switch hardware execution.",
+    "On-device shader compilation/reflection execution is NOT TESTED."
+  ],
+  "provenance": "Exact immutable revisions and archive SHA-256 digests are recorded from dependencies.lock.json; generated upstream version strings use an unknown hash and fixed SOURCE_DATE_EPOCH rather than Switchcraft Git metadata.",
+  "source_pins": {
+    "glslang": {
+      "archive_sha256": "c167b2474af06cbab93abae8249efaf88fb79a09f30488e2a24d399e4258ce7a",
+      "revision": "168d452a4f460d24b588fed08477a81c44ee27a1"
+    },
+    "shaderc": {
+      "archive_sha256": "a870d32b9c938dcea7d731a6c0b638044dfc2a0aca01da326e04d1cd63b81ab9",
+      "revision": "82757e4f72af8518fb679604d352623450cb761f"
+    },
+    "spirv_cross": {
+      "archive_sha256": "0f295b214b164e42a1d21537c8da7b44569806c16220dda9798558edfaacd11e",
+      "revision": "1a6169566c73d3da552748fc372fe2bbb856e46e"
+    },
+    "spirv_headers": {
+      "archive_sha256": "232899f1ad4104fb5bc377b94596c7621575eee62ad9a9e8f929b63a7dd8a7ad",
+      "revision": "29981f65241605e08b0ede4cfeb999fe3b723c6a"
+    },
+    "spirv_tools": {
+      "archive_sha256": "05d8af89737bde57571c48dbd36714c9f520a69623e14de72c3be6b600e277d6",
+      "revision": "b707790a898e44038547df54580022fc1cf89c3d"
+    }
+  }
+}

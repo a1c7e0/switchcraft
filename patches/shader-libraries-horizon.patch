@@ -1,0 +1,66 @@
+--- a/libshaderc/src/shaderc.cc
++++ b/libshaderc/src/shaderc.cc
+@@ -14,6 +14,10 @@
+ 
+ #include "shaderc/shaderc.h"
+ 
++#if defined(LWJGL_HORIZON_SHADERC)
++#include <switch.h>
++#endif
++
+ #include <algorithm>
+ #include <cassert>
+ #include <cstdint>
+@@ -39,6 +43,20 @@
+ 
+ namespace {
+ 
++#if defined(LWJGL_HORIZON_SHADERC)
++// libnx mutexes use the Horizon kernel's arbitration primitive.  Shaderc's
++// glslang has process-wide state, so all compile and assembly calls are
++// serialized with a real Horizon recursive mutex.
++static RMutex horizon_shaderc_compile_mutex;
++class HorizonShadercCompileLock {
++ public:
++  HorizonShadercCompileLock() { rmutexLock(&horizon_shaderc_compile_mutex); }
++  ~HorizonShadercCompileLock() { rmutexUnlock(&horizon_shaderc_compile_mutex); }
++};
++#else
++class HorizonShadercCompileLock {};
++#endif
++
+ // Returns shader stage (ie: vertex, fragment, etc.) in response to forced
+ // shader kinds. If the shader kind is not a forced kind, returns EshLangCount
+ // to let #pragma annotation or shader stage deducer determine the stage to
+@@ -682,6 +700,7 @@
+     size_t source_text_size, shaderc_shader_kind shader_kind,
+     const char* input_file_name, const char* entry_point_name,
+     const shaderc_compile_options_t additional_options) {
++  [[maybe_unused]] HorizonShadercCompileLock horizon_compile_lock;
+   return CompileToSpecifiedOutputType(
+       compiler, source_text, source_text_size, shader_kind, input_file_name,
+       entry_point_name, additional_options,
+@@ -693,6 +712,7 @@
+     size_t source_text_size, shaderc_shader_kind shader_kind,
+     const char* input_file_name, const char* entry_point_name,
+     const shaderc_compile_options_t additional_options) {
++  [[maybe_unused]] HorizonShadercCompileLock horizon_compile_lock;
+   return CompileToSpecifiedOutputType(
+       compiler, source_text, source_text_size, shader_kind, input_file_name,
+       entry_point_name, additional_options,
+@@ -704,6 +724,7 @@
+     size_t source_text_size, shaderc_shader_kind shader_kind,
+     const char* input_file_name, const char* entry_point_name,
+     const shaderc_compile_options_t additional_options) {
++  [[maybe_unused]] HorizonShadercCompileLock horizon_compile_lock;
+   return CompileToSpecifiedOutputType(
+       compiler, source_text, source_text_size, shader_kind, input_file_name,
+       entry_point_name, additional_options,
+@@ -714,6 +735,7 @@
+     const shaderc_compiler_t compiler, const char* source_assembly,
+     size_t source_assembly_size,
+     const shaderc_compile_options_t additional_options) {
++  [[maybe_unused]] HorizonShadercCompileLock horizon_compile_lock;
+   auto* result = new (std::nothrow) shaderc_compilation_result_spv_binary;
+   if (!result) return nullptr;
+   result->compilation_status = shaderc_compilation_status_invalid_assembly;

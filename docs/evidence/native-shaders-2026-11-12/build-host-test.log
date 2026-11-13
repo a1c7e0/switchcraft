@@ -1,0 +1,49 @@
+-- Shaderc: build type is "MinSizeRel".
+-- Configuring Shaderc to avoid building tests.
+-- Configuring Shaderc to avoid building examples.
+-- Configuring Shaderc to build executables.
+-- Configuring Shaderc to check copyrights.
+-- asciidoctor was not found - no documentation will be generated
+CMake Warning (deprecated) at third_party/glslang/CMakeLists.txt:111 (message):
+  ENABLE_HLSL is deprecated.  The HLSL front-end will be removed in a future
+  major release of glslang.  See
+  https://github.com/KhronosGroup/glslang/issues/4210 for details.
+This warning is for project developers.  Use -Wno-author or -Wno-deprecated
+to suppress it.
+
+-- optimizer enabled
+-- Configuring done (1.2s)
+-- Generating done (0.4s)
+-- Build files have been written to: /tmp/switchcraft-shader-build/host/shaderc
+[  0%] Built target spirv-tools-header-DebugInfo
+[  0%] Built target spirv-tools-header-OpenCLDebugInfo100
+[  0%] Built target spirv-tools-tables
+[  0%] Built target extinst_tables
+[  1%] Built target core_tables
+[ 32%] Built target SPIRV-Tools-static
+[ 76%] Built target SPIRV-Tools-opt
+[ 76%] Built target SPIRV
+[ 93%] Built target glslang
+[ 98%] Built target shaderc_util
+[100%] Built target shaderc
+[100%] Built target shaderc_combined
+-- SPIRV-Cross: Finding Git version for SPIRV-Cross.
+-- SPIRV-Cross: Git not found, using unknown build version.
+-- Configuring done (0.0s)
+-- Generating done (0.0s)
+-- Build files have been written to: /tmp/switchcraft-shader-build/host/spirv-cross
+[ 29%] Built target spirv-cross-core
+[ 41%] Built target spirv-cross-reflect
+[ 52%] Built target spirv-cross-glsl
+[ 64%] Built target spirv-cross-msl
+[ 76%] Built target spirv-cross-cpp
+[ 88%] Built target spirv-cross-hlsl
+[100%] Built target spirv-cross-c
+host: 45 shaderc_* + 169 spvc_* defined function symbols; all LWJGL API pointers resolve
+host: real GLSL -> SPIR-V compilation and SPIRV-Cross stage-input reflection passed
+shader libraries built with genuine upstream C APIs
+.
+----------------------------------------------------------------------
+Ran 1 test in 4.863s
+
+OK
