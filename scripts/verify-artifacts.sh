@@ -7,7 +7,7 @@ import hashlib,io,json,os,pathlib,tarfile,zipfile
 root=pathlib.Path('dist')
 manifest=json.loads((root/'manifest.json').read_text())
 lock=json.loads(pathlib.Path('dependencies.lock.json').read_text())
-assert not any(item['name'].endswith('.zip') for item in manifest['artifacts']), 'legacy full build ZIP must not be emitted'
+assert {item['name'] for item in manifest['artifacts'] if item['name'].endswith('.zip')} == {'switchcraft-debug-symbols.zip'}, 'only the separate debug ZIP belongs in the build manifest'
 for item in manifest['artifacts']:
     p=root/item['name']
     assert hashlib.sha256(p.read_bytes()).hexdigest()==item['sha256'],p

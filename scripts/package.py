@@ -286,8 +286,8 @@ transformation; its screenshot and logs are explicitly labeled HOST ONLY.
 ## E. Installation
 
 Use the separate minimal device-test ZIP from `device-test-slim/` after its
-manifest and hashes have been reviewed. The full build payload is intermediate,
-not the SD distribution. Extract the minimal ZIP onto the SD root, preserve
+manifest and hashes have been reviewed. Source, debug symbols and the native
+SDK are separate assets. Extract the minimal ZIP onto the SD root, preserve
 saves/configuration, and use application-mode hbmenu. No game files or real
 launcher.json are included.
 
