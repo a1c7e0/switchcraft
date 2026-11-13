@@ -9,45 +9,51 @@ branch intact and use explicit expected-head leases when rewriting refs.
 
 ## Current status checkpoint (2026-11-13)
 
-The owner authorized publishing the R4 test package on 2026-11-13 once its
-source, pinned SDK/image, complete build and artifact checks pass. It has not
-yet been delivered. Keep the SD ZIP minimal; publish source and debug separately.
-New native Java providers are cross-built, while all new Horizon execution is
-NOT TESTED. The current provider inventories are LWJGL core 1,957 JNI plus two
-lifecycle exports, SDL3 1,242, STB 224, VMA 73, FreeType 284, OpenAL 341,
-Shaderc 45, and SPIR-V Cross 169. The Shaderc/SPVC AArch64 cross-link proof
-passed. The combined Java 25 NRO links the genuine VM/instrumentation and all
-listed native families with zero undefined symbols and no OpenGL symbols; it
-uses the earlier runtime baseline `2d53737`, not the pending management image.
-Java FreeType/OpenAL loopback and STB/Shaderc/SPIRV-Cross host smoke passed.
-The Java SDL/Vulkan/VMA workload now presents 60 frames with validation enabled
-and no validation errors, after fixing explicit submit/present count fields. A fresh Java 25 strict-Vulkan Demo title is visually confirmed on
-Mesa llvmpipe 25.0.7; its screenshot and full log are HOST ONLY under
-`docs/evidence/host-2026-11-12/llvmpipe-attempt-02`. Game audio was disabled
-because the host had no ALSA sound device. A separate SwiftShader run stopped
-at an unsupported-feature UI. Do not turn any of these host or cross-build
-results into a Horizon pass.
+R4 is published at `test-suite-2026-11-12-r4` (Switchcraft `e2b9a77`, runtime
+`aed255884b8f946a903a4c3d62b2745727f4ef2e`). Its SD ZIP SHA-256 is
+`f765f02277c3fa05fdc05b3d5f6dfde544d7fb6e5b45b719732d2f8fbb81aad0`.
+Keep published R4 immutable. The owner authorized further fixes and test-package
+publication after source, SDK/image, build and artifact verification. R5 uses
+`test-suite-2026-11-13-r5`; its new binaries still need physical validation.
 
-The proposed Java 25 Minecraft image now includes ten modules. Its runtime
-classes and genuine 577-object management VM have been built and linked;
-the instrument-enabled image/package source reconstruction also passed.
-The instrumented Minecraft runtime is pinned to
-`aed255884b8f946a903a4c3d62b2745727f4ef2e`, including the shared-cache bootstrap fix. The pin belongs at
-`dependencies.lock.json` → `java_switch.runtime_image_modules`; package recipes
-must compare that lock value with the runtime image manifest and hash every
-file in the dynamic inventory. Do not assume a fixed image-file count. The
-combined app's B/R/L graphics, font/audio, and utilities diagnostics run only
-after standalone and combined A/X/Y prerequisites pass, in separate fresh
-processes. OpenAL loopback is not physical audio output.
+New R4 physical feedback contains 21 logs, preserved in
+`docs/evidence/device-2026-11-13/` with an English report at
+`docs/DEVICE_FEEDBACK_2026_11_13.md`. Firmware is 21.2.0, Application mode.
+zero-services-test reached native main and L passed its selected eager C-heap
+memory/protection/split-release/ownership/cleanup contract. Other zero-service
+buttons were not recorded. Do not treat that as Java or public physical-map
+success, or as proof of the earlier R3 launch-failure cause.
 
-R3 physical evidence dated 2026-11-12 establishes that `JNI_CreateJavaVM`
-returned, `vm-ready` was reached, and Java 25 `java.base` class-loading/error
-paths ran. Hello and Java25Smoke did not run because their classes were missing;
-the agent stopped on missing `AgentSmokeAgent`; JNI/FFM application workloads
-remain unverified. The combined app did not select a VM. The earlier R3
-`zero-services-test` launch report has no log or crash capture, so its cause is
-unknown. Preserve these distinctions in `docs/IMPLEMENTATION_STATUS.md` and
-`docs/DEVICE_FEEDBACK_2026_11_12.md`.
+The R4 combined NRO logs the correct e2b9a77 source, its complete menu and all
+six selected A/X/Y/B/R/L actions. The missing on-screen labels were not caused
+by an old combined NRO. R5 explicitly clears/redraws and flushes the menu once,
+with the source revision and all controls before input. This still needs a
+physical readability check. Existing one-VM-per-process and result panes stay.
+
+R4 again establishes genuine VM creation and java.base loader/error paths,
+but native ZIP preflight is followed by missing application classes. Hello,
+Java25Smoke and AgentSmokeAgent do not execute; combined X/Y/B/R/L cannot load
+NativeSymbols at the ready hook. Graphics, FFM application tests, audio,
+shaders and Minecraft are NOT REACHED. Root cause investigation found file
+URLs keep an artificial slash before sdmc: in loader/resource native paths;
+R5 adapts that conversion with real patched-JDK class/resource regressions.
+Do not describe the new fix as hardware-passed before new logs.
+
+Standalone R4 logs contain an old 2d53737-dirty source stamp. Archive/image/link
+hashes are coherent with the published SDK; direct diagnostic builds omitted
+build-info header refresh. The runtime build script fix refreshes that header
+before both direct platform.c compilations. Preserve the raw old stamp and
+explain it instead of inferring a stale VM archive.
+
+The ten-module instrumented Minecraft image and native provider families are
+real cross-builds. Host evidence includes 91 Switchcraft tests, 22 runtime
+tests, JNI/FFM/callbacks, FreeType/OpenAL loopback, STB/Shaderc/SPIRV-Cross,
+60 Java Vulkan/VMA frames with validation, and a visually confirmed official
+snapshot-6 Demo title under Mesa llvmpipe. Game audio was disabled on that host.
+All are HOST ONLY. Module inventory is pinned under
+`java_switch.runtime_image_modules`; verify every dynamic image-file hash.
+Publish source/debug separately; keep the SD ZIP minimal and preserve saves,
+configuration and all unique native/stdout/stderr captures.
 
 Java runtime ownership is a1c7e0/java-switch. Pin its full commit in
 `dependencies.lock.json`; do not duplicate its implementation back here.
@@ -134,8 +140,7 @@ another VM. Fatal exceptions keep the stock termination path and capture bounded
 relative-PC/register evidence; the exact B7 Java25 crash cause is unresolved.
 Unique tick-named Java output and presentation JSON history are allowlisted for
 feedback export. The R2 SD ZIP and its Actions assembly path are historical;
-the current R4 SD recipe is `scripts/package-device-slim.py`. No R4 package is
-approved or delivered by this status update.
+the current R4 SD recipe is `scripts/package-device-slim.py`. R4 publication and physical feedback are recorded in the current checkpoint.
 
 
 The following 2026-11-09 notes are historical. They record R2 physical evidence in
@@ -149,7 +154,7 @@ probe before Java A. R3 has since been exercised; use the current R4 test gates
 in `docs/IMPLEMENTATION_STATUS.md` and `docs/DEVICE_TEST_QUICKSTART.md`.
 The historical R3 user-facing SD ZIP was built by
 `scripts/package-device-slim.py` and contained only switch/, necessary
-instructions, notices and hashes. For the pending R4 recipe, publish a matching
+instructions, notices and hashes. For later test packages, publish a matching
 source companion and debug symbols separately only after review; do not copy
 them onto the SD card.
 The collector includes bounded hs_err_pid*.log from the two Java25 app folders.

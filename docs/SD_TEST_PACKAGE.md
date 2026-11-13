@@ -1,7 +1,7 @@
 # Switchcraft SD device test package
 
-Download **switchcraft-test-suite-2026-11-12-r4.zip** from
-[the R4 device test-suite release](https://github.com/a1c7e0/switchcraft/releases/tag/test-suite-2026-11-12-r4).
+Download **switchcraft-test-suite-2026-11-13-r5.zip** from
+[the R5 device test-suite release](https://github.com/a1c7e0/switchcraft/releases/tag/test-suite-2026-11-13-r5).
 The SD package is slim: `switch/`, short installation instructions and
 manifests/hashes. The matching full source archive is a separate release asset;
 it is not in the SD ZIP. Debug symbols are also separate. The manifest records
@@ -35,19 +35,20 @@ management.
 
 ## Run the tests
 
-For the R4 device run, start with one fresh `java25-test` A attempt. If it prints
+For the R5 device run, start with one fresh `java25-test` A attempt. If it prints
 Hello, continue in fresh processes with standalone X, standalone Y, combined A,
 combined X and combined Y. If a prerequisite fails, stop dependent VM tests and
-preserve its logs. The R3 `zero-services-test` launch was reported unable to
-start, but no log or crash capture was supplied; its cause is unknown. Its L
-probe is optional and must not block Java A. See
+preserve its logs. R4 feedback confirms `zero-services-test` opened and reached
+its main-entry marker, and its L private-memory probe passed. The R3 launch
+failure cause remains unproven. Zero-services actions remain optional and must
+not block Java A. See
 [DEVICE_TEST_QUICKSTART.md](DEVICE_TEST_QUICKSTART.md) for details.
 
 For the full checklist:
 
 1. Optional native checks: SD/memory/threads, Java 8 diagnostics and FFI calls.
-   `zero-services-test` L and its other actions are not prerequisites; R3 launch
-   could not be classified because no log was supplied. A public physical-memory
+   `zero-services-test` L and its other actions are not prerequisites; R4's L
+   probe passed and the R3 launch failure cause remains unproven. A public physical-memory
    mapping action may report unsupported with Result `0xfa01`; record it as
    unsupported, never as a PASS.
 2. Genuine Java 25: standalone A (Hello), X (JNI/FFM), Y (startup agent), then
@@ -71,12 +72,14 @@ presentation frames. R3 physical feedback established that `JNI_CreateJavaVM`
 returned and `vm-ready` was reached for two selections; `java.base` then ran
 missing-class error paths. Hello and Java25Smoke did not execute because their
 classes were not found. The startup agent stopped on a missing agent class, and
-no JNI, FFM, combined VM, or game test passed. `zero-services-test` could not be
-launched and has no log, so no cause is assigned. See
-[the preserved feedback](DEVICE_FEEDBACK_2026_11_12.md). R4 changes remain
-device-unverified until fresh logs are reviewed.
+no JNI, FFM, combined VM, or game test passed. R4 feedback separately confirms
+that `zero-services-test` opened, printed its main-entry marker and passed its
+L private-memory probe, including native results, permissions, canaries, split
+release, SDK ownership and cleanup. This does not establish the cause of the
+R3 launch failure, which has no supplied log. See the preserved R3 and R4
+feedback. Runtime class-loader fixes remain unvalidated on device.
 
-The required separate `switchcraft-source-2026-11-12-r4.tar.gz` companion includes the
+The required separate `switchcraft-source-2026-11-13-r5.tar.gz` companion includes the
 pinned LWJGL, OpenAL Soft, shader-library, libffi, OpenJDK and curl source
 archives, repository source and license texts. In particular it includes the
 full LWJGL upstream archive at `third-party/upstream/lwjgl3-upstream.tar.gz`;
@@ -114,13 +117,15 @@ and PASS/FAIL/NOT TESTED for each case.
 ## Provenance and reproduction
 
 The manifest carries the per-binary Switchcraft source revision, launcher
-revision and java-switch revision used by R4. Do not infer the runtime revision
+revision and java-switch revision used by R5. Do not infer the runtime revision
 from historical package documentation. R2 device logs recorded Java 8
 diagnostic PASS, private L memory-probe PASS including protection, canaries and
 cleanup, and 300 Vulkan frames in 5.23 seconds (16.525 ms average turnaround).
 Java 25 A reached heap reservation and terminated at `memoryReserver.cpp:521`
-because the protection page could not be protected. Java 25 execution and its
-dependent JNI/FFM/agent/combined tests remain unachieved.
+because the protection page could not be protected. R4 then established VM
+creation and `java.base` class-loading/error paths, but not Hello or JNI/FFM/
+agent/combined application execution. R5 Java application execution remains
+NOT TESTED.
 
 The installed-file manifest records payload hashes. From an SD-root copy, check
 the `switch/` payload with the included SD_FILES_SHA256SUMS:

@@ -25,7 +25,7 @@ with zipfile.ZipFile(root/'switchcraft-debug-symbols.zip') as debug:
             app=item['name'][:-4]
             assert identities['apps'][item['name']]==item['build_id']
             assert debug.read(app+'.elf')==pathlib.Path('build',app+'.elf').read_bytes()
-with tarfile.open(root/'switchcraft-source-2026-11-12-r4.tar.gz') as source:
+with tarfile.open(root/'switchcraft-source-2026-11-13-r5.tar.gz') as source:
     assert source.getmember('third-party/minijvm-source').isdir()
     upstream=source.extractfile('third-party/openjdk25-upstream.tar.gz')
     assert upstream is not None
@@ -68,7 +68,7 @@ with tarfile.open(root/'switchcraft-source-2026-11-12-r4.tar.gz') as source:
         assert len(data)==item['bytes'] and hashlib.sha256(data).hexdigest()==item['sha256'],item['path']
 slim_root=root/'device-test-slim'
 slim_manifest=json.loads((slim_root/'manifest.json').read_text())
-slim_zip=slim_root/'switchcraft-test-suite-2026-11-12-r4.zip'
+slim_zip=slim_root/'switchcraft-test-suite-2026-11-13-r5.zip'
 assert hashlib.sha256(slim_zip.read_bytes()).hexdigest()==slim_manifest['archive']['sha256']
 assert slim_manifest['archive']['name']==slim_zip.name
 with zipfile.ZipFile(slim_zip) as slim:
@@ -80,11 +80,12 @@ with zipfile.ZipFile(slim_zip) as slim:
     assert len([name for name in slim_names if name.endswith('.nro')])==9
     assert {name for name in slim_names if name.startswith('switch/mc-runtime/') and name.endswith('.jar')}=={
         item['path'] for item in slim_manifest['runtime_and_test_jars']}
+    assert len(slim_manifest['runtime_and_test_jars'])==20
     assert not any(name.startswith(('switchcraft-docs/','minecraft/')) for name in slim_names)
     assert not any(name.endswith(('.elf','.o','.a','.debug','.tar.gz')) for name in slim_names)
     source_record=slim_manifest['source_archive']
     source_path=root/source_record['name']
-    assert source_record['name']=='switchcraft-source-2026-11-12-r4.tar.gz'
+    assert source_record['name']=='switchcraft-source-2026-11-13-r5.tar.gz'
     assert source_path.stat().st_size==source_record['bytes']
     assert hashlib.sha256(source_path.read_bytes()).hexdigest()==source_record['sha256']
     assert source_record['lwjgl_upstream_sha256']==lock['lwjgl_core']['source_archive_sha256']
@@ -97,7 +98,7 @@ with zipfile.ZipFile(slim_zip) as slim:
     assert slim_manifest['runtime_minecraft_profile'] is True
     assert set(slim_manifest['runtime_image_modules'])==expected_modules
     assert slim_manifest['hardware_verification']=='NOT TESTED'
-    assert slim_manifest['zero_services_launch_observation'].startswith('R3 reported unable to start')
+    assert slim_manifest['zero_services_launch_observation'].startswith('R4 zero-services-test opened')
     for name,record in installed.items():
         payload=slim.read(name)
         assert len(payload)==record['bytes'] and hashlib.sha256(payload).hexdigest()==record['sha256'],name

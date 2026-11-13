@@ -6,11 +6,11 @@ belongs to the pinned `java-switch` repository. The legacy branch remains
 
 ## Current engineering checkpoint
 
-The current Switchcraft engineering checkpoint is dated 2026-11-13. The
-R4 package recipe is being updated for the expanded Java profile and native
-diagnostics; no R4 SD package has been built, delivered, or published. Current
-native exports and cross-link evidence establish build integration only. All
-new Horizon execution remains **NOT TESTED**.
+R4 was published from Switchcraft `e2b9a77` and runtime `aed2558`. Its new
+physical logs show a native L memory pass and continued application class-loading
+failures. See [the R4 report](DEVICE_FEEDBACK_2026_11_13.md). R5 is being prepared
+with file-URL conversion and menu/provenance fixes; those fixes are not yet
+verified on physical hardware. Cross-link and host results remain separate.
 
 | Area | Implemented and built | Host evidence | Horizon evidence |
 | --- | --- | --- | --- |
@@ -20,20 +20,29 @@ new Horizon execution remains **NOT TESTED**.
 | FreeType and OpenAL | 284 FreeType and 341 OpenAL functions cross-built | FreeType and OpenAL loopback Java smoke passed; loopback is not physical audio output | NOT TESTED |
 | Shaderc and SPIR-V Cross | 45 Shaderc and 169 SPVC functions verified in the actual AArch64 archives; cross-link proof passed | Real GLSL-to-SPIR-V compilation and stage-input reflection passed through Java | NOT TESTED |
 | SDL/Vulkan/VMA Java graphics smoke | Window, Vulkan surface/swapchain, and VMA initialization succeeded on the host | 60 frames presented on Mesa with validation enabled and no validation errors; explicit count fields fixed | NOT TESTED |
-| Java 25 runtime profile | Ten target modules, genuine 577-object management VM and instrument-enabled runtime image/package built | Clean-pin runtime source reconstruction and package verifier passed; final integration pin is being prepared | NOT TESTED |
-| Combined Java 25 diagnostic link | Genuine VM/instrumentation plus SDL, FreeType, OpenAL, STB, VMA, Shaderc, and SPIR-V Cross providers | Link passed with zero undefined symbols and no OpenGL symbols; uses baseline runtime `2d53737`, not the pending management image | NOT TESTED |
+| Java 25 runtime profile | Ten target modules, genuine 577-object management VM and instrument-enabled runtime image/package built | Clean-pin runtime source reconstruction and package verifier passed; R4 package used runtime aed2558; a new immutable fix pin is being prepared | NOT TESTED |
+| Combined Java 25 diagnostic link | Genuine VM/instrumentation plus SDL, FreeType, OpenAL, STB, VMA, Shaderc, and SPIR-V Cross providers | R4 link passed with zero undefined symbols and no OpenGL symbols, including the real management/instrumented runtime | NOT TESTED |
 | Minecraft title on a host | Java 25 strict-Vulkan Demo title visually confirmed under Mesa llvmpipe 25.0.7; HOST ONLY | Full log and screenshot: `docs/evidence/host-2026-11-12/llvmpipe-attempt-02`; game audio disabled because this host had no ALSA sound device. A separate SwiftShader run stopped at an unsupported-feature UI. | NOT ACHIEVED on Switch |
-| Minecraft title on Switch | Not implemented as a successful Horizon launch | Host results do not establish this milestone | NOT ACHIEVED |
+| Minecraft title on Switch | Explicit Demo handoff implemented; no successful Horizon launch | Host results do not establish this milestone | NOT ACHIEVED |
 
-The ten-module Java profile is being pinned at
+The ten-module Java profile is pinned at
 `dependencies.lock.json` → `java_switch.runtime_image_modules`. Packaging must
 use the runtime image's dynamic path/hash inventory; a fixed file count is not
 valid. The combined diagnostic app's new controls are B for SDL/Vulkan and VMA,
 R for FreeType/OpenAL loopback, and L for STB, Shaderc, and SPIR-V Cross. Each
 requires the standalone and combined A/X/Y prerequisites, with one fresh
-application process per action. The combined NRO currently links all listed
-native families against the earlier runtime baseline; it does not contain or
-validate the updated management VM image.
+application process per action. The R4 combined NRO contains the real management VM and all listed native
+families. R4 Java workloads still stop at class lookup before exercising those
+families; native symbol availability is not an execution pass.
+
+## Current R4 physical result
+
+zero-services-test launches and L passes the selected eager C-heap memory
+contract. Standalone A/X and combined A/X/Y/B/R/L reach VM-ready but cannot load
+application classes; agent Y aborts on missing AgentSmokeAgent. No Hello,
+application JNI/FFM, graphics, audio, shader or Minecraft workload passed in R4.
+The complete combined menu is logged and every action was selected. An explicit
+startup menu redraw is a new, device-unverified change.
 
 ## Physical-device evidence by package generation
 

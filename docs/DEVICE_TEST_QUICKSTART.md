@@ -1,15 +1,17 @@
 # Switchcraft first-device checklist
 
-Physical evidence from the R2 package establishes Java 8 diagnostic, private
-memory-probe and 300-frame Vulkan presentation passes. Java 25 execution,
-JNI/FFM, instrumentation and Minecraft launch remain unachieved on Horizon.
+R4 physical evidence establishes the zero-services app opened and printed its
+main-entry marker. Its L private-memory probe passed with native results,
+protection, canaries, split release, SDK ownership and cleanup. Java 25
+application execution, JNI/FFM workloads, instrumentation and Minecraft launch
+remain unachieved on Horizon. R5 device execution is NOT TESTED.
 The Linux Java 25 strict-Vulkan Demo title is host-only evidence. The current
 Horizon package does not launch Minecraft.
 
 ## Install the matching package
 
-Use [the R4 device test-suite release](https://github.com/a1c7e0/switchcraft/releases/tag/test-suite-2026-11-12-r4).
-Download `switchcraft-test-suite-2026-11-12-r4.zip` and optionally verify its
+Use [the R5 device test-suite release](https://github.com/a1c7e0/switchcraft/releases/tag/test-suite-2026-11-13-r5).
+Download `switchcraft-test-suite-2026-11-13-r5.zip` and optionally verify its
 SHA-256 in SHA256SUMS. The SD package contains `switch/`, short install
 instructions, and manifests/hashes. The matching source companion is a required
 separate release asset; debug materials are separate from the SD ZIP.
@@ -36,10 +38,12 @@ Diagnostic log names below are under `SD:/switch/mc-runtime/logs/`; Java crash
 reports, when present, are in the app folders. Record every raw Result/status
 and failed stage. A permission error is useful evidence, not a functional PASS.
 These diagnostics are separate from Java 25 and are not prerequisites for Java A.
-The R3 `zero-services-test` app was reported unable to start, but no log or
-crash capture was supplied. Its cause is unknown. Treat every zero-services
-action, including L, as optional and do not let it block the fresh `java25-test`
-A attempt. To prioritize the R4 Java sequence, skip to the next section.
+R4 feedback confirms `zero-services-test` opened and reached its main-entry
+marker; its L memory probe passed, including native statuses, permissions,
+canaries, split release, SDK ownership and cleanup. This does not resolve why
+the R3 launch was reported unsuccessful without a supplied log. Treat all
+zero-services actions as optional and do not let them block the fresh R5
+`java25-test` A attempt. Start the Java 25 sequence below first.
 
 | Application | Action | Expected observation | Log |
 | --- | --- | --- | --- |
@@ -57,9 +61,10 @@ A attempt. To prioritize the R4 Java sequence, skip to the next section.
 | `zero-services-test` | B | Deferred worker cleanup/reaper joins after exit and closes successfully | Same |
 | `zero-services-test` | L | Private VM memory mapping, permissions, split release and canaries succeed | Same |
 
-R2 device evidence already records Java 8 `DIAGNOSTIC SUITE PASS` and a
-successful private-memory L probe, including protection, canaries, split
-release and cleanup. `zero-services-test` contains no Java VM. Its **Y** action is an advanced,
+R2 device evidence records Java 8 `DIAGNOSTIC SUITE PASS` and a successful
+private-memory L probe. R4 separately confirms the zero-services L probe,
+including protection, canaries, split release and cleanup. `zero-services-test`
+contains no Java VM. Its **Y** action is an advanced,
 deliberate SafeFetch fault test, so run it last, after exporting ordinary probe
 logs. Expected fallback values are -12345 and -67890; the process may abort or
 stall if recovery fails. If it returns, run X again and retain the result. Keep
@@ -101,15 +106,17 @@ through OpenAL loopback, not the Switch's physical audio output.
 R3 physical feedback showed that `JNI_CreateJavaVM` returned and `vm-ready` was
 reached, then Hello and Java25Smoke failed because their classes were missing;
 the startup agent also failed because its agent class was missing. The combined
-app exited without selecting a VM. `zero-services-test` could not launch and no
-log was produced. See [the preserved R3 feedback](DEVICE_FEEDBACK_2026_11_12.md).
-These observations establish VM creation and `java.base` missing-class handling,
-not a successful Java app or workload.
+app exited without selecting a VM. R4 again exercised the Java VM creation and
+`java.base` class-loading/error paths, but app/JNI/agent classes remained
+missing. Its positive zero-services launch and L probe are separate native
+results and do not resolve the R3 launch failure cause. See the preserved R3
+and R4 feedback documents. These observations establish no successful Java
+application execution. Runtime class-loader fixes are not yet device-validated.
 
 R2's Java 25 A attempts reached heap reservation and then terminated with
 `memoryReserver.cpp:521` because the reservation could not protect its
 protection page. Java 25 Hello, JNI/FFM, the agent and combined launcher remain
-unachieved on hardware. Make one fresh A attempt with R4 and preserve
+unachieved on hardware. Make one fresh A attempt with R5 and preserve
 the generated Java crash report. If A does not print Hello, stop the Java 25
 sequence; do not repeat the VM attempt. If A succeeds, continue with fresh
 processes in the order above.

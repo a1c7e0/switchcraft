@@ -2,8 +2,6 @@
 """Package the pinned snapshot-6 native bring-up without shipping game files."""
 import datetime,hashlib,importlib.util,io,json,os,pathlib,shutil,subprocess,tarfile,zipfile
 ROOT=pathlib.Path(__file__).resolve().parents[1];os.chdir(ROOT);DIST=ROOT/'dist'
-legacy_payload_zip=DIST/'switchcraft-build-payload-2026-11-12-r4.zip'
-if legacy_payload_zip.exists():legacy_payload_zip.unlink()
 slim_output=DIST/'device-test-slim'
 if slim_output.exists():shutil.rmtree(slim_output)
 LOCK=json.loads((ROOT/'dependencies.lock.json').read_text())
@@ -20,7 +18,7 @@ toolchain={'image':LOCK['toolchain_image'],'compiler':subprocess.check_output([s
     'packages':sorted(p.name for p in (dk/'pacman/var/lib/pacman/local').glob('*') if p.is_dir())}
 now=datetime.datetime.now(datetime.timezone.utc).isoformat()
 limitations=['Horizon execution NOT TESTED','Java 25 Zero VM cross-linked in diagnostic NROs; startup and execution unverified; no Minecraft title on Switch',
-    'R3 zero-services launch was reported unsuccessful without a supplied log; cause unresolved; R4 stack hardening and main-entry marker are not a demonstrated startup fix',
+    'R4 zero-services-test launch and main-entry marker passed; its L private-memory probe passed. R3 launch failure cause remains unproven; Java class-loader fixes are not yet device-validated',
     'Host-only strict Vulkan demo title verified; this is not a Horizon result','NVK Maxwell is experimental/nonconformant',
  'SDL3/VI presentation and libffi W^X closures compiled, awaiting physical tests','LWJGL core JNI, VMA, FreeType/OpenAL loopback, STB, shaderc, and SPIR-V Cross bindings are cross-built, not device-tested; these are focused diagnostics rather than complete game-library coverage',
     'Fabric, account authentication and arbitrary Mods not implemented']
@@ -110,7 +108,7 @@ for base,prefix in [(ROOT/'licenses','switchcraft'),(JAVA/'licenses','java-switc
 shutil.copyfile(ROOT/'LICENSE',runtime/'licenses/SWITCHCRAFT-MIT.txt')
 shutil.copyfile(ROOT/'vendor/JSON-LICENSE.MIT',runtime/'licenses/NLOHMANN-JSON-MIT.txt')
 shutil.copyfile(ROOT/'.deps/sdl3/share/licenses/SDL3/LICENSE.txt',runtime/'licenses/SDL3-ZLIB.txt')
-source=DIST/'switchcraft-source-2026-11-12-r4.tar.gz'
+source=DIST/'switchcraft-source-2026-11-13-r5.tar.gz'
 curl_spec=importlib.util.spec_from_file_location('curl_source',ROOT/'scripts/prepare-curl-source.py')
 curl_source=importlib.util.module_from_spec(curl_spec);curl_spec.loader.exec_module(curl_source)
 curl_archive=curl_source.prepare()
@@ -159,7 +157,7 @@ manifest={'project':'Switchcraft','target':'26.4-snapshot-6','source_revision':r
  'build_date':now,'toolchain':toolchain,'dependency_lock':LOCK,'hardware_verification':'NOT TESTED','java25_horizon_runtime':'CROSS-LINKED; STARTUP NOT TESTED',
  'minecraft_title_on_horizon':'NOT ACHIEVED','host_reference':host_result,'host_reference_note':'Historical host capture; its VM status describes the capture date, not the later cross-linked runtime', 'artifacts':records,'sd_resources':[],
  'known_limitations':limitations,'not_produced':{'opengl-test.nro':'Legacy branch legacy/1.12.2 only','minecraft-aot-test.nro':'No viable self-contained AOT runtime'},
- 'release_tag':os.environ.get('SWITCHCRAFT_RELEASE_TAG','test-suite-2026-11-12-r4'),
+ 'release_tag':os.environ.get('SWITCHCRAFT_RELEASE_TAG','test-suite-2026-11-13-r5'),
  'runtime_image_modules':profile_modules,'runtime_minecraft_profile':True,
  'source_companions':source_components,
  'source_licenses':source_license_files,
@@ -246,9 +244,10 @@ report=f'''# Snapshot 6 delivery report
 ## A. Implemented
 
 Mainline targets 26.4-snapshot-6 and Vulkan. SDL3/VI swapchain and gamepad probe,
-exact base-feature profile, NVK offscreen tests, read-only launch planning and a
-hash-pinned Vulkan-only class transformation exist. Java is owned by the separate
-java-switch repository and consumed at a fixed commit. A limited static SDL/Vulkan
+exact base-feature profile, NVK offscreen tests, Prism instance planning and
+online instance management, and a hash-pinned Vulkan-only class transformation
+exist. Java is owned by the separate java-switch repository at a fixed commit.
+A limited static SDL/Vulkan
 symbol lookup is linked into the presentation probe; it is not a Java loader.
 Session/stage diagnostics, an allowlisted feedback collector and matching debug
 ELFs are included. Physical execution remains NOT TESTED.
@@ -275,10 +274,12 @@ See build/host-tests.log and build/java-runtime.log for exact results.
 
 ## D. Hardware
 
-R4 Horizon execution is NOT TESTED. Historical R3 feedback established that
-JNI_CreateJavaVM returned and vm-ready was reached, then Hello/JNI/agent
-class-loading attempts failed because classes were missing. That evidence is
-preserved and does not establish successful Java workload execution. The
+R5 Java application, JNI/FFM and combined-device execution are NOT TESTED.
+R4 feedback established that JNI_CreateJavaVM returned and java.base
+class-loading/error paths ran, but Hello, JNI/FFM and agent classes were
+missing. The R4 zero-services launch/main marker and L memory probe passed;
+the R3 zero-services launch failure cause remains unproven. These observations
+do not establish successful Java workload execution. The
 Switch Minecraft title objective is NOT ACHIEVED. The Linux Java 25 llvmpipe
 Vulkan Demo reference did reach the title screen, including the strict Vulkan
 transformation; its screenshot and logs are explicitly labeled HOST ONLY.

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Package only the verified SD runtime and diagnostic applications for R4."""
+"""Package the verified SD runtime and diagnostic applications for R5."""
 import argparse
 import hashlib
 import io
@@ -16,9 +16,9 @@ APPS = (
     "vulkan-test", "vulkan-present", "java25-test", "switchcraft-java25",
     "minecraft-launcher",
 )
-TAG = "test-suite-2026-11-12-r4"
-ARCHIVE_NAME = "switchcraft-test-suite-2026-11-12-r4.zip"
-SOURCE_NAME = "switchcraft-source-2026-11-12-r4.tar.gz"
+TAG = "test-suite-2026-11-13-r5"
+ARCHIVE_NAME = "switchcraft-test-suite-2026-11-13-r5.zip"
+SOURCE_NAME = "switchcraft-source-2026-11-13-r5.tar.gz"
 
 
 def digest(data):
@@ -47,7 +47,7 @@ def main():
 
     manifest = json.loads(args.manifest.read_text())
     if manifest.get("release_tag") != TAG:
-        raise RuntimeError("Fresh SD manifest does not identify the R4 release tag")
+        raise RuntimeError("Fresh SD manifest does not identify the R5 release tag")
     if subprocess.check_output(["git", "status", "--porcelain"], cwd=ROOT).strip():
         raise RuntimeError("Commit the package recipe and source before producing a release ZIP")
     source_revision = subprocess.check_output(
@@ -80,15 +80,15 @@ def main():
             "switch/mc-runtime/runtimes/openjdk25/lib/security/cacerts" not in runtime_paths):
         raise RuntimeError("Fresh manifest has no Java module image inventory")
     jar_inventory = manifest.get("runtime_and_test_jars", [])
-    if (not isinstance(jar_inventory, list) or not jar_inventory or
+    if (not isinstance(jar_inventory, list) or len(jar_inventory) != 20 or
             len({entry.get("path") for entry in jar_inventory}) != len(jar_inventory)):
-        raise RuntimeError("Fresh manifest has no runtime/test JAR inventory")
+        raise RuntimeError("Fresh manifest must inventory exactly twenty runtime/test JARs")
     source_path = ROOT / "dist" / SOURCE_NAME
     source_record = next((entry for entry in manifest.get("artifacts", [])
                           if entry["name"] == SOURCE_NAME), None)
     if (source_record is None or not source_path.is_file() or
             sha_file(source_path) != source_record["sha256"]):
-        raise RuntimeError("Matching R4 source companion is missing or differs from the fresh build manifest")
+        raise RuntimeError("Matching R5 source companion is missing or differs from the fresh build manifest")
 
     selected = {}
     expected_nros = {f"switch/{app}/{app}.nro" for app in APPS}
@@ -171,11 +171,11 @@ def main():
               f"[{SOURCE_NAME}]({release_url}/{SOURCE_NAME}). Hardware execution is not established by this package.\n")
     selected["README.md"] = readme.encode()
     selected["START_HERE.md"] = (
-        "# Switchcraft R4 device test package\n\n"
+        "# Switchcraft R5 device test package\n\n"
         f"Extract this ZIP directly into the SD root: [download the package]({release_url}/{ARCHIVE_NAME}). "
         "Merge folders and preserve existing saves/configuration. Use Switch 1, Atmosphere, "
         "and application-mode hbmenu. The required applications are under switch/.\n\n"
-        "## Focused R4 device run\n\n"
+        "## Focused R5 device run\n\n"
         "Before starting, record Switch firmware, Atmosphere and hbmenu versions. For every "
         "Java 25 attempt, launch a fresh application-mode hbmenu process and start only one "
         "test. Let its result screen finish, close the app normally with +, then close and "
@@ -191,7 +191,7 @@ def main():
         "| 7 | Fresh `switchcraft-java25`, B | After standalone and combined A/X/Y pass; require `PRESENTATION_PASS frames=60` and VMA allocator init/destroy. |\n"
         "| 8 | Fresh `switchcraft-java25`, R | After the same prerequisites; require FreeType and OpenAL loopback pass markers. No physical audio output is tested. |\n"
         "| 9 | Fresh `switchcraft-java25`, L | After the same prerequisites; require STB PNG, shaderc, SPIR-V Cross and utilities pass markers. |\n"
-        "| Optional | `zero-services-test`, L | This diagnostic was reported unable to start in R3 without a supplied log; record it separately and do not block Java A. |\n\n"
+        "| Optional | `zero-services-test`, L | R4 launch and L memory-probe passed; repeat only if useful and record separately. |\n\n"
         "Use a new application process for every row. If a prerequisite fails, leave dependent actions untested. After the attempts, export "
         "all logs and unique tick-named VM captures. `java25-test.log` may append across runs, "
         "so preserve each attempt's stdout/stderr capture. The collector below exports its "
@@ -215,7 +215,7 @@ def main():
         "sdk_abi": 1, "hardware_verification": "NOT TESTED",
         "horizon_vm_java_jni_ffm_instrumentation": "NOT TESTED",
         "minecraft_title_on_horizon": "NOT ACHIEVED / NOT TESTED",
-        "zero_services_launch_observation": "R3 reported unable to start; no log or crash capture supplied; cause unresolved. R4 stack hardening and main-entry marker are not a demonstrated startup fix.",
+        "zero_services_launch_observation": "R4 zero-services-test opened and reached the main-entry marker; R4 L private-memory probe passed, including native results, permissions, canaries, split release, SDK ownership and cleanup. R3 launch-failure cause remains unproven.",
         "combined_y_scope": "Cross-built LWJGL core JNI plus SDL/Vulkan FFM diagnostic; device execution NOT TESTED.",
         "runtime_image_files": runtime_image,
         "runtime_image_modules": manifest["runtime_image_modules"],

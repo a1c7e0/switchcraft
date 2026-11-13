@@ -52,8 +52,8 @@ jobs:
           record = json.loads(record_bytes)
           if record.get('release_tag') != requested_tag:
               raise SystemExit('requested release tag does not match pinned RELEASE_INPUTS.json')
-          if requested_tag != 'test-suite-2026-11-12-r4':
-              raise SystemExit('this publisher is pinned to the R4 device test package')
+          if requested_tag != 'test-suite-2026-11-13-r5':
+              raise SystemExit('this publisher is pinned to the R5 device test package')
           dependency_lock = json.loads(fetch(base + '/dependencies.lock.json'))
           curl_source_pin = json.loads(fetch(base + '/vendor/curl/UPSTREAM.json'))
           filename = record['filename']
@@ -91,15 +91,15 @@ jobs:
                   raise SystemExit(f"optional asset size or SHA-256 mismatch: {asset_name}")
               optional_names.add(asset_name)
               optional_data.append((asset_name, bytes(body)))
-          source_name = 'switchcraft-source-2026-11-12-r4.tar.gz'
+          source_name = 'switchcraft-source-2026-11-13-r5.tar.gz'
           expected_lwjgl_source = dependency_lock['lwjgl_core']['source_archive_sha256']
           matching_sources = [(name, data) for name, data in optional_data if name == source_name]
           if len(matching_sources) != 1:
-              raise SystemExit('the matching R4 source archive is a required separate release asset')
+              raise SystemExit('the matching R5 source archive is a required separate release asset')
           with tarfile.open(fileobj=io.BytesIO(matching_sources[0][1]), mode='r:gz') as source:
               upstream = source.extractfile('third-party/upstream/lwjgl3-upstream.tar.gz')
               if upstream is None or hashlib.file_digest(upstream, 'sha256').hexdigest() != expected_lwjgl_source:
-                  raise SystemExit('R4 source archive lacks the full pinned LWJGL upstream source')
+                  raise SystemExit('R5 source archive lacks the full pinned LWJGL upstream source')
           with zipfile.ZipFile(__import__('io').BytesIO(package)) as z:
               names = set(z.namelist())
               if any(not (n.startswith('switch/') or n in {'README.md', 'START_HERE.md', 'manifest.json'})
@@ -146,6 +146,10 @@ jobs:
           manifest_obj = json.loads(manifest)
           if any(manifest_obj.get(key) not in (None, requested_tag) for key in ('release_tag','package_id')):
               raise SystemExit('package manifest identifies a different release')
+          if not str(manifest_obj.get('zero_services_launch_observation', '')).startswith('R4 zero-services-test opened'):
+              raise SystemExit('R5 package must retain the verified R4 zero-services launch and L observations')
+          if manifest_obj.get('hardware_verification') != 'NOT TESTED':
+              raise SystemExit('R5 hardware verification must remain NOT TESTED pending R5 feedback')
           source_record = manifest_obj.get('source_archive', {})
           if (source_record.get('name') != source_name or
                   source_record.get('sha256') != digest(matching_sources[0][1]) or
@@ -207,8 +211,8 @@ jobs:
               jars = [n for n in names if n.startswith('switch/mc-runtime/') and n.endswith('.jar')]
               jar_inventory = manifest_obj.get('runtime_and_test_jars', [])
               jar_paths = {item.get('path') for item in jar_inventory if isinstance(item, dict)}
-              if not jar_inventory or len(jar_paths) != len(jar_inventory) or set(jars) != jar_paths:
-                  raise SystemExit('runtime/test JAR inventory does not exactly match the ZIP')
+              if len(jar_inventory) != 20 or len(jar_paths) != len(jar_inventory) or set(jars) != jar_paths:
+                  raise SystemExit('twenty runtime/test JARs must exactly match the ZIP inventory')
               for item in jar_inventory:
                   raw = z.read(item['path'])
                   if digest(raw) != item.get('sha256'):
@@ -267,7 +271,7 @@ jobs:
               (out / name).write_bytes(data)
           note_lines = [f"Verified minimal Switchcraft device test package `{filename}`.",
                         f"SHA-256: `{record['sha256']}` ({record['bytes']} bytes).",
-                        'This R4 ZIP is ready to extract directly onto the SD root. Use application-mode hbmenu and the included START_HERE.md. Standalone and combined Java25 A/X/Y attempts require fresh processes.',
+                        'This R5 ZIP is ready to extract directly onto the SD root. Use application-mode hbmenu and the included START_HERE.md. Start with a fresh standalone Java 25 A attempt; every Java 25 action requires its own process.',
                         'Physical execution is NOT TESTED until fresh Switch logs establish results. Cross-builds and host tests do not establish Java, JNI/FFM, instrumentation, graphics or Minecraft execution.']
           for asset in optional_assets:
               label = 'Required separate source companion' if asset['name'] == source_name else 'Optional asset'
